@@ -6142,6 +6142,10 @@ function ensureTeacherModeMenu(){
   refreshSaveStatus();
 }
 function selectConfiguration(role='teacher', experience='standard'){
+  if(role === 'student' && experience === 'beginner'){
+    window.location.href = 'budget-boss-jr.html';
+    return;
+  }
   if($("modeSelectScreen")) $("modeSelectScreen").style.display = "none";
   state.presentationRole = role;
   state.experienceLevel = experience;

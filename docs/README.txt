@@ -29,3 +29,6 @@ Elite experience adds:
 - stronger pressure rules
 - required monthly reflection
 - extended delayed consequence chain metadata
+
+
+Update: Student + Beginner now launches budget-boss-jr.html, based on the uploaded Budget Boss Jr. elementary file. Teacher panel is hidden on that page by default.
