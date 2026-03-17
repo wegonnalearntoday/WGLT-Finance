@@ -1,0 +1,68 @@
+{
+  "checking": [
+    {
+      "id": "student",
+      "name": "Student Checking",
+      "monthlyFee": 0,
+      "overdraftFee": 20,
+      "note": "No monthly checking fee. Overdraft fee is $20."
+    },
+    {
+      "id": "standard",
+      "name": "Standard Checking",
+      "monthlyFee": 5,
+      "overdraftFee": 10,
+      "note": "$5 monthly fee from savings. Overdraft fee is $10."
+    },
+    {
+      "id": "rewards",
+      "name": "Rewards Checking",
+      "monthlyFee": 10,
+      "overdraftFee": 0,
+      "note": "$10 monthly fee from savings. Overdraft fee is waived."
+    }
+  ],
+  "savings": [
+    {
+      "id": "basic",
+      "name": "Regular Savings",
+      "apr": 0.5,
+      "minBalance": 0,
+      "note": "Low interest, no minimum."
+    },
+    {
+      "id": "hysa",
+      "name": "High-Yield Savings",
+      "apr": 4,
+      "minBalance": 25,
+      "note": "Higher interest. Starts at just $25."
+    },
+    {
+      "id": "cd",
+      "name": "CD Builder",
+      "apr": 0,
+      "minBalance": 25,
+      "note": "Open 3-month, 6-month, or 1-year CDs."
+    }
+  ],
+  "cdTerms": {
+    "3m": {
+      "id": "3m",
+      "name": "3-Month CD",
+      "apr": 4,
+      "months": 3
+    },
+    "6m": {
+      "id": "6m",
+      "name": "6-Month CD",
+      "apr": 4.5,
+      "months": 6
+    },
+    "12m": {
+      "id": "12m",
+      "name": "1-Year CD",
+      "apr": 5,
+      "months": 12
+    }
+  }
+}

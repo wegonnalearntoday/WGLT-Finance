@@ -1,0 +1,932 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WGLT Budget Boss Simulator (Year Mission + Ledger)</title>
+
+  <style>
+    :root{
+      --primary:#1f7ae0; --primary2:#0b57d0;
+      --success:#1fa971; --warning:#f4c542; --danger:#e74c3c;
+      --ink:#223041; --muted:#6b7787;
+      --bg:#f5f7fb; --card:#ffffff; --line:#d9e1ef;
+      --shadow:0 10px 25px rgba(20,40,70,.12);
+      --radius:18px;
+
+      /* ===== Watermark controls =====
+         1) Upload your PNG to Wix Media and paste the URL below.
+         2) Tweak opacity/size if needed. */
+      --wm-url: url("https://static.wixstatic.com/media/80a41b_6d83951403394d179c4ac2403e567c8d~mv2.png");
+      --wm-opacity: .06;     /* 0.04–0.10 */
+      --wm-size: 92%;        /* 70%–110% */
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Comic Sans MS", cursive;
+      background:transparent;
+      color:var(--ink);
+      padding:14px;
+      display:flex;
+      justify-content:center;
+    }
+
+    .app{
+      width:100%;
+      max-width:1180px;
+      background:var(--card);
+      border:3px solid var(--primary);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* ===== Watermark placement (best readability) =====
+       We put the watermark on the non-card "background areas" (header + main),
+       so your content cards stay crisp and readable. */
+    header, main { position:relative; }
+    header::before,
+main::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image: url("https://static.wixstatic.com/media/80a41b_6d83951403394d179c4ac2403e567c8d~mv2.png");
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size: cover;       /* <- fills whole space */
+  opacity: .06;                 /* adjust: .04 to .10 */
+  pointer-events:none;
+  z-index:0;
+  mix-blend-mode:multiply;
+  filter: grayscale(1) contrast(1.05);
+}
+    /* keep content above watermark */
+    header > *, main > * { position:relative; z-index:1; }
+
+    header{
+      padding:14px 14px 10px;
+      background:linear-gradient(180deg,#f0f6ff, #ffffff);
+      border-bottom:1px solid var(--line);
+    }
+    .toprow{
+      display:flex; flex-wrap:wrap; gap:10px;
+      align-items:center; justify-content:space-between;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:900; letter-spacing:.2px; font-size:18px;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid var(--line); background:#fff;
+      font-weight:800; font-size:13px;
+    }
+    .money{ color:var(--success); font-weight:1000; }
+    .credit{ color:#7a3df0; font-weight:1000; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .toggle{
+      display:flex; gap:8px; align-items:center;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--line); background:#fff;
+      user-select:none; font-size:13px; font-weight:900;
+    }
+    .toggle input{ accent-color: var(--primary); }
+
+    .btn{
+      border:none; border-radius:14px;
+      padding:10px 12px;
+      font-weight:1000; cursor:pointer;
+      box-shadow:0 5px 0 rgba(0,0,0,.1);
+      transition:transform .08s ease;
+      background:var(--primary); color:#fff;
+      font-size:13px; white-space:nowrap;
+    }
+    .btn:active{ transform: translateY(3px); box-shadow:none; }
+    .btn.secondary{ background:#edf3ff; color:var(--ink); border:1px solid var(--line); box-shadow:none; }
+    .btn.warn{ background:var(--warning); color:var(--ink); }
+    .btn.danger{ background:var(--danger); }
+    .btn.success{ background:var(--success); }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; box-shadow:none; transform:none; }
+
+    /* Progress bar */
+    .missionbar{
+      margin-top:10px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+    }
+    .missionbar .label{ font-weight:1000; font-size:13px; }
+    .barwrap{
+      flex:1; min-width:260px;
+      height:12px; background:#eef2fb;
+      border-radius:999px; border:1px solid var(--line);
+      overflow:hidden;
+    }
+    .barfill{
+      height:100%; width:0%;
+      background:linear-gradient(90deg, var(--primary), #35c2ff);
+      border-radius:999px;
+      transition:width .25s ease;
+    }
+    .stepmeta{ font-weight:900; font-size:12px; color:var(--muted); }
+
+    main{
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:12px;
+      padding:12px;
+      background:var(--bg);
+    }
+    @media (max-width: 1000px){ main{ grid-template-columns:1fr; } }
+
+    .card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:0 6px 18px rgba(25,45,80,.06);
+      overflow:hidden;
+    }
+    .card h3{
+      margin:0; padding:12px 12px 10px;
+      border-bottom:1px solid var(--line);
+      font-size:14px; letter-spacing:.2px;
+    }
+    .card .body{ padding:12px; }
+    .muted{ color:var(--muted); font-size:12px; line-height:1.35; }
+
+    /* Tabs */
+    .tabs{
+      display:flex; gap:8px; flex-wrap:wrap;
+      padding:10px 12px; border-bottom:1px solid var(--line);
+      background:#fff;
+    }
+    .tab{
+      padding:9px 11px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-weight:1000; font-size:12px;
+      cursor:pointer; user-select:none;
+    }
+    .tab.active{
+      background:linear-gradient(180deg,#e9f2ff,#ffffff);
+      border-color:#bcd3ff;
+      color:var(--primary2);
+    }
+    .panel{ display:none; }
+    .panel.active{ display:block; }
+
+    /* Fields */
+    .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .field{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px;
+      background:#fff;
+    }
+    .field .name{ font-weight:1000; font-size:12px; color:var(--muted); }
+    .field .value{ font-weight:1100; font-size:18px; margin-top:4px; }
+    .field .def{ margin-top:6px; font-size:11px; color:var(--muted); font-weight:800; }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+    .chip{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:999px;
+      padding:7px 10px;
+      font-weight:1000;
+      cursor:pointer;
+      font-size:12px;
+      user-select:none;
+    }
+    .chip:active{ transform:translateY(1px); }
+    .minirow{ display:flex; gap:8px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+    .minirow .btn{ padding:8px 10px; border-radius:12px; font-size:12px; }
+
+    /* Glow (used for BOTH buttons + tabs) */
+    .glow{
+      border-radius:16px;
+      animation: glowPulse 1.1s ease-in-out infinite;
+    }
+    .tab.glow{ border-radius:999px; } /* tab-friendly glow */
+    @keyframes glowPulse{
+      0%{ box-shadow:0 0 0 0 rgba(53,194,255,.0), 0 0 0 0 rgba(31,122,224,.0); }
+      35%{ box-shadow:0 0 0 4px rgba(53,194,255,.20), 0 0 0 12px rgba(31,122,224,.12); }
+      100%{ box-shadow:0 0 0 0 rgba(53,194,255,.0), 0 0 0 0 rgba(31,122,224,.0); }
+    }
+    /* Green pulse for the ONE next required action button */
+    .glow-next{
+      border-radius:16px;
+      animation: glowNextPulse 1.1s ease-in-out infinite;
+    }
+    @keyframes glowNextPulse{
+      0%{ box-shadow:0 0 0 0 rgba(34,197,94,.0), 0 0 0 0 rgba(22,163,74,.0); }
+      35%{ box-shadow:0 0 0 5px rgba(34,197,94,.35), 0 0 0 14px rgba(22,163,74,.18); }
+      100%{ box-shadow:0 0 0 0 rgba(34,197,94,.0), 0 0 0 0 rgba(22,163,74,.0); }
+    }
+
+    /* Banner */
+    .banner{
+      position:fixed; left:50%; top:18px; transform:translateX(-50%);
+      background:#ffffff; border:1px solid var(--line);
+      border-radius:999px; padding:10px 14px;
+      box-shadow:var(--shadow);
+      font-weight:1100; z-index:999;
+      display:none; gap:10px; align-items:center;
+    }
+    .banner.show{ display:flex; }
+    .banner .ok{ color:var(--success); }
+
+    /* Modal */
+    .overlay{
+      position:fixed; inset:0;
+      background:rgba(20,30,50,.45);
+      display:none; z-index:1000;
+      align-items:center; justify-content:center;
+      padding:14px;
+    }
+    .overlay.show{ display:flex; }
+    .modal{
+      width:min(820px, 100%);
+      max-height:min(88vh, 820px);
+      background:#fff;
+      border-radius:22px;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .modal .mhead{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#f0f6ff,#ffffff);
+    }
+    .modal .mtitle{ font-weight:1100; font-size:16px; }
+    .modal .mmeta{ margin-top:4px; font-weight:900; font-size:12px; color:var(--muted); }
+    .modal .mbody{ padding:14px; white-space:pre-line; font-weight:900; color:var(--ink); line-height:1.35; overflow-y:auto; -webkit-overflow-scrolling:touch; flex:1 1 auto; }
+    .modal .mfoot{
+      padding:12px 14px; border-top:1px solid var(--line);
+      display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;
+    }
+
+    .log{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-weight:900;
+      color:var(--muted);
+      font-size:12px;
+      min-height:56px;
+      white-space:pre-line;
+    }
+    .lockhint{
+      margin-top:8px; padding:10px 12px;
+      border-radius:14px;
+      border:1px dashed #bcd3ff;
+      background:#f3f8ff;
+      font-size:12px;
+      font-weight:900;
+      color:#234;
+      display:none;
+    }
+    .lockhint.show{ display:block; }
+
+
+    @media (max-width: 700px){
+      .overlay{ padding:10px; align-items:center; }
+      .modal{ width:100%; max-height:88vh; border-radius:18px; }
+      .modal .mhead{ padding:12px 12px 8px; }
+      .modal .mbody{ padding:12px; font-size:14px; line-height:1.4; }
+      .modal .mfoot{ padding:10px 12px; }
+    }
+
+    .choice-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-top:10px; }
+    .choice-btn{ border:2px solid var(--line); border-radius:16px; padding:12px; background:#fff; cursor:pointer; text-align:left; font-weight:900; box-shadow:0 4px 12px rgba(20,40,70,.06); }
+    .choice-btn small{ display:block; color:var(--muted); font-weight:800; margin-top:4px; line-height:1.3; }
+    .choice-btn.selected{ border-color:var(--primary); background:#edf3ff; box-shadow:0 0 0 3px rgba(31,122,224,.14); }
+    .done-ready{ animation: glowNextPulse 1.1s ease-in-out infinite; }
+    .impact-box{ margin-top:10px; padding:10px 12px; border-radius:14px; border:1px solid var(--line); background:#f8fbff; font-weight:900; font-size:12px; color:var(--ink); white-space:pre-line; }
+
+    select{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:9px 10px;
+      font-weight:900;
+      background:#fff;
+      cursor:pointer;
+    }
+    .wants-box{
+      min-width:320px;
+      width:min(100%, 430px);
+      max-height:240px;
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      padding:8px;
+    }
+    .wants-option{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-weight:900;
+      cursor:pointer;
+      margin-bottom:6px;
+    }
+    .wants-option:last-child{ margin-bottom:0; }
+    .wants-option input{ accent-color:var(--primary); transform:scale(1.15); }
+    .wants-option.checked{ background:#edf3ff; border-color:#bcd3ff; }
+    .meter{
+      margin-top:10px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      padding:10px 12px;
+    }
+    .meter-bar{
+      height:12px;
+      background:#eef2fb;
+      border-radius:999px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      margin-top:8px;
+    }
+    .meter-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, var(--success), #8fe3b7);
+      transition:width .25s ease;
+    }
+    .tracker-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:8px;
+      margin-top:10px;
+    }
+    .tracker-item{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px;
+      background:#fff;
+      font-weight:900;
+      font-size:12px;
+    }
+    .tracker-item.done{
+      background:#edf9f3;
+      border-color:#a7dcc2;
+    }
+    .linkish{
+      border:none;
+      background:transparent;
+      color:var(--primary2);
+      font-weight:1000;
+      cursor:pointer;
+      padding:0;
+      text-decoration:underline;
+    }
+
+    /* Teacher mode entry + save toolkit */
+    .mode-screen{
+      position:fixed; inset:0; z-index:1200;
+      background:rgba(10,16,30,.82);
+      backdrop-filter:blur(4px);
+      display:flex; align-items:center; justify-content:center;
+      padding:16px;
+    }
+    .mode-card{
+      width:min(980px,100%);
+      background:#fff; border:1px solid var(--line); border-radius:24px;
+      box-shadow:var(--shadow); padding:22px;
+    }
+    .mode-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-top:14px; }
+    .mode-btn{
+      border:2px solid #bcd3ff; border-radius:20px; background:linear-gradient(180deg,#f7fbff,#eef5ff);
+      padding:16px; text-align:left; cursor:pointer; font-weight:1000; color:var(--ink);
+      box-shadow:0 6px 18px rgba(25,45,80,.08);
+    }
+    .mode-btn:hover{ transform:translateY(-1px); }
+    .mode-btn .emoji{ font-size:28px; display:block; margin-bottom:8px; }
+    .mode-btn small{ display:block; color:var(--muted); font-weight:800; line-height:1.35; margin-top:6px; }
+    .mode-screen-actions{ margin-top:14px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+    .save-toolkit{
+      border:1px solid var(--line); border-radius:18px; padding:14px; background:#fff;
+    }
+    .save-toolkit h4{ margin:0 0 8px; font-size:15px; }
+    .save-toolkit .summary{ color:var(--muted); font-size:13px; margin-bottom:10px; }
+    .save-toolkit .quick-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; }
+    .save-status{ margin-top:10px; font-size:12px; color:var(--muted); }
+    .reflection-list{ display:grid; gap:10px; margin-top:10px; }
+    .reflection-card{
+      border:1px solid var(--line); border-radius:14px; background:#fff; padding:10px 12px;
+      font-size:12px; line-height:1.4;
+    }
+    .reflection-card h4{ margin:0 0 6px; font-size:13px; }
+    .reflection-meta{ color:var(--muted); font-size:11px; margin-bottom:8px; }
+    .reflection-row{ margin-top:6px; }
+    .reflection-delete-bar{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px;
+    }
+    .reflection-empty{ color:var(--muted); font-size:12px; }
+    .teacher-badge{
+      display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px;
+      border:1px solid var(--line); background:#fff; font-weight:900; font-size:12px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="banner" id="banner">
+    <span class="ok">✅</span>
+    <span id="bannerText">Done</span>
+  </div>
+
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="mhead">
+        <div class="mtitle" id="mTitle">Modal Title</div>
+        <div class="mmeta" id="mMeta">Meta</div>
+      </div>
+      <div class="mbody" id="mBody">Body</div>
+      <div class="mfoot" id="mFoot"></div>
+    </div>
+  </div>
+
+
+  <div class="mode-screen" id="modeSelectScreen">
+    <div class="mode-card">
+      <div style="font-size:28px;font-weight:1100">Choose Your WGLT Mode</div>
+      <div class="muted" style="margin-top:6px;font-size:13px">This GitHub-ready build uses external JSON banks for jobs, contracts, ledger items, benchmarks, modes, and the 48-week scenario engine. Pick your lane and the simulator loads the same core engine with different pressure rules.</div>
+      <div class="mode-grid">
+        <button class="mode-btn glow-next" id="modeTeacherBtn" type="button">
+          <span class="emoji">🎓</span>Teacher Mode
+          <small>Guided 48-week lesson path with reports, reflections, save/resume, and classroom checkpoint tools.</small>
+        </button>
+        <button class="mode-btn" id="modeEliteBtn" type="button">
+          <span class="emoji">⚡</span>Elite Mode
+          <small>Same simulator core with tighter event pressure, a different random-event mix, and monthly reflection prompts for advanced play.</small>
+        </button>
+      </div>
+      <div class="impact-box" style="margin-top:14px">JSON banks now drive the content layer, which makes the simulator much easier to expand with more modes, jobs, events, and classroom packs.</div>
+      <div class="mode-screen-actions">
+        <button class="btn secondary" id="btnLoadLocalFromMenu" type="button">Resume Local Save</button>
+        <button class="btn secondary" id="btnImportSaveFromMenu" type="button">Upload Save File</button>
+      </div>
+      <input type="file" id="saveFileInput" accept="application/json,.json" style="display:none" />
+    </div>
+  </div>
+
+
+  <div class="app">
+    <header>
+      <div class="toprow">
+        <div class="brand">📚 WGLT Budget Boss <span class="muted">(Year Mission • Tap-Only • Ledger)</span></div>
+
+        <div class="row">
+          <span class="pill">Cash: <span class="money" id="cash">$200</span></span>
+          <span class="pill">Week <span id="weekNum">1</span>/48 • <span id="monthName">June</span></span>
+          <span class="pill">Credit: <span class="credit" id="credit">650</span></span>
+          <span class="pill">Savings Goal: <span id="goalBadge">$0</span></span>
+        </div>
+      </div>
+
+      <div class="missionbar">
+        <div class="label">🎯 Year Mission</div>
+        <div class="barwrap"><div class="barfill" id="barFill"></div></div>
+        <div class="stepmeta" id="stepMeta">No mission active</div>
+      </div>
+
+      <div class="missionbar" id="impactStrip">
+        <div class="label">📈 Live Impact</div>
+        <span class="pill">Cash Flow: <span id="impactCash">steady</span></span>
+        <span class="pill">Credit Trend: <span id="impactCredit">stable</span></span>
+        <span class="pill">Savings Goal: <span id="impactGoal">not set</span></span>
+        <span class="pill">Monthly Growth: <span id="impactGrowth">pick a savings account</span></span>
+      </div>
+    </header>
+
+    <main>
+      <!-- LEFT: Mission control -->
+      <section class="card">
+        <h3>Mission Control</h3>
+        <div class="body">
+          <div class="muted">
+            Start the year mission and complete all 48 weeks (June → May). Required actions glow. Weekly choice cards fire automatically — your decisions have real consequences later!
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="field">
+            <div class="name">Student Job</div>
+            <div class="minirow" style="margin-top:10px">
+              <button class="btn secondary" id="jobPrev">◀</button>
+              <div style="flex:1; min-width:180px">
+                <div style="font-weight:1100" id="jobName">Lawn Care</div>
+                <div class="muted" id="jobPay">Weekly Pay: $80</div>
+              </div>
+              <button class="btn secondary" id="jobNext">▶</button>
+            </div>
+            <div class="chips" id="jobTags"></div>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="minirow">
+            <button class="btn success" id="btnStartMission">Start Year Mission</button>
+            <button class="btn secondary" id="btnPauseMission">Pause</button>
+            <button class="btn secondary" id="btnResetMission">Reset</button>
+            <button class="btn warn" id="btnLockJob">Lock Job After Your Choice ✓</button>
+            <button class="btn secondary" id="btnQuitToMenu">Quit to Main Menu</button>
+          </div>
+
+          <div class="minirow" style="margin-top:8px">
+            <span class="teacher-badge">Mode: <span id="teacherModeLabel">Teacher Mode</span></span><span class="teacher-badge" id="modeSummaryLabel">Guided classroom flow</span>
+          </div>
+
+          <div class="log" id="log">Ready. Choose Teacher Mode to begin, then lock a year plan first.</div>
+
+          <div style="height:14px"></div>
+
+          <div class="save-toolkit">
+            <h4>💾 Save + Resume Toolkit</h4>
+            <div class="summary">Save the lesson on this browser, or export a save file and upload it in another classroom to keep going from the same spot.</div>
+            <div class="quick-grid">
+              <button class="btn secondary" id="btnSaveLocal">Save Local</button>
+              <button class="btn secondary" id="btnLoadLocal">Load Local</button>
+              <button class="btn secondary" id="btnDownloadSave">Download Save File</button>
+              <button class="btn secondary" id="btnUploadSave">Upload Save File</button>
+              <button class="btn secondary" id="btnOpenReflection">Open Reflection</button>
+            </div>
+            <div class="save-status" id="saveStatus">No local save yet.</div>
+          </div>
+
+          <div style="height:14px"></div>
+
+          <div class="field">
+            <div class="name">Scenario Playlist (optional)</div>
+            <div class="muted">Force lesson events (Inheritance → Dispute → Local Tax → Contract)</div>
+            <div class="minirow">
+              <button class="btn" id="playlistStart">Start</button>
+              <button class="btn secondary" id="playlistPause">Pause</button>
+              <button class="btn secondary" id="playlistLoop">Loop: Off</button>
+            </div>
+            <div class="minirow">
+              <button class="btn warn" id="btnPlaylistNext">Run Next Step</button>
+              <button class="btn secondary" id="btnPlaylistProgress">Progress</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: Tabs -->
+      <section class="card">
+        <div class="tabs">
+          <div class="tab active" data-tab="plan">Plan</div>
+          <div class="tab" data-tab="bank">Banking</div>
+          <div class="tab" data-tab="ledger">Business Ledger</div>
+          <div class="tab" data-tab="events">Events</div>
+          <div class="tab" data-tab="contracts">Contracts</div>
+          <div class="tab" data-tab="reports">Reports</div>
+          <div class="tab" data-tab="sheet">Budget Sheet</div>
+          <div class="tab" data-tab="help">How to Play</div>
+        </div>
+
+        <div class="body">
+          <!-- PLAN -->
+          <div class="panel active" id="panel-plan">
+            <div class="grid2">
+              <div class="field">
+                <div class="name"><button class="linkish" onclick="showSectionDef('income')">Monthly Salary ℹ️</button></div>
+                <div class="value" id="incomeVal">$320</div>
+                <div class="def">This is locked to the student job you selected. Change the job on the left to change income.</div>
+              </div>
+
+              <div class="field">
+                <div class="name"><button class="linkish" onclick="showSectionDef('tax')">Payroll Tax Withholding ℹ️</button></div>
+                <div class="value" id="taxVal">10%</div>
+                <div class="def">Money taken out before you get paid (funds public services).</div>
+                <div class="chips">
+                  <div class="chip" data-tax="0">0%</div>
+                  <div class="chip" data-tax="10">10%</div>
+                  <div class="chip" data-tax="15">15%</div>
+                  <div class="chip" data-tax="20">20%</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="grid2">
+              <div class="field">
+                <div class="name"><button class="linkish" onclick="showSectionDef('needs')">Needs ℹ️</button></div>
+                <div class="value" id="needsVal">$40</div>
+                <div class="def" id="needsDef">Examples: food, basic phone, hygiene, room/rent share, school supplies.</div>
+                <div class="def" style="margin-top:8px">Locked for this version.</div>
+              </div>
+
+              <div class="field">
+                <div class="name"><button class="linkish" onclick="showSectionDef('wants')">Wants ℹ️</button></div>
+                <div class="value" id="wantsVal" style="color:var(--danger)">$0</div>
+                <div class="def" id="wantsDef">Pick one or more wants that add up to at least your plan target before you start the year.</div>
+                <div class="minirow" style="margin-top:10px; align-items:flex-start">
+                  <div id="wantsPick" class="wants-box" aria-label="Choose one or more wants">
+                    <label class="wants-option"><input type="checkbox" value="3" data-label="Candy ($3)"> <span>Candy ($3)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="5" data-label="Snacks ($5)"> <span>Snacks ($5)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="10" data-label="Movie Ticket ($10)"> <span>Movie Ticket ($10)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="12" data-label="Music Streaming ($12)"> <span>Music Streaming ($12)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="15" data-label="New Game Skin ($15)"> <span>New Game Skin ($15)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="18" data-label="Pizza Night ($18)"> <span>Pizza Night ($18)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="20" data-label="Video Game Rental ($20)"> <span>Video Game Rental ($20)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="25" data-label="Arcade Day ($25)"> <span>Arcade Day ($25)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="30" data-label="Shoes/Style Item ($30)"> <span>Shoes/Style Item ($30)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="40" data-label="Game Purchase ($40)"> <span>Game Purchase ($40)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="50" data-label="Weekend Fun Pack ($50)"> <span>Weekend Fun Pack ($50)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="75" data-label="Concert/Big Trip ($75)"> <span>Concert/Big Trip ($75)</span></label>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:8px">
+                    <button class="btn secondary" id="btnAddWant">Add Wants to Plan</button>
+                    <button class="btn secondary" id="btnClearWants">Clear Wants</button>
+                    <span class="pill">Target: <span id="wantsTargetLabel">$0</span></span>
+                    <span class="pill">Selected: <span id="wantsPendingLabel">$0</span></span>
+                  </div>
+                </div>
+                <div class="muted" style="margin-top:8px">Tip: check as many wants as needed. Reach the target, then tap Add Wants to Plan.</div>
+              </div>
+
+              <div class="field">
+                <div class="name"><button class="linkish" onclick="showSectionDef('savings')">Savings + Debt ℹ️</button></div>
+                <div class="value" id="saveVal">$64</div>
+                <div class="def" id="saveDef">This bucket covers savings and debt together. In the 70-20-10 rule it uses 20% total, then auto-splits that total into savings first and debt second.</div>
+                <div class="def" style="margin-top:8px">Locked for this version.</div>
+              </div>
+
+              <div class="field">
+                <div class="name">Current Split</div>
+                <div class="value" id="debtVal">S $48 • D $16</div>
+                <div class="def">The combined bucket auto-splits 75% to savings and 25% to debt pay so students can still see both pieces in action.</div>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="field">
+              <div class="name"><button class="linkish" onclick="showSectionDef('insurance')">Insurance ℹ️</button></div>
+              <div class="value" id="insValLabel">Basic</div>
+              <div class="def" id="insExplain">Insurance can reduce emergency costs (repairs, accidents).</div>
+              <div class="chips">
+                <div class="chip" data-ins="none">None</div>
+                <div class="chip" data-ins="basic">Basic</div>
+                <div class="chip" data-ins="strong">Strong</div>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="minirow">
+              <button class="btn warn" id="btnSuggestedPlan">Choose Year Plan</button>
+              <span class="pill">Budget Model: <span id="budgetModelLabel">70-20-10 Rule (Beginner)</span></span>
+              <button class="btn success" id="btnApplyPlan">Lock Plan for Year</button>
+              <button class="btn secondary" id="btnNextWeek">Next Week ▶</button>
+              <button class="btn secondary" id="btnSavingsChallenge">Savings Challenge</button>
+              <span class="pill">Goal: <span id="goalStatusInline">Not set</span></span>
+              <span class="pill">Plan Lock: <span id="planLockLabel">Unlocked</span></span>
+            </div>
+          </div>
+
+          <!-- BANK -->
+          <div class="panel" id="panel-bank">
+            <div class="grid2">
+              <div class="field">
+                <div class="name">Balances</div>
+                <div class="value">Checking: <span id="checkingVal">$0</span> <button class="linkish" id="btnBucket4Checking" type="button">Benchmark #4</button></div>
+                <div class="value" style="font-size:16px">Savings: <span id="savingsVal">$0</span> <button class="linkish" id="btnBucket4Savings" type="button">Benchmark #4</button></div>
+                <div class="value" style="font-size:16px">Cash: <span id="cashBankVal">$200</span></div>
+                <div class="value" style="font-size:16px">Credit Score: <span id="creditInlineVal">650</span> <button class="linkish" id="btnCreditInfo" type="button">Benchmark #5</button></div>
+                <div class="def" id="bankTypeLabel">Bank Types: Not chosen</div>
+              </div>
+
+              <div class="field">
+                <div class="name">Write Check Amount (tap-variable)</div>
+                <div class="value" id="checkAmt">$10</div>
+                <div class="def">No typing. Tap +/- chips to set the amount.</div>
+                <div class="chips">
+                  <div class="chip" data-check="-10">-10</div>
+                  <div class="chip" data-check="-5">-5</div>
+                  <div class="chip" data-check="+5">+5</div>
+                  <div class="chip" data-check="+10">+10</div>
+                  <div class="chip" data-check="+25">+25</div>
+                </div>
+                <div class="minirow">
+                  <button class="btn" id="btnWriteCheck">Write Check</button>
+                  <button class="btn secondary" id="btnDepositCheck">Deposit Check</button>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="field">
+              <div class="name">Bank Tools</div>
+              <div class="def">Checking and savings start at $0. Use your $200 cash to fund them. High-Yield needs $30 into savings so $25 can go to high-yield and $5 stays behind to keep savings open.</div>
+              <div class="minirow">
+                <button class="btn secondary" id="btnChooseStartup">Choose Bank + Insurance (Start)</button>
+                <button class="btn secondary" id="btnCompareBanks">Compare Banks</button>
+                <button class="btn secondary" id="btnGoals">Goals</button>
+              </div>
+              <div class="impact-box" id="bankChoiceStatus">Checking: Not chosen
+Savings: Not chosen
+Insurance: Not chosen</div>
+              <div class="impact-box" id="choiceImpactBox">Choice Impact
+• Cash: no change yet
+• Credit Score: no change yet
+• Savings Goal: set this next in Plan</div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="field">
+              <div class="name">Transfer Money</div>
+              <div class="def">Move money either direction so students can cover bills and compare account growth.</div>
+              <div class="minirow" style="margin-top:10px">
+                <select id="transferAmt">
+                  <option value="10">$10</option>
+                  <option value="25" selected>$25</option>
+                  <option value="50">$50</option>
+                  <option value="100">$100</option>
+                </select>
+                <button class="btn secondary" id="btnTransferToSavings">Checking ➜ Savings</button>
+                <button class="btn secondary" id="btnTransferToChecking">Savings ➜ Checking</button>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="field">
+              <div class="name">CD Builder <button class="linkish" id="btnBucket4CD" type="button">Benchmark #4</button></div>
+              <div class="def">Open 3-month, 6-month, or 1-year CDs. If there is time left in the year, students can open another one.</div>
+              <div class="minirow" style="margin-top:10px">
+                <select id="cdTermPick">
+                  <option value="3m">3-Month CD • 4.0% APR</option>
+                  <option value="6m">6-Month CD • 4.5% APR</option>
+                </select>
+                <select id="cdDepositPick">
+                  <option value="25">$25</option>
+                  <option value="50" selected>$50</option>
+                  <option value="100">$100</option>
+                  <option value="200">$200</option>
+                </select>
+                <button class="btn secondary" id="btnOpenCD">Open CD</button>
+              </div>
+              <div class="impact-box" id="cdStatusBox">No active CDs yet.</div>
+              <div class="meter">
+                <div style="font-weight:1100">High-Yield Growth Meter <button class="linkish" id="btnBucket4HYSA" type="button">Benchmark #4</button></div>
+                <div class="muted" id="hysaMeterText">Choose and fund a high-yield account to see growth.</div>
+                <div class="meter-bar"><div class="meter-fill" id="hysaMeterFill"></div></div>
+              </div>
+              <div class="meter">
+                <div style="font-weight:1100">CD Maturity Meter <button class="linkish" id="btnBucket4CD2" type="button">Benchmark #4</button></div>
+                <div class="muted" id="cdMeterText">Open a CD to start the maturity tracker.</div>
+                <div class="meter-bar"><div class="meter-fill" id="cdMeterFill"></div></div>
+              </div>
+              <div id="cdMetersWrap" style="display:grid;gap:8px;margin-top:10px"></div>
+            </div>
+          </div>
+
+          <!-- LEDGER -->
+          <div class="panel" id="panel-ledger">
+            <div class="field">
+              <div class="name">Mini Business Ledger (tap-only)</div>
+              <div class="def">Track supplies (inventory) and expenses for your job. Purchases affect profit and cash flow.</div>
+
+              <div class="minirow" style="margin-top:10px">
+                <select id="ledgerItemPick"></select>
+                <button class="btn secondary" id="btnLedgerBuy">Buy Item</button>
+                <button class="btn secondary" id="btnLedgerUse">Use Item</button>
+                <button class="btn secondary" id="btnLedgerInventory">Inventory</button>
+              </div>
+
+              <div class="minirow">
+                <button class="btn secondary" id="btnLedgerExpense">Add Expense</button>
+                <button class="btn secondary" id="btnLedgerClearWeek">Clear Month</button>
+              </div>
+
+              <div class="log" id="ledgerBox" style="min-height:220px;max-height:320px;overflow-y:auto;font-size:12px;white-space:pre-wrap">Ledger empty.</div>
+
+              <div class="minirow">
+                <span class="pill">Inventory Value: <span id="invVal">$0</span></span>
+                <span class="pill">Month Expenses: <span id="wkExp">$0</span></span>
+                <span class="pill">Profit This Month: <span id="wkProfit">$0</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- EVENTS -->
+          <div class="panel" id="panel-events">
+            <div class="field">
+              <div class="name">Local Tax (Guaranteed)</div>
+              <div class="def">Use this if you need the Local Tax benchmark every time.</div>
+              <div class="minirow">
+                <button class="btn" id="btnGenLocalTax">Generate Local Tax (Lesson)</button>
+                <button class="btn secondary" id="btnPayLocalTax">Pay Local Tax Bill</button>
+                <span class="pill">Due: <span id="localTaxDue">$0</span></span>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="field">
+              <div class="name">Life + Job Events</div>
+              <div class="def">Every week can use the mixed event system: Life Scenario (40%) from the 48-week lesson engine, Job Event (30%) tied to the selected job, or Financial Decision (30%) using school/social style money choices.</div>
+              <div class="minirow">
+                <button class="btn secondary" id="btnInheritance">Trigger Inheritance</button>
+                <button class="btn secondary" id="btnDispute">Start Billing Dispute</button>
+                <button class="btn secondary" id="btnJobEvent">Run Job Real-Life Event</button>
+                <button class="btn secondary" id="btnSchoolEvent">Run School Decision</button>
+                <button class="btn secondary" id="btnSocialEvent">Run Social Decision</button>
+                <button class="btn warn" id="btnRandomEvent">Run Random Event</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTRACTS -->
+          <div class="panel" id="panel-contracts">
+            <div class="field">
+              <div class="name">Contracts (choose one during the year)</div>
+              <div class="def">A mission step will require selecting a contract and deciding to accept/decline.</div>
+
+              <div class="minirow" style="margin-top:10px">
+                <select id="contractPick"></select>
+                <button class="btn secondary" id="btnOpenContract">Review Selected Contract</button>
+                <button class="btn danger" id="btnCancelContract">Cancel Contract</button>
+              </div>
+
+              <div class="def" style="margin-top:10px">Active: <b id="contractState">None</b></div>
+            </div>
+          </div>
+
+          <!-- REPORTS -->
+          <div class="panel" id="panel-reports">
+            <div class="field">
+              <div class="name">12 Benchmark Tracker</div>
+              <div class="def">Live tracker for the 12 Florida financial literacy buckets covered during play.</div>
+              <div class="tracker-grid" id="bucketTracker"></div>
+            </div>
+            <div style="height:10px"></div>
+            <div class="field">
+              <div class="name">Standards Coverage</div>
+              <div class="minirow">
+                <button class="btn" id="btnReport">Generate Standards Report</button>
+                <button class="btn secondary" id="btnReflectionReport">View Reflections</button>
+                <button class="btn secondary" id="btnOpenReflectionReport">New Reflection</button>
+                <button class="btn secondary" id="btnClearReport">Clear Session</button>
+              </div>
+              <div class="log" id="reportBox">No report yet.</div>
+              <div class="log" id="reflectionReportBox" style="margin-top:10px;display:none">No reflections yet.</div>
+            </div>
+          </div>
+
+
+          <!-- SHEET -->
+          <div class="panel" id="panel-sheet">
+            <div class="field">
+              <div class="name">Budget Sheet</div>
+              <div class="def">This tab mirrors your worksheet idea and auto-fills from the selected job, plan, and live balances.</div>
+              <div class="log" id="sheetBox" style="min-height:260px; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-y:auto; max-height:600px;">Loading sheet...</div>
+            </div>
+          </div>
+
+          <!-- HELP -->
+          <div class="panel" id="panel-help">
+            <div class="field">
+              <div class="name">How to Play</div>
+              <div class="minirow">
+                <button class="btn secondary" id="btnHowToPlay">How to Play</button>
+                <button class="btn warn" id="btnCraftsWalkthrough">Selling Crafts Walkthrough</button>
+              </div>
+              <div class="def" style="margin-top:10px">
+                Tip: Choose and lock a year plan first, then choose a Student Job, build wants, and tap Start Year Mission. Required buttons and tabs glow so players know what to do next.
+              </div>
+              <div class="log" style="margin-top:10px">Teacher example: open the Selling Crafts Walkthrough to see a full sample run from setup to report.</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+
+<script src="./js/bootstrap.js"></script>
+</body>
+</html>
