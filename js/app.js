@@ -5,29 +5,93 @@ const FL_BUCKETS = APP_DATA.flBuckets || {};
 const WEEK_CALENDAR = APP_DATA.weekCalendar || {};
 const BANK_PRODUCTS = APP_DATA.bankProducts || {};
 const CONTRACTS = APP_DATA.contracts || [];
+const ELITE_CONTRACTS = APP_DATA.eliteContracts || [];
 const JOBS = APP_DATA.jobs || [];
 const LEDGER_CATALOG = APP_DATA.ledgerCatalog || {};
 const SOCIAL_WANTS_DECK = APP_DATA.socialWantsDeck || [];
 const WGLT_MASTER_DATA = APP_DATA.masterData || {weeks:[]};
-const MODES = APP_DATA.modes || [];
+const EXPERIENCE_MODES = (APP_DATA.experienceModes && APP_DATA.experienceModes.experienceModes) || [];
+const PRESENTATION_ROLES = (APP_DATA.presentationRoles && APP_DATA.presentationRoles.presentationRoles) || [];
+const TEACHER_TOOLS = APP_DATA.teacherTools || {defaults:{},themes:[]};
+const ELITE_SCENARIOS = (APP_DATA.eliteScenarios && APP_DATA.eliteScenarios.events) || [];
+const ADVANCED_DELAYED = (APP_DATA.advancedDelayedConsequences && APP_DATA.advancedDelayedConsequences.chains) || [];
+const LEGACY_MODES = APP_DATA.modes || [];
+
+function isTeacherRole(){
+  return (state.presentationRole || 'teacher') === 'teacher';
+}
+function isEliteExperience(){
+  return (state.experienceLevel || 'standard') === 'elite';
+}
+function getExperienceConfig(){
+  return EXPERIENCE_MODES.find(m => m.id === (state.experienceLevel || 'standard')) || EXPERIENCE_MODES[1] || EXPERIENCE_MODES[0] || {id:'standard',name:'Standard',description:'Balanced 48-week flow',eventWeights:{life:40,job:30,financial:30},requireMonthlyReflection:false,eliteFeatures:false};
+}
+function getPresentationRoleConfig(){
+  return PRESENTATION_ROLES.find(r => r.id === (state.presentationRole || 'teacher')) || PRESENTATION_ROLES[0] || {id:'teacher',name:'Teacher',description:'Facilitator view',showTeacherTools:true,showBenchmarksInMeta:true};
+}
 function getModeConfig(){
-  return MODES.find(m => m.id === state.currentMode) || MODES[0] || {id:'teacher',name:'Teacher Mode',eventWeights:{life:40,job:30,financial:30},showTeacherTools:true,requireMonthlyReflection:false};
+  const role = getPresentationRoleConfig();
+  const exp = getExperienceConfig();
+  return {
+    id: `${role.id}_${exp.id}`,
+    roleId: role.id,
+    experienceId: exp.id,
+    name: `${role.name} + ${exp.name}`,
+    shortName: `${role.name}/${exp.name}`,
+    description: `${role.description} ${exp.description}`.trim(),
+    eventWeights: exp.eventWeights || {life:40,job:30,financial:30},
+    requireMonthlyReflection: !!exp.requireMonthlyReflection,
+    showTeacherTools: !!role.showTeacherTools,
+    showBenchmarksInMeta: !!role.showBenchmarksInMeta,
+    showScenarioReason: !!role.showScenarioReason,
+    showDelayedTracker: !!role.showDelayedTracker,
+    showRubric: !!role.showRubric,
+    showHiddenNotes: !!role.showHiddenNotes,
+    eliteFeatures: !!exp.eliteFeatures,
+    difficultyBadge: exp.difficultyBadge || exp.name
+  };
 }
 function getModeStorageKey(){
-  return `wgltSave_${state.currentMode || 'teacher'}`;
+  const cfg = getModeConfig();
+  return `wgltSave_${cfg.roleId || 'teacher'}_${cfg.experienceId || 'standard'}`;
 }
 function getRandomEventWeights(){
+  return getModeConfig().eventWeights || {life:40,job:30,financial:30};
+}
+function getTeacherToolConfig(themeKey=''){
+  const themes = TEACHER_TOOLS.themes || [];
+  const defaults = TEACHER_TOOLS.defaults || {};
+  const match = themes.find(t => t.themeKey === themeKey) || {};
+  return {
+    discussionPrompt: match.discussionPrompt || defaults.discussionPrompt || '',
+    hiddenTeachingNote: match.hiddenTeachingNote || defaults.hiddenTeachingNote || '',
+    vocabulary: match.vocabulary || defaults.vocabulary || [],
+    reflectionCheckpoint: match.reflectionCheckpoint || defaults.reflectionCheckpoint || '',
+    rubricNotes: match.rubricNotes || defaults.rubricNotes || []
+  };
+}
+function getAvailableContracts(){
+  return isEliteExperience() ? [...CONTRACTS, ...ELITE_CONTRACTS] : CONTRACTS;
+}
+function getCurrentWeekCard(){
+  const week = Math.max(1, Math.min(48, Number(state.week || state.day || 1)));
+  return (WGLT_MASTER_DATA.weeks || []).find(w => Number(w.week) === week) || (WGLT_MASTER_DATA.weeks || [])[0] || null;
+}
+function getScenarioReasonText(){
   const cfg = getModeConfig();
-  return cfg.eventWeights || {life:40,job:30,financial:30};
+  const weekCard = getCurrentWeekCard();
+  const job = JOBS.find(j => j.id === state.jobId) || {};
+  const weights = cfg.eventWeights || {life:40,job:30,financial:30};
+  const theme = weekCard?.themeKey ? `Theme: ${weekCard.themeKey}.` : '';
+  const goal = weekCard?.learningGoal ? ` Goal this week: ${weekCard.learningGoal}.` : '';
+  const jobText = job.name ? ` Job filter: ${job.name}.` : '';
+  return `This scenario mix is being shaped by ${cfg.name}. Current event weights are ${weights.life || 0}/${weights.job || 0}/${weights.financial || 0} for life/job/financial.${jobText} ${theme}${goal}`.trim();
 }
 function updateModeBadge(){
   const cfg = getModeConfig();
   if(document.getElementById('teacherModeLabel')) document.getElementById('teacherModeLabel').textContent = cfg.name || 'Mode';
   if(document.getElementById('modeSummaryLabel')) document.getElementById('modeSummaryLabel').textContent = cfg.description || '';
 }
-
-
-
 
 /* ============================================================
    INLINED WIX-FRIENDLY MASTER DATA
@@ -2098,7 +2162,9 @@ const state = {
   credit: 650,
 
   teacherMode:true,
-  currentMode:"teacher",
+  presentationRole:"teacher",
+  experienceLevel:"standard",
+  currentMode:"teacher_standard",
   lockMode:false,
 
   bank: {
@@ -2332,8 +2398,12 @@ function applyLockRules(){
 
   if(!state.lockMode || !waiting || isNonBlocking){
     
-  if($("modeTeacherBtn")) $("modeTeacherBtn").onclick=()=>{ beep("click"); enterTeacherMode(); };
-  if($("modeEliteBtn")) $("modeEliteBtn").onclick=()=>{ beep("click"); enterEliteMode(); };
+  if($("modeStudentBeginnerBtn")) $("modeStudentBeginnerBtn").onclick=()=>{ beep("click"); selectConfiguration('student','beginner'); };
+  if($("modeStudentStandardBtn")) $("modeStudentStandardBtn").onclick=()=>{ beep("click"); selectConfiguration('student','standard'); };
+  if($("modeStudentEliteBtn")) $("modeStudentEliteBtn").onclick=()=>{ beep("click"); selectConfiguration('student','elite'); };
+  if($("modeTeacherBeginnerBtn")) $("modeTeacherBeginnerBtn").onclick=()=>{ beep("click"); selectConfiguration('teacher','beginner'); };
+  if($("modeTeacherStandardBtn")) $("modeTeacherStandardBtn").onclick=()=>{ beep("click"); selectConfiguration('teacher','standard'); };
+  if($("modeTeacherEliteBtn")) $("modeTeacherEliteBtn").onclick=()=>{ beep("click"); selectConfiguration('teacher','elite'); };
   if($("btnLoadLocalFromMenu")) $("btnLoadLocalFromMenu").onclick=()=>{ beep("click"); loadTeacherLocal(); };
   if($("btnImportSaveFromMenu")) $("btnImportSaveFromMenu").onclick=()=>{ beep("click"); promptTeacherSaveUpload(); };
   if($("saveFileInput")) $("saveFileInput").addEventListener("change", e=> importTeacherSave(e.target.files && e.target.files[0]));
@@ -2682,7 +2752,7 @@ function renderJob(){
   job.buckets.forEach(b=>{
     const chip=document.createElement("div");
     chip.className="chip";
-    chip.textContent = state.teacherMode ? `Benchmark #${b}: ${BENCH[b]}` : `Benchmark #${b}`;
+    chip.textContent = getModeConfig().showBenchmarksInMeta ? `Benchmark #${b}: ${BENCH[b]}` : `Benchmark #${b}`;
     tags.appendChild(chip);
   });
 }
@@ -3973,7 +4043,7 @@ function startupChoose(){
 
   function renderStartupModal(){
     $("mTitle").textContent = "🏦 Startup: Bank + Insurance";
-    $("mMeta").textContent = state.teacherMode ? `Benchmark #1: ${BENCH[1]} • Benchmark #6: ${BENCH[6]} • Benchmark #12: ${BENCH[12]}` : "Benchmark #1 • #6 • #12";
+    $("mMeta").textContent = getModeConfig().showBenchmarksInMeta ? `Benchmark #1: ${BENCH[1]} • Benchmark #6: ${BENCH[6]} • Benchmark #12: ${BENCH[12]}` : "Benchmark #1 • #6 • #12";
 
     $("mBody").innerHTML = `
       <div style="font-weight:1000">Pick a checking account, choose a savings path, fund your new accounts with cash, then choose insurance. Your choices stay highlighted.</div>
@@ -4884,7 +4954,7 @@ function openInvestmentChoiceModal(amount, label, onDone){
 function triggerInheritance(){
   openModal({
     title:"🧾 Inheritance Event",
-    meta: state.teacherMode ? `Benchmark #5: ${BENCH[5]} • Benchmark #3: ${BENCH[3]}` : "Benchmark #5 • Benchmark #3",
+    meta: getModeConfig().showBenchmarksInMeta ? `Benchmark #5: ${BENCH[5]} • Benchmark #3: ${BENCH[3]}` : "Benchmark #5 • Benchmark #3",
     body:"You receive $200. Choose what to do:",
     buttons:[{id:"save",label:"Save it",kind:"success"},{id:"spend",label:"Spend it",kind:"warn"},{id:"invest",label:"Invest it",kind:"primary"}],
     onPick:(id)=>{
@@ -4918,7 +4988,7 @@ function triggerInheritance(){
 function startDispute(){
   openModal({
     title:"📞 Billing Dispute",
-    meta: state.teacherMode ? `Benchmark #11: ${BENCH[11]} • Benchmark #13: ${BENCH[13]}` : "Benchmark #11 • Benchmark #13",
+    meta: getModeConfig().showBenchmarksInMeta ? `Benchmark #11: ${BENCH[11]} • Benchmark #13: ${BENCH[13]}` : "Benchmark #11 • Benchmark #13",
     body:"Mystery charge: $35. What do you do?",
     buttons:[
       {id:"dispute",label:"Dispute",kind:"success"},
@@ -5144,7 +5214,7 @@ function getContractById(id){
 function populateContracts(){
   const sel = $("contractPick");
   sel.innerHTML="";
-  CONTRACTS.forEach(c=>{
+  getAvailableContracts().forEach(c=>{
     const opt=document.createElement("option");
     opt.value=c.id;
     opt.textContent = `${c.name} ($${c.monthly}/mo)`;
@@ -5157,7 +5227,7 @@ function populateContracts(){
 function reviewSelectedContract(){
   const id = $("contractPick").value;
   state.contractId = id;
-  const c = CONTRACTS.find(x=>x.id===id);
+  const c = getAvailableContracts().find(x=>x.id===id);
   if(!c) return;
 
   const meta = state.teacherMode
@@ -5202,7 +5272,8 @@ function cancelContract(){
     return;
   }
   const id = state.contractId || $("contractPick").value;
-  const c = CONTRACTS.find(x=>x.id===id) || CONTRACTS[0];
+  const contracts = getAvailableContracts();
+  const c = contracts.find(x=>x.id===id) || contracts[0];
 
   openModal({
     title:"Cancel Contract?",
@@ -5526,7 +5597,7 @@ function runJobRealLifeEvent(){
 function compareBanks(){
   openModal({
     title:"🏦 Compare Banks",
-    meta: state.teacherMode ? `Benchmark #1: ${BENCH[1]} • Benchmark #3: ${BENCH[3]}` : "Benchmark #1 • Benchmark #3",
+    meta: getModeConfig().showBenchmarksInMeta ? `Benchmark #1: ${BENCH[1]} • Benchmark #3: ${BENCH[3]}` : "Benchmark #1 • Benchmark #3",
     body:
 `Student Checking: no monthly checking fee. If you spend more than you have, overdraft fee = $20.
 Standard Checking: $5/mo fee taken from savings. If you spend more than you have, overdraft fee = $10.
@@ -6070,30 +6141,25 @@ function ensureTeacherModeMenu(){
   openTab("plan");
   refreshSaveStatus();
 }
-function enterTeacherMode(){
+function selectConfiguration(role='teacher', experience='standard'){
   if($("modeSelectScreen")) $("modeSelectScreen").style.display = "none";
-  state.teacherMode = true;
-  state.currentMode = "teacher";
+  state.presentationRole = role;
+  state.experienceLevel = experience;
+  state.teacherMode = role === 'teacher';
+  state.currentMode = `${role}_${experience}`;
   state.lockMode = false;
-  if(payload.mode) state.currentMode = payload.mode;
   updateModeBadge();
   openTab("plan");
-  setLog("Teacher mode ready. Choose and lock your year plan first.");
+  const cfg = getModeConfig();
+  const launchLine = cfg.eliteFeatures
+    ? `${cfg.name} ready. Choose and lock your year plan first. Expect stronger pressure, advanced contracts, and consequence chains.`
+    : `${cfg.name} ready. Choose and lock your year plan first.`;
+  setLog(launchLine);
   refreshPreMissionPulse();
   renderAll();
 }
-function enterEliteMode(){
-  if($("modeSelectScreen")) $("modeSelectScreen").style.display = "none";
-  state.teacherMode = true;
-  state.currentMode = "elite";
-  state.lockMode = false;
-  if(payload.mode) state.currentMode = payload.mode;
-  updateModeBadge();
-  openTab("plan");
-  setLog("Elite mode ready. Choose and lock your year plan first. Expect tighter money pressure and required reflections.");
-  refreshPreMissionPulse();
-  renderAll();
-}
+function enterTeacherMode(){ selectConfiguration('teacher','standard'); }
+function enterEliteMode(){ selectConfiguration('teacher','elite'); }
 function refreshSaveStatus(text){
   const el = $("saveStatus");
   if(!el) return;
@@ -6160,8 +6226,10 @@ function mergeIntoState(target, source){
 }
 function getTeacherSavePayload(){
   return {
-    version: 1,
-    mode: state.currentMode || "teacher",
+    version: 2,
+    mode: state.currentMode || "teacher_standard",
+    presentationRole: state.presentationRole || 'teacher',
+    experienceLevel: state.experienceLevel || 'standard',
     savedAt: new Date().toISOString(),
     state: stateToSnapshot(state),
     teacherReflections: teacherReflections.map(r=>({...r}))
@@ -6172,14 +6240,17 @@ function applyTeacherSavePayload(payload, announce=true){
   const restored = snapshotToState(payload.state);
   mergeIntoState(state, restored);
   state.lockMode = false;
-  if(payload.mode) state.currentMode = payload.mode;
+  state.presentationRole = payload.presentationRole || restored.presentationRole || state.presentationRole || 'teacher';
+  state.experienceLevel = payload.experienceLevel || restored.experienceLevel || state.experienceLevel || 'standard';
+  state.teacherMode = state.presentationRole === 'teacher';
+  state.currentMode = payload.mode || `${state.presentationRole}_${state.experienceLevel}`;
   teacherReflections = Array.isArray(payload.teacherReflections) ? payload.teacherReflections.map(r=>({...r})) : [];
   renderAll();
   renderReflectionReport();
   if($("modeSelectScreen")) $("modeSelectScreen").style.display = "none";
   openTab("plan");
   refreshSaveStatus(payload.savedAt ? `Loaded save from ${new Date(payload.savedAt).toLocaleString()}.` : "Save loaded.");
-  if(announce) showBanner("Teacher save loaded");
+  if(announce) showBanner(`${getModeConfig().name} save loaded`);
 }
 function saveTeacherLocal(silent=false){
   try{
@@ -6531,6 +6602,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     clearRandomEventPending();
     applyLockRules();
     runJobRealLifeEvent();
+    maybeTriggerEliteScenario("job");
     if(hadPending) showBanner("Nice. You played the randomly selected event.");
   };
   if($("btnSchoolEvent")) $("btnSchoolEvent").onclick=()=>{
@@ -6539,6 +6611,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     clearRandomEventPending();
     applyLockRules();
     runLifeScenarioDecision();
+    maybeTriggerEliteScenario("life");
     if(hadPending) showBanner("Nice. You played the randomly selected event.");
   };
   if($("btnSocialEvent")) $("btnSocialEvent").onclick=()=>{
@@ -6547,6 +6620,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     clearRandomEventPending();
     applyLockRules();
     runFinancialDecision();
+    maybeTriggerEliteScenario("financial");
     if(hadPending) showBanner("Nice. You played the randomly selected event.");
   };
   if($("btnRandomEvent")) $("btnRandomEvent").onclick=()=> runRandomEvent();
@@ -6568,6 +6642,85 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
   if($("btnCreditInfo")) $("btnCreditInfo").onclick=()=> showBucketInfo(5);
 }
 
+
+
+function maybeTriggerEliteScenario(sourceType='life'){
+  if(!isEliteExperience() || !ELITE_SCENARIOS.length) return;
+  const currentWeek = Math.max(1, Math.min(48, Number(state.week || state.day || 1)));
+  if(!state.ui) state.ui = {};
+  if(state.ui.lastEliteWeekTriggered === currentWeek) return;
+  if(Math.random() > 0.35) return;
+  const options = ELITE_SCENARIOS.filter(ev => {
+    const range = ev.weeksAllowed || [1,48];
+    return currentWeek >= Number(range[0] || 1) && currentWeek <= Number(range[1] || 48);
+  });
+  const ev = options[Math.floor(Math.random()*options.length)] || ELITE_SCENARIOS[0];
+  if(!ev) return;
+  state.ui.lastEliteWeekTriggered = currentWeek;
+  openHtmlModal({
+    title:`⚡ Elite Scenario: ${ev.title}`,
+    meta:`Week ${currentWeek} • Triggered after ${sourceType} event`,
+    html:`<div style="font-weight:900;line-height:1.5">${escapeHtml(ev.description || '')}</div>`,
+    buttons:(ev.choices || []).map(choice => ({
+      label: choice.label,
+      kind: 'secondary',
+      onClick:()=>{
+        const fx = choice.effects || {};
+        if(Number(fx.cash || 0) < 0) payFromCheckingThenCashThenSavings(Math.abs(Number(fx.cash || 0)));
+        else state.cash += Number(fx.cash || 0);
+        state.bank.savings += Number(fx.savings || 0);
+        state.credit = clamp(state.credit + Number(fx.credit || 0), 300, 850);
+        if(!state.weekEngine) state.weekEngine = {pending:[], choices:{}};
+        if(choice.tag === 'disciplined' || choice.tag === 'growth'){
+          state.weekEngine.pending.push({label:`Elite echo from ${ev.title}`, triggerWeek:Math.min(48,currentWeek+2)});
+        }
+        addLedgerLine(`Elite scenario: ${ev.title} → ${choice.label}`);
+        closeHtmlModal();
+        renderAll();
+      }
+    })).concat([{label:'Skip Elite Prompt', kind:'warn', onClick:()=>closeHtmlModal()}])
+  });
+}
+
+function renderTeacherToolkit(){
+  const panel = $("panel-teacherToolkit");
+  const box = $("teacherToolkitBox");
+  if(!panel || !box) return;
+  const cfg = getModeConfig();
+  if(!cfg.showTeacherTools){
+    panel.style.display = 'none';
+    box.innerHTML = 'Teacher tools are hidden in Student role.';
+    return;
+  }
+  panel.style.display = 'block';
+  const weekCard = getCurrentWeekCard();
+  const tool = getTeacherToolConfig(weekCard?.themeKey || '');
+  const pending = (state.weekEngine && Array.isArray(state.weekEngine.pending)) ? state.weekEngine.pending : [];
+  const masterTracks = (state.masterScenario && state.masterScenario.trackCounts) ? state.masterScenario.trackCounts : {};
+  const trackRows = Object.keys(masterTracks).length
+    ? Object.entries(masterTracks).map(([k,v])=>`<li><b>${escapeHtml(k)}</b>: ${escapeHtml(String(v))}</li>`).join('')
+    : '<li>No master consequence tracks have built up yet.</li>';
+  const pendingRows = pending.length
+    ? pending.slice(0,6).map(item=>`<li><b>Week ${escapeHtml(String(item.triggerWeek || '?'))}</b>: ${escapeHtml(item.label || 'Pending consequence')}</li>`).join('')
+    : '<li>No pending delayed consequences yet.</li>';
+  const vocab = (tool.vocabulary || []).map(v=>`<span class="teacher-badge">${escapeHtml(v)}</span>`).join(' ');
+  const rubric = (tool.rubricNotes || []).map(r=>`<li>${escapeHtml(r)}</li>`).join('');
+  const eliteList = isEliteExperience()
+    ? `<div class="impact-box" style="margin-top:10px"><b>Elite Layer Active</b><br>Advanced contracts available: ${escapeHtml(String(getAvailableContracts().length))}. Bonus elite scenarios loaded: ${escapeHtml(String(ELITE_SCENARIOS.length))}. Advanced delayed chains loaded: ${escapeHtml(String(ADVANCED_DELAYED.length))}.</div>`
+    : '';
+  box.innerHTML = `
+    <div style="display:grid;gap:10px">
+      <div class="impact-box"><b>Scenario Reason Preview</b><br>${escapeHtml(getScenarioReasonText())}</div>
+      <div class="impact-box"><b>Discussion Prompt</b><br>${escapeHtml(tool.discussionPrompt || 'No prompt loaded.')}</div>
+      ${cfg.showHiddenNotes ? `<div class="impact-box"><b>Hidden Teaching Note</b><br>${escapeHtml(tool.hiddenTeachingNote || 'No hidden teaching note loaded.')}</div>` : ''}
+      <div class="impact-box"><b>Vocabulary Callouts</b><br>${vocab || '<span class="muted">No vocabulary callouts loaded.</span>'}</div>
+      <div class="impact-box"><b>Reflection Checkpoint</b><br>${escapeHtml(tool.reflectionCheckpoint || 'No reflection checkpoint loaded.')}</div>
+      ${cfg.showDelayedTracker ? `<div class="impact-box"><b>Visible Delayed Consequence Tracking</b><ul>${trackRows}</ul><div style="height:8px"></div><b>Pending Chain Items</b><ul>${pendingRows}</ul></div>` : ''}
+      ${cfg.showRubric ? `<div class="impact-box"><b>Score / Rubric Notes</b><ul>${rubric}</ul></div>` : ''}
+      ${eliteList}
+    </div>`;
+}
+
 /* Render all */
 function renderAll(){
   renderHeader();
@@ -6577,6 +6730,7 @@ function renderAll(){
   renderCDStatus();
   renderMeters();
   renderSheet();
+  renderTeacherToolkit();
   applyLockRules();
   if(!state.mission.active){
     if(state.plan.lockedForYear && !state.jobLocked){
@@ -6611,7 +6765,7 @@ function openMonthlyReflectionPrompt(monthName){
   openHtmlModal({
     title:`🧠 ${cfg.name} Reflection Check`,
     meta:`${monthName} monthly checkpoint`,
-    html:`<div style="font-weight:900;line-height:1.45">Before moving deeper into Elite Mode, capture a quick reflection for <b>${monthName}</b>.<br><br>Use the prompt below in the Reflection tool:
+    html:`<div style="font-weight:900;line-height:1.45">Before moving deeper into ${cfg.name}, capture a quick reflection for <b>${monthName}</b>.<br><br>Use the prompt below in the Reflection tool:
 <br><br><i>What money choice helped you most this month, what mistake cost you flexibility, and what will you change next month?</i></div>`,
     buttons:[
       {label:"Open Reflection Tool", kind:"primary", onClick:()=>{ closeHtmlModal(); openReflectionPrompt(); }},

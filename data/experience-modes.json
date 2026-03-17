@@ -1,0 +1,46 @@
+{
+  "experienceModes": [
+    {
+      "id": "beginner",
+      "name": "Beginner",
+      "description": "Softer pressure, extra guidance, and forgiving event flow.",
+      "eventWeights": {
+        "life": 50,
+        "job": 25,
+        "financial": 25
+      },
+      "requireMonthlyReflection": false,
+      "eliteFeatures": false,
+      "contractTier": "core",
+      "difficultyBadge": "Warm-up"
+    },
+    {
+      "id": "standard",
+      "name": "Standard",
+      "description": "Balanced 48-week flow with normal pressure and mixed event pacing.",
+      "eventWeights": {
+        "life": 40,
+        "job": 30,
+        "financial": 30
+      },
+      "requireMonthlyReflection": false,
+      "eliteFeatures": false,
+      "contractTier": "core",
+      "difficultyBadge": "Balanced"
+    },
+    {
+      "id": "elite",
+      "name": "Elite",
+      "description": "Advanced pressure, consequence chains, stronger tradeoffs, and required monthly reflection.",
+      "eventWeights": {
+        "life": 35,
+        "job": 35,
+        "financial": 30
+      },
+      "requireMonthlyReflection": true,
+      "eliteFeatures": true,
+      "contractTier": "elite",
+      "difficultyBadge": "Advanced"
+    }
+  ]
+}

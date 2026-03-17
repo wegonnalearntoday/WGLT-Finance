@@ -410,6 +410,8 @@ main::before{
       box-shadow:var(--shadow); padding:22px;
     }
     .mode-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-top:14px; }
+    .mode-grid-6{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    @media (max-width:900px){ .mode-grid-6{ grid-template-columns:1fr; } }
     .mode-btn{
       border:2px solid #bcd3ff; border-radius:20px; background:linear-gradient(180deg,#f7fbff,#eef5ff);
       padding:16px; text-align:left; cursor:pointer; font-weight:1000; color:var(--ink);
@@ -466,19 +468,21 @@ main::before{
 
   <div class="mode-screen" id="modeSelectScreen">
     <div class="mode-card">
-      <div style="font-size:28px;font-weight:1100">Choose Your WGLT Mode</div>
-      <div class="muted" style="margin-top:6px;font-size:13px">This GitHub-ready build uses external JSON banks for jobs, contracts, ledger items, benchmarks, modes, and the 48-week scenario engine. Pick your lane and the simulator loads the same core engine with different pressure rules.</div>
-      <div class="mode-grid">
-        <button class="mode-btn glow-next" id="modeTeacherBtn" type="button">
-          <span class="emoji">🎓</span>Teacher Mode
-          <small>Guided 48-week lesson path with reports, reflections, save/resume, and classroom checkpoint tools.</small>
-        </button>
-        <button class="mode-btn" id="modeEliteBtn" type="button">
-          <span class="emoji">⚡</span>Elite Mode
-          <small>Same simulator core with tighter event pressure, a different random-event mix, and monthly reflection prompts for advanced play.</small>
-        </button>
+      <div style="font-size:28px;font-weight:1100">Choose Role + Experience</div>
+      <div class="muted" style="margin-top:6px;font-size:13px">This GitHub-ready build separates <b>Presentation / Role</b> from <b>Difficulty / Experience</b>. Pick any combo below and the simulator loads the same core engine with different support tools and pressure rules.</div>
+      <div class="impact-box" style="margin-top:12px">
+        <b>Presentation / Role</b>: Student or Teacher<br>
+        <b>Difficulty / Experience</b>: Beginner, Standard, or Elite
       </div>
-      <div class="impact-box" style="margin-top:14px">JSON banks now drive the content layer, which makes the simulator much easier to expand with more modes, jobs, events, and classroom packs.</div>
+      <div class="mode-grid mode-grid-6">
+        <button class="mode-btn glow-next" id="modeStudentBeginnerBtn" type="button"><span class="emoji">🧭</span>Student + Beginner<small>Cleaner student view, softer pressure, and extra room to learn the loop.</small></button>
+        <button class="mode-btn" id="modeStudentStandardBtn" type="button"><span class="emoji">🎮</span>Student + Standard<small>Balanced gameplay with the normal event mix and fewer scaffolds.</small></button>
+        <button class="mode-btn" id="modeStudentEliteBtn" type="button"><span class="emoji">🚀</span>Student + Elite<small>Advanced contracts, stronger tradeoffs, and monthly reflection pressure.</small></button>
+        <button class="mode-btn" id="modeTeacherBeginnerBtn" type="button"><span class="emoji">🧑‍🏫</span>Teacher + Beginner<small>Facilitator prompts and notes with the gentlest gameplay pressure.</small></button>
+        <button class="mode-btn" id="modeTeacherStandardBtn" type="button"><span class="emoji">📘</span>Teacher + Standard<small>Guided classroom flow with balanced simulation pressure and full teaching tools.</small></button>
+        <button class="mode-btn" id="modeTeacherEliteBtn" type="button"><span class="emoji">⚡</span>Teacher + Elite<small>All teaching tools plus elite pressure, consequence chains, advanced contracts, and required reflections.</small></button>
+      </div>
+      <div class="impact-box" style="margin-top:14px">JSON banks now drive the content layer for roles, experiences, contracts, teacher prompts, and elite extensions, which makes the simulator much easier to scale.</div>
       <div class="mode-screen-actions">
         <button class="btn secondary" id="btnLoadLocalFromMenu" type="button">Resume Local Save</button>
         <button class="btn secondary" id="btnImportSaveFromMenu" type="button">Upload Save File</button>
@@ -598,6 +602,7 @@ main::before{
           <div class="tab" data-tab="events">Events</div>
           <div class="tab" data-tab="contracts">Contracts</div>
           <div class="tab" data-tab="reports">Reports</div>
+          <div class="tab" data-tab="teacherToolkit">Teacher Toolkit</div>
           <div class="tab" data-tab="sheet">Budget Sheet</div>
           <div class="tab" data-tab="help">How to Play</div>
         </div>
@@ -896,6 +901,14 @@ Insurance: Not chosen</div>
             </div>
           </div>
 
+
+          <div class="panel" id="panel-teacherToolkit" style="display:none">
+            <div class="field">
+              <div class="name">Teacher Toolkit</div>
+              <div class="def">Discussion prompts, hidden notes, vocabulary, scenario reason, visible consequence tracking, and rubric notes appear here for Teacher role combinations.</div>
+              <div class="log" id="teacherToolkitBox" style="min-height:260px; overflow-y:auto; max-height:600px;">Teacher tools are hidden in Student role.</div>
+            </div>
+          </div>
 
           <!-- SHEET -->
           <div class="panel" id="panel-sheet">

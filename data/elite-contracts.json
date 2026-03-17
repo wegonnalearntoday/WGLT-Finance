@@ -1,0 +1,50 @@
+[
+  {
+    "id": "hysa_challenge",
+    "name": "HYSA Auto-Save Challenge",
+    "monthly": 20,
+    "autoRenew": true,
+    "cancelFee": 0,
+    "disclosure": "Moves $20 into high-yield savings every month. Excellent for discipline, rough on short-term flexibility.",
+    "bucket": [
+      3,
+      4,
+      7,
+      8,
+      11
+    ],
+    "strategyNote": "Good but costly now. Builds cushion and growth if the student can live with less cash this month."
+  },
+  {
+    "id": "starter_etf",
+    "name": "Starter ETF Auto-Invest",
+    "monthly": 25,
+    "autoRenew": true,
+    "cancelFee": 10,
+    "disclosure": "A beginner investment lane. Long-term upside, but the money is less liquid than a savings account.",
+    "bucket": [
+      3,
+      4,
+      8,
+      11,
+      12
+    ],
+    "strategyNote": "Best for students with extra room in wants or strong savings habits already in place."
+  },
+  {
+    "id": "side_hustle_supplies",
+    "name": "Side Hustle Supply Bundle",
+    "monthly": 18,
+    "autoRenew": false,
+    "cancelFee": 0,
+    "disclosure": "Supplies can unlock larger job payouts later, but only if the student sticks with the plan.",
+    "bucket": [
+      1,
+      7,
+      8,
+      11,
+      12
+    ],
+    "strategyNote": "Classic opportunity cost. Short-term pinch for possible later upside."
+  }
+]

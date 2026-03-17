@@ -1,0 +1,141 @@
+{
+  "events": [
+    {
+      "id": "elite_cash_crunch",
+      "title": "Cash Cushion Crunch",
+      "description": "A small emergency hits right after an unplanned want. You now have to decide what gets protected.",
+      "weeksAllowed": [
+        5,
+        48
+      ],
+      "choices": [
+        {
+          "label": "Protect savings and cut wants",
+          "effects": {
+            "cash": -8,
+            "savings": 0,
+            "credit": 1
+          },
+          "tag": "disciplined"
+        },
+        {
+          "label": "Pull from savings to stay comfortable",
+          "effects": {
+            "cash": 0,
+            "savings": -10
+          },
+          "tag": "comfortable-now"
+        },
+        {
+          "label": "Ignore it and hope next week fixes it",
+          "effects": {
+            "cash": 0,
+            "credit": -4
+          },
+          "tag": "delay"
+        }
+      ]
+    },
+    {
+      "id": "elite_contract_pressure",
+      "title": "Contract Pressure",
+      "description": "A better-paying contract appears, but it requires supplies now and reliable follow-through later.",
+      "weeksAllowed": [
+        8,
+        48
+      ],
+      "choices": [
+        {
+          "label": "Take it and buy supplies",
+          "effects": {
+            "cash": -15,
+            "credit": 2
+          },
+          "tag": "growth"
+        },
+        {
+          "label": "Negotiate for later start",
+          "effects": {
+            "cash": 0,
+            "credit": 1
+          },
+          "tag": "cautious"
+        },
+        {
+          "label": "Decline and keep flexibility",
+          "effects": {
+            "cash": 0,
+            "savings": 2
+          },
+          "tag": "safe"
+        }
+      ]
+    },
+    {
+      "id": "elite_rate_compare",
+      "title": "Rate Compare",
+      "description": "You can split extra cash across checking, HYSA, or a CD. Each choice solves a different problem.",
+      "weeksAllowed": [
+        4,
+        48
+      ],
+      "choices": [
+        {
+          "label": "Keep it liquid in checking",
+          "effects": {
+            "cash": 5
+          },
+          "tag": "liquidity"
+        },
+        {
+          "label": "Move it to HYSA for growth",
+          "effects": {
+            "savings": 8
+          },
+          "tag": "growth"
+        },
+        {
+          "label": "Lock it into a CD",
+          "effects": {
+            "savings": 12,
+            "cash": -5
+          },
+          "tag": "commitment"
+        }
+      ]
+    },
+    {
+      "id": "elite_social_tradeoff",
+      "title": "Social Tradeoff",
+      "description": "Friends want to go out, but a bill and a saving goal are both staring at you.",
+      "weeksAllowed": [
+        3,
+        48
+      ],
+      "choices": [
+        {
+          "label": "Go and spend",
+          "effects": {
+            "cash": -12
+          },
+          "tag": "social"
+        },
+        {
+          "label": "Go but set a strict limit",
+          "effects": {
+            "cash": -5,
+            "credit": 1
+          },
+          "tag": "balanced"
+        },
+        {
+          "label": "Skip and protect the plan",
+          "effects": {
+            "savings": 5
+          },
+          "tag": "disciplined"
+        }
+      ]
+    }
+  ]
+}

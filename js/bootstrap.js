@@ -10,7 +10,13 @@
     ledgerCatalog: './data/ledger-catalog.json',
     socialWantsDeck: './data/social-wants-deck.json',
     masterData: './data/master-data.json',
-    modes: './data/modes.json'
+    modes: './data/modes.json',
+    experienceModes: './data/experience-modes.json',
+    presentationRoles: './data/presentation-roles.json',
+    teacherTools: './data/teacher-tools.json',
+    eliteContracts: './data/elite-contracts.json',
+    eliteScenarios: './data/elite-scenarios.json',
+    advancedDelayedConsequences: './data/advanced-delayed-consequences.json'
   };
   const entries = await Promise.all(Object.entries(files).map(async ([key, path]) => {
     const res = await fetch(path, {cache:'no-store'});

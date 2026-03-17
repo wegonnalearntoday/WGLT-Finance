@@ -1,0 +1,81 @@
+{
+  "defaults": {
+    "discussionPrompt": "What made this choice feel easy in the moment, and what made it financially risky later?",
+    "hiddenTeachingNote": "Coach students to name the tradeoff, not just the answer. The learning lives in the why.",
+    "vocabulary": [
+      "budget",
+      "tradeoff",
+      "consequence",
+      "opportunity cost"
+    ],
+    "reflectionCheckpoint": "Describe one smart move, one risky move, and one thing you would change next week.",
+    "rubricNotes": [
+      "4 - Strong planning language and clear justification.",
+      "3 - Mostly sound choice with some explanation.",
+      "2 - Choice made but little reasoning shown.",
+      "1 - Impulsive choice with no reflection."
+    ]
+  },
+  "themes": [
+    {
+      "themeKey": "planning",
+      "discussionPrompt": "Why is a plan strongest before the money is spent?",
+      "hiddenTeachingNote": "Push students to separate a sale from true affordability.",
+      "vocabulary": [
+        "plan",
+        "paycheck",
+        "impulse",
+        "affordability"
+      ],
+      "reflectionCheckpoint": "How did planning protect your cash this week?"
+    },
+    {
+      "themeKey": "saving",
+      "discussionPrompt": "What is the difference between saving because you can and saving because you planned to?",
+      "hiddenTeachingNote": "Point out how small consistent choices become visible over four weeks.",
+      "vocabulary": [
+        "saving",
+        "goal",
+        "consistency",
+        "buffer"
+      ],
+      "reflectionCheckpoint": "What saving move gave you the most flexibility?"
+    },
+    {
+      "themeKey": "credit",
+      "discussionPrompt": "How can a small missed payment grow teeth later?",
+      "hiddenTeachingNote": "Connect credit behaviors to trust and future borrowing power.",
+      "vocabulary": [
+        "credit",
+        "late fee",
+        "trust",
+        "payment history"
+      ],
+      "reflectionCheckpoint": "What could keep this problem from happening next month?"
+    },
+    {
+      "themeKey": "risk",
+      "discussionPrompt": "Which option felt safe, and which only looked safe at first?",
+      "hiddenTeachingNote": "Use this moment to teach hidden costs and fine print.",
+      "vocabulary": [
+        "risk",
+        "fee",
+        "fine print",
+        "insurance"
+      ],
+      "reflectionCheckpoint": "Which hidden risk would you watch for next time?"
+    },
+    {
+      "themeKey": "investing",
+      "discussionPrompt": "When is patience the smarter flex than instant spending?",
+      "hiddenTeachingNote": "Remind students that growth often looks quiet before it looks exciting.",
+      "vocabulary": [
+        "HYSA",
+        "CD",
+        "interest",
+        "growth"
+      ],
+      "reflectionCheckpoint": "What choice today could pay off later?"
+    }
+  ]
+}
