@@ -241,6 +241,11 @@ body{
 .start-btn:active{transform:translateY(0);}
 .start-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
 
+.jr-reset-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.jr-mini-btn{border:none;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer;box-shadow:var(--shadow);}
+.jr-mini-btn.reset{background:#fff7e8;color:#9a5a00;}
+.jr-mini-btn.clear{background:#ffe9ec;color:#a12b41;}
+
 /* ── MAIN GAME SCREEN ─────────────────────────────────────────── */
 .game-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
 
@@ -828,23 +833,23 @@ body{
       <div class="jar-panel">
         <h3>💰 My Money Jars</h3>
         <div class="jars">
-          <div class="jar-wrap">
+          <div class="jar-wrap jar-spend">
             <span class="jar-label">Spend</span>
-            <div class="jar-container jar-spend-c">
+            <div class="jar-container">
               <div class="jar-fill" id="jar-spend-fill" style="height:0%"></div>
             </div>
             <span class="jar-amount jar-spend" id="jar-spend-amt">$0</span>
           </div>
-          <div class="jar-wrap">
+          <div class="jar-wrap jar-save">
             <span class="jar-label">Save</span>
-            <div class="jar-container jar-save-c">
+            <div class="jar-container">
               <div class="jar-fill" id="jar-save-fill" style="height:0%"></div>
             </div>
             <span class="jar-amount jar-save" id="jar-save-amt">$0</span>
           </div>
-          <div class="jar-wrap">
+          <div class="jar-wrap jar-share">
             <span class="jar-label">Share</span>
-            <div class="jar-container jar-share-c">
+            <div class="jar-container">
               <div class="jar-fill" id="jar-share-fill" style="height:0%"></div>
             </div>
             <span class="jar-amount jar-share" id="jar-share-amt">$0</span>
@@ -886,6 +891,10 @@ body{
     <button class="next-btn" id="next-btn" onclick="nextWeek()" disabled>
       Next Week ➡️
     </button>
+    <div class="jr-reset-row">
+      <button class="jr-mini-btn reset" type="button" onclick="confirmResetGame()">🔁 Reset Jr Game</button>
+      <button class="jr-mini-btn clear" type="button" onclick="clearProfileAndReset()">🗑️ Clear Saved Player</button>
+    </div>
 
     <!-- Teacher panel -->
     <div class="teacher-panel" id="teacher-panel" style="display:none">
@@ -1386,6 +1395,7 @@ const WEEK_EMOJIS = ['☀️','🌤️','⛅','🌡️','🌧️','🌈','🌟',
 const SHARED_PROFILE_KEY = 'wgltSharedPlayerProfile';
 function saveSharedProfile(){ try{ localStorage.setItem(SHARED_PROFILE_KEY, JSON.stringify({ playerName: state.playerName || '', avatar: state.avatar || '', avatarName: state.avatarName || '', updatedAt: new Date().toISOString() })); }catch(err){} }
 function loadSharedProfile(){ try{ const raw = localStorage.getItem(SHARED_PROFILE_KEY); return raw ? JSON.parse(raw) : null; }catch(err){ return null; } }
+function clearSharedProfile(){ try{ localStorage.removeItem(SHARED_PROFILE_KEY); }catch(err){} }
 
 // ══════════════════════════════════════════════════════════════════
 // AVATAR & NAME
@@ -2019,16 +2029,28 @@ function resetGame() {
   document.querySelectorAll('.job-card').forEach(c=>c.classList.remove('selected'));
   document.querySelectorAll('.cause-btn').forEach(b=>b.classList.remove('selected'));
   document.querySelectorAll('.goal-btn').forEach(b=>b.classList.remove('selected'));
-  document.querySelectorAll('.avatar-btn').forEach(b=>b.classList.remove('selected'));
-  document.getElementById('player-name-input').value = '';
   document.getElementById('start-btn').disabled = true;
   document.getElementById('week-progress').style.display = 'none';
-  // Restore header logo
   document.getElementById('header-logo').style.display = '';
   document.getElementById('header-avatar').style.display = 'none';
   document.getElementById('ledger-entries').innerHTML =
     '<div class="ledger-entry event"><span class="l-emoji">🌟</span><span class="l-text">Game started! Good luck!</span><span class="l-amount"></span></div>';
+  hydrateSharedProfileUI();
   showScreen('screen-welcome');
+}
+
+function confirmResetGame(){
+  showModal('🔁','Reset Budget Boss Jr?',
+    'This will restart the current Jr game and take you back to the welcome screen. Your saved player name and avatar will stay unless you choose the clear option.',
+    'Reset Now', resetGame
+  );
+}
+
+function clearProfileAndReset(){
+  showModal('🗑️','Clear Saved Player?',
+    'This will delete the saved player name and avatar for Budget Boss Jr and restart the game fresh.',
+    'Delete + Reset', ()=>{ clearSharedProfile(); resetGame(); }
+  );
 }
 
 // ── Cloud animation re-randomize on load ──
@@ -2046,12 +2068,18 @@ document.querySelectorAll('.cloud').forEach(c=>{
 })();
 
 
-(function hydrateSharedProfile(){
+function hydrateSharedProfileUI(){
   const profile = loadSharedProfile();
-  if(!profile) return;
+  document.querySelectorAll('.avatar-btn').forEach(b => b.classList.remove('selected'));
+  const inp = document.getElementById('player-name-input');
+  if(inp) inp.value = '';
+  if(!profile){
+    updateHeaderAvatar();
+    checkStartReady();
+    return;
+  }
   if(profile.playerName){
     state.playerName = profile.playerName;
-    const inp = document.getElementById('player-name-input');
     if(inp) inp.value = profile.playerName;
   }
   if(profile.avatar){
@@ -2065,7 +2093,9 @@ document.querySelectorAll('.cloud').forEach(c=>{
   }
   updateHeaderAvatar();
   checkStartReady();
-})();
+}
+
+hydrateSharedProfileUI();
 
 </script>
 <script>
