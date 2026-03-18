@@ -55,6 +55,31 @@ function getModeStorageKey(){
   const cfg = getModeConfig();
   return `wgltSave_${cfg.roleId || 'teacher'}_${cfg.experienceId || 'standard'}`;
 }
+
+function getStorageKeyForMode(role='teacher', experience='standard'){
+  return `wgltSave_${role || 'teacher'}_${experience || 'standard'}`;
+}
+function getLocalSaveForMode(role='teacher', experience='standard'){
+  try{
+    const raw = localStorage.getItem(getStorageKeyForMode(role, experience));
+    return raw ? JSON.parse(raw) : null;
+  }catch(err){
+    return null;
+  }
+}
+function hasMeaningfulProgress(payload){
+  if(!payload || !payload.state) return false;
+  const snap = payload.state || {};
+  const ledgerCount = Array.isArray(snap?.ledger?.history) ? snap.ledger.history.length : 0;
+  const teacherCount = Array.isArray(payload.teacherReflections) ? payload.teacherReflections.length : 0;
+  const week = Number(snap?.weekEngine?.week || snap?.week || snap?.day || 1);
+  return !!(snap?.mission?.active || ledgerCount > 0 || teacherCount > 0 || week > 1 || snap?.jobLocked || snap?.plan?.lockedForYear);
+}
+let autoSaveTimer = null;
+function scheduleAutoSave(delay=500){
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(()=>saveTeacherLocal(true), delay);
+}
 function getRandomEventWeights(){
   return getModeConfig().eventWeights || {life:40,job:30,financial:30};
 }
@@ -292,7 +317,7 @@ function saveQuickDecisionReflection(meta={}){
   teacherReflections.unshift(reflection);
   closeHtmlModal();
   renderReflectionReport(true);
-  saveTeacherLocal(true);
+  scheduleAutoSave(100);
   showBanner("Reflection saved");
 }
 
@@ -6437,6 +6462,7 @@ function ensureTeacherModeMenu(){
   if(screen) screen.style.display = "flex";
   openTab("plan");
   refreshSaveStatus();
+  renderSharedProfileBadge();
 }
 function selectConfiguration(role='teacher', experience='standard'){
   renderSharedProfileBadge();
@@ -6456,6 +6482,13 @@ function selectConfiguration(role='teacher', experience='standard'){
   state.lockMode = false;
   updateModeBadge();
   openTab("plan");
+  const existing = getLocalSaveForMode(role, experience);
+  if(hasMeaningfulProgress(existing)){
+    applyTeacherSavePayload(existing, false);
+    refreshSaveStatus(existing.savedAt ? `Resumed local save from ${new Date(existing.savedAt).toLocaleString()}.` : 'Resumed local save.');
+    showBanner(`${getModeConfig().name} resumed`);
+    return;
+  }
   const cfg = getModeConfig();
   const launchLine = cfg.eliteFeatures
     ? `${cfg.name} ready. Choose and lock your year plan first. Expect stronger pressure, advanced contracts, and consequence chains.`
@@ -6463,6 +6496,7 @@ function selectConfiguration(role='teacher', experience='standard'){
   setLog(launchLine);
   refreshPreMissionPulse();
   renderAll();
+  scheduleAutoSave(150);
 }
 window.startRoleDifficulty = function(role, experience){ return selectConfiguration(role, experience); };
 
@@ -6559,6 +6593,7 @@ function applyTeacherSavePayload(payload, announce=true){
   openTab("plan");
   refreshSaveStatus(payload.savedAt ? `Loaded save from ${new Date(payload.savedAt).toLocaleString()}.` : "Save loaded.");
   if(announce) showBanner(`${getModeConfig().name} save loaded`);
+  scheduleAutoSave(150);
 }
 function saveTeacherLocal(silent=false){
   try{
@@ -6708,7 +6743,7 @@ function saveTeacherReflection(){
   teacherReflections.unshift(reflection);
   closeHtmlModal();
   renderReflectionReport(true);
-  saveTeacherLocal(true);
+  scheduleAutoSave(100);
   showBanner("Reflection saved");
 }
 function getCoverageTypeLabel(key){
@@ -7018,6 +7053,14 @@ function renderTeacherToolkit(){
   const eliteList = isEliteExperience()
     ? `<div class="impact-box" style="margin-top:10px"><b>Elite Layer Active</b><br>Advanced contracts available: ${escapeHtml(String(getAvailableContracts().length))}. Bonus elite scenarios loaded: ${escapeHtml(String(ELITE_SCENARIOS.length))}. Advanced delayed chains loaded: ${escapeHtml(String(ADVANCED_DELAYED.length))}.</div>`
     : '';
+  const reflectionBankHtml = Object.entries(AUTO_REFLECTION_BANK).map(([key,pool])=>{
+    const labelMap = {spending:'Spend Reflection Bank', save:'Save Reflection Bank', share:'Share Reflection Bank', general:'General Reflection Bank'};
+    const items = (pool || []).map(item=>`<li>${escapeHtml(item.question || '')}</li>`).join('');
+    return `<div class="impact-box"><b>${escapeHtml(labelMap[key] || key)}</b><ul>${items || '<li>No reflections loaded.</li>'}</ul></div>`;
+  }).join('');
+  const recentReflections = teacherReflections.length
+    ? teacherReflections.slice(0,5).map(r=>`<li><b>Week ${escapeHtml(String(r.week || 1))}</b> • ${escapeHtml(r.decisionType || 'general')}<br><span class="muted">${escapeHtml(r.q1 || 'No question recorded')}</span><br>Student: ${escapeHtml(r.q2 || '—')}<br>Teacher: ${escapeHtml(r.q3 || '—')}</li>`).join('')
+    : '<li>No reflection responses saved yet this session.</li>';
   box.innerHTML = `
     <div style="display:grid;gap:10px">
       <div class="impact-box"><b>Scenario Reason Preview</b><br>${escapeHtml(getScenarioReasonText())}</div>
@@ -7025,6 +7068,9 @@ function renderTeacherToolkit(){
       ${cfg.showHiddenNotes ? `<div class="impact-box"><b>Hidden Teaching Note</b><br>${escapeHtml(tool.hiddenTeachingNote || 'No hidden teaching note loaded.')}</div>` : ''}
       <div class="impact-box"><b>Vocabulary Callouts</b><br>${vocab || '<span class="muted">No vocabulary callouts loaded.</span>'}</div>
       <div class="impact-box"><b>Reflection Checkpoint</b><br>${escapeHtml(tool.reflectionCheckpoint || 'No reflection checkpoint loaded.')}</div>
+      <div class="impact-box"><b>Teacher Prompt</b><br>What would you tell a friend to do here?</div>
+      <div class="impact-box"><b>Recent Reflection Tracker</b><ul>${recentReflections}</ul></div>
+      ${reflectionBankHtml}
       ${cfg.showDelayedTracker ? `<div class="impact-box"><b>Visible Delayed Consequence Tracking</b><ul>${trackRows}</ul><div style="height:8px"></div><b>Pending Chain Items</b><ul>${pendingRows}</ul></div>` : ''}
       ${cfg.showRubric ? `<div class="impact-box"><b>Score / Rubric Notes</b><ul>${rubric}</ul></div>` : ''}
       ${eliteList}
@@ -7050,6 +7096,7 @@ function renderAll(){
     }
     refreshPreMissionPulse();
   }
+  if(state.currentMode && $("modeSelectScreen") && $("modeSelectScreen").style.display !== "flex") scheduleAutoSave(250);
 }
 
 /* INIT */
