@@ -2640,39 +2640,8 @@ Insurance: ${insuranceLabel}`;
   renderCDStatus();
   renderBucketTracker();
   renderMeters();
-  renderBankJars();
 }
 
-
-
-function renderBankJars(){
-  const ids = ["jarCheckingFill","jarSavingsFill","jarCashFill","jarHysaFill","jarCdFill"];
-  if(!ids.every(id => $(id))) return;
-  reconcileHysaBalance();
-  const cdTotal = (state.bank.cds || []).reduce((sum, cd) => sum + (cd.principal || 0) + (cd.accrued || 0), 0);
-  const values = {
-    checking: state.bank.checking || 0,
-    savings: state.bank.savings || 0,
-    cash: state.cash || 0,
-    hysa: (state.bank.hysaPrincipal || 0) + (state.bank.hysaAccrued || 0),
-    cd: cdTotal
-  };
-  const scale = Math.max(100, ...Object.values(values));
-  if($("bankJarScaleLabel")) $("bankJarScaleLabel").textContent = `Scale: $0 to ${money(scale)}`;
-  const map = [
-    ["jarCheckingFill","jarCheckingAmt",values.checking],
-    ["jarSavingsFill","jarSavingsAmt",values.savings],
-    ["jarCashFill","jarCashAmt",values.cash],
-    ["jarHysaFill","jarHysaAmt",values.hysa],
-    ["jarCdFill","jarCdAmt",values.cd]
-  ];
-  map.forEach(([fillId, amtId, amount]) => {
-    const pct = Math.max(0, Math.min(100, Math.round((amount / scale) * 100)));
-    $(fillId).style.height = pct + "%";
-    $(amtId).textContent = money(amount);
-    $(fillId).title = `${money(amount)} of ${money(scale)}`;
-  });
-}
 
 function renderBucketTracker(){
   if(!$("bucketTracker")) return;
@@ -2827,7 +2796,7 @@ function showBucketInfo(bucketNum){
   openModal({
     title:`Benchmark #${bucketNum}`,
     meta: FL_BUCKETS[bucketNum] || BENCH[bucketNum] || "Financial literacy standard",
-    body: defs[bucketNum] || `This benchmark covers ${FL_BUCKETS[bucketNum] || BENCH[bucketNum]}.`,
+    body: defs[bucketNum] || `This bucket covers ${FL_BUCKETS[bucketNum] || BENCH[bucketNum]}.`,
     buttons:[{id:"close",label:"Close",kind:"secondary"}]
   });
 }
@@ -4458,7 +4427,7 @@ Income: ${money(income)}
 Needs: ${money(m.needs)}
 Wants target to build: ${money(m.wantsTarget)}
 Savings + Debt: ${money(m.savingsDebt)}
-Auto split inside that benchmark: Savings ${money(split.save)} • Debt ${money(split.debt)}
+Auto split inside that bucket: Savings ${money(split.save)} • Debt ${money(split.debt)}
 
 ${state.plan.lockedForYear ? 'This plan is already locked for the current year.' : 'Pick the rule you want to teach, then build wants from the dropdown on the Plan tab.'}</div>`;
 
@@ -5831,7 +5800,7 @@ Wants make life fun! But they're the first thing to cut when money is tight. The
     },
     savings: {
       title:"🏦 Savings + Debt",
-      body:`This benchmark covers two important goals: building savings AND paying off debt.
+      body:`This bucket covers two important goals: building savings AND paying off debt.
 
 SAVINGS: Money you set aside for future goals, emergencies, or investing.
 • Regular Savings: 0.5% growth/month
@@ -5840,7 +5809,7 @@ SAVINGS: Money you set aside for future goals, emergencies, or investing.
 
 DEBT PAYMENT: Money used to pay down what you owe (credit cards, loans). Paying debt on time raises your credit score.
 
-In the 70-20-10 Rule (Beginner), 20% goes here. In the 60-20-20 Rule (Balanced), 20% goes here. In the 50-30-20 Rule (Lifestyle), 20% goes here. In the 50-40-10 Rule (Future Builder), 40% goes here. The game auto-splits the benchmark: 75% to savings, 25% to debt pay.
+In the 70-20-10 Rule (Beginner), 20% goes here. In the 60-20-20 Rule (Balanced), 20% goes here. In the 50-30-20 Rule (Lifestyle), 20% goes here. In the 50-40-10 Rule (Future Builder), 40% goes here. The game auto-splits the bucket: 75% to savings, 25% to debt pay.
 
 Why does this matter?
 • Savings = security for emergencies
