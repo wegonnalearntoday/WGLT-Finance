@@ -16,6 +16,11 @@ const TEACHER_TOOLS = APP_DATA.teacherTools || {defaults:{},themes:[]};
 const ELITE_SCENARIOS = (APP_DATA.eliteScenarios && APP_DATA.eliteScenarios.events) || [];
 const ADVANCED_DELAYED = (APP_DATA.advancedDelayedConsequences && APP_DATA.advancedDelayedConsequences.chains) || [];
 const LEGACY_MODES = APP_DATA.modes || [];
+const REAL_LIFE_EVENTS = (APP_DATA.realLifeEvents && APP_DATA.realLifeEvents.events) || [];
+const FINANCIAL_EVENTS = (APP_DATA.financialEvents && APP_DATA.financialEvents.events) || [];
+const OPPORTUNITY_EVENTS = (APP_DATA.opportunityEvents && APP_DATA.opportunityEvents.events) || [];
+const JSON_DELAYED_CONSEQUENCES = (APP_DATA.delayedConsequences && APP_DATA.delayedConsequences.consequences) || [];
+const TEACHER_TRACKER_TEMPLATE = APP_DATA.teacherTrackerTemplate || {columns:[],rows:[]};
 
 function isTeacherRole(){
   return (state.presentationRole || 'teacher') === 'teacher';
@@ -6879,3 +6884,242 @@ function openMonthlyReflectionPrompt(monthName){
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{ updateModeBadge(); });
+
+
+/* === JSON bank integration patch === */
+const __legacyRunLifeScenarioDecision = runLifeScenarioDecision;
+const __legacyRunFinancialDecision = runFinancialDecision;
+const __legacyRunJobRealLifeEvent = runJobRealLifeEvent;
+const __legacyRenderTeacherToolkit = renderTeacherToolkit;
+
+function ensureTeacherTrackerState(){
+  if(!state.teacherTracker) state.teacherTracker = [];
+  if(!Array.isArray(state.teacherTracker)) state.teacherTracker = [];
+}
+function getCurrentWeekNumber(){
+  return state.weekEngine ? Number(state.weekEngine.week || 1) : Number(state.day || 1);
+}
+function getCurrentJobObj(){
+  return (state.jobs && state.jobs[state.jobIndex]) || {};
+}
+function getCurrentGradeBand(){
+  const jobId = getCurrentJobObj().id || '';
+  if(['college_parttime','intern'].includes(jobId)) return 'college';
+  if(['freelancer','teacher','tech_junior','business_owner'].includes(jobId)) return 'adult';
+  const exp = (state.experienceLevel || 'standard');
+  if(exp === 'beginner') return '6-8';
+  if(exp === 'elite') return 'college';
+  return '9-12';
+}
+function jsonEventMatches(ev, type){
+  const week = getCurrentWeekNumber();
+  const diff = (state.experienceLevel || 'standard');
+  const grade = getCurrentGradeBand();
+  const jobId = getCurrentJobObj().id || '';
+  const weeksAllowed = ev.weeksAllowed || [1,48];
+  const jobsAllowed = ev.jobsAllowed || ['all'];
+  const diffAllowed = ev.difficulty || ev.difficulties || ['beginner','standard','elite'];
+  const gradeAllowed = ev.gradeBands || ['6-8','9-12','college','adult'];
+  const typeOk = !type || ev.type === type;
+  const weekOk = week >= Number(weeksAllowed[0] || 1) && week <= Number(weeksAllowed[1] || 48);
+  const diffOk = diffAllowed.includes(diff);
+  const gradeOk = gradeAllowed.includes(grade);
+  const jobOk = jobsAllowed.includes('all') || jobsAllowed.includes(jobId);
+  return typeOk && weekOk && diffOk && gradeOk && jobOk;
+}
+function getJsonEventsByType(type){
+  const pool = type === 'realLife' ? REAL_LIFE_EVENTS : type === 'financial' ? FINANCIAL_EVENTS : OPPORTUNITY_EVENTS;
+  return (pool || []).filter(ev => jsonEventMatches(ev, type));
+}
+function pickJsonEvent(type){
+  const pool = getJsonEventsByType(type);
+  if(!pool.length) return null;
+  if(!state.ui) state.ui = {};
+  if(!state.ui.recentJsonEvents) state.ui.recentJsonEvents = {};
+  const recent = state.ui.recentJsonEvents[type] || [];
+  let filtered = pool.filter(ev => !recent.includes(ev.id));
+  if(!filtered.length) filtered = pool.slice();
+  const picked = filtered[Math.floor(Math.random() * filtered.length)] || filtered[0];
+  state.ui.recentJsonEvents[type] = recent.concat([picked.id]).slice(-4);
+  return picked;
+}
+function summarizeJsonEffects(effects){
+  if(!effects) return 'No immediate change.';
+  const parts = [];
+  Object.entries(effects).forEach(([k,v])=>{
+    const n = Number(v || 0);
+    if(!n) return;
+    const label = k === 'hysa' ? 'HYSA' : k === 'cd' ? 'CD' : k.charAt(0).toUpperCase() + k.slice(1);
+    if(['cash','checking','savings','hysa','cd','emergency','income','debt'].includes(k)) parts.push(`${label} ${n > 0 ? '+' : ''}${money(n)}`);
+    else parts.push(`${label} ${n > 0 ? '+' : ''}${n}`);
+  });
+  return parts.length ? parts.join(' • ') : 'No immediate change.';
+}
+function queueJsonDelayedConsequence(id){
+  const item = (JSON_DELAYED_CONSEQUENCES || []).find(x => x.id === id);
+  if(!item) return null;
+  const currentWeek = getCurrentWeekNumber();
+  const fx = item.effects || {};
+  const applyFn = function(st){
+    if(Number(fx.cash || 0) > 0) st.cash += Number(fx.cash || 0);
+    if(Number(fx.cash || 0) < 0) payFromCheckingThenCashThenSavings(Math.abs(Number(fx.cash || 0)));
+    if(Number(fx.checking || 0)) st.bank.checking = Math.max(0, Number(st.bank.checking || 0) + Number(fx.checking || 0));
+    if(Number(fx.savings || 0)) st.bank.savings = Math.max(0, Number(st.bank.savings || 0) + Number(fx.savings || 0));
+    if(Number(fx.hysa || 0) > 0) addToHysa(Number(fx.hysa || 0), 'Delayed consequence');
+    if(Number(fx.debt || 0)) st.debt = Math.max(0, Number(st.debt || 0) + Number(fx.debt || 0));
+    if(Number(fx.income || 0)) st.cash += Number(fx.income || 0);
+    if(Number(fx.credit || 0)) st.credit = clamp(Number(st.credit || 650) + Number(fx.credit || 0), 300, 850);
+    return `${item.title || 'Delayed consequence'} • ${summarizeJsonEffects(fx)}`;
+  };
+  queueConsequence(currentWeek + Number(item.triggerWeeks || 1), item.id, item.title || 'Delayed consequence', applyFn);
+  return item;
+}
+function applyJsonChoiceEffects(effects, context){
+  const fx = effects || {};
+  if(Number(fx.cash || 0) > 0) state.cash += Number(fx.cash || 0);
+  if(Number(fx.cash || 0) < 0 && !(context && context.handledPayment)) payFromCheckingThenCashThenSavings(Math.abs(Number(fx.cash || 0)));
+  if(Number(fx.checking || 0) > 0) state.bank.checking += Number(fx.checking || 0);
+  if(Number(fx.checking || 0) < 0 && !(context && context.handledInvestment)) state.bank.checking = Math.max(0, state.bank.checking + Number(fx.checking || 0));
+  if(Number(fx.savings || 0) > 0) state.bank.savings += Number(fx.savings || 0);
+  if(Number(fx.savings || 0) < 0 && !(context && context.handledInvestment)) state.bank.savings = Math.max(0, state.bank.savings + Number(fx.savings || 0));
+  if(Number(fx.hysa || 0) > 0 && !(context && context.handledInvestment)) addToHysa(Number(fx.hysa || 0), 'Scenario choice');
+  if(Number(fx.cd || 0) > 0 && !(context && context.handledInvestment)) createCD('3m', Number(fx.cd || 0), true, 'bonus');
+  if(Number(fx.emergency || 0)){
+    if(!state.bank.emergency) state.bank.emergency = 0;
+    state.bank.emergency = Math.max(0, Number(state.bank.emergency || 0) + Number(fx.emergency || 0));
+  }
+  if(Number(fx.debt || 0)){
+    if(typeof state.debt !== 'number') state.debt = 0;
+    state.debt = Math.max(0, Number(state.debt || 0) + Number(fx.debt || 0));
+  }
+  if(Number(fx.income || 0)) state.cash += Number(fx.income || 0);
+  if(Number(fx.credit || 0)) state.credit = clamp(Number(state.credit || 650) + Number(fx.credit || 0), 300, 850);
+  if(Number(fx.stress || 0)){
+    if(!state.masterScenario) state.masterScenario = {stress:0,wantsPressure:0,needsPressure:0,played:{},trackCounts:{},firedWindows:{}};
+    state.masterScenario.stress = Number(state.masterScenario.stress || 0) + Number(fx.stress || 0);
+  }
+  if(Number(fx.social || 0)){
+    if(!state.masterScenario) state.masterScenario = {stress:0,wantsPressure:0,needsPressure:0,played:{},trackCounts:{},firedWindows:{}};
+    state.masterScenario.social = Number(state.masterScenario.social || 0) + Number(fx.social || 0);
+  }
+  if(Number(fx.time || 0)){
+    if(!state.masterScenario) state.masterScenario = {stress:0,wantsPressure:0,needsPressure:0,played:{},trackCounts:{},firedWindows:{}};
+    state.masterScenario.time = Number(state.masterScenario.time || 0) + Number(fx.time || 0);
+  }
+  renderHeader(); renderLedger(); renderSheet();
+}
+function addTeacherTrackerEntry(ev, choice, meta){
+  ensureTeacherTrackerState();
+  const cfg = getModeConfig();
+  const weekCard = getCurrentWeekCard();
+  const tool = getTeacherToolConfig((weekCard && weekCard.themeKey) || '');
+  state.teacherTracker.unshift({
+    week: getCurrentWeekNumber(),
+    role: cfg.roleId || state.presentationRole || 'student',
+    difficulty: cfg.experienceId || state.experienceLevel || 'standard',
+    job: getCurrentJobObj().name || '',
+    eventId: ev.id || '',
+    eventTitle: ev.title || '',
+    eventType: ev.type || '',
+    whyTriggered: (meta && meta.whyTriggered) || '',
+    choiceId: (choice && choice.id) || '',
+    choiceLabel: (choice && choice.label) || '',
+    paymentSource: (meta && meta.paymentSource) || '',
+    investmentTarget: (meta && meta.investmentTarget) || '',
+    immediateEffects: summarizeJsonEffects((choice && choice.effects) || {}),
+    delayedQueued: (meta && meta.delayedQueued) ? [meta.delayedQueued] : [],
+    reflectionPrompt: tool.reflectionCheckpoint || '',
+    teacherNotes: tool.hiddenTeachingNote || '',
+    rubricNotes: (tool.rubricNotes || []).join(' | ')
+  });
+  state.teacherTracker = state.teacherTracker.slice(0, 20);
+}
+function promptJsonInvestment(amount, targetKey, targetLabel, cb){
+  chooseFundingSource(amount, `Choose where to take ${money(amount)} for ${targetLabel}.`, (src)=>{
+    if(targetKey === 'hysa') addToHysa(amount, `Moved from ${src}`);
+    else if(targetKey === 'savings') state.bank.savings += amount;
+    else if(targetKey === 'checking') state.bank.checking += amount;
+    else if(targetKey === 'emergency'){
+      if(!state.bank.emergency) state.bank.emergency = 0;
+      state.bank.emergency += amount;
+    } else if(targetKey === 'cd') createCD('3m', amount, true, 'bonus');
+    showDecisionBadge(`Invested into ${formatSourceLabel(targetKey)} from ${formatSourceLabel(src)}: ${money(amount)}`);
+    if(cb) cb(src, targetKey);
+  });
+}
+function openJsonEventModal(type, fallbackFn){
+  const ev = pickJsonEvent(type);
+  if(!ev){ return fallbackFn ? fallbackFn() : showBanner('No scenario bank loaded for this lane yet.'); }
+  const why = `Matched ${(state.experienceLevel || 'standard')} • ${getCurrentGradeBand()} • ${(getCurrentJobObj().name || 'Any job')} • Week ${getCurrentWeekNumber()}`;
+  const prompt = ev.description || ev.prompt || ev.title || 'Make the best choice you can.';
+  openModal({
+    title: `${type === 'realLife' ? '📘' : type === 'financial' ? '🏦' : '💼'} ${ev.title}`,
+    meta: why,
+    body: prompt,
+    buttons: (ev.choices || []).map((c, idx)=>({id:String(idx), label:c.label, kind: idx === 0 ? 'primary' : 'secondary'})),
+    onPick:(pickId)=>{
+      const choice = (ev.choices || [])[Number(pickId)];
+      if(!choice) return;
+      const fx = choice.effects || {};
+      const finish = (meta={})=>{
+        applyJsonChoiceEffects(fx, meta);
+        let delayed = null;
+        if(choice.delayedConsequenceId) delayed = queueJsonDelayedConsequence(choice.delayedConsequenceId);
+        addLedgerLine(`${ev.title} → ${choice.label}${meta.paymentSource ? ` | from ${meta.paymentSource}` : ''}${meta.investmentTarget ? ` | into ${meta.investmentTarget}` : ''}`);
+        addTeacherTrackerEntry(ev, choice, {whyTriggered:why, paymentSource:meta.paymentSource || '', investmentTarget:meta.investmentTarget || '', delayedQueued: delayed ? delayed.title : ''});
+        openModal({
+          title:'Scenario Result',
+          meta:`Week ${getCurrentWeekNumber()} • ${ev.title}`,
+          body:`${summarizeJsonEffects(fx)}${delayed ? `
+
+Queued: ${delayed.title} in ${delayed.triggerWeeks} week(s).` : ''}`,
+          buttons:[{id:'ok', label:'Continue', kind:'primary'}],
+          onPick:()=>{
+            renderAll();
+            if(type === 'realLife' || type === 'opportunity') notifyAction('job_event');
+          }
+        });
+      };
+      if(choice.paymentRequired){
+        const amount = Math.abs(Number(fx.cash || fx.checking || 0));
+        chooseFundingSource(amount, `${choice.label}`, (src)=>{
+          showDecisionBadge(`Paid from ${formatSourceLabel(src)}: ${money(amount)}`);
+          finish({paymentSource: src, handledPayment:true});
+        });
+        return;
+      }
+      if(choice.investmentRequired){
+        const amount = Number(fx.hysa || fx.savings || fx.cd || fx.emergency || Math.abs(Number(fx.checking || 0)));
+        const targetKey = Number(fx.hysa || 0) > 0 ? 'hysa' : Number(fx.savings || 0) > 0 ? 'savings' : Number(fx.cd || 0) > 0 ? 'cd' : Number(fx.emergency || 0) > 0 ? 'emergency' : 'savings';
+        promptJsonInvestment(amount, targetKey, `${ev.title} choice`, (src, target)=> finish({investmentTarget: target, paymentSource: src, handledInvestment:true}));
+        return;
+      }
+      finish({});
+    }
+  });
+}
+function runLifeScenarioDecision(){ return openJsonEventModal('realLife', __legacyRunLifeScenarioDecision); }
+function runFinancialDecision(){ return openJsonEventModal('financial', __legacyRunFinancialDecision); }
+function runJobRealLifeEvent(){ return openJsonEventModal('opportunity', __legacyRunJobRealLifeEvent); }
+function renderTeacherToolkit(){
+  __legacyRenderTeacherToolkit();
+  const panel = $("panel-teacherToolkit");
+  const box = $("teacherToolkitBox");
+  if(!panel || !box || !isTeacherRole()) return;
+  ensureTeacherTrackerState();
+  const rows = state.teacherTracker.slice(0,6);
+  const trackerHtml = rows.length ? rows.map(r => `
+    <div class="impact-box" style="margin-top:10px">
+      <b>Week ${escapeHtml(String(r.week))}</b> • ${escapeHtml(r.eventTitle || 'Scenario')}<br>
+      <span class="muted">${escapeHtml(r.eventType || '')}</span><br>
+      Why: ${escapeHtml(r.whyTriggered || '')}<br>
+      Choice: ${escapeHtml(r.choiceLabel || '')}${r.paymentSource ? ` • Paid from ${escapeHtml(r.paymentSource)}` : ''}${r.investmentTarget ? ` • Into ${escapeHtml(r.investmentTarget)}` : ''}<br>
+      Immediate: ${escapeHtml(r.immediateEffects || '')}<br>
+      ${r.delayedQueued && r.delayedQueued.length ? `Queued: ${escapeHtml(r.delayedQueued.join(', '))}<br>` : ''}
+      ${r.rubricNotes ? `Rubric: ${escapeHtml(r.rubricNotes)}` : ''}
+    </div>
+  `).join('') : '<div class="impact-box" style="margin-top:10px"><b>Scenario Tracker</b><br>No tracker entries yet. Trigger a scenario to populate this sheet.</div>';
+  box.innerHTML += `<div style="margin-top:12px"><h3 style="margin:8px 0">Scenario Tracker Sheet</h3>${trackerHtml}</div>`;
+}
+try { ensureTeacherTrackerState(); renderAll(); } catch(err) { console.warn('JSON bank patch render warning', err); }
+/* === end JSON bank integration patch === */

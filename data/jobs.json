@@ -118,5 +118,96 @@
       11,
       13
     ]
+  },
+  {
+    "id": "college_parttime",
+    "name": "College Part-Time Job",
+    "pay": 140,
+    "buckets": [
+      1,
+      2,
+      3,
+      7,
+      12,
+      10,
+      9
+    ]
+  },
+  {
+    "id": "intern",
+    "name": "Internship",
+    "pay": 165,
+    "buckets": [
+      1,
+      2,
+      3,
+      7,
+      12,
+      10,
+      13
+    ]
+  },
+  {
+    "id": "freelancer",
+    "name": "Freelancer",
+    "pay": 180,
+    "buckets": [
+      1,
+      2,
+      3,
+      7,
+      12,
+      10,
+      13
+    ]
+  },
+  {
+    "id": "teacher",
+    "name": "Entry-Level Teacher",
+    "pay": 220,
+    "buckets": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      7,
+      10,
+      12,
+      13
+    ]
+  },
+  {
+    "id": "tech_junior",
+    "name": "Junior Developer",
+    "pay": 260,
+    "buckets": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      7,
+      10,
+      12,
+      13
+    ]
+  },
+  {
+    "id": "business_owner",
+    "name": "Small Business Owner",
+    "pay": 240,
+    "buckets": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      7,
+      8,
+      10,
+      12,
+      13
+    ]
   }
 ]
