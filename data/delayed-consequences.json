@@ -1,0 +1,16 @@
+{
+  "consequences": [
+    {
+      "id": "late_fee",
+      "triggerWeeks": 2
+    },
+    {
+      "id": "savings_bonus",
+      "triggerWeeks": 4
+    },
+    {
+      "id": "credit_score_drop",
+      "triggerWeeks": 3
+    }
+  ]
+}

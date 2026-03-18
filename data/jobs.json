@@ -1,122 +1,49 @@
-[
-  {
-    "id": "babysitting",
-    "name": "Babysitting",
-    "pay": 60,
-    "buckets": [
-      1,
-      2,
-      3,
-      6,
-      7,
-      12,
-      10
-    ]
-  },
-  {
-    "id": "pet",
-    "name": "Pet Sitting",
-    "pay": 70,
-    "buckets": [
-      1,
-      2,
-      3,
-      6,
-      7,
-      12,
-      10
-    ]
-  },
-  {
-    "id": "dogwalk",
-    "name": "Dog Walking",
-    "pay": 55,
-    "buckets": [
-      1,
-      2,
-      3,
-      7,
-      12
-    ]
-  },
-  {
-    "id": "lawn",
-    "name": "Lawn Care",
-    "pay": 80,
-    "buckets": [
-      1,
-      2,
-      3,
-      7,
-      8,
-      12,
-      10
-    ]
-  },
-  {
-    "id": "cars",
-    "name": "Washing Cars",
-    "pay": 75,
-    "buckets": [
-      1,
-      2,
-      3,
-      7,
-      12,
-      9
-    ]
-  },
-  {
-    "id": "tutor",
-    "name": "Tutoring",
-    "pay": 90,
-    "buckets": [
-      1,
-      2,
-      3,
-      7,
-      12,
-      10
-    ]
-  },
-  {
-    "id": "chores",
-    "name": "Housecleaning/Chores",
-    "pay": 45,
-    "buckets": [
-      1,
-      2,
-      3,
-      7,
-      12
-    ]
-  },
-  {
-    "id": "errands",
-    "name": "Running Errands",
-    "pay": 50,
-    "buckets": [
-      1,
-      2,
-      3,
-      7,
-      12,
-      10
-    ]
-  },
-  {
-    "id": "crafts",
-    "name": "Selling Crafts",
-    "pay": 85,
-    "buckets": [
-      1,
-      2,
-      3,
-      7,
-      12,
-      10,
-      11,
-      13
-    ]
-  }
-]
+{
+  "jobs": [
+    {
+      "id": "lawncare",
+      "name": "Lawn Care",
+      "level": "beginner"
+    },
+    {
+      "id": "retail",
+      "name": "Retail Associate",
+      "level": "beginner"
+    },
+    {
+      "id": "fastfood",
+      "name": "Fast Food Worker",
+      "level": "beginner"
+    },
+    {
+      "id": "college_parttime",
+      "name": "College Part-Time Job",
+      "level": "standard"
+    },
+    {
+      "id": "intern",
+      "name": "Internship",
+      "level": "standard"
+    },
+    {
+      "id": "freelancer",
+      "name": "Freelancer",
+      "level": "elite"
+    },
+    {
+      "id": "teacher",
+      "name": "Entry-Level Teacher",
+      "level": "elite"
+    },
+    {
+      "id": "tech_junior",
+      "name": "Junior Developer",
+      "level": "elite"
+    },
+    {
+      "id": "business_owner",
+      "name": "Small Business Owner",
+      "level": "elite"
+    }
+  ]
+}

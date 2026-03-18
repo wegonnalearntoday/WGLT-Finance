@@ -1,0 +1,32 @@
+{
+  "events": [
+    {
+      "id": "forgot_lunch",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ]
+    },
+    {
+      "id": "car_trouble",
+      "difficulty": [
+        "standard",
+        "elite"
+      ]
+    },
+    {
+      "id": "roommate_split",
+      "difficulty": [
+        "standard",
+        "elite"
+      ]
+    },
+    {
+      "id": "childcare_cost",
+      "difficulty": [
+        "elite"
+      ]
+    }
+  ]
+}

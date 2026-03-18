@@ -1,0 +1,24 @@
+{
+  "events": [
+    {
+      "id": "bank_fee",
+      "difficulty": [
+        "standard",
+        "elite"
+      ]
+    },
+    {
+      "id": "credit_card_offer",
+      "difficulty": [
+        "standard",
+        "elite"
+      ]
+    },
+    {
+      "id": "student_loan_payment",
+      "difficulty": [
+        "elite"
+      ]
+    }
+  ]
+}
