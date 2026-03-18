@@ -16,12 +16,7 @@
     teacherTools: './data/teacher-tools.json',
     eliteContracts: './data/elite-contracts.json',
     eliteScenarios: './data/elite-scenarios.json',
-    advancedDelayedConsequences: './data/advanced-delayed-consequences.json',
-    realLifeEvents: './data/real-life-events.json',
-    financialEvents: './data/financial-events.json',
-    opportunityEvents: './data/opportunity-events.json',
-    delayedConsequences: './data/delayed-consequences.json',
-    teacherTrackerTemplate: './data/teacher-tracker-template.json'
+    advancedDelayedConsequences: './data/advanced-delayed-consequences.json'
   };
   const entries = await Promise.all(Object.entries(files).map(async ([key, path]) => {
     const res = await fetch(path, {cache:'no-store'});

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -482,12 +482,12 @@ main::before{
         <b>Difficulty / Experience</b>: Beginner, Standard, or Elite
       </div>
       <div class="mode-grid mode-grid-6">
-        <button class="mode-btn glow-next" id="modeStudentBeginnerBtn" type="button"><span class="emoji">🧭</span>Student + Beginner<small>Cleaner student view, softer pressure, and extra room to learn the loop.</small></button>
-        <button class="mode-btn" id="modeStudentStandardBtn" type="button"><span class="emoji">🎮</span>Student + Standard<small>Balanced gameplay with the normal event mix and fewer scaffolds.</small></button>
-        <button class="mode-btn" id="modeStudentEliteBtn" type="button"><span class="emoji">🚀</span>Student + Elite<small>Advanced contracts, stronger tradeoffs, and monthly reflection pressure.</small></button>
-        <button class="mode-btn" id="modeTeacherBeginnerBtn" type="button"><span class="emoji">🧑‍🏫</span>Teacher + Beginner<small>Facilitator prompts and notes with the gentlest gameplay pressure.</small></button>
-        <button class="mode-btn" id="modeTeacherStandardBtn" type="button"><span class="emoji">📘</span>Teacher + Standard<small>Guided classroom flow with balanced simulation pressure and full teaching tools.</small></button>
-        <button class="mode-btn" id="modeTeacherEliteBtn" type="button"><span class="emoji">⚡</span>Teacher + Elite<small>All teaching tools plus elite pressure, consequence chains, advanced contracts, and required reflections.</small></button>
+        <button class="mode-btn glow-next" id="modeStudentBeginnerBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','beginner')" type="button"><span class="emoji">🧭</span>Student + Beginner<small>Cleaner student view, softer pressure, and extra room to learn the loop.</small></button>
+        <button class="mode-btn" id="modeStudentStandardBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','standard')" type="button"><span class="emoji">🎮</span>Student + Standard<small>Balanced gameplay with the normal event mix and fewer scaffolds.</small></button>
+        <button class="mode-btn" id="modeStudentEliteBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','elite')" type="button"><span class="emoji">🚀</span>Student + Elite<small>Advanced contracts, stronger tradeoffs, and monthly reflection pressure.</small></button>
+        <button class="mode-btn" id="modeTeacherBeginnerBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','beginner')" type="button"><span class="emoji">🧑‍🏫</span>Teacher + Beginner<small>Facilitator prompts and notes with the gentlest gameplay pressure.</small></button>
+        <button class="mode-btn" id="modeTeacherStandardBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','standard')" type="button"><span class="emoji">📘</span>Teacher + Standard<small>Guided classroom flow with balanced simulation pressure and full teaching tools.</small></button>
+        <button class="mode-btn" id="modeTeacherEliteBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','elite')" type="button"><span class="emoji">⚡</span>Teacher + Elite<small>All teaching tools plus elite pressure, consequence chains, advanced contracts, and required reflections.</small></button>
       </div>
       <div class="impact-box" style="margin-top:14px">JSON banks now drive the content layer for roles, experiences, contracts, teacher prompts, and elite extensions, which makes the simulator much easier to scale.</div>
       <div class="mode-screen-actions">
@@ -948,6 +948,19 @@ Insurance: Not chosen</div>
   </div>
 
 
+
+<script>
+window.startRoleDifficulty = window.startRoleDifficulty || function(role, experience){
+  try {
+    if(role === 'student' && experience === 'beginner'){ window.location.href = 'budget-boss-jr.html'; return; }
+    var screen = document.getElementById('modeSelectScreen');
+    if(screen) screen.style.display = 'none';
+    var app = document.querySelector('.app');
+    if(app) app.style.display = '';
+    window.__WGLT_PENDING_MODE__ = { role: role, experience: experience };
+  } catch(err) { console.error(err); }
+};
+</script>
 <script src="./js/bootstrap.js"></script>
 </body>
 </html>
