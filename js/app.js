@@ -133,6 +133,169 @@ function formatSourceLabel(src){
   return src ? String(src).charAt(0).toUpperCase() + String(src).slice(1) : 'Selected Account';
 }
 
+const AUTO_REFLECTION_BANK = {
+  spending: [
+    { type: "spending", question: "Was this worth the money?" },
+    { type: "spending", question: "Was that a need or a want?" },
+    { type: "spending", question: "How did this choice affect your money?" },
+    { type: "spending", question: "Would you make the same choice again?" },
+    { type: "spending", question: "Did this help your future or just right now?" },
+    { type: "spending", question: "What could you have done differently?" },
+    { type: "spending", question: "Was this a smart money move? Why?" },
+    { type: "spending", question: "Did you follow your plan or change it?" },
+    { type: "spending", question: "How might this choice affect you later?" },
+    { type: "spending", question: "Was this worth the money you spent?" }
+  ],
+  save: [
+    { type: "save", question: "Did this help future you?" },
+    { type: "save", question: "Did you save as much as you wanted?" },
+    { type: "save", question: "How did saving change your money?" },
+    { type: "save", question: "Was saving now a smart move?" },
+    { type: "save", question: "Would you make this save choice again?" },
+    { type: "save", question: "Did you stick to your plan?" }
+  ],
+  share: [
+    { type: "share", question: "How did sharing affect your money?" },
+    { type: "share", question: "Was helping worth it for your budget?" },
+    { type: "share", question: "Did you help and still protect your plan?" },
+    { type: "share", question: "Would you share the same way again?" },
+    { type: "share", question: "Was this kind and smart?" }
+  ],
+  general: [
+    { type: "general", question: "What was the best part of your decision?" },
+    { type: "general", question: "Would you do anything differently next time?" },
+    { type: "general", question: "Did this choice help now or later?" }
+  ]
+};
+
+function ensureReflectionState(){
+  if(!state.ui) state.ui = {};
+  if(!state.ui.reflectionRotation) state.ui.reflectionRotation = {spending:0, save:0, share:0, general:0};
+  if(!state.ui.reflectionShownByWeek) state.ui.reflectionShownByWeek = {};
+}
+
+function normalizeDecisionReflectionType(type){
+  if(type === 'spend') return 'spending';
+  if(type === 'saving') return 'save';
+  return ['spending','save','share','general'].includes(type) ? type : 'general';
+}
+
+function getDecisionBenchmark(type){
+  const map = {spending:'2', save:'3', share:'6', general:''};
+  return map[normalizeDecisionReflectionType(type)] || '';
+}
+
+function getNextReflectionQuestion(type){
+  ensureReflectionState();
+  const normalized = normalizeDecisionReflectionType(type);
+  const pool = AUTO_REFLECTION_BANK[normalized] || AUTO_REFLECTION_BANK.general;
+  const idx = Number(state.ui.reflectionRotation[normalized] || 0) % pool.length;
+  state.ui.reflectionRotation[normalized] = (idx + 1) % pool.length;
+  return pool[idx];
+}
+
+function inferDecisionReflectionType(meta={}){
+  const forced = normalizeDecisionReflectionType(meta.type || '');
+  if(forced !== 'general') return forced;
+  const blob = `${meta.title || ''} ${meta.label || ''} ${meta.summary || ''} ${meta.note || ''}`.toLowerCase();
+  if(/\b(lend|loan|donate|gift|share|help(ed)?|friend|family|community|generous)\b/.test(blob)) return 'share';
+  if(/\b(save|saving|savings|invest|invested|cd|hysa|goal|deposit to savings)\b/.test(blob)) return 'save';
+  if(Number(meta.amount || 0) > 0 || /\b(spend|spent|buy|bought|pay|paid|cost|shopping|wants|gifts)\b/.test(blob)) return 'spending';
+  return 'general';
+}
+
+function shouldAskDecisionReflection(meta={}){
+  ensureReflectionState();
+  const week = Number((state.weekEngine && state.weekEngine.week) || state.day || 1);
+  const type = inferDecisionReflectionType(meta);
+  const key = `${week}_${type}`;
+  if(state.ui.reflectionShownByWeek[key]) return false;
+  state.ui.reflectionShownByWeek[key] = true;
+  return true;
+}
+
+function queueDecisionReflection(meta={}){
+  if(!shouldAskDecisionReflection(meta)) return;
+  const type = inferDecisionReflectionType(meta);
+  const question = getNextReflectionQuestion(type);
+  const week = Number((state.weekEngine && state.weekEngine.week) || state.day || 1);
+  const monthName = typeof weekToMonthName === 'function' ? weekToMonthName(week) : '';
+  const promptMeta = {
+    ...meta,
+    type,
+    week,
+    monthName,
+    question: question.question
+  };
+  setTimeout(()=>openDecisionReflectionPrompt(promptMeta), 180);
+}
+
+function openDecisionReflectionPrompt(meta={}){
+  const type = normalizeDecisionReflectionType(meta.type);
+  const titleMap = {
+    spending: "💸 Quick Money Check",
+    save: "🪙 Quick Save Check",
+    share: "🤝 Quick Share Check",
+    general: "🧠 Quick Choice Check"
+  };
+  const introMap = {
+    spending: "Quick thought after that money move:",
+    save: "Quick thought after saving:",
+    share: "Quick thought after helping or sharing:",
+    general: "Quick thought after that choice:"
+  };
+  const html = `
+    <div style="display:grid;gap:10px">
+      <div style="background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:12px">
+        <div style="font-weight:900;font-size:12px;opacity:.85">${introMap[type] || introMap.general}</div>
+        <div style="font-weight:900;font-size:20px;line-height:1.25;margin-top:6px">${escapeHtml(meta.question || "What was the best part of your decision?")}</div>
+      </div>
+      <label style="font-weight:900;font-size:12px">Student answer
+        <input id="quickReflectionStudent" maxlength="140" style="width:100%;margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:12px" placeholder="Short answer here">
+      </label>
+      <label style="font-weight:900;font-size:12px">Teacher Mode tracker
+        <input id="quickReflectionTeacher" maxlength="160" style="width:100%;margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:12px" placeholder="What would you tell a friend to do here?">
+      </label>
+      <div class="muted" style="font-size:12px">Tag: ${escapeHtml(type.charAt(0).toUpperCase() + type.slice(1))}${meta.amount ? ` • Amount: ${escapeHtml(money(Number(meta.amount || 0)))}` : ''}</div>
+    </div>
+  `;
+  openHtmlModal({
+    title: titleMap[type] || titleMap.general,
+    meta: `Week ${meta.week || 1}${meta.monthName ? ` • ${meta.monthName}` : ''}`,
+    html,
+    buttons: [
+      {label:"Skip", kind:"secondary", onClick: closeHtmlModal},
+      {label:"Save Reflection", kind:"success", onClick: ()=>saveQuickDecisionReflection(meta)}
+    ]
+  });
+}
+
+function saveQuickDecisionReflection(meta={}){
+  const studentAnswer = ($("quickReflectionStudent")?.value || "").trim();
+  const teacherAnswer = ($("quickReflectionTeacher")?.value || "").trim();
+  const type = normalizeDecisionReflectionType(meta.type);
+  const reflection = {
+    id: `refl_auto_${Date.now()}_${Math.random().toString(36).slice(2,7)}`,
+    week: meta.week || (state.weekEngine ? state.weekEngine.week : 1),
+    month: meta.monthName || (typeof weekToMonthName === "function" ? weekToMonthName(state.weekEngine ? state.weekEngine.week : 1) : ""),
+    createdAt: new Date().toISOString(),
+    title: meta.title || `${type.charAt(0).toUpperCase() + type.slice(1)} Reflection`,
+    coverageType: 'auto',
+    benchmark: getDecisionBenchmark(type),
+    notes: meta.label || meta.summary || meta.note || '',
+    q1: meta.question || '',
+    q2: studentAnswer || "Skipped by student",
+    q3: teacherAnswer || "No teacher note",
+    q4: meta.summary || '',
+    decisionType: type
+  };
+  teacherReflections.unshift(reflection);
+  closeHtmlModal();
+  renderReflectionReport(true);
+  saveTeacherLocal(true);
+  showBanner("Reflection saved");
+}
+
 /* ============================================================
    INLINED WIX-FRIENDLY MASTER DATA
    This keeps the simulator single-file for Wix HTML embed use.
@@ -301,6 +464,7 @@ function runLifeScenarioDecision(){
 Source used: ${srcLabel}` : ''),
           buttons:[{id:'ok',label:'Continue',kind:'primary'}],
           onPick:()=>{
+            queueDecisionReflection({ title: picked.title, label: choice.label, summary, amount: Math.abs(Number(choice.moneyDelta || 0)) });
             maybeFireMasterDelayedConsequences(week);
             notifyAction('job_event');
           }
@@ -512,6 +676,7 @@ function openScenarioModal(scenario, onDone){
         }
         if(scenario.id) state.weekEngine.choices[scenario.id] = i;
         renderHeader();
+        queueDecisionReflection({ title, label: opt.label, summary });
         if(onDone) onDone();
       }
 
@@ -543,6 +708,7 @@ Choose which account to pay from:`, (src)=>{
             }
             if(scenario.id) state.weekEngine.choices[scenario.id] = i;
             renderHeader();
+            queueDecisionReflection({ title, label: opt.label, summary, amount: paymentAmount || resolvedCost || 0 });
             if(onDone) onDone();
           });
         }, 50);
@@ -4004,7 +4170,7 @@ function createCD(termKey, deposit, silent=false, source='player'){
   };
   if(source==='bonus' || source==='paycheck'){ finishCreate(); return true; }
   chooseFundingSource(deposit, `Choose where to take ${money(deposit)} for your ${term.name}.`, ()=>{
-    finishCreate(); addLedgerLine(`Opened ${term.name} for ${money(deposit)}`); notifyAction('open_cd');
+    finishCreate(); addLedgerLine(`Opened ${term.name} for ${money(deposit)}`); queueDecisionReflection({ type:'save', title:'Opened a CD', label:`${term.name} for ${money(deposit)}`, summary:`You locked ${money(deposit)} into ${term.name}.`, amount:deposit }); notifyAction('open_cd');
   });
   return 'pending';
 }
@@ -4021,6 +4187,7 @@ function transferToSavings(){
   addLedgerLine(`Transfer: ${money(amt)} from checking to savings`);
   renderHeader();
   renderSheet();
+  queueDecisionReflection({ type:'save', title:'Transfer to Savings', label:`Moved ${money(amt)} to savings`, summary:`${money(amt)} moved from checking to savings`, amount:amt });
   notifyAction("transfer_savings");
 }
 function transferToChecking(){
@@ -4934,6 +5101,7 @@ Your balances:
           showDecisionBadge(`Invested into HYSA from ${formatSourceLabel(src)}: ${money(25)}`);
           showBanner("$25 moved to High-Yield!");
           renderHeader();
+          queueDecisionReflection({ type:'save', title:'HYSA Choice', label:'Moved $25 to High-Yield Savings', summary:'You saved money for later growth.', amount:25 });
           if(onDone) onDone();
         });
       } else if(id === "cd3" || id === "cd6"){
@@ -4971,6 +5139,7 @@ Your balances:
               showDecisionBadge(`Invested into ${cd.name} from ${formatSourceLabel(src)}: ${money(deposit)}`);
               showBanner(`${cd.name} opened at ${aprLabel}!`);
               renderHeader();
+              queueDecisionReflection({ type:'save', title:'CD Choice', label:`Opened ${cd.name}`, summary:`You put ${money(deposit)} into a CD.`, amount:deposit });
               if(onDone) onDone();
             });
           }
@@ -6549,6 +6718,7 @@ function getCoverageTypeLabel(key){
     benchmark:"Benchmark Checkpoint",
     playlist:"Playlist Lesson",
     goal:"Savings / Goal Check",
+    auto:"Quick Reflection",
     other:"Other"
   }[key] || "Other";
 }
@@ -6575,12 +6745,13 @@ function renderReflectionReport(showBox=false){
           </label>
         </div>
         <div class="reflection-row"><b>Covered:</b> ${escapeHtml(getCoverageTypeLabel(r.coverageType))}</div>
+        <div class="reflection-row"><b>Tag:</b> ${escapeHtml(r.decisionType ? (r.decisionType.charAt(0).toUpperCase() + r.decisionType.slice(1)) : "—")}</div>
         <div class="reflection-row"><b>Linked Benchmark:</b> ${escapeHtml(benchLabel)}</div>
         <div class="reflection-row"><b>Lesson / Event Notes:</b> ${escapeHtml(r.notes || "None")}</div>
-        <div class="reflection-row"><b>Choice that mattered most:</b> ${escapeHtml(r.q1 || "—")}</div>
-        <div class="reflection-row"><b>Need / Want / Emergency:</b> ${escapeHtml(r.q2 || "—")}</div>
-        <div class="reflection-row"><b>Effect on net worth / balances:</b> ${escapeHtml(r.q3 || "—")}</div>
-        <div class="reflection-row"><b>Next time:</b> ${escapeHtml(r.q4 || "—")}</div>
+        <div class="reflection-row"><b>Question shown:</b> ${escapeHtml(r.q1 || "—")}</div>
+        <div class="reflection-row"><b>Student answer:</b> ${escapeHtml(r.q2 || "—")}</div>
+        <div class="reflection-row"><b>Teacher note:</b> ${escapeHtml(r.q3 || "—")}</div>
+        <div class="reflection-row"><b>Decision summary:</b> ${escapeHtml(r.q4 || "—")}</div>
       </div>`;
   }).join("");
   box.innerHTML = `
@@ -6917,3 +7088,8 @@ function openMonthlyReflectionPrompt(monthName){
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{ updateModeBadge(); bindRoleDifficultyMenu(); });
+
+
+function openReflectionPrompt(){
+  openTeacherReflectionModal();
+}
