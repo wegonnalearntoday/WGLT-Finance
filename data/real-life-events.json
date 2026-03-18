@@ -2,30 +2,1344 @@
   "events": [
     {
       "id": "forgot_lunch",
+      "title": "Forgot Lunch",
+      "type": "realLife",
       "difficulty": [
         "beginner",
         "standard",
         "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "teacherPromptId": "prompt_forgot_lunch",
+      "choices": [
+        {
+          "id": "buy_lunch",
+          "label": "Buy lunch for $4",
+          "effects": {
+            "cash": -4
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "buy_snack",
+          "label": "Buy a snack for $2",
+          "effects": {
+            "cash": -2
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "skip_lunch",
+          "label": "Skip lunch",
+          "effects": {
+            "stress": 1
+          },
+          "delayedConsequenceId": "low_energy_next_week"
+        }
+      ]
+    },
+    {
+      "id": "friend_pizza_night",
+      "title": "Friends Want Pizza Tonight",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "teacherPromptId": "prompt_social_spending",
+      "choices": [
+        {
+          "id": "go_full",
+          "label": "Go and spend $8",
+          "effects": {
+            "cash": -8,
+            "social": 1
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "go_small",
+          "label": "Go but keep it to $4",
+          "effects": {
+            "cash": -4
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "skip",
+          "label": "Skip and save money",
+          "effects": {
+            "cash": 0,
+            "social": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "broken_headphones",
+      "title": "Headphones Broke",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "replace_now",
+          "label": "Replace now for $20",
+          "effects": {
+            "cash": -20
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "borrow",
+          "label": "Borrow a pair for now",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "wait",
+          "label": "Wait until next paycheck",
+          "effects": {
+            "cash": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "birthday_gift",
+      "title": "Friend Birthday Gift",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "gift_15",
+          "label": "Buy a $15 gift",
+          "effects": {
+            "cash": -15,
+            "social": 1
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "gift_5",
+          "label": "Buy a simple $5 gift",
+          "effects": {
+            "cash": -5
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "make_card",
+          "label": "Make a card and spend $0",
+          "effects": {
+            "cash": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "school_trip_fee",
+      "title": "Unexpected School Activity Fee",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        2,
+        40
+      ],
+      "choices": [
+        {
+          "id": "pay_fee",
+          "label": "Pay the $12 fee",
+          "effects": {
+            "cash": -12
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "ask_help",
+          "label": "Ask for help covering the fee",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "skip_trip",
+          "label": "Skip the activity",
+          "effects": {
+            "social": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "bus_pass_issue",
+      "title": "Bus Pass Expired",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "college_parttime",
+        "intern",
+        "freelancer",
+        "teacher",
+        "tech_junior",
+        "business_owner",
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "renew_pass",
+          "label": "Renew it for $25",
+          "effects": {
+            "cash": -25
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "rideshare",
+          "label": "Use rideshare for $12",
+          "effects": {
+            "cash": -12
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "ask_ride",
+          "label": "Ask a friend for a ride",
+          "effects": {
+            "stress": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "phone_screen_crack",
+      "title": "Phone Screen Cracked",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "repair_now",
+          "label": "Repair now for $85",
+          "effects": {
+            "cash": -85
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "cheap_case",
+          "label": "Use a $15 protective case for now",
+          "effects": {
+            "cash": -15
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "wait",
+          "label": "Wait and risk it getting worse",
+          "effects": {
+            "stress": 1
+          },
+          "delayedConsequenceId": "bigger_phone_repair"
+        }
       ]
     },
     {
       "id": "car_trouble",
+      "title": "Car Trouble Before Work",
+      "type": "realLife",
       "difficulty": [
         "standard",
         "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "freelancer",
+        "teacher",
+        "tech_junior",
+        "business_owner",
+        "college_parttime",
+        "intern"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "teacherPromptId": "prompt_transportation",
+      "choices": [
+        {
+          "id": "repair_250",
+          "label": "Fix it now for $250",
+          "effects": {
+            "cash": -250
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "borrow_car",
+          "label": "Borrow a car this week",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "delay_repair",
+          "label": "Delay repair",
+          "effects": {
+            "cash": 0,
+            "stress": 2
+          },
+          "delayedConsequenceId": "missed_shift"
+        }
       ]
     },
     {
-      "id": "roommate_split",
+      "id": "roommate_split_bill",
+      "title": "Roommate Missed Their Part",
+      "type": "realLife",
       "difficulty": [
         "standard",
         "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "college_parttime",
+        "intern",
+        "freelancer",
+        "teacher",
+        "tech_junior",
+        "business_owner"
+      ],
+      "weeksAllowed": [
+        4,
+        48
+      ],
+      "choices": [
+        {
+          "id": "cover_bill",
+          "label": "Cover their $40 for now",
+          "effects": {
+            "cash": -40
+          },
+          "paymentRequired": true,
+          "delayedConsequenceId": "roommate_pays_back"
+        },
+        {
+          "id": "partial_cover",
+          "label": "Cover only $20",
+          "effects": {
+            "cash": -20,
+            "stress": 1
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "refuse",
+          "label": "Refuse to cover it",
+          "effects": {
+            "social": -1
+          }
+        }
       ]
     },
     {
-      "id": "childcare_cost",
+      "id": "laundry_day",
+      "title": "Laundry Day",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "do_laundry",
+          "label": "Spend $8 on laundry",
+          "effects": {
+            "cash": -8
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "wait_week",
+          "label": "Wait until next week",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "wash_small",
+          "label": "Do a smaller load for $4",
+          "effects": {
+            "cash": -4
+          },
+          "paymentRequired": true
+        }
+      ]
+    },
+    {
+      "id": "textbook_required",
+      "title": "You Need a Textbook",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college"
+      ],
+      "jobsAllowed": [
+        "college_parttime",
+        "intern",
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        20
+      ],
+      "choices": [
+        {
+          "id": "buy_new",
+          "label": "Buy new for $90",
+          "effects": {
+            "cash": -90
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "rent",
+          "label": "Rent for $35",
+          "effects": {
+            "cash": -35
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "borrow_library",
+          "label": "Use library reserve copy",
+          "effects": {
+            "stress": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "work_uniform",
+      "title": "Work Uniform Needed",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "retail",
+        "fastfood",
+        "college_parttime",
+        "intern",
+        "teacher"
+      ],
+      "weeksAllowed": [
+        1,
+        12
+      ],
+      "choices": [
+        {
+          "id": "buy_uniform",
+          "label": "Buy uniform pieces for $30",
+          "effects": {
+            "cash": -30
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "borrow_piece",
+          "label": "Borrow one piece temporarily",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "thrift_store",
+          "label": "Find a used option for $12",
+          "effects": {
+            "cash": -12
+          },
+          "paymentRequired": true
+        }
+      ]
+    },
+    {
+      "id": "medical_copay",
+      "title": "Unexpected Medical Copay",
+      "type": "realLife",
       "difficulty": [
         "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "pay_copay",
+          "label": "Pay the $35 copay",
+          "effects": {
+            "cash": -35
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "reschedule",
+          "label": "Reschedule and hope it can wait",
+          "effects": {
+            "stress": 2
+          },
+          "delayedConsequenceId": "bigger_health_issue"
+        },
+        {
+          "id": "use_hsa_like",
+          "label": "Use saved medical money",
+          "effects": {
+            "savings": -35
+          }
+        }
+      ]
+    },
+    {
+      "id": "childcare_need",
+      "title": "Need Emergency Childcare",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "adult"
+      ],
+      "jobsAllowed": [
+        "teacher",
+        "business_owner",
+        "freelancer",
+        "tech_junior"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "pay_childcare",
+          "label": "Pay $60 for childcare",
+          "effects": {
+            "cash": -60
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "ask_family",
+          "label": "Ask family for help",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "miss_work",
+          "label": "Miss work to stay home",
+          "effects": {
+            "income": -40
+          }
+        }
+      ]
+    },
+    {
+      "id": "professional_clothes",
+      "title": "Need Professional Clothes",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "intern",
+        "teacher",
+        "tech_junior",
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        24
+      ],
+      "choices": [
+        {
+          "id": "buy_outfit",
+          "label": "Buy an outfit for $55",
+          "effects": {
+            "cash": -55
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "thrift",
+          "label": "Thrift an outfit for $18",
+          "effects": {
+            "cash": -18
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "borrow",
+          "label": "Borrow something for now",
+          "effects": {
+            "stress": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "pet_expense",
+      "title": "Pet Needs Food or Care",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "adult",
+        "college"
+      ],
+      "jobsAllowed": [
+        "freelancer",
+        "teacher",
+        "business_owner",
+        "tech_junior",
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "pay_pet",
+          "label": "Spend $30 on pet needs",
+          "effects": {
+            "cash": -30
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "buy_small",
+          "label": "Buy a smaller supply for $15",
+          "effects": {
+            "cash": -15
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "delay",
+          "label": "Delay and risk a bigger issue",
+          "effects": {
+            "stress": 2
+          },
+          "delayedConsequenceId": "pet_emergency"
+        }
+      ]
+    },
+    {
+      "id": "campus_parking_ticket",
+      "title": "Parking Ticket",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "college_parttime",
+        "intern",
+        "teacher",
+        "tech_junior",
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "pay_ticket",
+          "label": "Pay the $25 ticket",
+          "effects": {
+            "cash": -25
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "appeal",
+          "label": "Try to appeal it",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "delay_ticket",
+          "label": "Wait until later",
+          "effects": {
+            "cash": 0
+          },
+          "delayedConsequenceId": "late_ticket_fee"
+        }
+      ]
+    },
+    {
+      "id": "holiday_travel",
+      "title": "Holiday Travel Decision",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        36,
+        48
+      ],
+      "choices": [
+        {
+          "id": "travel_100",
+          "label": "Spend $100 to travel home",
+          "effects": {
+            "cash": -100,
+            "social": 1
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "travel_budget",
+          "label": "Find a budget option for $45",
+          "effects": {
+            "cash": -45
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "stay_local",
+          "label": "Stay local and save",
+          "effects": {
+            "cash": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "graduation_fee",
+      "title": "Graduation or Certification Fee",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "intern",
+        "college_parttime",
+        "teacher",
+        "tech_junior",
+        "all"
+      ],
+      "weeksAllowed": [
+        20,
+        48
+      ],
+      "choices": [
+        {
+          "id": "pay_fee",
+          "label": "Pay the $75 fee",
+          "effects": {
+            "cash": -75
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "save_and_delay",
+          "label": "Delay and save for it",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "ask_support",
+          "label": "Ask for support or reimbursement",
+          "effects": {
+            "stress": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "moving_supplies",
+      "title": "You Need Moving Supplies",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "college_parttime",
+        "intern",
+        "freelancer",
+        "teacher",
+        "tech_junior",
+        "business_owner",
+        "all"
+      ],
+      "weeksAllowed": [
+        10,
+        48
+      ],
+      "choices": [
+        {
+          "id": "buy_supplies",
+          "label": "Spend $40 on supplies",
+          "effects": {
+            "cash": -40
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "borrow_boxes",
+          "label": "Borrow boxes and spend $10",
+          "effects": {
+            "cash": -10
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "wait_move",
+          "label": "Delay the move",
+          "effects": {
+            "stress": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "wifi_outage",
+      "title": "Home Wi-Fi Problem",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "intern",
+        "college_parttime",
+        "freelancer",
+        "teacher",
+        "tech_junior",
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "pay_fix",
+          "label": "Pay $20 for a faster fix",
+          "effects": {
+            "cash": -20
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "use_hotspot",
+          "label": "Use your hotspot and wait",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "library",
+          "label": "Work at the library for now",
+          "effects": {
+            "time": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "interview_transportation",
+      "title": "Interview Transportation",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "intern",
+        "tech_junior",
+        "teacher",
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "rideshare",
+          "label": "Take a rideshare for $18",
+          "effects": {
+            "cash": -18
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "public_transit",
+          "label": "Use transit for $4",
+          "effects": {
+            "cash": -4
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "friend_dropoff",
+          "label": "Ask someone for a ride",
+          "effects": {
+            "stress": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "lost_id",
+      "title": "Lost ID or Campus Card",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "replace_id",
+          "label": "Replace it for $15",
+          "effects": {
+            "cash": -15
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "temporary_pass",
+          "label": "Use a temporary pass",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "wait_replace",
+          "label": "Wait until payday",
+          "effects": {
+            "cash": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "small_home_repair",
+      "title": "Small Home Repair",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "adult"
+      ],
+      "jobsAllowed": [
+        "teacher",
+        "business_owner",
+        "freelancer",
+        "tech_junior",
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "pay_repair",
+          "label": "Repair it for $65",
+          "effects": {
+            "cash": -65
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "diy_small",
+          "label": "Patch it for $15",
+          "effects": {
+            "cash": -15
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "wait_repair",
+          "label": "Wait and risk a bigger cost",
+          "effects": {
+            "stress": 2
+          },
+          "delayedConsequenceId": "bigger_home_repair"
+        }
+      ]
+    },
+    {
+      "id": "family_obligation",
+      "title": "Family Obligation Comes Up",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "help_20",
+          "label": "Contribute $20",
+          "effects": {
+            "cash": -20,
+            "social": 1
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "help_time",
+          "label": "Help with time instead of money",
+          "effects": {
+            "time": -1
+          }
+        },
+        {
+          "id": "decline",
+          "label": "Decline to help financially",
+          "effects": {
+            "social": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "food_budget_stretch",
+      "title": "Food Budget Running Low",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "choices": [
+        {
+          "id": "meal_plan",
+          "label": "Meal plan carefully and spend $12",
+          "effects": {
+            "cash": -12
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "eat_out",
+          "label": "Keep eating out for $25",
+          "effects": {
+            "cash": -25
+          },
+          "paymentRequired": true,
+          "delayedConsequenceId": "budget_pressure"
+        },
+        {
+          "id": "use_pantry",
+          "label": "Use what you have at home",
+          "effects": {
+            "cash": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "group_project_supply",
+      "title": "Need Supplies for a Group Project",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        1,
+        32
+      ],
+      "choices": [
+        {
+          "id": "buy_supplies",
+          "label": "Buy supplies for $10",
+          "effects": {
+            "cash": -10
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "split_cost",
+          "label": "Split cost and pay $5",
+          "effects": {
+            "cash": -5
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "use_free_materials",
+          "label": "Use free materials",
+          "effects": {
+            "time": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "graduation_party",
+      "title": "Graduation Celebration Cost",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "weeksAllowed": [
+        20,
+        48
+      ],
+      "choices": [
+        {
+          "id": "spend_50",
+          "label": "Spend $50 celebrating",
+          "effects": {
+            "cash": -50,
+            "social": 1
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "budget_15",
+          "label": "Keep celebration to $15",
+          "effects": {
+            "cash": -15
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "celebrate_free",
+          "label": "Celebrate for free",
+          "effects": {
+            "cash": 0
+          }
+        }
       ]
     }
   ]

@@ -1,16 +1,189 @@
 {
   "consequences": [
     {
+      "id": "low_energy_next_week",
+      "title": "Low Energy Next Week",
+      "triggerWeeks": 1,
+      "effects": {
+        "stress": 1
+      }
+    },
+    {
+      "id": "bigger_phone_repair",
+      "title": "Phone Repair Got Worse",
+      "triggerWeeks": 2,
+      "effects": {
+        "cash": -40
+      }
+    },
+    {
+      "id": "missed_shift",
+      "title": "Missed Shift Due to Transportation",
+      "triggerWeeks": 1,
+      "effects": {
+        "income": -30
+      }
+    },
+    {
+      "id": "roommate_pays_back",
+      "title": "Roommate Paid You Back",
+      "triggerWeeks": 2,
+      "effects": {
+        "cash": 40
+      }
+    },
+    {
+      "id": "bigger_health_issue",
+      "title": "Health Issue Got Worse",
+      "triggerWeeks": 2,
+      "effects": {
+        "cash": -55,
+        "stress": 2
+      }
+    },
+    {
+      "id": "pet_emergency",
+      "title": "Pet Emergency Visit",
+      "triggerWeeks": 2,
+      "effects": {
+        "cash": -75
+      }
+    },
+    {
+      "id": "late_ticket_fee",
+      "title": "Late Ticket Fee Added",
+      "triggerWeeks": 2,
+      "effects": {
+        "cash": -15
+      }
+    },
+    {
+      "id": "bigger_home_repair",
+      "title": "Repair Became More Expensive",
+      "triggerWeeks": 3,
+      "effects": {
+        "cash": -90
+      }
+    },
+    {
+      "id": "budget_pressure",
+      "title": "Budget Pressure Built Up",
+      "triggerWeeks": 1,
+      "effects": {
+        "stress": 1
+      }
+    },
+    {
+      "id": "credit_balance_risk",
+      "title": "Credit Balance Risk",
+      "triggerWeeks": 3,
+      "effects": {
+        "stress": 1
+      }
+    },
+    {
+      "id": "loan_balance_grows",
+      "title": "Loan Balance Grew",
+      "triggerWeeks": 4,
+      "effects": {
+        "debt": 20
+      }
+    },
+    {
+      "id": "late_loan_fee",
+      "title": "Late Loan Fee",
+      "triggerWeeks": 2,
+      "effects": {
+        "cash": -25
+      }
+    },
+    {
+      "id": "billing_problem_grows",
+      "title": "Billing Problem Grew",
+      "triggerWeeks": 2,
+      "effects": {
+        "cash": -35
+      }
+    },
+    {
+      "id": "faster_pay_access",
+      "title": "Paycheck Hit Faster",
+      "triggerWeeks": 1,
+      "effects": {
+        "planning": 1
+      }
+    },
+    {
+      "id": "overdraft_fee",
+      "title": "Overdraft Fee",
+      "triggerWeeks": 1,
+      "effects": {
+        "checking": -15
+      }
+    },
+    {
       "id": "late_fee",
-      "triggerWeeks": 2
+      "title": "Late Fee",
+      "triggerWeeks": 1,
+      "effects": {
+        "cash": -10
+      }
     },
     {
-      "id": "savings_bonus",
-      "triggerWeeks": 4
+      "id": "side_hustle_profit",
+      "title": "Side Hustle Profit",
+      "triggerWeeks": 2,
+      "effects": {
+        "income": 35
+      }
     },
     {
-      "id": "credit_score_drop",
-      "triggerWeeks": 3
+      "id": "bigger_side_hustle_profit",
+      "title": "Bigger Side Hustle Profit",
+      "triggerWeeks": 3,
+      "effects": {
+        "income": 65
+      }
+    },
+    {
+      "id": "freelance_payment",
+      "title": "Client Paid Invoice",
+      "triggerWeeks": 2,
+      "effects": {
+        "income": 90
+      }
+    },
+    {
+      "id": "small_award_possible",
+      "title": "Scholarship Decision",
+      "triggerWeeks": 4,
+      "effects": {
+        "income": 50
+      }
+    },
+    {
+      "id": "referral_bonus_paid",
+      "title": "Referral Bonus Paid",
+      "triggerWeeks": 2,
+      "effects": {
+        "income": 75
+      }
+    },
+    {
+      "id": "pitch_result",
+      "title": "Pitch Result Came Back",
+      "triggerWeeks": 3,
+      "effects": {
+        "income": 120
+      }
+    },
+    {
+      "id": "small_flip_profit",
+      "title": "Flip Profit",
+      "triggerWeeks": 1,
+      "effects": {
+        "income": 12
+      }
     }
   ]
 }

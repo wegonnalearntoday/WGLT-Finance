@@ -1,0 +1,42 @@
+{
+  "columns": [
+    "week",
+    "role",
+    "difficulty",
+    "job",
+    "eventId",
+    "eventTitle",
+    "eventType",
+    "whyTriggered",
+    "choiceId",
+    "choiceLabel",
+    "paymentSource",
+    "investmentTarget",
+    "immediateEffects",
+    "delayedQueued",
+    "reflectionPrompt",
+    "teacherNotes",
+    "rubricNotes"
+  ],
+  "rows": [
+    {
+      "week": 1,
+      "role": "Teacher",
+      "difficulty": "Standard",
+      "job": "",
+      "eventId": "",
+      "eventTitle": "",
+      "eventType": "",
+      "whyTriggered": "",
+      "choiceId": "",
+      "choiceLabel": "",
+      "paymentSource": "",
+      "investmentTarget": "",
+      "immediateEffects": "",
+      "delayedQueued": [],
+      "reflectionPrompt": "",
+      "teacherNotes": "",
+      "rubricNotes": ""
+    }
+  ]
+}

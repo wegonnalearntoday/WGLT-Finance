@@ -2,22 +2,621 @@
   "events": [
     {
       "id": "bank_fee",
+      "title": "Unexpected Bank Fee",
+      "type": "financial",
       "difficulty": [
         "standard",
         "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "pay_fee",
+          "label": "Accept the $10 fee",
+          "effects": {
+            "checking": -10
+          }
+        },
+        {
+          "id": "call_bank",
+          "label": "Call and ask for reversal",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "switch_bank",
+          "label": "Look into changing banks",
+          "effects": {
+            "time": -1
+          }
+        }
       ]
     },
     {
       "id": "credit_card_offer",
+      "title": "Credit Card Offer",
+      "type": "financial",
       "difficulty": [
         "standard",
         "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "accept_offer",
+          "label": "Take the card",
+          "effects": {
+            "credit": 1
+          },
+          "delayedConsequenceId": "credit_balance_risk"
+        },
+        {
+          "id": "decline_offer",
+          "label": "Decline for now",
+          "effects": {
+            "credit": 0
+          }
+        },
+        {
+          "id": "research_offer",
+          "label": "Research before deciding",
+          "effects": {
+            "time": -1
+          }
+        }
       ]
     },
     {
       "id": "student_loan_payment",
+      "title": "Student Loan Payment Due",
+      "type": "financial",
       "difficulty": [
         "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "college_parttime",
+        "intern",
+        "teacher",
+        "tech_junior",
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "pay_loan",
+          "label": "Pay $75 now",
+          "effects": {
+            "cash": -75
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "minimum",
+          "label": "Pay a smaller amount",
+          "effects": {
+            "cash": -35
+          },
+          "paymentRequired": true,
+          "delayedConsequenceId": "loan_balance_grows"
+        },
+        {
+          "id": "skip",
+          "label": "Skip this cycle",
+          "effects": {
+            "stress": 2
+          },
+          "delayedConsequenceId": "late_loan_fee"
+        }
+      ]
+    },
+    {
+      "id": "hysa_choice",
+      "title": "Where Should You Put Your Savings?",
+      "type": "financial",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "keep_checking",
+          "label": "Keep it in checking",
+          "effects": {}
+        },
+        {
+          "id": "move_hysa",
+          "label": "Move $25 into HYSA",
+          "effects": {
+            "checking": -25,
+            "hysa": 25
+          },
+          "investmentRequired": true
+        },
+        {
+          "id": "move_savings",
+          "label": "Move $25 into savings",
+          "effects": {
+            "checking": -25,
+            "savings": 25
+          },
+          "investmentRequired": true
+        }
+      ]
+    },
+    {
+      "id": "cd_offer",
+      "title": "CD Offer from Your Bank",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "open_cd",
+          "label": "Put $100 into a CD",
+          "effects": {
+            "checking": -100,
+            "cd": 100
+          },
+          "investmentRequired": true
+        },
+        {
+          "id": "use_hysa",
+          "label": "Stick with HYSA",
+          "effects": {}
+        },
+        {
+          "id": "hold_cash",
+          "label": "Keep cash flexible",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "billing_error",
+      "title": "Possible Billing Error",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "call_now",
+          "label": "Call and fix it now",
+          "effects": {
+            "time": -1
+          }
+        },
+        {
+          "id": "pay_anyway",
+          "label": "Pay the extra $18 to avoid delay",
+          "effects": {
+            "cash": -18
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "ignore",
+          "label": "Ignore it for now",
+          "effects": {
+            "stress": 1
+          },
+          "delayedConsequenceId": "billing_problem_grows"
+        }
+      ]
+    },
+    {
+      "id": "direct_deposit_setup",
+      "title": "Set Up Direct Deposit",
+      "type": "financial",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "retail",
+        "fastfood",
+        "college_parttime",
+        "intern",
+        "teacher",
+        "tech_junior"
+      ],
+      "choices": [
+        {
+          "id": "setup",
+          "label": "Set it up now",
+          "effects": {
+            "time": -1
+          },
+          "delayedConsequenceId": "faster_pay_access"
+        },
+        {
+          "id": "paper_check",
+          "label": "Keep paper checks",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "emergency_fund_choice",
+      "title": "Build an Emergency Fund?",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "fund_20",
+          "label": "Put $20 aside",
+          "effects": {
+            "checking": -20,
+            "emergency": 20
+          },
+          "investmentRequired": true
+        },
+        {
+          "id": "fund_50",
+          "label": "Put $50 aside",
+          "effects": {
+            "checking": -50,
+            "emergency": 50
+          },
+          "investmentRequired": true
+        },
+        {
+          "id": "skip",
+          "label": "Skip this week",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "overdraft_risk",
+      "title": "Your Balance Is Getting Low",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "transfer_15",
+          "label": "Transfer $15 from savings",
+          "effects": {
+            "savings": -15,
+            "checking": 15
+          },
+          "investmentRequired": true
+        },
+        {
+          "id": "cut_spending",
+          "label": "Cut spending this week",
+          "effects": {
+            "discipline": 1
+          }
+        },
+        {
+          "id": "ignore",
+          "label": "Ignore it",
+          "effects": {
+            "stress": 1
+          },
+          "delayedConsequenceId": "overdraft_fee"
+        }
+      ]
+    },
+    {
+      "id": "small_investment_choice",
+      "title": "You Have $25 Extra",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "hysa",
+          "label": "Put it in HYSA",
+          "effects": {
+            "checking": -25,
+            "hysa": 25
+          },
+          "investmentRequired": true
+        },
+        {
+          "id": "emergency",
+          "label": "Put it in emergency fund",
+          "effects": {
+            "checking": -25,
+            "emergency": 25
+          },
+          "investmentRequired": true
+        },
+        {
+          "id": "keep_cash",
+          "label": "Keep it available",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "rent_due",
+      "title": "Rent Is Due Soon",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "college_parttime",
+        "intern",
+        "freelancer",
+        "teacher",
+        "tech_junior",
+        "business_owner",
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "pay_early",
+          "label": "Set aside the full amount now",
+          "effects": {
+            "planning": 1
+          }
+        },
+        {
+          "id": "partial_set_aside",
+          "label": "Set aside part of it",
+          "effects": {
+            "planning": 0
+          }
+        },
+        {
+          "id": "wait",
+          "label": "Wait and hope next check covers it",
+          "effects": {
+            "stress": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "subscription_review",
+      "title": "Review Your Subscriptions",
+      "type": "financial",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "cancel_one",
+          "label": "Cancel one and save $10",
+          "effects": {
+            "cash": 10
+          }
+        },
+        {
+          "id": "keep_all",
+          "label": "Keep everything",
+          "effects": {}
+        },
+        {
+          "id": "pause_one",
+          "label": "Pause one this month",
+          "effects": {
+            "cash": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "late_payment_warning",
+      "title": "Late Payment Warning",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "pay_now",
+          "label": "Pay $25 now",
+          "effects": {
+            "cash": -25
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "call_for_extension",
+          "label": "Call and ask for more time",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "ignore",
+          "label": "Ignore it",
+          "effects": {
+            "stress": 2
+          },
+          "delayedConsequenceId": "late_fee"
+        }
+      ]
+    },
+    {
+      "id": "split_refund",
+      "title": "You Got a Small Refund",
+      "type": "financial",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "spend_it",
+          "label": "Spend the $20",
+          "effects": {
+            "cash": 20
+          }
+        },
+        {
+          "id": "save_half",
+          "label": "Save half, keep half",
+          "effects": {
+            "cash": 10,
+            "savings": 10
+          }
+        },
+        {
+          "id": "save_all",
+          "label": "Save all $20",
+          "effects": {
+            "savings": 20
+          }
+        }
+      ]
+    },
+    {
+      "id": "insurance_deductible",
+      "title": "Insurance Deductible Decision",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "adult"
+      ],
+      "jobsAllowed": [
+        "teacher",
+        "tech_junior",
+        "business_owner",
+        "freelancer",
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "pay_deductible",
+          "label": "Pay the deductible",
+          "effects": {
+            "cash": -120
+          },
+          "paymentRequired": true
+        },
+        {
+          "id": "delay_claim",
+          "label": "Delay the claim",
+          "effects": {
+            "stress": 2
+          }
+        },
+        {
+          "id": "use_emergency",
+          "label": "Use emergency fund",
+          "effects": {
+            "emergency": -120
+          }
+        }
       ]
     }
   ]
