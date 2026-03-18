@@ -351,6 +351,27 @@ main::before{
     .wants-option:last-child{ margin-bottom:0; }
     .wants-option input{ accent-color:var(--primary); transform:scale(1.15); }
     .wants-option.checked{ background:#edf3ff; border-color:#bcd3ff; }
+
+    .bank-jar-board{margin-top:14px;padding:14px;border:1px solid #d9e6fb;border-radius:18px;background:linear-gradient(180deg,#fbfdff,#f1f7ff);}
+    .bank-jar-title{font-weight:1100;color:#24416c;margin-bottom:8px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+    .bank-jar-sub{font-size:12px;color:#567;}
+    .bank-jars{display:flex;gap:12px;justify-content:center;align-items:flex-end;flex-wrap:wrap;}
+    .bank-jar-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:74px;}
+    .bank-jar-label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;color:#365;}
+    .bank-jar{width:60px;height:92px;position:relative;overflow:hidden;border-radius:0 0 14px 14px;background:rgba(255,255,255,.75);border:3px solid #b8cfff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);}
+    .bank-jar-fill{position:absolute;left:0;right:0;bottom:0;height:0%;transition:height .8s cubic-bezier(.34,1.56,.64,1);}
+    .bank-jar-fill::before{content:'';position:absolute;left:-10%;right:-10%;top:-10px;height:14px;border-radius:50%;background:rgba(255,255,255,.25);}    
+    .bank-jar-amt{font-size:12px;font-weight:1000;color:#234;}
+    .bank-jar-checking .bank-jar{border-color:#5b8def;}
+    .bank-jar-checking .bank-jar-fill{background:linear-gradient(180deg,rgba(91,141,239,.55),rgba(91,141,239,.88));}
+    .bank-jar-savings .bank-jar{border-color:#4caf50;}
+    .bank-jar-savings .bank-jar-fill{background:linear-gradient(180deg,rgba(76,175,80,.5),rgba(76,175,80,.88));}
+    .bank-jar-cash .bank-jar{border-color:#ff9800;}
+    .bank-jar-cash .bank-jar-fill{background:linear-gradient(180deg,rgba(255,152,0,.45),rgba(255,152,0,.88));}
+    .bank-jar-hysa .bank-jar{border-color:#8e44ad;}
+    .bank-jar-hysa .bank-jar-fill{background:linear-gradient(180deg,rgba(142,68,173,.45),rgba(142,68,173,.9));}
+    .bank-jar-cd .bank-jar{border-color:#00a8a8;}
+    .bank-jar-cd .bank-jar-fill{background:linear-gradient(180deg,rgba(0,168,168,.42),rgba(0,168,168,.9));}
     .meter{
       margin-top:10px;
       border:1px solid var(--line);
@@ -680,14 +701,14 @@ main::before{
               <div class="field">
                 <div class="name"><button class="linkish" onclick="showSectionDef('savings')">Savings + Debt ℹ️</button></div>
                 <div class="value" id="saveVal">$64</div>
-                <div class="def" id="saveDef">This bucket covers savings and debt together. In the 70-20-10 rule it uses 20% total, then auto-splits that total into savings first and debt second.</div>
+                <div class="def" id="saveDef">This benchmark covers savings and debt together. In the 70-20-10 rule it uses 20% total, then auto-splits that total into savings first and debt second.</div>
                 <div class="def" style="margin-top:8px">Locked for this version.</div>
               </div>
 
               <div class="field">
                 <div class="name">Current Split</div>
                 <div class="value" id="debtVal">S $48 • D $16</div>
-                <div class="def">The combined bucket auto-splits 75% to savings and 25% to debt pay so students can still see both pieces in action.</div>
+                <div class="def">The combined benchmark auto-splits 75% to savings and 25% to debt pay so students can still see both pieces in action.</div>
               </div>
             </div>
 
@@ -727,6 +748,39 @@ main::before{
                 <div class="value" style="font-size:16px">Cash: <span id="cashBankVal">$200</span></div>
                 <div class="value" style="font-size:16px">Credit Score: <span id="creditInlineVal">650</span> <button class="linkish" id="btnCreditInfo" type="button">Benchmark #5</button></div>
                 <div class="def" id="bankTypeLabel">Bank Types: Not chosen</div>
+                <div class="bank-jar-board">
+                  <div class="bank-jar-title">
+                    <span>Visual Money Benchmarks</span>
+                    <span class="bank-jar-sub" id="bankJarScaleLabel">Scale: $0 to $100</span>
+                  </div>
+                  <div class="bank-jars">
+                    <div class="bank-jar-wrap bank-jar-checking">
+                      <div class="bank-jar-label">Checking</div>
+                      <div class="bank-jar"><div class="bank-jar-fill" id="jarCheckingFill"></div></div>
+                      <div class="bank-jar-amt" id="jarCheckingAmt">$0</div>
+                    </div>
+                    <div class="bank-jar-wrap bank-jar-savings">
+                      <div class="bank-jar-label">Savings</div>
+                      <div class="bank-jar"><div class="bank-jar-fill" id="jarSavingsFill"></div></div>
+                      <div class="bank-jar-amt" id="jarSavingsAmt">$0</div>
+                    </div>
+                    <div class="bank-jar-wrap bank-jar-cash">
+                      <div class="bank-jar-label">Cash</div>
+                      <div class="bank-jar"><div class="bank-jar-fill" id="jarCashFill"></div></div>
+                      <div class="bank-jar-amt" id="jarCashAmt">$0</div>
+                    </div>
+                    <div class="bank-jar-wrap bank-jar-hysa">
+                      <div class="bank-jar-label">HYSA</div>
+                      <div class="bank-jar"><div class="bank-jar-fill" id="jarHysaFill"></div></div>
+                      <div class="bank-jar-amt" id="jarHysaAmt">$0</div>
+                    </div>
+                    <div class="bank-jar-wrap bank-jar-cd">
+                      <div class="bank-jar-label">CDs</div>
+                      <div class="bank-jar"><div class="bank-jar-fill" id="jarCdFill"></div></div>
+                      <div class="bank-jar-amt" id="jarCdAmt">$0</div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div class="field">
@@ -892,7 +946,7 @@ Insurance: Not chosen</div>
           <div class="panel" id="panel-reports">
             <div class="field">
               <div class="name">12 Benchmark Tracker</div>
-              <div class="def">Live tracker for the 12 Florida financial literacy buckets covered during play.</div>
+              <div class="def">Live tracker for the 12 Florida financial literacy benchmarks covered during play.</div>
               <div class="tracker-grid" id="bucketTracker"></div>
             </div>
             <div style="height:10px"></div>
