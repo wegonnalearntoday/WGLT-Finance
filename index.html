@@ -952,7 +952,14 @@ Insurance: Not chosen</div>
 <script>
 window.startRoleDifficulty = window.startRoleDifficulty || function(role, experience){
   try {
-    if(role === 'student' && experience === 'beginner'){ try{ sessionStorage.setItem('wglt_use_beginner_48','1'); }catch(e){} /* route into main 48-week beginner lane */ }
+    if(experience === 'beginner'){
+      try{
+        sessionStorage.setItem('wglt_jr_role', role);
+        sessionStorage.setItem('wglt_jr_experience', experience);
+      }catch(e){}
+      window.location.href = './budget-boss-jr.html?teacher=' + (role === 'teacher' ? '1' : '0') + '&role=' + encodeURIComponent(role) + '&experience=' + encodeURIComponent(experience);
+      return;
+    }
     var screen = document.getElementById('modeSelectScreen');
     if(screen) screen.style.display = 'none';
     var app = document.querySelector('.app');

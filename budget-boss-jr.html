@@ -897,6 +897,10 @@ body{
       <div class="teacher-info" id="teacher-info">
         Use these tools to add teachable moments anytime. The class votes together on every choice card.
       </div>
+      <div class="teacher-info" id="teacher-reflection-box" style="margin-top:10px;display:none">
+        <b>🪞 Reflection Checkpoint</b>
+        <div id="teacher-reflection-content" style="margin-top:8px">Reflection prompts will appear here during teacher mode.</div>
+      </div>
     </div>
   </div>
 
@@ -956,6 +960,56 @@ body{
 // STATE
 // ══════════════════════════════════════════════════════════════════
 const TOTAL_WEEKS = 12;
+const JR_REFLECTION_PROMPTS = {
+  default: {
+    discussion: "Was this choice a need, a want, or something in between?",
+    reflection: [
+      "What was the smartest part of this choice?",
+      "How could this choice help or hurt next week?"
+    ],
+    note: "Point students back to the jars: Spend, Save, and Share."
+  },
+  spend: {
+    discussion: "What did the student gain by spending now, and what did they give up?",
+    reflection: [
+      "Was spending from the Spend jar a planned choice or an impulse?",
+      "Would saving part of this money have made next week easier?"
+    ],
+    note: "Use this to reinforce opportunity cost in kid-friendly language."
+  },
+  save: {
+    discussion: "How does saving today change what is possible later?",
+    reflection: [
+      "What future goal gets closer because of this saving choice?",
+      "How did patience show up in this decision?"
+    ],
+    note: "Celebrate delayed gratification and goal progress."
+  },
+  share: {
+    discussion: "Why might someone choose to share even when they are still saving?",
+    reflection: [
+      "How did this choice help another person or cause?",
+      "Can generosity and saving both matter at the same time?"
+    ],
+    note: "Connect sharing to empathy and purposeful money choices."
+  },
+  monthly: {
+    discussion: "What pattern do you notice in the jars this month?",
+    reflection: [
+      "Which jar grew the most this month, and why?",
+      "What would you change before the next month starts?"
+    ],
+    note: "Use the end of each 4-week block as a mini check-in."
+  },
+  final: {
+    discussion: "What decision had the biggest effect on the whole 12-week game?",
+    reflection: [
+      "What was your best money choice in the game?",
+      "What would you do differently if you played again?"
+    ],
+    note: "Close by naming one concrete money habit the class practiced."
+  }
+};
 
 let state = {
   playerName: '', avatar: '', avatarName: '',
@@ -1469,6 +1523,7 @@ function loadWeekScenario(week) {
   // Update teacher info
   document.getElementById('teacher-info').textContent =
     `Week ${week}: ${scenario.scenario} | FL Standards: Earning (#1), Saving (#3), Spending (#2), Sharing`;
+  updateTeacherWeekPrompt(scenario);
 
   if (scenario.skipChoice) {
     // Week 1 — just earn, show a modal, then allow next
@@ -1588,6 +1643,7 @@ function makeChoice(opt, scenario, btn) {
   setTimeout(() => {
     showSpendSection();
     document.getElementById('next-btn').disabled = false;
+    if (isTeacherJrMode()) openTeacherReflectionModal(opt, scenario);
   }, 400);
 }
 
@@ -1700,6 +1756,70 @@ function buildReport() {
 
   document.getElementById('report-subtitle').textContent =
     `${name} finished all ${TOTAL_WEEKS} weeks as a ${JOBS[state.job].name}!`;
+  if(isTeacherJrMode()){
+    renderTeacherReflectionBox(`
+      <div><b>🏁 Final Reflection</b></div>
+      <div style="margin-top:8px"><b>Discussion Prompt</b><br>${JR_REFLECTION_PROMPTS.final.discussion}</div>
+      <div style="margin-top:8px"><b>Ask students</b><ul style="margin:6px 0 0 18px"><li>${JR_REFLECTION_PROMPTS.final.reflection[0]}</li><li>${JR_REFLECTION_PROMPTS.final.reflection[1]}</li></ul></div>
+      <div style="margin-top:8px"><b>Teaching Note</b><br>${JR_REFLECTION_PROMPTS.final.note}</div>
+    `);
+  }
+}
+
+
+function isTeacherJrMode(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('teacher') === '1') return true;
+  try{ return sessionStorage.getItem('wglt_jr_role') === 'teacher'; }catch(err){ return false; }
+}
+
+function getReflectionPackForChoice(opt){
+  if(!opt) return JR_REFLECTION_PROMPTS.default;
+  if((opt.share || 0) > 0) return JR_REFLECTION_PROMPTS.share;
+  if((opt.save || 0) > 0 && (opt.spend || 0) >= 0) return JR_REFLECTION_PROMPTS.save;
+  if((opt.spend || 0) < 0) return JR_REFLECTION_PROMPTS.spend;
+  return JR_REFLECTION_PROMPTS.default;
+}
+
+function renderTeacherReflectionBox(html){
+  const box = document.getElementById('teacher-reflection-box');
+  const content = document.getElementById('teacher-reflection-content');
+  if(!box || !content) return;
+  if(!isTeacherJrMode()){
+    box.style.display = 'none';
+    return;
+  }
+  box.style.display = '';
+  content.innerHTML = html;
+}
+
+function updateTeacherWeekPrompt(scenario){
+  if(!isTeacherJrMode() || !scenario) return;
+  const pack = JR_REFLECTION_PROMPTS.default;
+  const monthCheckpoint = state.week > 0 && state.week % 4 === 0
+    ? `<div style="margin-top:8px;padding:8px;border-radius:10px;background:rgba(255,255,255,.12)"><b>Month Checkpoint</b><br>${JR_REFLECTION_PROMPTS.monthly.reflection[0]}<br>${JR_REFLECTION_PROMPTS.monthly.reflection[1]}</div>`
+    : '';
+  renderTeacherReflectionBox(`
+    <div><b>💬 Discussion Prompt</b><br>${pack.discussion}</div>
+    <div style="margin-top:8px"><b>📝 Reflection Questions</b><ul style="margin:6px 0 0 18px"><li>${pack.reflection[0]}</li><li>${pack.reflection[1]}</li></ul></div>
+    <div style="margin-top:8px"><b>🔍 Teaching Note</b><br>${pack.note}</div>
+    <div style="margin-top:8px"><b>🎯 Why this scenario appeared</b><br>Week ${state.week} for the ${JOBS[state.job].name} job track.</div>
+    ${monthCheckpoint}
+  `);
+}
+
+function openTeacherReflectionModal(opt, scenario){
+  if(!isTeacherJrMode()) return;
+  const pack = getReflectionPackForChoice(opt);
+  const extra = state.week % 4 === 0
+    ? `<div style="margin-top:10px"><b>📅 End-of-Month Check</b><ul style="margin:6px 0 0 18px"><li>${JR_REFLECTION_PROMPTS.monthly.reflection[0]}</li><li>${JR_REFLECTION_PROMPTS.monthly.reflection[1]}</li></ul></div>`
+    : '';
+  showModal('🪞','Teacher Reflection Prompt',
+    'Discussion prompt:<br><br><b>' + pack.discussion + '</b><br><br>' +
+    'Ask students:<br>• ' + pack.reflection[0] + '<br>• ' + pack.reflection[1] + '<br><br>' +
+    'Teaching note:<br>' + pack.note + extra,
+    'Keep Going ▶️', closeModal
+  );
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -1725,12 +1845,15 @@ function teacherTriggerExpense() {
 }
 
 function teacherDiscussion() {
+  const monthExtra = state.week > 0 && state.week % 4 === 0
+    ? '\n\n📅 Month Check: What pattern do you notice in the jars this month? What would you change before the next month starts?'
+    : '';
   showModal('💬','Discussion Time!',
     'Ask the class:\n\n' +
     '1️⃣ Which jar do you wish was bigger right now?\n' +
     '2️⃣ Was it hard to save instead of spend this week?\n' +
     '3️⃣ How does it feel to see your Save jar growing?\n' +
-    '4️⃣ What would happen if we spent from the Save jar?',
+    '4️⃣ What would happen if we spent from the Save jar?' + monthExtra,
     'Resume Game ▶️', closeModal
   );
 }
@@ -1905,7 +2028,9 @@ document.querySelectorAll('.cloud').forEach(c=>{
 (function(){
   const params = new URLSearchParams(window.location.search);
   const teacherPanel = document.getElementById('teacher-panel');
-  if(teacherPanel && params.get('teacher') === '1') teacherPanel.style.display = '';
+  const teacherOn = params.get('teacher') === '1' || (function(){ try{ return sessionStorage.getItem('wglt_jr_role') === 'teacher'; }catch(err){ return false; }})();
+  if(teacherPanel && teacherOn) teacherPanel.style.display = '';
+  if(teacherOn) renderTeacherReflectionBox('<div><b>Teacher mode ready.</b><br>Reflection prompts will update as each week loads.</div>');
 })();
 
 
@@ -1914,7 +2039,7 @@ document.querySelectorAll('.cloud').forEach(c=>{
   if(!profile) return;
   if(profile.playerName){
     state.playerName = profile.playerName;
-    const inp = document.getElementById('player-name');
+    const inp = document.getElementById('player-name-input');
     if(inp) inp.value = profile.playerName;
   }
   if(profile.avatar){

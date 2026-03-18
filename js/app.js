@@ -6240,8 +6240,13 @@ function ensureTeacherModeMenu(){
 }
 function selectConfiguration(role='teacher', experience='standard'){
   renderSharedProfileBadge();
-  if(role === 'student' && experience === 'beginner'){
-    try{ sessionStorage.setItem('wglt_use_beginner_48','1'); }catch(e){}
+  if(experience === 'beginner'){
+    try{
+      sessionStorage.setItem('wglt_jr_role', role);
+      sessionStorage.setItem('wglt_jr_experience', experience);
+    }catch(e){}
+    window.location.href = './budget-boss-jr.html?teacher=' + (role === 'teacher' ? '1' : '0') + '&role=' + encodeURIComponent(role) + '&experience=' + encodeURIComponent(experience);
+    return;
   }
   if($("modeSelectScreen")) $("modeSelectScreen").style.display = "none";
   state.presentationRole = role;
