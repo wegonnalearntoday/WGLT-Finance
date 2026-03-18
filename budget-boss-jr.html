@@ -259,7 +259,7 @@ body{
   color:var(--ink-lt);margin-bottom:16px;text-align:center;
 }
 .jars{display:flex;gap:12px;justify-content:center;align-items:flex-end;}
-.jar-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;}
+.jar-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;}
 .jar-label{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;}
 .jar-container{
   width:64px;height:90px;
@@ -300,6 +300,10 @@ body{
 @keyframes coinFall{from{top:-10px;opacity:1}to{top:80%;opacity:0}}
 @keyframes jarPulse{0%{transform:translateY(0);box-shadow:0 0 0 rgba(0,0,0,0)}35%{transform:translateY(-2px);box-shadow:0 0 18px rgba(255,255,255,.55)}100%{transform:translateY(0);box-shadow:0 0 0 rgba(0,0,0,0)}}
 .jar-fill.jar-pulse{animation:jarPulse .65s ease;}
+.jar-delta-pop{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-weight:1000;font-size:.9rem;pointer-events:none;animation:jarDeltaRise .95s ease forwards;text-shadow:0 2px 6px rgba(255,255,255,.55);}
+.jar-delta-pop.plus{color:#16a34a;}
+.jar-delta-pop.minus{color:#dc2626;}
+@keyframes jarDeltaRise{0%{opacity:0;transform:translate(-50%,6px) scale(.9);}15%{opacity:1;}100%{opacity:0;transform:translate(-50%,-26px) scale(1.06);}}
 
 /* Savings goal bar */
 .goal-progress{
@@ -1886,19 +1890,32 @@ function teacherShowBuckets() {
 // ══════════════════════════════════════════════════════════════════
 // UI HELPERS
 // ══════════════════════════════════════════════════════════════════
+function spawnJarDelta(jarKey, delta){
+  if(!delta) return;
+  const wrap = document.querySelector('.jar-wrap.jar-' + jarKey);
+  if(!wrap) return;
+  const el = document.createElement('div');
+  el.className = 'jar-delta-pop ' + (delta > 0 ? 'plus' : 'minus');
+  el.textContent = (delta > 0 ? '+' : '') + fmt(delta);
+  wrap.appendChild(el);
+  setTimeout(() => el.remove(), 950);
+}
+
 function updateJars() {
   const prev = state._lastJarSnapshot || {spend:0, save:0, share:0};
-  const MAX = Math.max(10, state.goal || 0, state.jars.spend, state.jars.save, state.jars.share);
+  const MAX = Math.max(100, state.goal || 0, state.jars.spend, state.jars.save, state.jars.share);
   ['spend','save','share'].forEach(j => {
     const pct = Math.min(100, (state.jars[j]/MAX)*100);
     const fillEl = document.getElementById('jar-'+j+'-fill');
     fillEl.style.height = pct + '%';
     fillEl.title = '$' + fmt(state.jars[j]) + ' out of visual max $' + fmt(MAX);
     document.getElementById('jar-'+j+'-amt').textContent = '$' + fmt(state.jars[j]);
-    if (state.jars[j] !== prev[j]) {
+    const delta = state.jars[j] - (prev[j] || 0);
+    if (delta !== 0) {
       fillEl.classList.remove('jar-pulse');
       void fillEl.offsetWidth;
       fillEl.classList.add('jar-pulse');
+      spawnJarDelta(j, delta);
       setTimeout(() => fillEl.classList.remove('jar-pulse'), 700);
     }
   });
