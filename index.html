@@ -241,6 +241,10 @@ main::before{
     }
     .banner.show{ display:flex; }
     .banner .ok{ color:var(--success); }
+    .decision-badge{position:fixed;top:72px;right:16px;z-index:52;display:none;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(0,0,0,.88);border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 28px rgba(0,0,0,.35);font-weight:800;font-size:13px;color:#fff;transform:translateY(-4px);opacity:0;transition:opacity .18s ease, transform .18s ease;}
+    .decision-badge.show{opacity:1;transform:translateY(0);}
+    .decision-badge .icon{font-size:16px;}
+    @media (max-width:700px){.decision-badge{left:12px;right:12px;top:66px;justify-content:center;font-size:12px;padding:10px 12px;}}
 
     /* Modal */
     .overlay{
@@ -453,6 +457,9 @@ main::before{
     <span class="ok">✅</span>
     <span id="bannerText">Done</span>
   </div>
+  <div class="decision-badge" id="decisionBadge" aria-live="polite">
+    <span class="icon">💡</span><span id="decisionBadgeText">Paid from Checking</span>
+  </div>
 
   <div class="overlay" id="overlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
@@ -502,6 +509,7 @@ main::before{
           <span class="pill">Week <span id="weekNum">1</span>/48 • <span id="monthName">June</span></span>
           <span class="pill">Credit: <span class="credit" id="credit">650</span></span>
           <span class="pill">Savings Goal: <span id="goalBadge">$0</span></span>
+          <span class="pill" id="sharedProfilePill" style="display:none">Player: <span id="sharedProfileBadge"></span></span>
         </div>
       </div>
 

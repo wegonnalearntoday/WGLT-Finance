@@ -1327,6 +1327,9 @@ const SHOP_ITEMS = [
 ];
 
 const WEEK_EMOJIS = ['☀️','🌤️','⛅','🌡️','🌧️','🌈','🌟','🍂','🎒','🍁','❄️','🏁'];
+const SHARED_PROFILE_KEY = 'wgltSharedPlayerProfile';
+function saveSharedProfile(){ try{ localStorage.setItem(SHARED_PROFILE_KEY, JSON.stringify({ playerName: state.playerName || '', avatar: state.avatar || '', avatarName: state.avatarName || '', updatedAt: new Date().toISOString() })); }catch(err){} }
+function loadSharedProfile(){ try{ const raw = localStorage.getItem(SHARED_PROFILE_KEY); return raw ? JSON.parse(raw) : null; }catch(err){ return null; } }
 
 // ══════════════════════════════════════════════════════════════════
 // AVATAR & NAME
@@ -1342,11 +1345,13 @@ function selectAvatar(emoji, name) {
       b.classList.add('selected');
     }
   });
+  saveSharedProfile();
   checkStartReady();
 }
 
 function onNameInput(val) {
   state.playerName = val.trim();
+  saveSharedProfile();
   checkStartReady();
 }
 
@@ -1393,6 +1398,7 @@ function checkStartReady() {
 // GAME START
 // ══════════════════════════════════════════════════════════════════
 function startGame() {
+  saveSharedProfile();
   state.week = 0;
   state.jars = { spend:0, save:0, share:0 };
   state.totalEarned = 0;
@@ -1902,6 +1908,28 @@ document.querySelectorAll('.cloud').forEach(c=>{
   if(teacherPanel && params.get('teacher') === '1') teacherPanel.style.display = '';
 })();
 
+
+(function hydrateSharedProfile(){
+  const profile = loadSharedProfile();
+  if(!profile) return;
+  if(profile.playerName){
+    state.playerName = profile.playerName;
+    const inp = document.getElementById('player-name');
+    if(inp) inp.value = profile.playerName;
+  }
+  if(profile.avatar){
+    state.avatar = profile.avatar;
+    state.avatarName = profile.avatarName || '';
+    document.querySelectorAll('.avatar-btn').forEach(b => {
+      if (b.querySelector('.av-emoji') && b.querySelector('.av-emoji').textContent === profile.avatar) {
+        b.classList.add('selected');
+      }
+    });
+  }
+  updateHeaderAvatar();
+  checkStartReady();
+})();
+
 </script>
 <script>
 /* Notify Wix loader that the HTML game is ready */
@@ -1910,6 +1938,9 @@ window.addEventListener("load", function () {
     window.parent.postMessage({ type: "WGLT_READY" }, "*");
   }
 });
+
+
+
 </script>
 </body>
 </html>

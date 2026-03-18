@@ -93,6 +93,46 @@ function updateModeBadge(){
   if(document.getElementById('modeSummaryLabel')) document.getElementById('modeSummaryLabel').textContent = cfg.description || '';
 }
 
+const SHARED_PROFILE_KEY = 'wgltSharedPlayerProfile';
+function loadSharedProfile(){
+  try{ const raw = localStorage.getItem(SHARED_PROFILE_KEY); return raw ? JSON.parse(raw) : null; }catch(err){ return null; }
+}
+function renderSharedProfileBadge(){
+  const pill = document.getElementById('sharedProfilePill');
+  const badge = document.getElementById('sharedProfileBadge');
+  if(!pill || !badge) return;
+  const profile = loadSharedProfile();
+  if(profile && (profile.playerName || profile.avatar)){
+    badge.textContent = `${profile.avatar || '🙂'} ${profile.playerName || profile.avatarName || 'Player'}`;
+    pill.style.display = 'inline-flex';
+  } else {
+    pill.style.display = 'none';
+  }
+}
+
+let decisionBadgeTimer = null;
+function showDecisionBadge(text){
+  const box = document.getElementById('decisionBadge');
+  const label = document.getElementById('decisionBadgeText');
+  if(!box || !label || !text) return;
+  label.textContent = text;
+  box.style.display = 'inline-flex';
+  box.classList.add('show');
+  clearTimeout(decisionBadgeTimer);
+  decisionBadgeTimer = setTimeout(()=>{
+    box.classList.remove('show');
+    box.style.display = 'none';
+  }, 2600);
+}
+function formatSourceLabel(src){
+  if(src === 'cd') return 'CD';
+  if(src === 'hysa') return 'HYSA';
+  if(src === 'checking') return 'Checking';
+  if(src === 'savings') return 'Savings';
+  if(src === 'cash') return 'Cash';
+  return src ? String(src).charAt(0).toUpperCase() + String(src).slice(1) : 'Selected Account';
+}
+
 /* ============================================================
    INLINED WIX-FRIENDLY MASTER DATA
    This keeps the simulator single-file for Wix HTML embed use.
@@ -147,7 +187,7 @@ function ensureMasterScenarioState(){
   if(!state.masterScenario.firedWindows) state.masterScenario.firedWindows = {};
 }
 
-function applyMasterScenarioChoice(choice, scenario, week){
+function applyMasterScenarioChoice(choice, scenario, week, options={}){
   ensureMasterScenarioState();
   const lines = [];
   const moneyDelta = Number(choice.moneyDelta || 0);
@@ -155,12 +195,13 @@ function applyMasterScenarioChoice(choice, scenario, week){
   const stressDelta = Number(choice.stressDelta || 0);
   const wantsDelta = Number(choice.wantsDelta || 0);
   const needsDelta = Number(choice.needsDelta || 0);
+  const skipMoneySpend = !!options.skipMoneySpend;
 
   if(moneyDelta > 0){
     state.cash += moneyDelta;
     lines.push(`Cash ${money(moneyDelta)}`);
   } else if(moneyDelta < 0){
-    payFromCheckingThenCashThenSavings(Math.abs(moneyDelta));
+    if(!skipMoneySpend) payFromCheckingThenCashThenSavings(Math.abs(moneyDelta));
     lines.push(`Spent ${money(Math.abs(moneyDelta))}`);
   }
 
@@ -250,17 +291,27 @@ function runLifeScenarioDecision(){
     onPick:(pickId)=>{
       const choice = picked.choices[Number(pickId)];
       if(!choice) return;
-      const summary = applyMasterScenarioChoice(choice, picked, week);
-      openModal({
-        title:'Life Scenario Result',
-        meta:`Week ${week} • ${picked.title}`,
-        body: summary || choice.summary || 'Choice applied.',
-        buttons:[{id:'ok',label:'Continue',kind:'primary'}],
-        onPick:()=>{
-          maybeFireMasterDelayedConsequences(week);
-          notifyAction('job_event');
-        }
-      });
+      const finishChoice = (skipMoneySpend=false, srcLabel='')=>{
+        const summary = applyMasterScenarioChoice(choice, picked, week, {skipMoneySpend});
+        openModal({
+          title:'Life Scenario Result',
+          meta:`Week ${week} • ${picked.title}`,
+          body: (summary || choice.summary || 'Choice applied.') + (srcLabel ? `
+
+Source used: ${srcLabel}` : ''),
+          buttons:[{id:'ok',label:'Continue',kind:'primary'}],
+          onPick:()=>{
+            maybeFireMasterDelayedConsequences(week);
+            notifyAction('job_event');
+          }
+        });
+      };
+      if(Number(choice.moneyDelta || 0) < 0){
+        const amt = Math.abs(Number(choice.moneyDelta || 0));
+        chooseFundingSource(amt, `Life scenario choice: ${choice.label}`, (src)=> finishChoice(true, src));
+        return;
+      }
+      finishChoice(false, '');
     }
   });
 }
@@ -342,7 +393,8 @@ function inferScenarioFunding(opt, job){
       { kind:'checking', re:/st\.bank\.checking\s*=\s*Math\.max\(0\s*,\s*st\.bank\.checking\s*-\s*(\d+)\s*\)/ },
       { kind:'checking', re:/st\.bank\.checking\s*-=\s*(\d+)/ },
       { kind:'savings', re:/st\.bank\.savings\s*=\s*Math\.max\(0\s*,\s*st\.bank\.savings\s*-\s*(\d+)\s*\)/ },
-      { kind:'savings', re:/st\.bank\.savings\s*-=\s*(\d+)/ }
+      { kind:'savings', re:/st\.bank\.savings\s*-=\s*(\d+)/ },
+      { kind:'pay_chain', re:/payFromCheckingThenCashThenSavings\((\d+)\)/ }
     ];
     for(const p of patterns){
       const m = src.match(p.re);
@@ -354,13 +406,35 @@ function inferScenarioFunding(opt, job){
       if(/st\.cash\s*=\s*Math\.max\(0\s*,\s*st\.cash\s*-\s*amt\s*\)|st\.cash\s*-=\s*amt/.test(src)) return { amount:amt, originalSource:'cash', inferred:true };
       if(/st\.bank\.checking\s*=\s*Math\.max\(0\s*,\s*st\.bank\.checking\s*-\s*amt\s*\)|st\.bank\.checking\s*-=\s*amt/.test(src)) return { amount:amt, originalSource:'checking', inferred:true };
       if(/st\.bank\.savings\s*=\s*Math\.max\(0\s*,\s*st\.bank\.savings\s*-\s*amt\s*\)|st\.bank\.savings\s*-=\s*amt/.test(src)) return { amount:amt, originalSource:'savings', inferred:true };
+      if(/addToHysa\(amt/.test(src) || /createCD\([^)]*amt/.test(src)) return { amount:amt, originalSource:'invest_only', inferred:true };
     }
+    const investAmt = src.match(/addToHysa\((\d+)/);
+    if(investAmt) return { amount:Number(investAmt[1]), originalSource:/st\.bank\.checking\s*=|st\.bank\.checking\s*-=/ .test(src) ? 'checking' : (/st\.cash\s*=|st\.cash\s*-=/.test(src) ? 'cash' : 'invest_only'), inferred:true };
+    const cdAmt = src.match(/createCD\([^,]+,\s*(\d+)/);
+    if(cdAmt) return { amount:Number(cdAmt[1]), originalSource:'invest_only', inferred:true };
   }catch(err){}
   return null;
 }
 
 function runApplyWithFundingOverride(applyFn, paymentInfo, job){
   if(!paymentInfo || !paymentInfo.amount || !paymentInfo.originalSource) return applyFn(state, job);
+  if(paymentInfo.originalSource === 'invest_only') return applyFn(state, job);
+  if(paymentInfo.originalSource === 'pay_chain'){
+    const originalSpendFn = payFromCheckingThenCashThenSavings;
+    let spendSkipped = false;
+    payFromCheckingThenCashThenSavings = function(amount){
+      if(!spendSkipped && Number(amount) === Number(paymentInfo.amount)){
+        spendSkipped = true;
+        return;
+      }
+      return originalSpendFn(amount);
+    };
+    try{
+      return applyFn(state, job);
+    } finally {
+      payFromCheckingThenCashThenSavings = originalSpendFn;
+    }
+  }
   let skipped = false;
   const targetSource = paymentInfo.originalSource;
   const targetAmount = Number(paymentInfo.amount);
@@ -460,6 +534,7 @@ Choose which account to pay from:`, (src)=>{
             }else{
               summary = opt.apply(state, job);
             }
+            showDecisionBadge(`Paid from ${formatSourceLabel(src)}: ${money(paymentAmount)}`);
             if(summary) addLedgerLine(`✏ ${title}: ${summary} (paid from ${src})`);
             if(opt.consequences){
               opt.consequences.forEach(c => {
@@ -2949,6 +3024,7 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
             const cdResult = spendFromSource('cd', amount);
             if(!cdResult.ok){ beep('warn'); showBanner(cdResult.message || 'CD withdrawal failed'); return; }
             addLedgerLine(cdResult.summary);
+            showDecisionBadge(`Paid from ${formatSourceLabel('cd')}: ${money(amount)}`);
             if(onPaid) setTimeout(()=> onPaid('cd', cdResult), 50);
           }
         });
@@ -2990,6 +3066,7 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
               state.bank.checking = Math.max(0, state.bank.checking - overdraftFee);
               state.credit = Math.max(300, state.credit - 12);
               addLedgerLine(`Overdraft: paid ${money(amount)} (fee: ${money(overdraftFee)}, credit -12)`);
+              showDecisionBadge(`Paid from ${srcLabel} with overdraft fee`);
               renderHeader(); renderLedger();
               setTimeout(()=> onPaid && onPaid(id, {ok:true, summary:`Overdraft from ${srcLabel} — fee ${money(overdraftFee)}`}), 50);
               return;
@@ -3007,6 +3084,7 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
               if(!finalResult.ok){ beep('warn'); showBanner('Payment failed after transfer'); return; }
               addLedgerLine(`Transfer: ${money(shortfall)} from ${fromSrc} → ${id} to cover ${money(amount)}`);
               addLedgerLine(finalResult.summary);
+              showDecisionBadge(`Paid from ${formatSourceLabel(id)} after transfer`);
               renderHeader(); renderLedger();
               setTimeout(()=> onPaid && onPaid(id, finalResult), 50);
               return;
@@ -3016,6 +3094,7 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
         return;
       }
       addLedgerLine(result.summary);
+      showDecisionBadge(`Paid from ${formatSourceLabel(id)}: ${money(amount)}`);
       // Let onPaid handle rendering after it updates state
       if(onPaid) setTimeout(()=> onPaid(id, result), 50);
     }
@@ -3247,11 +3326,12 @@ function ledgerAddExpense(){
       const map={travel5:5, travel10:10, repair15:15, fee8:8};
       const amt = map[id] || 0;
       if(amt>0){
-        chooseFundingSource(amt, `Choose where to pay this ${money(amt)} business expense from.`, ()=>{
+        chooseFundingSource(amt, `Choose where to pay this ${money(amt)} business expense from.`, (src)=>{
           state.ledger.weekExpenses += amt;
-          addLedgerLine(`Expense: -${money(amt)}`);
+          addLedgerLine(`Expense: -${money(amt)} from ${src}`);
           recalcProfit();
           renderHeader();
+          renderLedger();
         });
       }
     }
@@ -4815,20 +4895,16 @@ Your balances:
     ],
     onPick:(id)=>{
       if(id === "hysa"){
-        if(state.bank.checking >= 25){
+        chooseFundingSource(25, `Move ${money(25)} into High-Yield (${hysaAPR}% APR). Choose where the money comes from:`, (src)=>{
           state.bank.savingsType = "hysa";
-          state.bank.checking -= 25;
           addToHysa(25);
-          addLedgerLine(`Paycheck: moved $25 → High-Yield (${hysaAPR}% APR)`);
+          addLedgerLine(`Paycheck: moved $25 → High-Yield (${hysaAPR}% APR) from ${src}`);
           addCoverage(4);
+          showDecisionBadge(`Invested into HYSA from ${formatSourceLabel(src)}: ${money(25)}`);
           showBanner("$25 moved to High-Yield!");
           renderHeader();
           if(onDone) onDone();
-        } else {
-          showBanner("Need at least $25 in checking first");
-          renderHeader();
-          if(onDone) onDone();
-        }
+        });
       } else if(id === "cd3" || id === "cd6"){
         const termKey = id === "cd3" ? "3m" : "6m";
         const termMonths = id === "cd3" ? 3 : 6;
@@ -4861,6 +4937,7 @@ Your balances:
               state.bank.savingsType = "cd";
               addLedgerLine(`Paycheck: opened ${cd.name} — ${money(deposit)} at ${aprLabel} APR (from ${src})`);
               addCoverage(4); addCoverage(9);
+              showDecisionBadge(`Invested into ${cd.name} from ${formatSourceLabel(src)}: ${money(deposit)}`);
               showBanner(`${cd.name} opened at ${aprLabel}!`);
               renderHeader();
               if(onDone) onDone();
@@ -4928,6 +5005,7 @@ function openInvestmentChoiceModal(amount, label, onDone){
         renderHeader();
         renderSheet();
         renderCDStatus();
+        showDecisionBadge(`Invested into HYSA: ${money(amount)}`);
         if(onDone) onDone(`Invested ${money(amount)} into HYSA`);
         return;
       }
@@ -6142,6 +6220,7 @@ function ensureTeacherModeMenu(){
   refreshSaveStatus();
 }
 function selectConfiguration(role='teacher', experience='standard'){
+  renderSharedProfileBadge();
   if(role === 'student' && experience === 'beginner'){
     window.location.href = 'budget-boss-jr.html';
     return;
@@ -6752,6 +6831,7 @@ applyBudgetModel(state.plan.model || "rule702010");
 wire();
 renderAll();
 renderReflectionReport();
+renderSharedProfileBadge();
 refreshSaveStatus();
 ensureTeacherModeMenu();
 
