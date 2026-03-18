@@ -6213,6 +6213,25 @@ function openHtmlModal({title, meta="", html="", onRender=null, buttons=[]}){
 }
 function closeHtmlModal(){ closeModal(); }
 
+
+function bindRoleDifficultyMenu(){
+  const bind = (id, role, experience) => {
+    const el = $(id);
+    if(!el) return;
+    el.onclick = (e)=>{
+      if(e) e.preventDefault();
+      beep("click");
+      selectConfiguration(role, experience);
+    };
+  };
+  bind("modeStudentBeginnerBtn", "student", "beginner");
+  bind("modeStudentStandardBtn", "student", "standard");
+  bind("modeStudentEliteBtn", "student", "elite");
+  bind("modeTeacherBeginnerBtn", "teacher", "beginner");
+  bind("modeTeacherStandardBtn", "teacher", "standard");
+  bind("modeTeacherEliteBtn", "teacher", "elite");
+}
+
 function ensureTeacherModeMenu(){
   const screen = $("modeSelectScreen");
   if(screen) screen.style.display = "flex";
@@ -6834,6 +6853,7 @@ renderReflectionReport();
 renderSharedProfileBadge();
 refreshSaveStatus();
 ensureTeacherModeMenu();
+bindRoleDifficultyMenu();
 
 /* Notify Wix loader that the HTML game is ready */
 window.addEventListener("load", function () {
