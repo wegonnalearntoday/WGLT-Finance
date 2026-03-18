@@ -2796,7 +2796,7 @@ function showBucketInfo(bucketNum){
   openModal({
     title:`Benchmark #${bucketNum}`,
     meta: FL_BUCKETS[bucketNum] || BENCH[bucketNum] || "Financial literacy standard",
-    body: defs[bucketNum] || `This bucket covers ${FL_BUCKETS[bucketNum] || BENCH[bucketNum]}.`,
+    body: defs[bucketNum] || `This benchmark covers ${FL_BUCKETS[bucketNum] || BENCH[bucketNum]}.`,
     buttons:[{id:"close",label:"Close",kind:"secondary"}]
   });
 }
@@ -4427,7 +4427,7 @@ Income: ${money(income)}
 Needs: ${money(m.needs)}
 Wants target to build: ${money(m.wantsTarget)}
 Savings + Debt: ${money(m.savingsDebt)}
-Auto split inside that bucket: Savings ${money(split.save)} • Debt ${money(split.debt)}
+Auto split inside that benchmark: Savings ${money(split.save)} • Debt ${money(split.debt)}
 
 ${state.plan.lockedForYear ? 'This plan is already locked for the current year.' : 'Pick the rule you want to teach, then build wants from the dropdown on the Plan tab.'}</div>`;
 
@@ -5800,7 +5800,7 @@ Wants make life fun! But they're the first thing to cut when money is tight. The
     },
     savings: {
       title:"🏦 Savings + Debt",
-      body:`This bucket covers two important goals: building savings AND paying off debt.
+      body:`This benchmark covers two important goals: building savings AND paying off debt.
 
 SAVINGS: Money you set aside for future goals, emergencies, or investing.
 • Regular Savings: 0.5% growth/month
@@ -5809,7 +5809,7 @@ SAVINGS: Money you set aside for future goals, emergencies, or investing.
 
 DEBT PAYMENT: Money used to pay down what you owe (credit cards, loans). Paying debt on time raises your credit score.
 
-In the 70-20-10 Rule (Beginner), 20% goes here. In the 60-20-20 Rule (Balanced), 20% goes here. In the 50-30-20 Rule (Lifestyle), 20% goes here. In the 50-40-10 Rule (Future Builder), 40% goes here. The game auto-splits the bucket: 75% to savings, 25% to debt pay.
+In the 70-20-10 Rule (Beginner), 20% goes here. In the 60-20-20 Rule (Balanced), 20% goes here. In the 50-30-20 Rule (Lifestyle), 20% goes here. In the 50-40-10 Rule (Future Builder), 40% goes here. The game auto-splits the benchmark: 75% to savings, 25% to debt pay.
 
 Why does this matter?
 • Savings = security for emergencies
