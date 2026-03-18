@@ -2640,8 +2640,39 @@ Insurance: ${insuranceLabel}`;
   renderCDStatus();
   renderBucketTracker();
   renderMeters();
+  renderBankJars();
 }
 
+
+
+function renderBankJars(){
+  const ids = ["jarCheckingFill","jarSavingsFill","jarCashFill","jarHysaFill","jarCdFill"];
+  if(!ids.every(id => $(id))) return;
+  reconcileHysaBalance();
+  const cdTotal = (state.bank.cds || []).reduce((sum, cd) => sum + (cd.principal || 0) + (cd.accrued || 0), 0);
+  const values = {
+    checking: state.bank.checking || 0,
+    savings: state.bank.savings || 0,
+    cash: state.cash || 0,
+    hysa: (state.bank.hysaPrincipal || 0) + (state.bank.hysaAccrued || 0),
+    cd: cdTotal
+  };
+  const scale = Math.max(100, ...Object.values(values));
+  if($("bankJarScaleLabel")) $("bankJarScaleLabel").textContent = `Scale: $0 to ${money(scale)}`;
+  const map = [
+    ["jarCheckingFill","jarCheckingAmt",values.checking],
+    ["jarSavingsFill","jarSavingsAmt",values.savings],
+    ["jarCashFill","jarCashAmt",values.cash],
+    ["jarHysaFill","jarHysaAmt",values.hysa],
+    ["jarCdFill","jarCdAmt",values.cd]
+  ];
+  map.forEach(([fillId, amtId, amount]) => {
+    const pct = Math.max(0, Math.min(100, Math.round((amount / scale) * 100)));
+    $(fillId).style.height = pct + "%";
+    $(amtId).textContent = money(amount);
+    $(fillId).title = `${money(amount)} of ${money(scale)}`;
+  });
+}
 
 function renderBucketTracker(){
   if(!$("bucketTracker")) return;

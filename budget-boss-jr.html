@@ -293,6 +293,8 @@ body{
   top:-20px;left:50%;transform:translateX(-50%);
 }
 @keyframes coinFall{from{top:-10px;opacity:1}to{top:80%;opacity:0}}
+@keyframes jarPulse{0%{transform:translateY(0);box-shadow:0 0 0 rgba(0,0,0,0)}35%{transform:translateY(-2px);box-shadow:0 0 18px rgba(255,255,255,.55)}100%{transform:translateY(0);box-shadow:0 0 0 rgba(0,0,0,0)}}
+.jar-fill.jar-pulse{animation:jarPulse .65s ease;}
 
 /* Savings goal bar */
 .goal-progress{
@@ -1875,12 +1877,22 @@ function teacherShowBuckets() {
 // UI HELPERS
 // ══════════════════════════════════════════════════════════════════
 function updateJars() {
-  const MAX = 25; // jar "full" at $25
+  const prev = state._lastJarSnapshot || {spend:0, save:0, share:0};
+  const MAX = Math.max(10, state.goal || 0, state.jars.spend, state.jars.save, state.jars.share);
   ['spend','save','share'].forEach(j => {
     const pct = Math.min(100, (state.jars[j]/MAX)*100);
-    document.getElementById('jar-'+j+'-fill').style.height = pct + '%';
+    const fillEl = document.getElementById('jar-'+j+'-fill');
+    fillEl.style.height = pct + '%';
+    fillEl.title = '$' + fmt(state.jars[j]) + ' out of visual max $' + fmt(MAX);
     document.getElementById('jar-'+j+'-amt').textContent = '$' + fmt(state.jars[j]);
+    if (state.jars[j] !== prev[j]) {
+      fillEl.classList.remove('jar-pulse');
+      void fillEl.offsetWidth;
+      fillEl.classList.add('jar-pulse');
+      setTimeout(() => fillEl.classList.remove('jar-pulse'), 700);
+    }
   });
+  state._lastJarSnapshot = { ...state.jars };
   // Goal bar
   const pct = Math.min(100, (state.jars.save / state.goal)*100);
   document.getElementById('goal-fill').style.width = pct + '%';
