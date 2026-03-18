@@ -952,7 +952,7 @@ Insurance: Not chosen</div>
 <script>
 window.startRoleDifficulty = window.startRoleDifficulty || function(role, experience){
   try {
-    if(role === 'student' && experience === 'beginner'){ window.location.href = 'budget-boss-jr.html'; return; }
+    if(role === 'student' && experience === 'beginner'){ try{ sessionStorage.setItem('wglt_use_beginner_48','1'); }catch(e){} /* route into main 48-week beginner lane */ }
     var screen = document.getElementById('modeSelectScreen');
     if(screen) screen.style.display = 'none';
     var app = document.querySelector('.app');

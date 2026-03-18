@@ -6241,8 +6241,7 @@ function ensureTeacherModeMenu(){
 function selectConfiguration(role='teacher', experience='standard'){
   renderSharedProfileBadge();
   if(role === 'student' && experience === 'beginner'){
-    window.location.href = 'budget-boss-jr.html';
-    return;
+    try{ sessionStorage.setItem('wglt_use_beginner_48','1'); }catch(e){}
   }
   if($("modeSelectScreen")) $("modeSelectScreen").style.display = "none";
   state.presentationRole = role;
