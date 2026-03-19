@@ -390,8 +390,16 @@ body{
 }
 .choice-scenario .big-emoji{font-size:2rem;display:block;margin-bottom:8px;}
 .choice-question{
-  font-size:.9rem;color:var(--ink-lt);font-weight:600;margin-bottom:18px;
+  font-size:.9rem;color:var(--ink-lt);font-weight:600;margin-bottom:10px;
 }
+.choice-prompt{
+  text-align:center;font-family:'Fredoka One',sans-serif;font-size:1rem;
+  color:#2e7d32;background:rgba(76,175,80,.12);border:2px dashed rgba(76,175,80,.45);
+  border-radius:16px;padding:10px 14px;margin:0 0 16px;
+  animation:jrPromptPulse 1.15s ease-in-out infinite;
+}
+.choice-prompt.hidden{display:none;}
+@keyframes jrPromptPulse{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(76,175,80,.42);}50%{transform:scale(1.02);box-shadow:0 0 0 10px rgba(76,175,80,0);}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(76,175,80,0);}}
 .choice-options{display:flex;flex-direction:column;gap:10px;}
 .choice-opt{
   display:flex;align-items:center;gap:12px;
@@ -872,6 +880,7 @@ body{
         <span id="cc-scenario"></span>
       </div>
       <div class="choice-question" id="cc-question"></div>
+      <div class="choice-prompt hidden" id="choicePrompt">👇 Choose an option below</div>
       <div class="choice-options" id="cc-options"></div>
     </div>
 
@@ -2005,7 +2014,7 @@ function refreshJrNextStepGuide(force=false){
   const choiceCard = document.getElementById('choice-card');
   const choiceVisible = choiceCard && choiceCard.style.display !== 'none';
   if(choiceVisible && !state.choiceMade){
-    target = choiceCard.querySelector('.choice-opt') || choiceCard;
+    target = document.getElementById('choicePrompt') || choiceCard;
     if(choiceCard) choiceCard.classList.add('jr-guide-ring');
   } else {
     const nextBtn = document.getElementById('next-btn');
@@ -2035,6 +2044,8 @@ function advanceWeek() {
   updateProgressBar();
   hideConsequenceBanner();
   document.getElementById('choice-card').style.display = 'none';
+  const promptEl = document.getElementById('choicePrompt');
+  if(promptEl) promptEl.classList.add('hidden');
   document.getElementById('spend-section').style.display = 'none';
   document.getElementById('next-btn').disabled = true;
   state.choiceMade = false;
@@ -2136,6 +2147,12 @@ function showChoiceCard(scenario) {
   document.getElementById('cc-scenario').textContent = scenario.scenario;
   document.getElementById('cc-question').textContent = scenario.question;
 
+  const promptEl = document.getElementById('choicePrompt');
+  if(promptEl){
+    promptEl.textContent = '👇 Choose an option below';
+    promptEl.classList.remove('hidden');
+  }
+
   const opts = document.getElementById('cc-options');
   opts.innerHTML = '';
   scenario.options.forEach((opt, i) => {
@@ -2154,6 +2171,9 @@ function showChoiceCard(scenario) {
 function makeChoice(opt, scenario, btn) {
   if (state.choiceMade) return;
   state.choiceMade = true;
+
+  const promptEl = document.getElementById('choicePrompt');
+  if(promptEl) promptEl.classList.add('hidden');
 
   // Disable all buttons
   document.querySelectorAll('.choice-opt').forEach(b => {
