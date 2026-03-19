@@ -130,6 +130,8 @@ function ensureStandardV1State(){
   if(!state.standardV1.pressureTracks) state.standardV1.pressureTracks = { basics:0, bills:0, impulse:0, resilience:0 };
   if(!state.standardV1.chainHistory) state.standardV1.chainHistory = [];
   if(!state.standardV1.chainWindowsFired) state.standardV1.chainWindowsFired = {};
+  if(!state.standardV1.actionPlans) state.standardV1.actionPlans = [];
+  if(!state.standardV1.bigConsequenceLog) state.standardV1.bigConsequenceLog = [];
 }
 function derivePressureTrack(item){
   const hay = `${item?.label || ''} ${item?.sourceLabel || ''}`.toLowerCase();
@@ -235,6 +237,106 @@ function getDynamicRandomEventWeights(){
   out.financial = Math.max(0, 100 - out.life - out.job);
   return out;
 }
+function ensureEliteState(){
+  ensureStandardV1State();
+  if(!state.elite) state.elite = {};
+  if(!state.elite.investments) state.elite.investments = { stocks:0, costBasis:0, lastChange:0, history:[] };
+  if(!state.elite.career) state.elite.career = { level:1, title:'Starter Worker', promotions:0, payBonus:0, history:[] };
+  if(!state.elite.endings) state.elite.endings = { final:null, track:'⚖️ Survivor' };
+}
+function totalStockFunds(){
+  ensureEliteState();
+  return Number(state.elite.investments.stocks || 0);
+}
+function getCreditTier(){
+  const score = Number(state.credit || 650);
+  if(score >= 760) return 'Premier';
+  if(score >= 700) return 'Strong';
+  if(score >= 640) return 'Building';
+  if(score >= 580) return 'Watch';
+  return 'At Risk';
+}
+function getEliteEndingTrack(){
+  ensureEliteState();
+  const saved = Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0) + totalStockFunds();
+  const health = Number((state.standardV1 && state.standardV1.healthScore) || computeFinancialHealth().score || 0);
+  const credit = Number(state.credit || 650);
+  const cashFlow = Number(state.bank?.checking || 0) + Number(state.cash || 0);
+  let label = '⚖️ Survivor';
+  if(saved >= 450 && credit >= 700 && health >= 72) label = '💎 Wealth Builder';
+  else if(cashFlow < 40 || credit < 610 || health < 45) label = '🚨 Financially Struggling';
+  state.elite.endings.track = label;
+  return label;
+}
+function getMonthlyActionPlan(snapshot){
+  ensureEliteState();
+  const snap = snapshot || {};
+  const pressure = getPressureTrackSummary();
+  const health = Number((snap.healthScore != null ? snap.healthScore : (state.standardV1 && state.standardV1.healthScore)) || computeFinancialHealth().score || 0);
+  if(state.plan && state.plan.unplannedWantUsedThisMonth) return 'Next month focus on saving consistency and planning your wants before you spend.';
+  if(pressure.key === 'bills' && Number(pressure.count || 0) >= 2) return 'Next month focus on bill timing, recurring contracts, and protecting your credit score.';
+  if(pressure.key === 'impulse' && Number(pressure.count || 0) >= 2) return 'Next month focus on pausing before wants so impulse spending stops crowding out your plan.';
+  if(Number(state.credit || 650) < 650) return 'Next month focus on protecting credit by paying on time and avoiding avoidable fees.';
+  if(health < 60) return 'Next month focus on stabilizing cash flow before taking on extra risk.';
+  if(totalStockFunds() > 0) return 'Next month focus on balancing safe saving with risk so one bad week does not shake your whole plan.';
+  return 'Next month focus on saving consistency.';
+}
+function applyEliteMarketCycle(monthName){
+  ensureEliteState();
+  if(!isEliteExperience()) return null;
+  const holdings = totalStockFunds();
+  if(holdings <= 0) return null;
+  const swings = [-0.12,-0.08,-0.05,0.04,0.07,0.1,0.14];
+  const pct = swings[Math.floor(Math.random()*swings.length)];
+  const delta = Math.round(holdings * pct);
+  state.elite.investments.stocks = Math.max(0, holdings + delta);
+  state.elite.investments.lastChange = delta;
+  state.elite.investments.history.push({ month: monthName || '', pct, delta, value: state.elite.investments.stocks });
+  if(delta >= 0){
+    state.credit = clamp(state.credit + (pct >= 0.1 ? 3 : 1), 300, 850);
+    addLedgerLine(`${monthName || 'Month'}: Stock market gain ${delta >= 0 ? '+' : ''}${money(delta)} (${Math.round(pct*100)}%)`);
+    return `Market gain: ${delta >= 0 ? '+' : ''}${money(delta)} (${Math.round(pct*100)}%)`;
+  }
+  state.credit = clamp(state.credit - (pct <= -0.1 ? 4 : 2), 300, 850);
+  addLedgerLine(`${monthName || 'Month'}: Stock market swing ${delta >= 0 ? '+' : '-'}${money(Math.abs(delta))} (${Math.round(pct*100)}%)`);
+  return `Market swing: -${money(Math.abs(delta))} (${Math.round(pct*100)}%)`;
+}
+function maybeAdvanceCareer(monthName){
+  ensureEliteState();
+  if(!isEliteExperience()) return null;
+  const health = Number((state.standardV1 && state.standardV1.healthScore) || computeFinancialHealth().score || 0);
+  const saved = Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0) + totalStockFunds();
+  const career = state.elite.career;
+  const threshold = career.level * 120;
+  if(health >= 68 && Number(state.credit || 650) >= 660 && saved >= threshold){
+    career.level += 1;
+    career.promotions += 1;
+    career.payBonus += 20;
+    state.plan.income += 20;
+    const titles = ['Starter Worker','Reliable Earner','Shift Lead','Team Captain','Money Planner','Future Manager','Community Builder'];
+    career.title = titles[Math.min(titles.length-1, career.level-1)] || `Level ${career.level}`;
+    career.history.push({ month: monthName || '', level: career.level, title: career.title });
+    addLedgerLine(`${monthName || 'Month'}: Career promotion → ${career.title} (+$20 monthly pay)`);
+    return `${career.title} unlocked. Monthly pay +$20.`;
+  }
+  return null;
+}
+function renderEliteOverview(){
+  ensureEliteState();
+  const card = document.getElementById('eliteCommandCard');
+  if(card) card.style.display = isEliteExperience() ? 'block' : 'none';
+  if(!isEliteExperience()) return;
+  const career = state.elite.career;
+  const endingTrack = getEliteEndingTrack();
+  if(document.getElementById('eliteCreditTier')) document.getElementById('eliteCreditTier').textContent = getCreditTier();
+  if(document.getElementById('eliteCareerPath')) document.getElementById('eliteCareerPath').textContent = career.title || 'Starter Worker';
+  if(document.getElementById('eliteCareerLevel')) document.getElementById('eliteCareerLevel').textContent = `Lv ${career.level || 1}`;
+  if(document.getElementById('eliteStockValue')) document.getElementById('eliteStockValue').textContent = money(totalStockFunds());
+  if(document.getElementById('eliteEndingTrack')) document.getElementById('eliteEndingTrack').textContent = endingTrack;
+  const latestPlan = (state.standardV1.actionPlans || []).slice(-1)[0] || getMonthlyActionPlan({});
+  if(document.getElementById('eliteActionPlan')) document.getElementById('eliteActionPlan').textContent = latestPlan;
+}
+
 function getChoiceEchoPreview(){
   const pending = ((state.weekEngine && state.weekEngine.pending) || []).slice().sort((a,b)=>Number(a.triggerWeek||99)-Number(b.triggerWeek||99));
   const masterTracks = Object.entries((state.masterScenario && state.masterScenario.trackCounts) || {}).filter(([,v])=>Number(v||0) > 0).sort((a,b)=>Number(b[1]||0)-Number(a[1]||0));
@@ -351,6 +453,7 @@ function renderStandardV1HUD(){
   if(document.getElementById('impactEchoes')) document.getElementById('impactEchoes').textContent = echo.text;
   if(document.getElementById('impactGoalStatus')) document.getElementById('impactGoalStatus').textContent = getWeeklyGoalStatusText();
   if(document.getElementById('impactIdentity')) document.getElementById('impactIdentity').textContent = `${identity.emoji} ${identity.title}`;
+  renderEliteOverview();
 }
 function promptWeeklyGoalIfNeeded(onDone){
   ensureStandardV1State();
@@ -843,10 +946,14 @@ function fireDueConsequences(currentWeek){
       const msg = c.apply(state);
       registerPressureTrack(c, 1);
       renderHeader();
+      if(!state.standardV1.bigConsequenceLog) state.standardV1.bigConsequenceLog = [];
+      state.standardV1.bigConsequenceLog.push({ week: currentWeek, label: c.label, message: msg });
       openModal({
-        title:`⚡ Consequence: ${c.label}`,
-        meta:`Week ${currentWeek} • Result of an earlier choice`,
-        body: msg,
+        title:`⚠️ This decision is catching up to you…`,
+        meta:`Week ${currentWeek} • ${c.label}`,
+        body: `${msg}
+
+Takeaway: earlier choices can echo forward and change what this week feels like.`,
         buttons:[{id:"ok",label:"Got it",kind:"primary"}],
         onPick: showNext
       });
@@ -2800,7 +2907,12 @@ const state = {
   jobLocked: false,
 
   playlist: { active:false, paused:false, loop:false, index:0, items:["inheritance","dispute","gen_local_tax","contract_pick"] },
-  ui: { pendingBudgetSheetReview:false, realLifeSelections:{}, randomEventPendingType:null, randomEventCycling:false }
+  ui: { pendingBudgetSheetReview:false, realLifeSelections:{}, randomEventPendingType:null, randomEventCycling:false },
+  elite: {
+    investments: { stocks:0, costBasis:0, lastChange:0, history:[] },
+    career: { level:1, title:'Starter Worker', promotions:0, payBonus:0, history:[] },
+    endings: { final:null, track:'⚖️ Survivor' }
+  }
 };
 
 /* Coverage tracking */
@@ -3136,6 +3248,7 @@ Insurance: ${insuranceLabel}`;
   renderBucketTracker();
   renderMeters();
   renderBankJars();
+  renderEliteOverview();
 }
 
 
@@ -5264,13 +5377,40 @@ function nextWeek(){
     if(currentW >= 48){
       renderAll();
       notifyAction("next_week");
-      // Auto-scroll to budget sheet at end of year
-      setTimeout(()=>{
-        openTab("sheet", {auto:true});
-        const sheetPanel = $("panel-sheet");
-        if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth"});
-        showBanner("Year complete! Check your Budget Sheet summary ⬇️");
-      }, 400);
+      if(isEliteExperience()){
+        ensureEliteState();
+        const ending = getEliteEndingTrack();
+        state.elite.endings.final = ending;
+        const career = state.elite.career || { level:1, title:'Starter Worker' };
+        openModal({
+          title:'🏁 Elite Year Ending',
+          meta:'Your full year result',
+          body:`Ending: ${ending}
+Career: ${career.title} (Level ${career.level || 1})
+Credit: ${state.credit}
+Stocks: ${money(totalStockFunds())}
+Savings: ${money(Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0))}
+
+Action Plan: ${getMonthlyActionPlan({})}`,
+          buttons:[{id:'ok', label:'View Final Budget Sheet', kind:'primary'}],
+          onPick:()=>{
+            setTimeout(()=>{
+              openTab("sheet", {auto:true});
+              const sheetPanel = $("panel-sheet");
+              if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth"});
+              showBanner("Year complete! Check your Budget Sheet summary ⬇️");
+            }, 250);
+          }
+        });
+      } else {
+        // Auto-scroll to budget sheet at end of year
+        setTimeout(()=>{
+          openTab("sheet", {auto:true});
+          const sheetPanel = $("panel-sheet");
+          if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth"});
+          showBanner("Year complete! Check your Budget Sheet summary ⬇️");
+        }, 400);
+      }
       return;
     }
     const oldM = weekToMonth(currentW);
@@ -5328,6 +5468,10 @@ function nextWeek(){
         const snapCd = typeof snap.cd === 'number' ? snap.cd : totalCdFunds();
         const snapCredit = typeof snap.credit === 'number' ? snap.credit : state.credit;
         const coachingTip = getMonthlyCoachingTip(snap);
+        const actionPlan = getMonthlyActionPlan(snap);
+        state.standardV1.actionPlans.push(actionPlan);
+        const marketSummary = applyEliteMarketCycle(newMonthName);
+        const promotionSummary = maybeAdvanceCareer(newMonthName);
         openModal({
           title:`📅 ${prevMonthName} Complete!`,
           meta:`Your budget snapshot is on the Budget Sheet`,
@@ -5437,6 +5581,7 @@ Your balances:
 • High-Yield Savings: ${hysaAPR}% APR — grows monthly, stays liquid${cdNote}`,
     buttons:[
       {id:"hysa",  label:`Move $25 → High-Yield (${hysaAPR}% APR)`, kind:"success"},
+      ...stockButton,
       ...cdOptions,
       {id:"keep",  label:`Keep everything in ${destLabel}`, kind:"secondary"}
     ],
@@ -5451,6 +5596,20 @@ Your balances:
           showBanner("$25 moved to High-Yield!");
           renderHeader();
           queueDecisionReflection({ type:'save', title:'HYSA Choice', label:'Moved $25 to High-Yield Savings', summary:'You saved money for later growth.', amount:25 });
+          if(onDone) onDone();
+        });
+      } else if(id === "stock"){
+        chooseFundingSource(25, `Move ${money(25)} into a stock index fund. Choose where the money comes from:`, (src)=>{
+          ensureEliteState();
+          state.elite.investments.stocks += 25;
+          state.elite.investments.costBasis += 25;
+          state.elite.investments.history.push({ month: weekToMonthName(currentWeek), delta: 25, type:'buy' });
+          state.credit = clamp(state.credit + 1, 300, 850);
+          addLedgerLine(`Paycheck: moved $25 → Stock Index from ${src}`);
+          showDecisionBadge(`Risk layer active: stock index +${money(25)}`);
+          showBanner('$25 moved into stock index');
+          renderHeader();
+          queueDecisionReflection({ type:'save', title:'Stock Choice', label:'Moved $25 to stock index', summary:'You chose a risk-and-reward investment.', amount:25 });
           if(onDone) onDone();
         });
       } else if(id === "cd3" || id === "cd6"){
@@ -5535,6 +5694,7 @@ function openInvestmentChoiceModal(amount, label, onDone){
   const buttons = [
     {id:"hysa", label:`HYSA (4% APR) • ${money(amount)}`, kind:"success"}
   ];
+  if(isEliteExperience()) buttons.push({id:"stock", label:`Stock Index (risk/reward) • ${money(amount)}`, kind:"warn"});
   if(monthsRemaining >= 3) buttons.push({id:"cd3", label:`3-Month CD (4.0%) • ${money(amount)}`, kind:"primary"});
   if(monthsRemaining >= 6) buttons.push({id:"cd6", label:`6-Month CD (4.5%) • ${money(amount)}`, kind:"primary"});
   buttons.push({id:"cancel", label:"Cancel", kind:"secondary"});
@@ -5556,6 +5716,19 @@ function openInvestmentChoiceModal(amount, label, onDone){
         renderCDStatus();
         showDecisionBadge(`Invested into HYSA: ${money(amount)}`);
         if(onDone) onDone(`Invested ${money(amount)} into HYSA`);
+        return;
+      }
+      if(id==="stock"){
+        ensureEliteState();
+        state.elite.investments.stocks += amount;
+        state.elite.investments.costBasis += amount;
+        state.elite.investments.history.push({ month: weekToMonthName(state.weekEngine ? state.weekEngine.week : 1), delta: amount, type:'buy' });
+        state.credit = clamp(state.credit + 2, 300, 850);
+        addLedgerLine(`${label} invested: ${money(amount)} into Stock Index`);
+        renderHeader();
+        renderSheet();
+        renderCDStatus();
+        if(onDone) onDone(`Invested ${money(amount)} into Stock Index`);
         return;
       }
 
