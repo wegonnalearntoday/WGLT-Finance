@@ -167,9 +167,50 @@ function getDynamicRandomEventWeights(){
 }
 function getChoiceEchoPreview(){
   const pending = ((state.weekEngine && state.weekEngine.pending) || []).slice().sort((a,b)=>Number(a.triggerWeek||99)-Number(b.triggerWeek||99));
-  if(!pending.length) return {count:0, text:'none queued', next:null};
-  const next = pending[0];
-  return { count:pending.length, next, text:`${pending.length} queued • next W${next.triggerWeek}: ${next.label || 'Echo'}` };
+  const tracks = Object.entries((state.masterScenario && state.masterScenario.trackCounts) || {}).filter(([,v])=>Number(v||0) > 0).sort((a,b)=>Number(b[1]||0)-Number(a[1]||0));
+  const pressureCount = tracks.reduce((sum,[,v])=>sum + Number(v || 0), 0);
+  if(!pending.length && !pressureCount) return {count:0, text:'none queued', next:null, pressure:null};
+  const next = pending[0] || null;
+  const pressure = tracks[0] ? { key:tracks[0][0], count:Number(tracks[0][1]||0) } : null;
+  const parts = [];
+  if(pending.length) parts.push(`${pending.length} queued`);
+  if(next) parts.push(`next W${next.triggerWeek}: ${next.label || 'Echo'}`);
+  if(pressure) parts.push(`pressure: ${pressure.key} x${pressure.count}`);
+  return { count:pending.length + pressureCount, text:parts.join(' • '), next, pressure };
+}
+function getIdentitySnapshot(source){
+  const base = source || {};
+  const saved = Number(base.savings ?? state.bank?.savings ?? 0) + Number(base.hysa ?? state.bank?.hysaPrincipal ?? 0) + Number(base.cd ?? (typeof totalCdFunds === 'function' ? totalCdFunds() : 0));
+  const checking = Number(base.checking ?? state.bank?.checking ?? 0);
+  const credit = Number(base.credit ?? state.credit ?? 650);
+  const unplanned = !!(base.unplannedWantUsed ?? (state.plan && state.plan.unplannedWantUsedThisMonth));
+  const goalPct = Number(base.savingsGoalPct ?? (state.savingsGoal ? Math.min(100, Math.round((saved / Math.max(1, Number(state.savingsGoal || 1))) * 100)) : 0));
+  const health = base.healthScore != null ? Number(base.healthScore) : Number((state.standardV1 && state.standardV1.healthScore) || computeFinancialHealth().score || 0);
+  const pending = Number(((state.weekEngine && state.weekEngine.pending && state.weekEngine.pending.length) || 0));
+
+  let title = 'Balanced Builder';
+  let emoji = '⚖️';
+  let detail = 'You are balancing spending, saving, and staying in the game.';
+
+  if(health >= 82 && goalPct >= 45 && !unplanned){
+    title = 'Saver Identity';
+    emoji = '💎';
+    detail = 'Your habits are stacking toward savings and long-term wins.';
+  } else if((credit < 625 || checking <= 0 || unplanned) && health < 55){
+    title = 'Debt Risk Trend';
+    emoji = '⚠️';
+    detail = 'Unplanned money pressure is starting to squeeze your budget.';
+  } else if(pending >= 4 && health < 65){
+    title = 'Pressure Week';
+    emoji = '🌪️';
+    detail = 'Earlier choices are still echoing, so this is a protect-your-plan stretch.';
+  } else if(credit >= 680 && saved >= 75){
+    title = 'Strong Builder';
+    emoji = '🏗️';
+    detail = 'You are building stability with credit, savings, and cleaner decisions.';
+  }
+
+  return { emoji, title, detail };
 }
 function computeFinancialHealth(){
   ensureStandardV1State();
@@ -220,13 +261,16 @@ function renderStandardV1HUD(){
   const health = computeFinancialHealth();
   const goal = getCurrentWeeklyGoal();
   const echo = getChoiceEchoPreview();
+  const identity = getIdentitySnapshot({ healthScore: health.score });
   if(document.getElementById('healthScore')) document.getElementById('healthScore').textContent = `${health.score}`;
   if(document.getElementById('healthLabel')) document.getElementById('healthLabel').textContent = health.label;
   if(document.getElementById('weeklyGoalBadge')) document.getElementById('weeklyGoalBadge').textContent = goal ? `${goal.emoji} ${goal.name}` : 'Pick goal';
-  if(document.getElementById('consequenceBadge')) document.getElementById('consequenceBadge').textContent = echo.count ? `${echo.count} pending` : '0 pending';
+  if(document.getElementById('consequenceBadge')) document.getElementById('consequenceBadge').textContent = echo.count ? `${echo.count} active` : '0 pending';
+  if(document.getElementById('identityBadge')) document.getElementById('identityBadge').textContent = `${identity.emoji} ${identity.title}`;
   if(document.getElementById('impactHealth')) document.getElementById('impactHealth').textContent = `${health.score}/100 • ${health.label}`;
   if(document.getElementById('impactEchoes')) document.getElementById('impactEchoes').textContent = echo.text;
   if(document.getElementById('impactGoalStatus')) document.getElementById('impactGoalStatus').textContent = getWeeklyGoalStatusText();
+  if(document.getElementById('impactIdentity')) document.getElementById('impactIdentity').textContent = `${identity.emoji} ${identity.title}`;
 }
 function promptWeeklyGoalIfNeeded(onDone){
   ensureStandardV1State();
@@ -910,6 +954,12 @@ function showWeekSummary(week, onDone){
   if(echoes.length){
     lines.push("⚠️ Choices you made are still in play:");
     echoes.forEach(c => lines.push(`  • ${c.label} (arrives Week ${c.triggerWeek})`));
+  }
+  const hotTracks = Object.entries((state.masterScenario && state.masterScenario.trackCounts) || {}).filter(([,v])=>Number(v||0) >= 2).sort((a,b)=>Number(b[1]||0)-Number(a[1]||0)).slice(0,2);
+  if(hotTracks.length){
+    lines.push("");
+    lines.push("🧠 Pattern pressure is building:");
+    hotTracks.forEach(([k,v])=>lines.push(`  • ${k} track at x${v} — protect your next few choices.`));
   }
   const cal = WEEK_CALENDAR[week] || WEEK_CALENDAR[48];
   const nextCal = WEEK_CALENDAR[Math.min(week+1,48)] || WEEK_CALENDAR[48];
@@ -4494,6 +4544,7 @@ function renderSheet(){
 High-Yield balance: ${money(snap.hysa)} (this month growth: ${hysaGrowthMonthStr} • total growth: ${hysaGrowthStr})
 CD total: ${money(snap.cd)}   Credit: ${snap.credit}
 Savings goal: ${goalStr}</div>
+        ${(snap.identityTitle || snap.identityDetail) ? `<div style="margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.58);font-size:12px;line-height:1.45"><b>${snap.identityEmoji || '🧾'} ${snap.identityTitle || 'Identity Snapshot'}</b><br>${snap.identityDetail || ''}</div>` : ''}
         ${wantsSummaryHtml}
       </div>`;
     });
@@ -5624,10 +5675,17 @@ function pickWeightedRandomEventType(){
   return pick;
 }
 
+function getRandomEventPresentation(type){
+  if(type === 'job') return { label:'💼 Job Event', buttonId:'btnJobEvent', detail:'work and reputation choices' };
+  if(type === 'financial') return { label:'⚠️ Financial Decision', buttonId:'btnSocialEvent', detail:'money pressure and protection choices' };
+  return { label:'👥 Social / Life Scenario', buttonId:'btnSchoolEvent', detail:'people, school, and daily pressure choices' };
+}
+
 function runRandomEvent(){
   if(!state.ui) state.ui = {};
   if(state.ui.randomEventCycling) return;
 
+  showBanner('🎲 Rolling your week...');
   const finalType = pickWeightedRandomEventType();
   const ids = ["btnSchoolEvent","btnJobEvent","btnSocialEvent"];
   let step = 0;
@@ -5662,10 +5720,10 @@ function runRandomEvent(){
     state.ui.randomEventPendingType = finalType;
     applyLockRules();
 
-    const label = finalType === "life" ? "Life Scenario" : finalType === "job" ? "Job Event" : "Financial Decision";
+    const meta = getRandomEventPresentation(finalType);
     const goal = getCurrentWeeklyGoal();
     const goalLine = goal ? ` • Goal: ${goal.name}` : "";
-    showBanner(`Random pick: ${label}${goalLine}. Tap the green button.`);
+    showBanner(`🎲 Random pick: ${meta.label}${goalLine}. Tap the glowing button.`);
     scrollToBtn(getRandomEventButtonId(finalType));
   }
 
@@ -6373,6 +6431,17 @@ function recordMonthSnapshot(){
   });
 
   if(!state.monthSnapshots) state.monthSnapshots = [];
+  const identity = getIdentitySnapshot({
+    checking: state.bank.checking,
+    savings: state.bank.savings,
+    hysa: hysaTotal,
+    cd: cdTotal,
+    credit: state.credit,
+    savingsGoalPct,
+    unplannedWantUsed: !!state.plan.unplannedWantUsedThisMonth,
+    healthScore: computeFinancialHealth().score
+  });
+
   state.monthSnapshots.push({
     month,
     monthName,
@@ -6388,7 +6457,10 @@ function recordMonthSnapshot(){
     wants: state.plan.wants,
     wantsSummary,
     unplannedWantUsed: !!state.plan.unplannedWantUsedThisMonth,
-    unplannedWantLabels: [...(state.plan.unplannedWantLabelsThisMonth || [])]
+    unplannedWantLabels: [...(state.plan.unplannedWantLabelsThisMonth || [])],
+    identityTitle: identity.title,
+    identityEmoji: identity.emoji,
+    identityDetail: identity.detail
   });
 }
 
