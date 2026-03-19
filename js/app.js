@@ -118,6 +118,157 @@ function updateModeBadge(){
   if(document.getElementById('modeSummaryLabel')) document.getElementById('modeSummaryLabel').textContent = cfg.description || '';
 }
 
+function isStandardV1Experience(){
+  return (state.experienceLevel || 'standard') !== 'beginner';
+}
+function ensureStandardV1State(){
+  if(!state.standardV1) state.standardV1 = {};
+  if(!state.standardV1.weeklyGoals) state.standardV1.weeklyGoals = {};
+  if(!state.standardV1.goalHistory) state.standardV1.goalHistory = [];
+  if(!state.standardV1.healthHistory) state.standardV1.healthHistory = [];
+  if(!state.standardV1.choiceEchoLog) state.standardV1.choiceEchoLog = [];
+}
+const WEEKLY_GOAL_BANK = [
+  { id:'save', name:'Build Savings', emoji:'🏦', desc:'Put future-you first this week.', weights:{life:-5,job:-5,financial:10} },
+  { id:'credit', name:'Protect Credit', emoji:'🛡️', desc:'Avoid fees, missed payments, and bad paper trails.', weights:{life:0,job:-5,financial:5} },
+  { id:'income', name:'Grow Job Income', emoji:'💼', desc:'Lean into work opportunities and reputation wins.', weights:{life:-10,job:15,financial:-5} },
+  { id:'wants', name:'Control Wants', emoji:'🎯', desc:'Beat impulse spending and stay on plan.', weights:{life:10,job:-5,financial:-5} }
+];
+function getWeeklyGoalForWeek(week){
+  ensureStandardV1State();
+  return state.standardV1.weeklyGoals[String(week)] || null;
+}
+function getCurrentWeeklyGoal(){
+  const week = Number((state.weekEngine && state.weekEngine.week) || state.day || 1);
+  return getWeeklyGoalForWeek(week);
+}
+function setWeeklyGoalForWeek(week, goalId){
+  ensureStandardV1State();
+  const goal = WEEKLY_GOAL_BANK.find(g => g.id === goalId) || WEEKLY_GOAL_BANK[0];
+  state.standardV1.weeklyGoals[String(week)] = { week, id:goal.id, name:goal.name, emoji:goal.emoji, desc:goal.desc, selectedAt:new Date().toISOString() };
+  state.standardV1.goalHistory.push({ week, id:goal.id, name:goal.name });
+  showBanner(`${goal.emoji} Weekly Goal: ${goal.name}`);
+  scheduleAutoSave(150);
+}
+function getDynamicRandomEventWeights(){
+  const base = Object.assign({life:40,job:30,financial:30}, getRandomEventWeights());
+  const goal = getCurrentWeeklyGoal();
+  const shift = goal ? ((WEEKLY_GOAL_BANK.find(g => g.id === goal.id) || {}).weights || {}) : {};
+  const out = {
+    life: Math.max(10, Number(base.life || 0) + Number(shift.life || 0)),
+    job: Math.max(10, Number(base.job || 0) + Number(shift.job || 0)),
+    financial: Math.max(10, Number(base.financial || 0) + Number(shift.financial || 0))
+  };
+  const total = out.life + out.job + out.financial || 100;
+  out.life = Math.round((out.life / total) * 100);
+  out.job = Math.round((out.job / total) * 100);
+  out.financial = Math.max(0, 100 - out.life - out.job);
+  return out;
+}
+function getChoiceEchoPreview(){
+  const pending = ((state.weekEngine && state.weekEngine.pending) || []).slice().sort((a,b)=>Number(a.triggerWeek||99)-Number(b.triggerWeek||99));
+  if(!pending.length) return {count:0, text:'none queued', next:null};
+  const next = pending[0];
+  return { count:pending.length, next, text:`${pending.length} queued • next W${next.triggerWeek}: ${next.label || 'Echo'}` };
+}
+function computeFinancialHealth(){
+  ensureStandardV1State();
+  const saved = Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0);
+  const liquid = Number(state.cash || 0) + Number(state.bank?.checking || 0) + Number(state.bank?.savings || 0);
+  const goalPct = state.savingsGoal ? Math.min(1, saved / Math.max(1, Number(state.savingsGoal))) : 0;
+  const pendingCount = Number((state.weekEngine && state.weekEngine.pending && state.weekEngine.pending.length) || 0);
+  let score = 52;
+  score += Math.max(-12, Math.min(18, Math.round((Number(state.credit || 650) - 650) / 8)));
+  score += Math.max(0, Math.min(16, Math.round(saved / 18)));
+  score += Math.max(-10, Math.min(8, Math.round((liquid - 60) / 20)));
+  score += Math.round(goalPct * 12);
+  if(state.plan && state.plan.unplannedWantUsedThisMonth) score -= 7;
+  if(Number(state.localTaxDue || 0) > 0) score -= Math.min(10, Math.round(Number(state.localTaxDue || 0) / 8));
+  if(Number(state.bank?.checking || 0) <= 0) score -= 6;
+  score -= Math.min(12, pendingCount * 2);
+  const goal = getCurrentWeeklyGoal();
+  const goalHealthMap = {
+    save: saved >= 50 ? 5 : saved >= 20 ? 2 : -1,
+    credit: Number(state.credit || 650) >= 670 ? 5 : Number(state.credit || 650) >= 650 ? 2 : -2,
+    income: Number(state.ledger?.weekIncome || 0) > 0 || Number(state.plan?.income || 0) >= 360 ? 4 : 0,
+    wants: state.plan && state.plan.unplannedWantUsedThisMonth ? -4 : 4
+  };
+  if(goal && Object.prototype.hasOwnProperty.call(goalHealthMap, goal.id)) score += Number(goalHealthMap[goal.id] || 0);
+  score = Math.max(0, Math.min(100, Math.round(score)));
+  let label = 'steady';
+  if(score >= 85) label = 'excellent';
+  else if(score >= 70) label = 'strong';
+  else if(score >= 55) label = 'steady';
+  else if(score >= 40) label = 'watch it';
+  else label = 'danger';
+  state.standardV1.healthScore = score;
+  state.standardV1.healthLabel = label;
+  return {score, label};
+}
+function getWeeklyGoalStatusText(){
+  const goal = getCurrentWeeklyGoal();
+  if(!goal) return 'Pick goal';
+  const saved = Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0);
+  if(goal.id === 'save') return saved >= 25 ? 'On track' : 'Keep feeding savings';
+  if(goal.id === 'credit') return Number(state.credit || 650) >= 650 ? 'Protecting your score' : 'Watch fees and bills';
+  if(goal.id === 'income') return Number(state.ledger?.weekIncome || 0) > 0 ? 'Income moving' : 'Look for work wins';
+  if(goal.id === 'wants') return state.plan && state.plan.unplannedWantUsedThisMonth ? 'Impulse watch' : 'On plan';
+  return computeFinancialHealth().label;
+}
+function renderStandardV1HUD(){
+  ensureStandardV1State();
+  const health = computeFinancialHealth();
+  const goal = getCurrentWeeklyGoal();
+  const echo = getChoiceEchoPreview();
+  if(document.getElementById('healthScore')) document.getElementById('healthScore').textContent = `${health.score}`;
+  if(document.getElementById('healthLabel')) document.getElementById('healthLabel').textContent = health.label;
+  if(document.getElementById('weeklyGoalBadge')) document.getElementById('weeklyGoalBadge').textContent = goal ? `${goal.emoji} ${goal.name}` : 'Pick goal';
+  if(document.getElementById('consequenceBadge')) document.getElementById('consequenceBadge').textContent = echo.count ? `${echo.count} pending` : '0 pending';
+  if(document.getElementById('impactHealth')) document.getElementById('impactHealth').textContent = `${health.score}/100 • ${health.label}`;
+  if(document.getElementById('impactEchoes')) document.getElementById('impactEchoes').textContent = echo.text;
+  if(document.getElementById('impactGoalStatus')) document.getElementById('impactGoalStatus').textContent = getWeeklyGoalStatusText();
+}
+function promptWeeklyGoalIfNeeded(onDone){
+  ensureStandardV1State();
+  if(!isStandardV1Experience() || !(state.mission && state.mission.active)){
+    if(onDone) onDone();
+    return;
+  }
+  const week = Number((state.weekEngine && state.weekEngine.week) || 1);
+  if(getWeeklyGoalForWeek(week)){
+    if(onDone) onDone();
+    return;
+  }
+  openHtmlModal({
+    title:`🎯 Week ${week} Goal`,
+    meta:`Set your focus before this week's choices`,
+    html:`<div style="font-weight:900;margin-bottom:10px">Choose a focus for this week. Your random event mix and health tracker will react to this choice.</div>
+      <div class="choice-grid">${WEEKLY_GOAL_BANK.map(g=>`<button class="choice-btn" data-weekly-goal="${g.id}">${g.emoji} ${g.name}<small>${g.desc}</small></button>`).join('')}</div>`,
+    buttons:[],
+    onRender:()=>{
+      document.querySelectorAll('[data-weekly-goal]').forEach(btn=>{
+        btn.onclick=()=>{
+          beep('click');
+          setWeeklyGoalForWeek(week, btn.dataset.weeklyGoal);
+          closeHtmlModal();
+          renderAll();
+          if(onDone) onDone();
+        };
+      });
+    }
+  });
+}
+function queueConsequenceObject(item, sourceLabel=''){
+  ensureStandardV1State();
+  if(!state.weekEngine) initWeekEngine();
+  const entry = Object.assign({}, item || {});
+  entry.sourceWeek = Number((state.weekEngine && state.weekEngine.week) || 1);
+  entry.sourceLabel = sourceLabel || entry.sourceLabel || '';
+  state.weekEngine.pending.push(entry);
+  state.standardV1.choiceEchoLog.unshift({ week:entry.sourceWeek, triggerWeek:entry.triggerWeek, label:entry.label || 'Echo', sourceLabel:entry.sourceLabel || '' });
+  state.standardV1.choiceEchoLog = state.standardV1.choiceEchoLog.slice(0, 18);
+}
+
 const SHARED_PROFILE_KEY = 'wgltSharedPlayerProfile';
 function loadSharedProfile(){
   try{ const raw = localStorage.getItem(SHARED_PROFILE_KEY); return raw ? JSON.parse(raw) : null; }catch(err){ return null; }
@@ -531,7 +682,7 @@ function weekToMonthName(w){ return (WEEK_CALENDAR[w]||WEEK_CALENDAR[48]).name; 
 /* apply() returns a summary string for the modal/log       */
 
 function queueConsequence(triggerWeek, id, label, applyFn){
-  state.weekEngine.pending.push({ triggerWeek, id, label, apply: applyFn });
+  queueConsequenceObject({ triggerWeek, id, label, apply: applyFn });
 }
 
 function fireDueConsequences(currentWeek){
@@ -551,6 +702,7 @@ function fireDueConsequences(currentWeek){
 
   // Major consequences → modal one at a time
   if(major.length){
+    showBanner(`Choice Echoes arrived for Week ${currentWeek}`);
     let idx = 0;
     function showNext(){
       if(idx >= major.length){ renderAll(); return; }
@@ -696,7 +848,7 @@ function openScenarioModal(scenario, onDone){
         if(summary) addLedgerLine(`✏ ${title}: ${summary}`);
         if(opt.consequences){
           opt.consequences.forEach(c => {
-            state.weekEngine.pending.push(Object.assign({}, c));
+            queueConsequenceObject(Object.assign({}, c), title);
           });
         }
         if(scenario.id) state.weekEngine.choices[scenario.id] = i;
@@ -728,7 +880,7 @@ Choose which account to pay from:`, (src)=>{
             if(summary) addLedgerLine(`✏ ${title}: ${summary} (paid from ${src})`);
             if(opt.consequences){
               opt.consequences.forEach(c => {
-                state.weekEngine.pending.push(Object.assign({}, c));
+                queueConsequenceObject(Object.assign({}, c), title);
               });
             }
             if(scenario.id) state.weekEngine.choices[scenario.id] = i;
@@ -2284,6 +2436,7 @@ function initWeekEngine(){
     ranBonus: {},     // week → true if bonus already ran
     masterScenarioLocks: {}
   };
+  ensureStandardV1State();
   state.masterScenario = { played:{}, trackCounts:{}, firedWindows:{}, stress:0, wantsPressure:0, needsPressure:0 };
 }
 
@@ -2432,6 +2585,12 @@ const state = {
   experienceLevel:"standard",
   currentMode:"teacher_standard",
   lockMode:false,
+  standardV1:{
+    weeklyGoals:{},
+    goalHistory:[],
+    healthHistory:[],
+    choiceEchoLog:[]
+  },
 
   bank: {
     checking: 0,
@@ -3774,8 +3933,13 @@ function startMission(){
   state.plan.unplannedWantUsedThisMonth = false;
   state.plan.unplannedWantLabelsThisMonth = [];
   state.plan.wantsInventoryActive = state.plan.wantsSelections ? state.plan.wantsSelections.map(w=>({label:w.label, value:w.value, available:true})) : [];
+  ensureStandardV1State();
+  state.standardV1.weeklyGoals = {};
+  state.standardV1.goalHistory = [];
+  state.standardV1.choiceEchoLog = [];
 
-  setLog("Year mission started! June Week 1 — follow the glowing actions. Weekly choice cards appear each week.");
+  setLog("Year mission started! June Week 1 — follow the glowing actions. Weekly goals, health, and choice echoes are now live.");
+  setTimeout(()=>promptWeeklyGoalIfNeeded(), 200);
   renderAll();
   runCurrentMissionStep();
 }
@@ -4080,6 +4244,7 @@ function updateImpactStrip(){
   $("impactGoal").textContent = state.savingsGoal ? `${money(state.bank.savings + hysaTotal)} saved toward ${money(state.savingsGoal)}` : 'not set';
   $("impactGrowth").textContent = growth.note;
   if($("btnImpactCreditInfo")) $("btnImpactCreditInfo").onclick = ()=> showBucketInfo(5);
+  renderStandardV1HUD();
 }
 
 function getChoiceImpactText(){
@@ -5041,8 +5206,10 @@ function nextWeek(){
     renderWeekHeader();
     fireDueConsequences(state.weekEngine.week);
     maybeFireMasterDelayedConsequences(state.weekEngine.week);
-    runWeeklyScenarios(state.weekEngine.week, ()=>{
-      renderAll(); renderSheet(); notifyAction("next_week");
+    promptWeeklyGoalIfNeeded(()=>{
+      runWeeklyScenarios(state.weekEngine.week, ()=>{
+        renderAll(); renderSheet(); notifyAction("next_week");
+      });
     });
     return;
   }
@@ -5429,7 +5596,7 @@ function pickWeightedRandomEventType(){
   const last = state.randomRun.lastEventType || null;
   const prev = state.randomRun.prevEventType || null;
 
-  const weights = getRandomEventWeights();
+  const weights = getDynamicRandomEventWeights();
   let pool = [
     {type:"life", weight:Number(weights.life || 40)},
     {type:"job", weight:Number(weights.job || 30)},
@@ -5496,7 +5663,9 @@ function runRandomEvent(){
     applyLockRules();
 
     const label = finalType === "life" ? "Life Scenario" : finalType === "job" ? "Job Event" : "Financial Decision";
-    showBanner(`Random pick: ${label}. Tap the green button.`);
+    const goal = getCurrentWeeklyGoal();
+    const goalLine = goal ? ` • Goal: ${goal.name}` : "";
+    showBanner(`Random pick: ${label}${goalLine}. Tap the green button.`);
     scrollToBtn(getRandomEventButtonId(finalType));
   }
 
@@ -6940,7 +7109,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
   if($("btnJobEvent")) $("btnJobEvent").textContent = "Run Job Event";
   if($("btnSchoolEvent")) $("btnSchoolEvent").textContent = "Run Life Scenario";
   if($("btnSocialEvent")) $("btnSocialEvent").textContent = "Run Financial Decision";
-  if($("btnRandomEvent")) { const w=getRandomEventWeights(); $("btnRandomEvent").textContent = `Run Random Event (${w.life||40}/${w.job||30}/${w.financial||30})`; }
+  if($("btnRandomEvent")) { const w=getDynamicRandomEventWeights(); $("btnRandomEvent").textContent = `Run Random Event (${w.life||40}/${w.job||30}/${w.financial||30})`; }
   $("btnJobEvent").onclick=()=>{
     if(state.ui?.randomEventPendingType && state.ui.randomEventPendingType !== "job") return;
     const hadPending = state.ui?.randomEventPendingType === "job";
@@ -7017,7 +7186,7 @@ function maybeTriggerEliteScenario(sourceType='life'){
         state.credit = clamp(state.credit + Number(fx.credit || 0), 300, 850);
         if(!state.weekEngine) state.weekEngine = {pending:[], choices:{}};
         if(choice.tag === 'disciplined' || choice.tag === 'growth'){
-          state.weekEngine.pending.push({label:`Elite echo from ${ev.title}`, triggerWeek:Math.min(48,currentWeek+2)});
+          queueConsequenceObject({label:`Elite echo from ${ev.title}`, triggerWeek:Math.min(48,currentWeek+2)}, ev.title);
         }
         addLedgerLine(`Elite scenario: ${ev.title} → ${choice.label}`);
         closeHtmlModal();
@@ -7087,6 +7256,7 @@ function renderAll(){
   renderMeters();
   renderSheet();
   renderTeacherToolkit();
+  updateImpactStrip();
   applyLockRules();
   if(!state.mission.active){
     if(state.plan.lockedForYear && !state.jobLocked){
