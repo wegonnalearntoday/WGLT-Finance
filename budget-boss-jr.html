@@ -433,6 +433,11 @@ body{
 .next-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(74,171,219,.5);}
 .next-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
 
+.jr-next-guide{position:relative;animation:jrGuidePulse 1.15s ease-in-out infinite !important;box-shadow:0 0 0 0 rgba(76,175,80,.55);border-color:#4caf50 !important;}
+.jr-guide-ring{animation:jrGuideRing 1.15s ease-in-out infinite !important;}
+@keyframes jrGuidePulse{0%{transform:translateY(0) scale(1);box-shadow:0 0 0 0 rgba(76,175,80,.52);}50%{transform:translateY(-2px) scale(1.02);box-shadow:0 0 0 10px rgba(76,175,80,0);}100%{transform:translateY(0) scale(1);box-shadow:0 0 0 0 rgba(76,175,80,0);}}
+@keyframes jrGuideRing{0%{box-shadow:0 0 0 0 rgba(76,175,80,.48);}100%{box-shadow:0 0 0 14px rgba(76,175,80,0);}}
+
 /* ── SPENDING SECTION ─────────────────────────────────────────── */
 .spend-section{
   background:white;border-radius:var(--radius);
@@ -1823,6 +1828,7 @@ function refreshGameUIAfterLoad(){
   updateJars();
   restoreSelectionsUI();
   document.getElementById('week-progress').style.display = state.gameActive || state.finalReached ? 'flex' : 'none';
+  setTimeout(() => refreshJrNextStepGuide(true), 160);
   document.getElementById('choice-card').style.display = 'none';
   document.getElementById('spend-section').style.display = state.gameActive || state.finalReached ? 'block' : 'none';
   document.getElementById('next-btn').disabled = false;
@@ -1976,6 +1982,49 @@ function startGame() {
   );
 }
 
+
+function clearJrGuidance(){
+  document.querySelectorAll('.jr-next-guide').forEach(el => el.classList.remove('jr-next-guide'));
+  document.querySelectorAll('.jr-guide-ring').forEach(el => el.classList.remove('jr-guide-ring'));
+}
+function scrollToJrGuideTarget(el){
+  if(!el || typeof el.scrollIntoView !== 'function') return;
+  const key = el.id || el.className || el.tagName;
+  if(state._lastGuideScrollKey === key) return;
+  state._lastGuideScrollKey = key;
+  setTimeout(() => {
+    try{ el.scrollIntoView({ behavior:'smooth', block:'center' }); }catch(err){}
+  }, 120);
+}
+function refreshJrNextStepGuide(force=false){
+  clearJrGuidance();
+  if(!state.gameActive) return;
+  const modalOpen = document.getElementById('modal') && document.getElementById('modal').style.display !== 'none';
+  if(modalOpen && !force) return;
+  let target = null;
+  const choiceCard = document.getElementById('choice-card');
+  const choiceVisible = choiceCard && choiceCard.style.display !== 'none';
+  if(choiceVisible && !state.choiceMade){
+    target = choiceCard.querySelector('.choice-opt') || choiceCard;
+    if(choiceCard) choiceCard.classList.add('jr-guide-ring');
+  } else {
+    const nextBtn = document.getElementById('next-btn');
+    if(nextBtn && !nextBtn.disabled){
+      target = nextBtn;
+    }
+  }
+  if(target){
+    target.classList.add('jr-next-guide');
+    if(force || state._lastGuideTarget !== (target.id || target.className || target.tagName)){
+      scrollToJrGuideTarget(target);
+    }
+    state._lastGuideTarget = target.id || target.className || target.tagName;
+  } else {
+    state._lastGuideTarget = '';
+    state._lastGuideScrollKey = '';
+  }
+}
+
 // ══════════════════════════════════════════════════════════════════
 // WEEK FLOW
 // ══════════════════════════════════════════════════════════════════
@@ -1989,6 +2038,8 @@ function advanceWeek() {
   document.getElementById('spend-section').style.display = 'none';
   document.getElementById('next-btn').disabled = true;
   state.choiceMade = false;
+  state._lastGuideTarget = '';
+  state._lastGuideScrollKey = '';
 
   // Fire pending consequences for this week
   firePendingConsequences(state.week, () => {
@@ -2037,6 +2088,7 @@ function loadWeekScenario(week) {
           showSpendSection();
           document.getElementById('next-btn').disabled = false;
           state.choiceMade = true;
+          refreshJrNextStepGuide(true);
         }
       );
     }, 400);
@@ -2096,6 +2148,7 @@ function showChoiceCard(scenario) {
   });
 
   card.style.display = 'block';
+  setTimeout(() => refreshJrNextStepGuide(true), 120);
 }
 
 function makeChoice(opt, scenario, btn) {
@@ -2155,6 +2208,7 @@ function makeChoice(opt, scenario, btn) {
     document.getElementById('next-btn').disabled = false;
     if (isTeacherJrMode()) updateTeacherWeekPrompt(scenario, reflectionType);
     saveGameProgress(true);
+    refreshJrNextStepGuide(true);
   }, 400);
 }
 
@@ -2181,6 +2235,7 @@ function showSpendSection() {
   });
 
   section.style.display = 'block';
+  setTimeout(() => refreshJrNextStepGuide(true), 80);
 }
 
 function buyItem(item, el) {
@@ -2207,6 +2262,9 @@ function buyItem(item, el) {
 // ══════════════════════════════════════════════════════════════════
 function nextWeek() {
   if (state.week >= TOTAL_WEEKS) { endGame(); return; }
+  clearJrGuidance();
+  state._lastGuideTarget = '';
+  state._lastGuideScrollKey = '';
   advanceWeek();
   scrollTop();
 }
@@ -2511,6 +2569,7 @@ function showModal(emoji, title, body, btnText, onClose) {
 }
 function closeModal() {
   document.getElementById('modal').style.display = 'none';
+  setTimeout(() => refreshJrNextStepGuide(true), 80);
 }
 
 function animateCoin() {
