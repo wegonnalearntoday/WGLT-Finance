@@ -318,6 +318,15 @@ main::before{
     .choice-btn.selected{ border-color:var(--primary); background:#edf3ff; box-shadow:0 0 0 3px rgba(31,122,224,.14); }
     .done-ready{ animation: glowNextPulse 1.1s ease-in-out infinite; }
     .impact-box{ margin-top:10px; padding:10px 12px; border-radius:14px; border:1px solid var(--line); background:#f8fbff; font-weight:900; font-size:12px; color:var(--ink); white-space:pre-line; }
+    .timeline-panel{ display:grid; gap:10px; margin-top:12px; }
+    .timeline-row{ display:grid; gap:8px; padding:10px 12px; border:1px solid var(--line); border-radius:14px; background:#f8fbff; }
+    .timeline-row.active{ background:#eef9f0; }
+    .timeline-row.arrived{ background:#fff8ea; }
+    .timeline-row.pressure{ background:#fff4f4; }
+    .timeline-week{ font-size:11px; font-weight:1000; letter-spacing:.06em; text-transform:uppercase; color:#335; }
+    .timeline-title{ font-size:14px; font-weight:1000; color:var(--ink); }
+    .timeline-why{ font-size:12px; color:var(--muted); line-height:1.45; }
+    .timeline-empty{ padding:12px; border:1px dashed var(--line); border-radius:14px; background:#fbfdff; font-weight:800; color:var(--muted); }
 
     select{
       border:1px solid var(--line);
@@ -503,13 +512,14 @@ main::before{
         <b>Difficulty / Experience</b>: Beginner, Standard, or Elite
       </div>
       <div class="mode-grid mode-grid-6">
-        <button class="mode-btn glow-next" id="modeStudentBeginnerBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','beginner')" type="button"><span class="emoji">🧭</span>Student + Beginner<small>Cleaner student view, softer pressure, and extra room to learn the loop.</small></button>
-        <button class="mode-btn" id="modeStudentStandardBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','standard')" type="button"><span class="emoji">🎮</span>Student + Standard<small>Balanced gameplay with the normal event mix and fewer scaffolds.</small></button>
-        <button class="mode-btn" id="modeStudentEliteBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','elite')" type="button"><span class="emoji">🚀</span>Student + Elite<small>Advanced contracts, stronger tradeoffs, and monthly reflection pressure.</small></button>
-        <button class="mode-btn" id="modeTeacherBeginnerBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','beginner')" type="button"><span class="emoji">🧑‍🏫</span>Teacher + Beginner<small>Facilitator prompts and notes with the gentlest gameplay pressure.</small></button>
-        <button class="mode-btn" id="modeTeacherStandardBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','standard')" type="button"><span class="emoji">📘</span>Teacher + Standard<small>Guided classroom flow with balanced simulation pressure and full teaching tools.</small></button>
-        <button class="mode-btn" id="modeTeacherEliteBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','elite')" type="button"><span class="emoji">⚡</span>Teacher + Elite<small>All teaching tools plus elite pressure, consequence chains, advanced contracts, and required reflections.</small></button>
+        <button class="mode-btn glow-next" id="modeStudentBeginnerBtn" data-mode-range="Ages 8-11 • Grades 3-5" data-mode-fit="Best for first-time players, younger learners, and classrooms that want the softest support." onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','beginner')" type="button"><span class="emoji">🧭</span>Student + Beginner<small>Cleaner student view, softer pressure, and extra room to learn the loop.</small></button>
+        <button class="mode-btn" id="modeStudentStandardBtn" data-mode-range="Ages 11-14 • Grades 6-8" data-mode-fit="Best for your main middle school experience with balanced challenge and visible cause-and-effect." onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','standard')" type="button"><span class="emoji">🎮</span>Student + Standard<small>Balanced gameplay with the normal event mix and fewer scaffolds.</small></button>
+        <button class="mode-btn" id="modeStudentEliteBtn" data-mode-range="Ages 14-18 • Grades 9-12" data-mode-fit="Best for advanced students ready for stronger pressure, contracts, and long-term tradeoffs." onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','elite')" type="button"><span class="emoji">🚀</span>Student + Elite<small>Advanced contracts, stronger tradeoffs, and monthly reflection pressure.</small></button>
+        <button class="mode-btn" id="modeTeacherBeginnerBtn" data-mode-range="Ages 8-11 • Grades 3-5" data-mode-fit="Teacher dashboard paired with the gentlest learner flow for younger groups." onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','beginner')" type="button"><span class="emoji">🧑‍🏫</span>Teacher + Beginner<small>Facilitator prompts and notes with the gentlest gameplay pressure.</small></button>
+        <button class="mode-btn" id="modeTeacherStandardBtn" data-mode-range="Ages 11-14 • Grades 6-8" data-mode-fit="Teacher command center for your core classroom rollout and most whole-group lessons." onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','standard')" type="button"><span class="emoji">📘</span>Teacher + Standard<small>Guided classroom flow with balanced simulation pressure and full teaching tools.</small></button>
+        <button class="mode-btn" id="modeTeacherEliteBtn" data-mode-range="Ages 14-18 • Grades 9-12" data-mode-fit="Teacher command center for advanced classes, stronger pressure, and deeper reflection work." onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','elite')" type="button"><span class="emoji">⚡</span>Teacher + Elite<small>All teaching tools plus elite pressure, consequence chains, advanced contracts, and required reflections.</small></button>
       </div>
+      <div class="impact-box" id="modeHoverInfo" style="margin-top:14px"><b>Hover a mode</b><br>See the recommended age range, grade band, and best fit before you launch.</div>
       <div class="impact-box" style="margin-top:14px">JSON banks now drive the content layer for roles, experiences, contracts, teacher prompts, and elite extensions, which makes the simulator much easier to scale.</div>
       <div class="mode-screen-actions">
         <button class="btn secondary" id="btnLoadLocalFromMenu" type="button">Resume Local Save</button>
@@ -554,6 +564,13 @@ main::before{
         <span class="pill">Goal Status: <span id="impactGoalStatus">Pick goal</span></span>
         <span class="pill">Identity Snapshot: <span id="impactIdentity">⚖️ Balanced Builder</span></span>
         <span class="pill">Choice Echoes: <span id="impactEchoes">none queued</span></span>
+      </div>
+      <div class="card" id="consequenceTimelineCard" style="margin-top:14px">
+        <h3>🧭 Consequence Timeline</h3>
+        <div class="body">
+          <div class="muted">A breadcrumb trail for cause-and-effect so students can see what is coming, what already landed, and why.</div>
+          <div id="consequenceTimelinePanel" class="timeline-panel"></div>
+        </div>
       </div>
     </header>
 

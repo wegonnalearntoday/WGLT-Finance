@@ -127,6 +127,76 @@ function ensureStandardV1State(){
   if(!state.standardV1.goalHistory) state.standardV1.goalHistory = [];
   if(!state.standardV1.healthHistory) state.standardV1.healthHistory = [];
   if(!state.standardV1.choiceEchoLog) state.standardV1.choiceEchoLog = [];
+  if(!state.standardV1.pressureTracks) state.standardV1.pressureTracks = { basics:0, bills:0, impulse:0, resilience:0 };
+  if(!state.standardV1.chainHistory) state.standardV1.chainHistory = [];
+  if(!state.standardV1.chainWindowsFired) state.standardV1.chainWindowsFired = {};
+}
+function derivePressureTrack(item){
+  const hay = `${item?.label || ''} ${item?.sourceLabel || ''}`.toLowerCase();
+  if(/lunch|meal|energy|suppl|shortage|burnout|late|skip/.test(hay)) return 'basics';
+  if(/contract|renew|bill|charge|fee|tax|overage|dispute|payment|rate/.test(hay)) return 'bills';
+  if(/spend|pizza|wants|gift|arcade|stream|club|splurge|impulse/.test(hay)) return 'impulse';
+  if(/reward|boost|discipline|milestone|reputation|savings|dividend|goodwill|pays off|strong/.test(hay)) return 'resilience';
+  return 'bills';
+}
+function registerPressureTrack(item, amount){
+  ensureStandardV1State();
+  const track = derivePressureTrack(item);
+  state.standardV1.pressureTracks[track] = Math.max(0, Number(state.standardV1.pressureTracks[track] || 0) + Number(amount || 0));
+  return track;
+}
+function getPressureTrackSummary(){
+  ensureStandardV1State();
+  const entries = Object.entries(state.standardV1.pressureTracks || {}).sort((a,b)=>Number(b[1]||0)-Number(a[1]||0));
+  const top = entries[0] || ['basics',0];
+  const labels = { basics:'basics', bills:'bills', impulse:'impulse', resilience:'resilience' };
+  return { key:top[0], label:labels[top[0]] || top[0], count:Number(top[1] || 0), total:entries.reduce((s,[,v])=>s+Number(v||0),0) };
+}
+function maybeQueueConsequenceChain(currentWeek, reason){
+  ensureStandardV1State();
+  const summary = getPressureTrackSummary();
+  if(summary.total < 4) return;
+  const chainKey = `${summary.key}:${Math.ceil(Number(currentWeek || 1) / 4)}`;
+  if(state.standardV1.chainWindowsFired[chainKey]) return;
+  state.standardV1.chainWindowsFired[chainKey] = true;
+  const triggerWeek = Math.min(48, Number(currentWeek || 1) + (summary.key === 'resilience' ? 1 : 2));
+  const labelMap = {
+    basics:'Routine Pressure Wave',
+    bills:'Bill Pressure Wave',
+    impulse:'Impulse Pressure Wave',
+    resilience:'Bounce-Back Bonus'
+  };
+  const detailMap = {
+    basics:'Your basics routine has been shaky for a few weeks, so this week feels tighter.',
+    bills:'Recurring bills and old money choices are stacking up, so this week starts with less breathing room.',
+    impulse:'Impulse choices are starting to crowd out your plan, so extra pressure hits this week.',
+    resilience:'Your better habits are starting to pay you back with a little breathing room.'
+  };
+  queueConsequenceObject({
+    triggerWeek,
+    id:`chain_${summary.key}_${triggerWeek}`,
+    label:labelMap[summary.key] || 'Pressure Wave',
+    major: summary.key !== 'resilience',
+    sourceLabel:`v2.1 chain from ${reason || summary.label}`,
+    apply:(st)=>{
+      ensureStandardV1State();
+      if(summary.key === 'resilience'){
+        st.bank.savings += 12;
+        addLedgerLine(`↩ Bounce-back bonus +${money(12)} to savings`);
+        st.standardV1.pressureTracks.basics = Math.max(0, Number(st.standardV1.pressureTracks.basics || 0) - 1);
+        st.standardV1.pressureTracks.bills = Math.max(0, Number(st.standardV1.pressureTracks.bills || 0) - 1);
+        return `${detailMap[summary.key]} Savings +${money(12)}.`;
+      }
+      const hit = summary.key === 'bills' ? 18 : (summary.key === 'impulse' ? 14 : 10);
+      payFromCheckingThenCashThenSavings(hit);
+      st.credit = clamp(Number(st.credit || 650) - (summary.key === 'bills' ? 8 : 4), 300, 850);
+      st.standardV1.pressureTracks[summary.key] = Math.max(0, Number(st.standardV1.pressureTracks[summary.key] || 0) - 2);
+      addLedgerLine(`↩ ${labelMap[summary.key] || 'Pressure wave'} -${money(hit)}`);
+      return `${detailMap[summary.key]} Cost: ${money(hit)}${summary.key === 'bills' ? ' and credit -8.' : '.'}`;
+    }
+  }, `chain:${summary.key}`);
+  state.standardV1.chainHistory.unshift({ week:Number(currentWeek || 1), triggerWeek, key:summary.key, reason:reason || summary.label, label:labelMap[summary.key] || 'Pressure Wave' });
+  state.standardV1.chainHistory = state.standardV1.chainHistory.slice(0, 20);
 }
 const WEEKLY_GOAL_BANK = [
   { id:'save', name:'Build Savings', emoji:'🏦', desc:'Put future-you first this week.', weights:{life:-5,job:-5,financial:10} },
@@ -167,16 +237,18 @@ function getDynamicRandomEventWeights(){
 }
 function getChoiceEchoPreview(){
   const pending = ((state.weekEngine && state.weekEngine.pending) || []).slice().sort((a,b)=>Number(a.triggerWeek||99)-Number(b.triggerWeek||99));
-  const tracks = Object.entries((state.masterScenario && state.masterScenario.trackCounts) || {}).filter(([,v])=>Number(v||0) > 0).sort((a,b)=>Number(b[1]||0)-Number(a[1]||0));
-  const pressureCount = tracks.reduce((sum,[,v])=>sum + Number(v || 0), 0);
+  const masterTracks = Object.entries((state.masterScenario && state.masterScenario.trackCounts) || {}).filter(([,v])=>Number(v||0) > 0).sort((a,b)=>Number(b[1]||0)-Number(a[1]||0));
+  const pressure = getPressureTrackSummary();
+  const pressureCount = masterTracks.reduce((sum,[,v])=>sum + Number(v || 0), 0) + Number(pressure.total || 0);
   if(!pending.length && !pressureCount) return {count:0, text:'none queued', next:null, pressure:null};
   const next = pending[0] || null;
-  const pressure = tracks[0] ? { key:tracks[0][0], count:Number(tracks[0][1]||0) } : null;
+  const masterPressure = masterTracks[0] ? { key:masterTracks[0][0], count:Number(masterTracks[0][1]||0) } : null;
   const parts = [];
   if(pending.length) parts.push(`${pending.length} queued`);
   if(next) parts.push(`next W${next.triggerWeek}: ${next.label || 'Echo'}`);
-  if(pressure) parts.push(`pressure: ${pressure.key} x${pressure.count}`);
-  return { count:pending.length + pressureCount, text:parts.join(' • '), next, pressure };
+  if(pressure && pressure.count) parts.push(`chain pressure: ${pressure.label} x${pressure.count}`);
+  else if(masterPressure) parts.push(`pressure: ${masterPressure.key} x${masterPressure.count}`);
+  return { count:pending.length + pressureCount, text:parts.join(' • '), next, pressure:pressure && pressure.count ? pressure : masterPressure };
 }
 function getIdentitySnapshot(source){
   const base = source || {};
@@ -187,6 +259,7 @@ function getIdentitySnapshot(source){
   const goalPct = Number(base.savingsGoalPct ?? (state.savingsGoal ? Math.min(100, Math.round((saved / Math.max(1, Number(state.savingsGoal || 1))) * 100)) : 0));
   const health = base.healthScore != null ? Number(base.healthScore) : Number((state.standardV1 && state.standardV1.healthScore) || computeFinancialHealth().score || 0);
   const pending = Number(((state.weekEngine && state.weekEngine.pending && state.weekEngine.pending.length) || 0));
+  const pressure = getPressureTrackSummary();
 
   let title = 'Balanced Builder';
   let emoji = '⚖️';
@@ -200,10 +273,14 @@ function getIdentitySnapshot(source){
     title = 'Debt Risk Trend';
     emoji = '⚠️';
     detail = 'Unplanned money pressure is starting to squeeze your budget.';
-  } else if(pending >= 4 && health < 65){
+  } else if((pending >= 4 || pressure.total >= 5) && health < 65){
     title = 'Pressure Week';
     emoji = '🌪️';
-    detail = 'Earlier choices are still echoing, so this is a protect-your-plan stretch.';
+    detail = pressure.key === 'bills'
+      ? 'Bills and older choices are stacking together, so this is a protect-your-plan stretch.'
+      : pressure.key === 'impulse'
+        ? 'Impulse choices are echoing forward, so this week needs tighter control.'
+        : 'Earlier choices are still echoing, so this is a protect-your-plan stretch.';
   } else if(credit >= 680 && saved >= 75){
     title = 'Strong Builder';
     emoji = '🏗️';
@@ -218,6 +295,7 @@ function computeFinancialHealth(){
   const liquid = Number(state.cash || 0) + Number(state.bank?.checking || 0) + Number(state.bank?.savings || 0);
   const goalPct = state.savingsGoal ? Math.min(1, saved / Math.max(1, Number(state.savingsGoal))) : 0;
   const pendingCount = Number((state.weekEngine && state.weekEngine.pending && state.weekEngine.pending.length) || 0);
+  const pressure = getPressureTrackSummary();
   let score = 52;
   score += Math.max(-12, Math.min(18, Math.round((Number(state.credit || 650) - 650) / 8)));
   score += Math.max(0, Math.min(16, Math.round(saved / 18)));
@@ -227,6 +305,8 @@ function computeFinancialHealth(){
   if(Number(state.localTaxDue || 0) > 0) score -= Math.min(10, Math.round(Number(state.localTaxDue || 0) / 8));
   if(Number(state.bank?.checking || 0) <= 0) score -= 6;
   score -= Math.min(12, pendingCount * 2);
+  score -= Math.min(10, Number(pressure.total || 0));
+  if(pressure.key === 'resilience' && Number(pressure.count || 0) >= 2) score += 4;
   const goal = getCurrentWeeklyGoal();
   const goalHealthMap = {
     save: saved >= 50 ? 5 : saved >= 20 ? 2 : -1,
@@ -309,8 +389,11 @@ function queueConsequenceObject(item, sourceLabel=''){
   entry.sourceWeek = Number((state.weekEngine && state.weekEngine.week) || 1);
   entry.sourceLabel = sourceLabel || entry.sourceLabel || '';
   state.weekEngine.pending.push(entry);
+  const delta = entry.major ? 2 : (/bonus|reward|boost|milestone|discipline|goodwill|dividend/i.test(String(entry.label || '')) ? -1 : 1);
+  registerPressureTrack(entry, delta);
   state.standardV1.choiceEchoLog.unshift({ week:entry.sourceWeek, triggerWeek:entry.triggerWeek, label:entry.label || 'Echo', sourceLabel:entry.sourceLabel || '' });
   state.standardV1.choiceEchoLog = state.standardV1.choiceEchoLog.slice(0, 18);
+  maybeQueueConsequenceChain(entry.sourceWeek, entry.label || entry.sourceLabel || 'echo');
 }
 
 const SHARED_PROFILE_KEY = 'wgltSharedPlayerProfile';
@@ -740,6 +823,8 @@ function fireDueConsequences(currentWeek){
   // Minor consequences → ledger log only
   minor.forEach(c => {
     const msg = c.apply(state);
+    if(/bonus|reward|boost|milestone|discipline|goodwill|dividend/i.test(String(c.label || ''))) registerPressureTrack(c, -1);
+    else registerPressureTrack(c, 1);
     addLedgerLine(`↩ ${c.label}: ${msg}`);
     renderHeader();
   });
@@ -749,9 +834,14 @@ function fireDueConsequences(currentWeek){
     showBanner(`Choice Echoes arrived for Week ${currentWeek}`);
     let idx = 0;
     function showNext(){
-      if(idx >= major.length){ renderAll(); return; }
+      if(idx >= major.length){
+        maybeQueueConsequenceChain(currentWeek, major.map(c=>c.label).join(', '));
+        renderAll();
+        return;
+      }
       const c = major[idx++];
       const msg = c.apply(state);
+      registerPressureTrack(c, 1);
       renderHeader();
       openModal({
         title:`⚡ Consequence: ${c.label}`,
@@ -763,6 +853,7 @@ function fireDueConsequences(currentWeek){
     }
     showNext();
   } else {
+    maybeQueueConsequenceChain(currentWeek, minor.map(c=>c.label).join(', '));
     renderAll();
   }
 }
@@ -2488,6 +2579,9 @@ function initWeekEngine(){
   };
   ensureStandardV1State();
   state.masterScenario = { played:{}, trackCounts:{}, firedWindows:{}, stress:0, wantsPressure:0, needsPressure:0 };
+  state.standardV1.pressureTracks = { basics:0, bills:0, impulse:0, resilience:0 };
+  state.standardV1.chainHistory = [];
+  state.standardV1.chainWindowsFired = {};
 }
 
 /* Get scenarios for a given week */
@@ -3988,6 +4082,9 @@ function startMission(){
   state.standardV1.weeklyGoals = {};
   state.standardV1.goalHistory = [];
   state.standardV1.choiceEchoLog = [];
+  state.standardV1.pressureTracks = { basics:0, bills:0, impulse:0, resilience:0 };
+  state.standardV1.chainHistory = [];
+  state.standardV1.chainWindowsFired = {};
 
   setLog("Year mission started! June Week 1 — follow the glowing actions. Weekly goals, health, and choice echoes are now live.");
   setTimeout(()=>promptWeeklyGoalIfNeeded(), 200);
@@ -5185,6 +5282,10 @@ function nextWeek(){
       normalizeHysaMonthEndGrowth();
       checkSavingsMilestones();
       recordMonthSnapshot();
+      ensureStandardV1State();
+      Object.keys(state.standardV1.pressureTracks || {}).forEach(key=>{
+        state.standardV1.pressureTracks[key] = Math.max(0, Number(state.standardV1.pressureTracks[key] || 0) - (key === 'resilience' ? 0 : 1));
+      });
       state.day = newM;
       if(state.plan.lockedForYear){
         const gross = state.plan.income;
@@ -5767,9 +5868,16 @@ function applyRecurringContractCharge(monthNumber, monthName){
 function getMonthlyCoachingTip(snapshot){
   const snap = snapshot || {};
   const title = String(snap.identityTitle || '');
+  const pressure = getPressureTrackSummary();
   if(title === 'Saver Identity') return 'Coach Tip: Keep the streak alive. Protect your wants plan and feed savings first next month.';
-  if(title === 'Debt Risk Trend') return 'Coach Tip: Next month, trim one want and review every recurring bill before it hits.';
-  if(title === 'Pressure Week') return 'Coach Tip: You have echoes stacked up. Keep extra cash in checking so old choices do not snowball.';
+  if(title === 'Debt Risk Trend') return pressure.key === 'bills'
+    ? 'Coach Tip: Bills are your pressure point right now. Review recurring charges and keep extra cash in checking before month start.'
+    : 'Coach Tip: Next month, trim one want and review every recurring bill before it hits.';
+  if(title === 'Pressure Week') return pressure.key === 'impulse'
+    ? 'Coach Tip: Impulse pressure is building. Pre-plan one treat and say no to the rest next month.'
+    : pressure.key === 'basics'
+      ? 'Coach Tip: Protect your basics next month. Meals, supplies, and sleep save money later.'
+      : 'Coach Tip: You have echoes stacked up. Keep extra cash in checking so old choices do not snowball.';
   if(title === 'Strong Builder') return 'Coach Tip: You are stable. Try turning one strong month into a two-month streak.';
   return 'Coach Tip: Stay balanced next month by checking your bills, wants, and savings before spending.';
 }
@@ -6716,9 +6824,22 @@ function closeHtmlModal(){ closeModal(); }
 
 
 function bindRoleDifficultyMenu(){
+  const hoverBox = $("modeHoverInfo");
+  const defaultHoverHtml = '<b>Hover a mode</b><br>See the recommended age range, grade band, and best fit before you launch.';
   const bind = (id, role, experience) => {
     const el = $(id);
     if(!el) return;
+    const showModeHint = ()=>{
+      const range = el.dataset.modeRange || 'Recommended age range coming soon';
+      const fit = el.dataset.modeFit || 'Use this mode when you want the best classroom fit.';
+      const modeName = (el.textContent || '').split('\n')[0].trim();
+      el.title = `${modeName} • ${range} • ${fit}`;
+      if(hoverBox) hoverBox.innerHTML = `<b>${escapeHtml(modeName)}</b><br>${escapeHtml(range)}<br><span class="muted">${escapeHtml(fit)}</span>`;
+    };
+    el.onmouseenter = showModeHint;
+    el.onfocus = showModeHint;
+    el.onmouseleave = ()=>{ if(hoverBox) hoverBox.innerHTML = defaultHoverHtml; };
+    el.onblur = ()=>{ if(hoverBox) hoverBox.innerHTML = defaultHoverHtml; };
     el.onclick = (e)=>{
       if(e) e.preventDefault();
       beep("click");
@@ -7303,6 +7424,75 @@ function maybeTriggerEliteScenario(sourceType='life'){
   });
 }
 
+function renderConsequenceTimeline(){
+  const panel = $("consequenceTimelinePanel");
+  if(!panel) return;
+  ensureStandardV1State();
+  const currentWeek = Number((state.weekEngine && state.weekEngine.week) || 1);
+  const pending = (state.weekEngine && Array.isArray(state.weekEngine.pending)) ? state.weekEngine.pending.slice() : [];
+  const log = Array.isArray(state.standardV1.choiceEchoLog) ? state.standardV1.choiceEchoLog.slice() : [];
+  const pressure = getPressureTrackSummary();
+  const rows = [];
+
+  pending
+    .sort((a,b)=>Number(a.triggerWeek || 99) - Number(b.triggerWeek || 99))
+    .slice(0,4)
+    .forEach(item=>{
+      rows.push({
+        klass:'active',
+        weekLabel:`Week ${item.triggerWeek || '?'}`,
+        title:item.label || 'Pending echo',
+        why:item.sourceLabel ? `Why: ${item.sourceLabel}` : 'Why: Earlier choices scheduled this consequence.',
+        order:Number(item.triggerWeek || 99)
+      });
+    });
+
+  log.forEach(item=>{
+    const triggerWeek = Number(item.triggerWeek || item.week || 0);
+    const stillPending = pending.some(p=>String(p.id || '') === String(item.id || '') && Number(p.triggerWeek || 0) === triggerWeek && (p.label || '') === (item.label || ''));
+    if(stillPending) return;
+    if(triggerWeek > currentWeek) return;
+    rows.push({
+      klass:'arrived',
+      weekLabel:`Week ${triggerWeek || '?'}`,
+      title:`${item.label || 'Echo'} landed`,
+      why:item.sourceLabel ? `Why: ${item.sourceLabel}` : 'Why: A previous choice finally caught up.',
+      order:1000 + triggerWeek
+    });
+  });
+
+  if(pressure && Number(pressure.total || 0) > 0){
+    rows.push({
+      klass:'pressure',
+      weekLabel:'Pattern Watch',
+      title:`${pressure.label || 'Pressure'} x${pressure.count || pressure.total || 0}`,
+      why:'Why: Repeated habits are stacking together, which raises the chance of harder echo weeks.',
+      order:9999
+    });
+  }
+
+  const deduped = [];
+  const seen = new Set();
+  rows.sort((a,b)=>a.order-b.order).forEach(row=>{
+    const key = `${row.klass}|${row.weekLabel}|${row.title}|${row.why}`;
+    if(seen.has(key)) return;
+    seen.add(key);
+    deduped.push(row);
+  });
+
+  if(!deduped.length){
+    panel.innerHTML = '<div class="timeline-empty">No active consequence trail yet. Once choices start queuing delayed effects, they will show up here like footprints in fresh paint.</div>';
+    return;
+  }
+
+  panel.innerHTML = deduped.slice(0,7).map(row=>`
+    <div class="timeline-row ${row.klass}">
+      <div class="timeline-week">${escapeHtml(row.weekLabel)}</div>
+      <div class="timeline-title">${escapeHtml(row.title)}</div>
+      <div class="timeline-why">${escapeHtml(row.why)}</div>
+    </div>`).join('');
+}
+
 function renderTeacherToolkit(){
   const panel = $("panel-teacherToolkit");
   const box = $("teacherToolkitBox");
@@ -7363,6 +7553,7 @@ function renderAll(){
   renderMeters();
   renderSheet();
   renderTeacherToolkit();
+  renderConsequenceTimeline();
   updateImpactStrip();
   applyLockRules();
   if(!state.mission.active){
