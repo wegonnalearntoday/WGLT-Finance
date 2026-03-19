@@ -950,11 +950,13 @@ body{
     <div class="teacher-panel" id="teacher-panel" style="display:none">
       <h4>👩‍🏫 Teacher Tools</h4>
       <div class="teacher-row">
+        <button class="teacher-btn" id="teacher-elite-toggle" onclick="toggleTeacherElite()">👑 Teacher Elite: OFF</button>
         <button class="teacher-btn" onclick="teacherTriggerBonus()">💰 Bonus Payday</button>
         <button class="teacher-btn" onclick="teacherTriggerExpense()">🔧 Surprise Expense</button>
         <button class="teacher-btn" onclick="teacherDiscussion()">💬 Discussion Pause</button>
         <button class="teacher-btn" onclick="teacherShowBuckets()">📋 FL Standards</button>
       </div>
+      <div class="teacher-info" id="teacher-elite-info" style="margin-top:10px;display:none"></div>
       <div class="teacher-info" id="teacher-info">
         Use these tools to add teachable moments anytime. The class votes together on every choice card.
       </div>
@@ -1121,7 +1123,10 @@ let state = {
   boughtItems:{}, choiceMade:false,
   gameActive:false, finalReached:false,
   reflectionHistory: [],
-  currentTeacherReflectionType: 'default'
+  currentTeacherReflectionType: 'default',
+  teacherEliteOn: false,
+  scenarioPlan: {},
+  scenarioCoverage: { usedScenarioIds: [], usedTags: [], planMode: 'random' }
 };
 const JOBS = {
   lemon: {
@@ -1473,6 +1478,169 @@ const JOBS = {
 
 };
 
+
+const ELITE_WEEK_THEMES = [
+  { key:'spend', label:'Needs vs. Wants Week', detail:'Students practice using money carefully and spotting wants vs. needs.' },
+  { key:'save', label:'Saving Week', detail:'Students focus on saving for a future goal.' },
+  { key:'share', label:'Sharing Week', detail:'Students think about generosity and helping others.' },
+  { key:'mixed', label:'Budget Balance Week', detail:'Students compare spending, saving, and sharing choices together.' },
+  { key:'reallife', label:'Real-Life Event Week', detail:'Students work through a surprise or honest-choice situation.' },
+  { key:'spend', label:'Smart Spending Week', detail:'Students talk through purchases and tradeoffs.' },
+  { key:'save', label:'Goal Push Week', detail:'Students make choices that move them closer to a goal.' },
+  { key:'share', label:'Community Week', detail:'Students connect money choices to helping other people.' },
+  { key:'planning', label:'Planning Ahead Week', detail:'Students balance work, school, and future choices.' },
+  { key:'spend', label:'Treat or Wait Week', detail:'Students decide whether fun now is worth it.' },
+  { key:'future', label:'Future You Week', detail:'Students think about choices that pay off later.' },
+  { key:'review', label:'Review Week', detail:'Students pull together spending, saving, and sharing ideas.' }
+];
+const ELITE_THEME_KEYWORDS = {
+  spend: ['spend', 'treat', 'buy', 'needs vs wants'],
+  save: ['save', 'goal', 'future'],
+  share: ['share', 'help', 'community'],
+  mixed: ['balance', 'mix', 'split'],
+  reallife: ['surprise', 'real life', 'honesty', 'problem solving'],
+  planning: ['plan', 'school', 'schedule'],
+  future: ['future', 'next week', 'long-term'],
+  review: ['review', 'all together']
+};
+function slugifyScenarioText(str){
+  return String(str || '').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+}
+function ensureEliteState(){
+  if(typeof state.teacherEliteOn !== 'boolean') state.teacherEliteOn = false;
+  if(!state.scenarioPlan || typeof state.scenarioPlan !== 'object') state.scenarioPlan = {};
+  if(!state.scenarioCoverage || typeof state.scenarioCoverage !== 'object') state.scenarioCoverage = { usedScenarioIds: [], usedTags: [], planMode: 'random' };
+  if(!Array.isArray(state.scenarioCoverage.usedScenarioIds)) state.scenarioCoverage.usedScenarioIds = [];
+  if(!Array.isArray(state.scenarioCoverage.usedTags)) state.scenarioCoverage.usedTags = [];
+}
+function getEliteThemeForWeek(week){
+  return ELITE_WEEK_THEMES[(Math.max(1, week) - 1) % ELITE_WEEK_THEMES.length];
+}
+function classifyScenarioType(scenario){
+  if(!scenario) return ['review'];
+  const tags = new Set();
+  const text = ((scenario.scenario || '') + ' ' + (scenario.question || '')).toLowerCase();
+  const options = Array.isArray(scenario.options) ? scenario.options : [];
+  let spendCount = 0, saveCount = 0, shareCount = 0;
+  options.forEach(opt => {
+    if((opt.spend || 0) < 0 || /buy|treat|snack|spend/.test((opt.text || '') + ' ' + (opt.effect || ''))) spendCount++;
+    if((opt.save || 0) > 0 || /save|goal|future/.test((opt.text || '') + ' ' + (opt.effect || ''))) saveCount++;
+    if((opt.share || 0) > 0 || /share|donate|gift|help/.test((opt.text || '') + ' ' + (opt.effect || ''))) shareCount++;
+  });
+  if(spendCount) tags.add('spend');
+  if(saveCount) tags.add('save');
+  if(shareCount) tags.add('share');
+  if((spendCount && saveCount) || (saveCount && shareCount) || (spendCount && shareCount)) tags.add('mixed');
+  if(/school|weekend|homework|balance|plan|usual chores|keep working/.test(text)) tags.add('planning');
+  if(/friend|borrow|found|nobody is around|nobody saw|wrong store|ran out|rain|hot|hole in|gift card|honest|surprise|uh oh/.test(text)) tags.add('reallife');
+  if(/goal|final push|so close|future|next week|final week|last week/.test(text)) tags.add('future');
+  if(/final week|last week/.test(text)) tags.add('review');
+  if(!tags.size) tags.add('mixed');
+  return Array.from(tags);
+}
+function cloneScenarioForWeek(scenario, currentWeek){
+  const cloned = JSON.parse(JSON.stringify(scenario));
+  const originalWeek = Number(scenario.week || currentWeek);
+  const weekShift = currentWeek - originalWeek;
+  cloned.originalWeek = originalWeek;
+  cloned.week = currentWeek;
+  cloned._scenarioId = scenario._scenarioId || slugifyScenarioText((scenario.scenario || '') + '-' + originalWeek);
+  cloned._tags = scenario._tags || classifyScenarioType(scenario);
+  if(Array.isArray(cloned.options)){
+    cloned.options = cloned.options.map(opt => {
+      const optionClone = Object.assign({}, opt);
+      if(opt.consequence){
+        const offset = Math.max(1, Number(opt.consequence.week || (originalWeek + 1)) - originalWeek);
+        optionClone.consequence = Object.assign({}, opt.consequence, { week: Math.min(TOTAL_WEEKS, currentWeek + offset) });
+      }
+      return optionClone;
+    });
+  }
+  return cloned;
+}
+function getScenarioPoolForJob(jobKey){
+  const job = JOBS[jobKey];
+  if(!job || !Array.isArray(job.scenarios)) return [];
+  return job.scenarios.map((scenario, idx) => {
+    if(!scenario._scenarioId) scenario._scenarioId = `${jobKey}-${idx+1}-${slugifyScenarioText(scenario.scenario || 'scenario')}`;
+    if(!scenario._tags) scenario._tags = classifyScenarioType(scenario);
+    return scenario;
+  });
+}
+function randomPick(list){
+  return list[Math.floor(Math.random() * list.length)];
+}
+function buildScenarioPlanIfNeeded(){
+  ensureEliteState();
+  if(!state.job) return;
+  const mode = state.teacherEliteOn ? 'elite' : 'random';
+  const existingWeeks = Object.keys(state.scenarioPlan || {}).length;
+  if(existingWeeks >= TOTAL_WEEKS && state.scenarioCoverage.planMode === mode) return;
+  const pool = getScenarioPoolForJob(state.job).slice();
+  const usedIds = new Set();
+  const usedTags = [];
+  const plan = {};
+  for(let week = 1; week <= TOTAL_WEEKS; week++){
+    const theme = getEliteThemeForWeek(week);
+    let available = pool.filter(s => !usedIds.has(s._scenarioId));
+    if(state.teacherEliteOn){
+      let themed = available.filter(s => (s._tags || []).includes(theme.key));
+      if(!themed.length && theme.key === 'review') themed = available.filter(s => (s._tags || []).includes('mixed') || (s._tags || []).includes('future'));
+      if(!themed.length && theme.key === 'future') themed = available.filter(s => (s._tags || []).includes('save') || (s._tags || []).includes('planning'));
+      if(!themed.length && theme.key === 'planning') themed = available.filter(s => (s._tags || []).includes('reallife') || (s._tags || []).includes('mixed'));
+      if(themed.length) available = themed;
+    }
+    if(!available.length) available = pool.slice();
+    const chosen = randomPick(available);
+    usedIds.add(chosen._scenarioId);
+    (chosen._tags || []).forEach(tag => { if(!usedTags.includes(tag)) usedTags.push(tag); });
+    plan[week] = cloneScenarioForWeek(chosen, week);
+  }
+  state.scenarioPlan = plan;
+  state.scenarioCoverage = { usedScenarioIds: Array.from(usedIds), usedTags, planMode: mode };
+}
+function getScenarioForWeek(week){
+  ensureEliteState();
+  buildScenarioPlanIfNeeded();
+  return state.scenarioPlan[String(week)] || state.scenarioPlan[week] || null;
+}
+function getCoverageStatusMarkup(){
+  ensureEliteState();
+  const usedTags = state.scenarioCoverage.usedTags || [];
+  const targetTags = state.teacherEliteOn ? ELITE_WEEK_THEMES.map(t => t.key) : ['spend','save','share','mixed','reallife','planning','future','review'];
+  const uniqueTargets = [...new Set(targetTags)];
+  return uniqueTargets.map(tag => {
+    const hit = usedTags.includes(tag);
+    const label = (ELITE_THEME_KEYWORDS[tag] && ELITE_THEME_KEYWORDS[tag][0]) ? ELITE_THEME_KEYWORDS[tag][0] : tag;
+    return `<span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:${hit ? 'rgba(76,175,80,.18)' : 'rgba(255,255,255,.1)'};border:1px solid ${hit ? 'rgba(76,175,80,.45)' : 'rgba(255,255,255,.14)'};margin:4px 6px 0 0">${hit ? '✅' : '🟡'} ${label}</span>`;
+  }).join('');
+}
+function updateTeacherEliteUI(){
+  ensureEliteState();
+  const btn = document.getElementById('teacher-elite-toggle');
+  const box = document.getElementById('teacher-elite-info');
+  if(btn) btn.textContent = state.teacherEliteOn ? '👑 Teacher Elite: ON' : '👑 Teacher Elite: OFF';
+  if(!box) return;
+  if(!isTeacherJrMode()){
+    box.style.display = 'none';
+    return;
+  }
+  const nextTheme = getEliteThemeForWeek(Math.min(TOTAL_WEEKS, Math.max(1, (state.week || 0) + (state.choiceMade ? 1 : 0))));
+  box.style.display = '';
+  box.innerHTML = state.teacherEliteOn
+    ? `<b>Elite plan active.</b> 12 weeks stay simple, but each week now follows a theme and coverage tracker.<br><div style="margin-top:8px"><b>Next theme:</b> ${nextTheme.label}</div><div style="margin-top:8px">${getCoverageStatusMarkup()}</div>`
+    : `<b>Elite plan off.</b> Weeks use a fully random unseen-scenario mix for replayability.`;
+}
+function toggleTeacherElite(){
+  ensureEliteState();
+  state.teacherEliteOn = !state.teacherEliteOn;
+  state.scenarioPlan = {};
+  state.scenarioCoverage = { usedScenarioIds: [], usedTags: [], planMode: state.teacherEliteOn ? 'elite' : 'random' };
+  updateTeacherEliteUI();
+  saveGameProgress(true);
+  const theme = getEliteThemeForWeek(Math.max(1, state.week || 1));
+  showModal('👑', state.teacherEliteOn ? 'Teacher Elite ON' : 'Teacher Elite OFF', state.teacherEliteOn ? `Elite mode is on. The game stays 12 weeks and simple, but now each week follows a theme like <b>${theme.label}</b> and the game tracks coverage so the class sees a fuller mix.` : 'Elite mode is off. The game now uses the random replay mix again.', 'Got it!', closeModal);
+}
 // Spend shop items (same for both jobs)
 const SHOP_ITEMS = [
   { id:'icecream', emoji:'🍦', name:'Ice Cream', cost:2, oneTime:false },
@@ -1539,10 +1707,11 @@ function refreshGameUIAfterLoad(){
   document.getElementById('choice-card').style.display = 'none';
   document.getElementById('spend-section').style.display = state.gameActive || state.finalReached ? 'block' : 'none';
   document.getElementById('next-btn').disabled = false;
+  updateTeacherEliteUI();
   if(state.gameActive || state.finalReached){
     showScreen(state.finalReached ? 'screen-report' : 'screen-game');
     if(!state.finalReached){
-      const scenario = JOBS[state.job]?.scenarios?.[Math.max(0, state.week-1)];
+      const scenario = getScenarioForWeek(Math.max(1, state.week || 1));
       if(scenario) updateTeacherWeekPrompt(scenario, state.currentTeacherReflectionType || 'default');
     }
   }else{
@@ -1556,9 +1725,11 @@ function resumeGame(){
   state = Object.assign({}, state, saved.state);
   if(!state.reflectionHistory) state.reflectionHistory = [];
   if(!state.currentTeacherReflectionType) state.currentTeacherReflectionType = 'default';
-  hydrateSharedProfileUI();
+  ensureEliteState();
+hydrateSharedProfileUI();
 updateResumeButton();
 syncEarnedIncomeLabel();
+updateTeacherEliteUI();
   refreshGameUIAfterLoad();
 }
 function returnToMenu(){
@@ -1722,16 +1893,19 @@ function firePendingConsequences(week, cb) {
 
 function loadWeekScenario(week) {
   const job = JOBS[state.job];
-  const scenario = job.scenarios[week - 1];
+  const scenario = getScenarioForWeek(week);
   if (!scenario) { endGame(); return; }
 
   // Auto-earn base pay
   const pay = job.basePay + (Math.random() > .5 ? 1 : 0); // small variance
   earnMoney(pay, job.name + ' pay 💵', job.emoji);
 
+  const theme = getEliteThemeForWeek(week);
   // Update teacher info
-  document.getElementById('teacher-info').textContent =
-    `Week ${week}: ${scenario.scenario} | FL Standards: Earning (#1), Saving (#3), Spending (#2), Sharing`;
+  document.getElementById('teacher-info').textContent = state.teacherEliteOn
+    ? `Week ${week}: ${theme.label} · ${scenario.scenario} | FL Standards: Earning (#1), Saving (#3), Spending (#2), Sharing`
+    : `Week ${week}: ${scenario.scenario} | FL Standards: Earning (#1), Saving (#3), Spending (#2), Sharing`;
+  updateTeacherEliteUI();
   updateTeacherWeekPrompt(scenario);
 
   if (scenario.skipChoice) {
@@ -1851,7 +2025,8 @@ function makeChoice(opt, scenario, btn) {
   const reflectionType = getReflectionTypeForChoice(opt);
   state.currentTeacherReflectionType = reflectionType;
   const pack = JR_REFLECTION_PROMPTS[reflectionType] || JR_REFLECTION_PROMPTS.default;
-  const leadQuestion = pack.reflection[0];
+  const historyCount = (state.reflectionHistory || []).filter(item => item.type === reflectionType).length;
+  const leadQuestion = pack.reflection[historyCount % pack.reflection.length];
   state.reflectionHistory = state.reflectionHistory || [];
   state.reflectionHistory.unshift({ week: state.week, type: reflectionType, typeLabel: reflectionType.charAt(0).toUpperCase() + reflectionType.slice(1), question: leadQuestion, choiceText: opt.text });
 
@@ -2280,9 +2455,11 @@ function resetGame() {
   document.getElementById('header-avatar').style.display = 'none';
   document.getElementById('ledger-entries').innerHTML =
     '<div class="ledger-entry event"><span class="l-emoji">🌟</span><span class="l-text">Game started! Good luck!</span><span class="l-amount"></span></div>';
-  hydrateSharedProfileUI();
+  ensureEliteState();
+hydrateSharedProfileUI();
 updateResumeButton();
 syncEarnedIncomeLabel();
+updateTeacherEliteUI();
   clearSavedGame();
   showScreen('screen-welcome');
 }
@@ -2312,7 +2489,10 @@ document.querySelectorAll('.cloud').forEach(c=>{
   const teacherPanel = document.getElementById('teacher-panel');
   const teacherOn = params.get('teacher') === '1' || (function(){ try{ return sessionStorage.getItem('wglt_jr_role') === 'teacher'; }catch(err){ return false; }})();
   if(teacherPanel && teacherOn) teacherPanel.style.display = '';
-  if(teacherOn) renderTeacherReflectionBox('<div><b>Teacher mode ready.</b><br>Click a question in the reflection area to show it to the class.</div>');
+  if(teacherOn){
+    updateTeacherEliteUI();
+    renderTeacherReflectionBox('<div><b>Teacher mode ready.</b><br>Click a question in the reflection area to show it to the class.</div>');
+  }
 })();
 
 
@@ -2343,9 +2523,11 @@ function hydrateSharedProfileUI(){
   checkStartReady();
 }
 
+ensureEliteState();
 hydrateSharedProfileUI();
 updateResumeButton();
 syncEarnedIncomeLabel();
+updateTeacherEliteUI();
 
 </script>
 <script>
