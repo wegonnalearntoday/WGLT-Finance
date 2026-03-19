@@ -2681,6 +2681,7 @@ const state = {
 
   contractActive: false,
   contractId: null,
+  contractLedger: { chargedMonths:{} },
 
   savingsGoal: 0,
   _wantsRefreshCallback: null,
@@ -3057,7 +3058,7 @@ function renderBankJars(){
     hysa: (state.bank.hysaPrincipal || 0) + (state.bank.hysaAccrued || 0),
     cd: cdTotal
   };
-  const scale = Math.max(100, ...Object.values(values));
+  const scale = Math.max(1000, ...Object.values(values));
   if($("bankJarScaleLabel")) $("bankJarScaleLabel").textContent = `Scale: $0 to ${money(scale)}`;
   const map = [
     ["jarCheckingFill","jarCheckingAmt",values.checking],
@@ -4008,6 +4009,7 @@ function resetMission(){
   state.localTaxDue = 0;
   state.contractActive = false;
   state.contractId = null;
+  state.contractLedger = { chargedMonths:{} };
   if(!state.randomRun) state.randomRun = {};
   state.randomRun.contractOfferId = pickRandomContractId();
   state.randomRun.lastEventType = null;
@@ -4969,6 +4971,7 @@ function applyMonthlyPlanForCurrentMonth(){
     state.ledger.weekExpenses += insuranceCost;
     addLedgerLine(`Insurance premium: -${money(insuranceCost)}`);
   }
+  applyRecurringContractCharge(state.day, `Month ${state.day}`);
   state.plan.appliedMonths.add(state.day);
 
   if(state.bank.checking < 0){
@@ -5191,6 +5194,7 @@ function nextWeek(){
         state.ledger.weekIncome += takeHome;
         const newMonthName = weekToMonthName(currentW+1);
         addLedgerLine(`--- ${newMonthName} started --- Paycheck: +${money(takeHome)} (tax withheld: ${money(tax)})`);
+        const contractCharge = applyRecurringContractCharge(newM, newMonthName);
         state.weekEngine.week += 1;
         renderWeekHeader();
         fireDueConsequences(state.weekEngine.week);
@@ -5222,6 +5226,7 @@ function nextWeek(){
 
         const snapCd = typeof snap.cd === 'number' ? snap.cd : totalCdFunds();
         const snapCredit = typeof snap.credit === 'number' ? snap.credit : state.credit;
+        const coachingTip = getMonthlyCoachingTip(snap);
         openModal({
           title:`📅 ${prevMonthName} Complete!`,
           meta:`Your budget snapshot is on the Budget Sheet`,
@@ -5740,6 +5745,35 @@ function getContractById(id){
   return CONTRACTS.find(c => c.id === id) || CONTRACTS[0];
 }
 
+function ensureContractLedger(){
+  if(!state.contractLedger) state.contractLedger = {};
+  if(!state.contractLedger.chargedMonths) state.contractLedger.chargedMonths = {};
+}
+
+function applyRecurringContractCharge(monthNumber, monthName){
+  ensureContractLedger();
+  if(!state.contractActive || !state.contractId) return 0;
+  const c = getContractById(state.contractId);
+  if(!c) return 0;
+  const key = `${c.id}:${Number(monthNumber || 0)}`;
+  if(state.contractLedger.chargedMonths[key]) return 0;
+  state.contractLedger.chargedMonths[key] = true;
+  payFromCheckingThenCashThenSavings(c.monthly);
+  state.ledger.weekExpenses += c.monthly;
+  addLedgerLine(`${monthName}: Contract auto-payment -${money(c.monthly)} for ${c.name}`);
+  return c.monthly;
+}
+
+function getMonthlyCoachingTip(snapshot){
+  const snap = snapshot || {};
+  const title = String(snap.identityTitle || '');
+  if(title === 'Saver Identity') return 'Coach Tip: Keep the streak alive. Protect your wants plan and feed savings first next month.';
+  if(title === 'Debt Risk Trend') return 'Coach Tip: Next month, trim one want and review every recurring bill before it hits.';
+  if(title === 'Pressure Week') return 'Coach Tip: You have echoes stacked up. Keep extra cash in checking so old choices do not snowball.';
+  if(title === 'Strong Builder') return 'Coach Tip: You are stable. Try turning one strong month into a two-month streak.';
+  return 'Coach Tip: Stay balanced next month by checking your bills, wants, and savings before spending.';
+}
+
 /* Contracts */
 function populateContracts(){
   const sel = $("contractPick");
@@ -5783,6 +5817,7 @@ Accept this contract?`,
     onPick:(pick)=>{
       if(pick==="accept"){
         state.contractActive=true;
+        ensureContractLedger();
         state.bank.checking -= c.monthly;
         addLedgerLine(`Contract accepted: ${c.name} (-${money(c.monthly)})`);
         state.credit=clamp(state.credit+1,300,850);
