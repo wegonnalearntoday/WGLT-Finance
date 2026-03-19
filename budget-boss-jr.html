@@ -629,7 +629,7 @@ body{
 .name-input::placeholder{color:#B0BEC5;font-weight:600;}
 
 .avatar-grid{
-  display:grid;grid-template-columns:repeat(6,1fr);gap:10px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
 }
 .avatar-btn{
   background:var(--sky-lt);border:3px solid transparent;
@@ -707,7 +707,7 @@ body{
 
 
 <div class="back-link-wrap">
-  <a class="back-link" href="index.html">⬅️ Back to Role + Difficulty Select</a>
+  <a class="back-link" href="index.html" onclick="return returnToDifficultySelect(event)">⬅️ Back to Role + Difficulty Select</a>
 </div>
 
 <div id="app">
@@ -766,6 +766,10 @@ body{
         <div class="avatar-btn" onclick="selectAvatar('🐙','Octopus')"><span class="av-emoji">🐙</span><span class="av-name">Octopus</span></div>
         <div class="avatar-btn" onclick="selectAvatar('🧑‍🚀','Astronaut')"><span class="av-emoji">🧑‍🚀</span><span class="av-name">Astronaut</span></div>
         <div class="avatar-btn" onclick="selectAvatar('🦸','Hero')"><span class="av-emoji">🦸</span><span class="av-name">Hero</span></div>
+        <div class="avatar-btn" onclick="selectAvatar('👩🏽‍🚀','Astronaut Girl')"><span class="av-emoji">👩🏽‍🚀</span><span class="av-name">Astronaut Girl</span></div>
+        <div class="avatar-btn" onclick="selectAvatar('👨🏿‍🚀','Astronaut Boy')"><span class="av-emoji">👨🏿‍🚀</span><span class="av-name">Astronaut Boy</span></div>
+        <div class="avatar-btn" onclick="selectAvatar('🦸🏽‍♀️','Hero Girl')"><span class="av-emoji">🦸🏽‍♀️</span><span class="av-name">Hero Girl</span></div>
+        <div class="avatar-btn" onclick="selectAvatar('🦸🏿‍♂️','Hero Boy')"><span class="av-emoji">🦸🏿‍♂️</span><span class="av-name">Hero Boy</span></div>
       </div>
     </div>
 
@@ -933,7 +937,8 @@ body{
     </button>
     <div class="save-strip">
       <button class="jr-mini-btn" type="button" onclick="saveGameProgress()">💾 Save Progress</button>
-      <button class="jr-mini-btn" type="button" onclick="returnToMenu()">🏠 Main Menu</button>
+      <button class="jr-mini-btn" type="button" onclick="returnToMenu()">🏠 Jr Home</button>
+      <button class="jr-mini-btn" type="button" onclick="returnToDifficultySelect()">🧭 All Difficulties</button>
       <button class="jr-mini-btn" type="button" onclick="resumeGame()">▶️ Resume</button>
     </div>
     <div class="jr-reset-row">
@@ -1560,6 +1565,16 @@ function returnToMenu(){
   saveGameProgress(true);
   showScreen('screen-welcome');
   updateResumeButton();
+}
+function returnToDifficultySelect(event){
+  if(event) event.preventDefault();
+  saveGameProgress(true);
+  try{
+    window.location.href = 'index.html';
+  }catch(err){
+    try{ window.history.back(); }catch(e){}
+  }
+  return false;
 }
 function showTermDefinition(termKey){
   const term = TERM_DEFINITIONS[termKey];
