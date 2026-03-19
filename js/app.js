@@ -240,13 +240,31 @@ function getDynamicRandomEventWeights(){
 function ensureEliteState(){
   ensureStandardV1State();
   if(!state.elite) state.elite = {};
-  if(!state.elite.investments) state.elite.investments = { stocks:0, costBasis:0, lastChange:0, history:[] };
-  if(!state.elite.career) state.elite.career = { level:1, title:'Starter Worker', promotions:0, payBonus:0, history:[] };
+  if(!state.elite.investments) state.elite.investments = { stocks:0, costBasis:0, lastChange:0, history:[], portfolios:{conservative:0,balanced:0,aggressive:0} };
+  if(!state.elite.investments.portfolios) state.elite.investments.portfolios = {conservative:0,balanced:0,aggressive:0};
+  if(!state.elite.career) state.elite.career = { level:1, title:'Starter Worker', promotions:0, payBonus:0, history:[], branch:'' };
   if(!state.elite.endings) state.elite.endings = { final:null, track:'⚖️ Survivor' };
+  if(!state.elite.creditAccess) state.elite.creditAccess = { apartment:false, car:false, loan:false };
 }
 function totalStockFunds(){
   ensureEliteState();
-  return Number(state.elite.investments.stocks || 0);
+  const inv = state.elite.investments || {};
+  const ports = inv.portfolios || {};
+  const portTotal = Number(ports.conservative || 0) + Number(ports.balanced || 0) + Number(ports.aggressive || 0);
+  if(portTotal > 0){
+    inv.stocks = Math.round(portTotal);
+    return inv.stocks;
+  }
+  return Number(inv.stocks || 0);
+}
+function getStockMixSummary(){
+  ensureEliteState();
+  const p = state.elite.investments.portfolios || {};
+  const parts = [];
+  if(Number(p.conservative || 0) > 0) parts.push(`Shield ${money(p.conservative)}`);
+  if(Number(p.balanced || 0) > 0) parts.push(`Blend ${money(p.balanced)}`);
+  if(Number(p.aggressive || 0) > 0) parts.push(`Rocket ${money(p.aggressive)}`);
+  return parts.length ? parts.join(' • ') : 'None yet';
 }
 function getCreditTier(){
   const score = Number(state.credit || 650);
@@ -255,6 +273,22 @@ function getCreditTier(){
   if(score >= 640) return 'Building';
   if(score >= 580) return 'Watch';
   return 'At Risk';
+}
+function getCreditUnlocks(){
+  const score = Number(state.credit || 650);
+  const apartment = score >= 700 ? 'Unlocked' : `Need ${700-score} more`;
+  const car = score >= 660 ? 'Unlocked' : `Need ${660-score} more`;
+  const loan = score >= 620 ? 'Unlocked' : `Need ${620-score} more`;
+  ensureEliteState();
+  state.elite.creditAccess = { apartment:score >= 700, car:score >= 660, loan:score >= 620 };
+  return { apartment, car, loan, score };
+}
+function getJobCareerBranch(){
+  const job = (state.jobs && state.jobs[state.jobIndex]) || {};
+  const id = job.id || '';
+  if(['babysitting','pet','dogwalk'].includes(id)) return { key:'care', name:'Care Services', titles:['Neighborhood Helper','Trusted Care Pro','Senior Care Lead','Family Services Captain','Community Care Director','Youth Care Manager','Care Business Owner'], bonus:[15,20,25,30,35,40] };
+  if(['lawn','cars','chores','errands'].includes(id)) return { key:'ops', name:'Operations', titles:['Starter Worker','Route Runner','Shift Lead','Operations Captain','Service Manager','Field Director','Neighborhood Ops Owner'], bonus:[15,20,25,30,35,40] };
+  return { key:'specialist', name:'Creative & Academic', titles:['Starter Specialist','Skilled Builder','Lead Specialist','Program Captain','Studio Manager','Community Expert','Brand Owner'], bonus:[20,25,30,35,40,45] };
 }
 function getEliteEndingTrack(){
   ensureEliteState();
@@ -284,22 +318,38 @@ function getMonthlyActionPlan(snapshot){
 function applyEliteMarketCycle(monthName){
   ensureEliteState();
   if(!isEliteExperience()) return null;
-  const holdings = totalStockFunds();
-  if(holdings <= 0) return null;
-  const swings = [-0.12,-0.08,-0.05,0.04,0.07,0.1,0.14];
-  const pct = swings[Math.floor(Math.random()*swings.length)];
-  const delta = Math.round(holdings * pct);
-  state.elite.investments.stocks = Math.max(0, holdings + delta);
-  state.elite.investments.lastChange = delta;
-  state.elite.investments.history.push({ month: monthName || '', pct, delta, value: state.elite.investments.stocks });
+  const inv = state.elite.investments;
+  const ports = inv.portfolios || {conservative:0, balanced:0, aggressive:0};
+  const total = totalStockFunds();
+  if(total <= 0) return null;
+  const profiles = {
+    conservative:[-0.04,-0.02,-0.01,0.01,0.02,0.03,0.04],
+    balanced:[-0.08,-0.05,-0.02,0.03,0.05,0.08,0.1],
+    aggressive:[-0.16,-0.1,-0.06,0.05,0.1,0.14,0.18]
+  };
+  let delta = 0;
+  const lines = [];
+  ['conservative','balanced','aggressive'].forEach(key=>{
+    const amt = Number(ports[key] || 0);
+    if(amt <= 0) return;
+    const swings = profiles[key];
+    const pct = swings[Math.floor(Math.random()*swings.length)];
+    const change = Math.round(amt * pct);
+    ports[key] = Math.max(0, amt + change);
+    delta += change;
+    lines.push(`${key}: ${change >= 0 ? '+' : '-'}${money(Math.abs(change))} (${Math.round(pct*100)}%)`);
+  });
+  inv.stocks = Math.round(Number(ports.conservative||0)+Number(ports.balanced||0)+Number(ports.aggressive||0));
+  inv.lastChange = delta;
+  inv.history.push({ month: monthName || '', delta, value: inv.stocks, mix:getStockMixSummary() });
   if(delta >= 0){
-    state.credit = clamp(state.credit + (pct >= 0.1 ? 3 : 1), 300, 850);
-    addLedgerLine(`${monthName || 'Month'}: Stock market gain ${delta >= 0 ? '+' : ''}${money(delta)} (${Math.round(pct*100)}%)`);
-    return `Market gain: ${delta >= 0 ? '+' : ''}${money(delta)} (${Math.round(pct*100)}%)`;
+    state.credit = clamp(state.credit + (delta >= Math.round(total*0.08) ? 3 : 1), 300, 850);
+    addLedgerLine(`${monthName || 'Month'}: Stock market gain +${money(delta)} | ${lines.join(' | ')}`);
+    return `Market gain: +${money(delta)} | ${lines.join(' • ')}`;
   }
-  state.credit = clamp(state.credit - (pct <= -0.1 ? 4 : 2), 300, 850);
-  addLedgerLine(`${monthName || 'Month'}: Stock market swing ${delta >= 0 ? '+' : '-'}${money(Math.abs(delta))} (${Math.round(pct*100)}%)`);
-  return `Market swing: -${money(Math.abs(delta))} (${Math.round(pct*100)}%)`;
+  state.credit = clamp(state.credit - (delta <= -Math.round(total*0.08) ? 4 : 2), 300, 850);
+  addLedgerLine(`${monthName || 'Month'}: Stock market swing -${money(Math.abs(delta))} | ${lines.join(' | ')}`);
+  return `Market swing: -${money(Math.abs(delta))} | ${lines.join(' • ')}`;
 }
 function maybeAdvanceCareer(monthName){
   ensureEliteState();
@@ -307,17 +357,19 @@ function maybeAdvanceCareer(monthName){
   const health = Number((state.standardV1 && state.standardV1.healthScore) || computeFinancialHealth().score || 0);
   const saved = Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0) + totalStockFunds();
   const career = state.elite.career;
+  const branch = getJobCareerBranch();
+  career.branch = branch.name;
   const threshold = career.level * 120;
   if(health >= 68 && Number(state.credit || 650) >= 660 && saved >= threshold){
     career.level += 1;
     career.promotions += 1;
-    career.payBonus += 20;
-    state.plan.income += 20;
-    const titles = ['Starter Worker','Reliable Earner','Shift Lead','Team Captain','Money Planner','Future Manager','Community Builder'];
-    career.title = titles[Math.min(titles.length-1, career.level-1)] || `Level ${career.level}`;
-    career.history.push({ month: monthName || '', level: career.level, title: career.title });
-    addLedgerLine(`${monthName || 'Month'}: Career promotion → ${career.title} (+$20 monthly pay)`);
-    return `${career.title} unlocked. Monthly pay +$20.`;
+    const payRaise = branch.bonus[Math.min(branch.bonus.length-1, Math.max(0, career.level-2))] || 20;
+    career.payBonus += payRaise;
+    state.plan.income += payRaise;
+    career.title = branch.titles[Math.min(branch.titles.length-1, career.level-1)] || `Level ${career.level}`;
+    career.history.push({ month: monthName || '', level: career.level, title: career.title, branch:branch.name, payRaise });
+    addLedgerLine(`${monthName || 'Month'}: Career promotion → ${career.title} (${branch.name}) (+$${payRaise} monthly pay)`);
+    return `${career.title} unlocked in ${branch.name}. Monthly pay +$${payRaise}.`;
   }
   return null;
 }
@@ -328,11 +380,15 @@ function renderEliteOverview(){
   if(!isEliteExperience()) return;
   const career = state.elite.career;
   const endingTrack = getEliteEndingTrack();
+  const unlocks = getCreditUnlocks();
   if(document.getElementById('eliteCreditTier')) document.getElementById('eliteCreditTier').textContent = getCreditTier();
   if(document.getElementById('eliteCareerPath')) document.getElementById('eliteCareerPath').textContent = career.title || 'Starter Worker';
   if(document.getElementById('eliteCareerLevel')) document.getElementById('eliteCareerLevel').textContent = `Lv ${career.level || 1}`;
   if(document.getElementById('eliteStockValue')) document.getElementById('eliteStockValue').textContent = money(totalStockFunds());
   if(document.getElementById('eliteEndingTrack')) document.getElementById('eliteEndingTrack').textContent = endingTrack;
+  if(document.getElementById('eliteStockMix')) document.getElementById('eliteStockMix').textContent = getStockMixSummary();
+  if(document.getElementById('eliteCreditUnlocks')) document.getElementById('eliteCreditUnlocks').textContent = `Apt: ${unlocks.apartment} • Car: ${unlocks.car} • Loan: ${unlocks.loan}`;
+  if(document.getElementById('eliteCareerBranch')) document.getElementById('eliteCareerBranch').textContent = career.branch || getJobCareerBranch().name;
   const latestPlan = (state.standardV1.actionPlans || []).slice(-1)[0] || getMonthlyActionPlan({});
   if(document.getElementById('eliteActionPlan')) document.getElementById('eliteActionPlan').textContent = latestPlan;
 }
@@ -5382,16 +5438,56 @@ function nextWeek(){
         const ending = getEliteEndingTrack();
         state.elite.endings.final = ending;
         const career = state.elite.career || { level:1, title:'Starter Worker' };
-        openModal({
-          title:'🏁 Elite Year Ending',
-          meta:'Your full year result',
-          body:`Ending: ${ending}
-Career: ${career.title} (Level ${career.level || 1})
-Credit: ${state.credit}
-Stocks: ${money(totalStockFunds())}
+        const unlocks = getCreditUnlocks();
+        const endingScenes = {
+          '💎 Wealth Builder': {
+            title:'💎 Elite Ending: Wealth Builder',
+            meta:'You finished strong',
+            body:`You built a sturdy money tower this year.
+
+Career: ${career.title} (${career.branch || getJobCareerBranch().name})
+Credit: ${state.credit} (${getCreditTier()})
+Investments: ${money(totalStockFunds())} | ${getStockMixSummary()}
 Savings: ${money(Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0))}
+Credit Unlocks: Apartment ${unlocks.apartment} • Car ${unlocks.car} • Loan ${unlocks.loan}
+
+You finished with options, not just survival.`,
+            kind:'success'
+          },
+          '🚨 Financially Struggling': {
+            title:'🚨 Elite Ending: Financially Struggling',
+            meta:'A tough year, but readable',
+            body:`This year squeezed you hard, but the score tells a story you can learn from.
+
+Career: ${career.title} (${career.branch || getJobCareerBranch().name})
+Credit: ${state.credit} (${getCreditTier()})
+Investments: ${money(totalStockFunds())} | ${getStockMixSummary()}
+Savings: ${money(Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0))}
+Credit Unlocks: Apartment ${unlocks.apartment} • Car ${unlocks.car} • Loan ${unlocks.loan}
 
 Action Plan: ${getMonthlyActionPlan({})}`,
+            kind:'danger'
+          },
+          '⚖️ Survivor': {
+            title:'⚖️ Elite Ending: Survivor',
+            meta:'You stayed standing',
+            body:`You kept the machine running and learned where pressure shows up.
+
+Career: ${career.title} (${career.branch || getJobCareerBranch().name})
+Credit: ${state.credit} (${getCreditTier()})
+Investments: ${money(totalStockFunds())} | ${getStockMixSummary()}
+Savings: ${money(Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0))}
+Credit Unlocks: Apartment ${unlocks.apartment} • Car ${unlocks.car} • Loan ${unlocks.loan}
+
+Action Plan: ${getMonthlyActionPlan({})}`,
+            kind:'primary'
+          }
+        };
+        const scene = endingScenes[ending] || endingScenes['⚖️ Survivor'];
+        openModal({
+          title:scene.title,
+          meta:scene.meta,
+          body:scene.body,
           buttons:[{id:'ok', label:'View Final Budget Sheet', kind:'primary'}],
           onPick:()=>{
             setTimeout(()=>{
@@ -5609,7 +5705,7 @@ Your balances:
           showDecisionBadge(`Risk layer active: stock index +${money(25)}`);
           showBanner('$25 moved into stock index');
           renderHeader();
-          queueDecisionReflection({ type:'save', title:'Stock Choice', label:'Moved $25 to stock index', summary:'You chose a risk-and-reward investment.', amount:25 });
+          queueDecisionReflection({ type:'save', title:'Stock Choice', label:'Moved $25 to Blend ETF', summary:'You chose a risk-and-reward investment.', amount:25 });
           if(onDone) onDone();
         });
       } else if(id === "cd3" || id === "cd6"){
@@ -5694,7 +5790,11 @@ function openInvestmentChoiceModal(amount, label, onDone){
   const buttons = [
     {id:"hysa", label:`HYSA (4% APR) • ${money(amount)}`, kind:"success"}
   ];
-  if(isEliteExperience()) buttons.push({id:"stock", label:`Stock Index (risk/reward) • ${money(amount)}`, kind:"warn"});
+  if(isEliteExperience()){
+    buttons.push({id:"stockSafe", label:`Shield Fund (lower risk) • ${money(amount)}`, kind:"warn"});
+    buttons.push({id:"stockBlend", label:`Blend ETF (medium risk) • ${money(amount)}`, kind:"warn"});
+    buttons.push({id:"stockGrowth", label:`Rocket Growth (high risk) • ${money(amount)}`, kind:"warn"});
+  }
   if(monthsRemaining >= 3) buttons.push({id:"cd3", label:`3-Month CD (4.0%) • ${money(amount)}`, kind:"primary"});
   if(monthsRemaining >= 6) buttons.push({id:"cd6", label:`6-Month CD (4.5%) • ${money(amount)}`, kind:"primary"});
   buttons.push({id:"cancel", label:"Cancel", kind:"secondary"});
@@ -5718,17 +5818,21 @@ function openInvestmentChoiceModal(amount, label, onDone){
         if(onDone) onDone(`Invested ${money(amount)} into HYSA`);
         return;
       }
-      if(id==="stock"){
+      if(id==="stockSafe" || id==="stockBlend" || id==="stockGrowth"){
         ensureEliteState();
-        state.elite.investments.stocks += amount;
+        const map = { stockSafe:'conservative', stockBlend:'balanced', stockGrowth:'aggressive' };
+        const names = { conservative:'Shield Fund', balanced:'Blend ETF', aggressive:'Rocket Growth' };
+        const key = map[id];
+        state.elite.investments.portfolios[key] = Number(state.elite.investments.portfolios[key] || 0) + amount;
+        state.elite.investments.stocks = totalStockFunds();
         state.elite.investments.costBasis += amount;
-        state.elite.investments.history.push({ month: weekToMonthName(state.weekEngine ? state.weekEngine.week : 1), delta: amount, type:'buy' });
-        state.credit = clamp(state.credit + 2, 300, 850);
-        addLedgerLine(`${label} invested: ${money(amount)} into Stock Index`);
+        state.elite.investments.history.push({ month: weekToMonthName(state.weekEngine ? state.weekEngine.week : 1), delta: amount, type:'buy', lane:key });
+        state.credit = clamp(state.credit + (key==='aggressive' ? 1 : key==='balanced' ? 2 : 3), 300, 850);
+        addLedgerLine(`${label} invested: ${money(amount)} into ${names[key]}`);
         renderHeader();
         renderSheet();
         renderCDStatus();
-        if(onDone) onDone(`Invested ${money(amount)} into Stock Index`);
+        if(onDone) onDone(`Invested ${money(amount)} into ${names[key]}`);
         return;
       }
 
