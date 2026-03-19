@@ -1,2352 +1,1027 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WGLT Budget Boss Jr. 🌟</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
-<style>
-/* ── RESET & BASE ─────────────────────────────────────────────── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --sun:    #FFB800;
-  --sun-lt: #FFF3CC;
-  --sky:    #4AABDB;
-  --sky-lt: #DFF3FB;
-  --grass:  #5DBB63;
-  --grass-lt:#E6F5E7;
-  --coral:  #F4633A;
-  --coral-lt:#FDE9E3;
-  --purple: #7B5EA7;
-  --purple-lt:#EDE7F6;
-  --mint:   #2CC4A0;
-  --mint-lt:#E0F7F2;
-  --cream:  #FFFBF0;
-  --ink:    #2C3E50;
-  --ink-lt: #5A6B7A;
-  --white:  #FFFFFF;
-  --shadow: 0 4px 16px rgba(44,62,80,.12);
-  --shadow-lg: 0 8px 32px rgba(44,62,80,.18);
-  --radius: 20px;
-  --radius-sm: 12px;
-}
-body{
-  font-family:'Nunito',sans-serif;
-  background:var(--cream);
-  color:var(--ink);
-  min-height:100vh;
-  overflow-x:hidden;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WGLT Budget Boss Simulator (Year Mission + Ledger)</title>
 
-/* ── BACKGROUND CLOUDS ────────────────────────────────────────── */
-.bg-clouds{
-  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
-}
-.cloud{
-  position:absolute;border-radius:50px;background:white;opacity:.55;
-  animation:drift linear infinite;
-}
-.cloud::before,.cloud::after{content:'';position:absolute;background:white;border-radius:50%;}
-.cloud-1{width:120px;height:40px;top:8%;animation-duration:28s;animation-delay:-5s;}
-.cloud-1::before{width:60px;height:60px;top:-30px;left:15px;}
-.cloud-1::after{width:40px;height:40px;top:-20px;left:50px;}
-.cloud-2{width:180px;height:50px;top:20%;animation-duration:36s;animation-delay:-12s;}
-.cloud-2::before{width:80px;height:80px;top:-40px;left:20px;}
-.cloud-2::after{width:55px;height:55px;top:-25px;left:75px;}
-.cloud-3{width:100px;height:35px;top:60%;animation-duration:22s;animation-delay:-8s;}
-.cloud-3::before{width:50px;height:50px;top:-25px;left:10px;}
-.cloud-3::after{width:35px;height:35px;top:-18px;left:45px;}
-@keyframes drift{from{left:-200px}to{left:calc(100vw + 200px)}}
+  <style>
+    :root{
+      --primary:#1f7ae0; --primary2:#0b57d0;
+      --success:#1fa971; --warning:#f4c542; --danger:#e74c3c;
+      --ink:#223041; --muted:#6b7787;
+      --bg:#f5f7fb; --card:#ffffff; --line:#d9e1ef;
+      --shadow:0 10px 25px rgba(20,40,70,.12);
+      --radius:18px;
 
-/* ── APP SHELL ────────────────────────────────────────────────── */
-#app{
-  position:relative;z-index:1;
-  max-width:860px;margin:0 auto;
-  padding:16px;
-}
+      /* ===== Watermark controls =====
+         1) Upload your PNG to Wix Media and paste the URL below.
+         2) Tweak opacity/size if needed. */
+      --wm-url: url("https://static.wixstatic.com/media/80a41b_6d83951403394d179c4ac2403e567c8d~mv2.png");
+      --wm-opacity: .06;     /* 0.04–0.10 */
+      --wm-size: 92%;        /* 70%–110% */
+    }
 
-/* ── HEADER ───────────────────────────────────────────────────── */
-.app-header{
-  background:linear-gradient(135deg,var(--sky) 0%,var(--purple) 100%);
-  border-radius:var(--radius);
-  padding:18px 28px;
-  display:flex;align-items:center;gap:16px;
-  box-shadow:var(--shadow-lg);
-  margin-bottom:20px;
-}
-.header-logo{font-size:2.8rem;line-height:1;}
-.header-text h1{
-  font-family:'Fredoka One',sans-serif;
-  font-size:1.8rem;color:white;letter-spacing:.5px;line-height:1;
-}
-.header-text p{color:rgba(255,255,255,.85);font-size:.85rem;font-weight:600;}
-.header-stats{
-  margin-left:auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end;
-}
-.stat-pill{
-  background:rgba(255,255,255,.22);
-  border:2px solid rgba(255,255,255,.35);
-  border-radius:50px;
-  padding:6px 16px;
-  display:flex;flex-direction:column;align-items:center;
-  min-width:72px;
-}
-.stat-pill .label{color:rgba(255,255,255,.8);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
-.stat-pill .value{color:white;font-size:1.1rem;font-weight:900;}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Comic Sans MS", cursive;
+      background:transparent;
+      color:var(--ink);
+      padding:14px;
+      display:flex;
+      justify-content:center;
+    }
 
-/* ── PROGRESS BAR ─────────────────────────────────────────────── */
-.week-progress{
-  background:white;border-radius:var(--radius);
-  padding:14px 20px;
-  box-shadow:var(--shadow);
-  margin-bottom:20px;
-  display:flex;align-items:center;gap:14px;
-}
-.week-label{font-weight:800;font-size:.95rem;white-space:nowrap;min-width:100px;}
-.progress-track{
-  flex:1;height:20px;background:#EEE;border-radius:50px;overflow:hidden;
-}
-.progress-fill{
-  height:100%;border-radius:50px;
-  background:linear-gradient(90deg,var(--grass),var(--sun));
-  transition:width .6s cubic-bezier(.34,1.56,.64,1);
-  position:relative;
-}
-.progress-fill::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(255,255,255,.3) 0%,transparent 100%);
-  border-radius:50px;
-}
-.progress-emoji{font-size:1.2rem;}
+    .app{
+      width:100%;
+      max-width:1180px;
+      background:var(--card);
+      border:3px solid var(--primary);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
 
-/* ── SCREENS ──────────────────────────────────────────────────── */
-.screen{display:none;}
-.screen.active{display:block;animation:fadeUp .35s ease both;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+    /* ===== Watermark placement (best readability) =====
+       We put the watermark on the non-card "background areas" (header + main),
+       so your content cards stay crisp and readable. */
+    header, main { position:relative; }
+    header::before,
+main::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image: url("https://static.wixstatic.com/media/80a41b_6d83951403394d179c4ac2403e567c8d~mv2.png");
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size: cover;       /* <- fills whole space */
+  opacity: .06;                 /* adjust: .04 to .10 */
+  pointer-events:none;
+  z-index:0;
+  mix-blend-mode:multiply;
+  filter: grayscale(1) contrast(1.05);
+}
+    /* keep content above watermark */
+    header > *, main > * { position:relative; z-index:1; }
 
-/* ── WELCOME SCREEN ───────────────────────────────────────────── */
-.welcome-hero{
-  text-align:center;
-  background:linear-gradient(160deg,var(--sun-lt) 0%,var(--sky-lt) 100%);
-  border-radius:var(--radius);
-  padding:40px 30px;
-  box-shadow:var(--shadow);
-  margin-bottom:24px;
-}
-.welcome-hero .big-emoji{font-size:5rem;display:block;margin-bottom:12px;animation:bounce 2s ease infinite;}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.welcome-hero h2{
-  font-family:'Fredoka One',sans-serif;
-  font-size:2.2rem;color:var(--ink);margin-bottom:8px;
-}
-.welcome-hero p{font-size:1.05rem;color:var(--ink-lt);font-weight:600;max-width:520px;margin:0 auto;}
+    header{
+      padding:14px 14px 10px;
+      background:linear-gradient(180deg,#f0f6ff, #ffffff);
+      border-bottom:1px solid var(--line);
+    }
+    .toprow{
+      display:flex; flex-wrap:wrap; gap:10px;
+      align-items:center; justify-content:space-between;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:900; letter-spacing:.2px; font-size:18px;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid var(--line); background:#fff;
+      font-weight:800; font-size:13px;
+    }
+    .money{ color:var(--success); font-weight:1000; }
+    .credit{ color:#7a3df0; font-weight:1000; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .toggle{
+      display:flex; gap:8px; align-items:center;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--line); background:#fff;
+      user-select:none; font-size:13px; font-weight:900;
+    }
+    .toggle input{ accent-color: var(--primary); }
 
-.job-picker{
-  display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;
-}
-.job-card{
-  background:white;border-radius:var(--radius);
-  padding:28px 20px;text-align:center;
-  cursor:pointer;
-  border:4px solid transparent;
-  box-shadow:var(--shadow);
-  transition:transform .2s,border-color .2s,box-shadow .2s;
-  position:relative;overflow:hidden;
-}
-.job-card::before{
-  content:'';position:absolute;inset:0;
-  opacity:0;transition:opacity .2s;
-}
-.job-card.lemon::before{background:linear-gradient(135deg,#FFF8DC,#FFF3CC);}
-.job-card.yard::before{background:linear-gradient(135deg,#E6F5E7,#D4EDD6);}
-.job-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
-.job-card.selected{border-color:var(--sun);box-shadow:0 0 0 4px rgba(255,184,0,.25),var(--shadow-lg);}
-.job-card.selected.yard{border-color:var(--grass);box-shadow:0 0 0 4px rgba(93,187,99,.25),var(--shadow-lg);}
-.job-card .emoji{font-size:3.5rem;display:block;margin-bottom:10px;position:relative;z-index:1;}
-.job-card h3{font-family:'Fredoka One',sans-serif;font-size:1.4rem;margin-bottom:4px;position:relative;z-index:1;}
-.job-card .pay{font-size:.9rem;font-weight:700;position:relative;z-index:1;}
-.job-card.lemon h3{color:var(--sun);}
-.job-card.lemon .pay{color:#B8860B;}
-.job-card.yard h3{color:var(--grass);}
-.job-card.yard .pay{color:#3A7D3F;}
-.job-card .check{
-  position:absolute;top:12px;right:12px;
-  width:28px;height:28px;border-radius:50%;
-  display:none;align-items:center;justify-content:center;
-  font-size:1rem;color:white;font-weight:900;
-}
-.job-card.lemon .check{background:var(--sun);}
-.job-card.yard .check{background:var(--grass);}
-.job-card.chores .check{background:#C0478A;}
-.job-card.errands .check{background:#2980B9;}
-.job-card.chores::before{background:linear-gradient(135deg,#FCE4F0,#F9D0E6);}
-.job-card.errands::before{background:linear-gradient(135deg,#E3F2FD,#BBDEFB);}
-.job-card.chores h3{color:#C0478A;}
-.job-card.chores .pay{color:#8B2E62;}
-.job-card.errands h3{color:#2980B9;}
-.job-card.errands .pay{color:#1A5276;}
-.job-card.selected.chores{border-color:#C0478A;box-shadow:0 0 0 4px rgba(192,71,138,.25),var(--shadow-lg);}
-.job-card.selected.errands{border-color:#2980B9;box-shadow:0 0 0 4px rgba(41,128,185,.25),var(--shadow-lg);}
-.job-card.selected .check{display:flex;}
+    .btn{
+      border:none; border-radius:14px;
+      padding:10px 12px;
+      font-weight:1000; cursor:pointer;
+      box-shadow:0 5px 0 rgba(0,0,0,.1);
+      transition:transform .08s ease;
+      background:var(--primary); color:#fff;
+      font-size:13px; white-space:nowrap;
+    }
+    .btn:active{ transform: translateY(3px); box-shadow:none; }
+    .btn.secondary{ background:#edf3ff; color:var(--ink); border:1px solid var(--line); box-shadow:none; }
+    .btn.warn{ background:var(--warning); color:var(--ink); }
+    .btn.danger{ background:var(--danger); }
+    .btn.success{ background:var(--success); }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; box-shadow:none; transform:none; }
 
-/* ── CAUSE PICKER ─────────────────────────────────────────────── */
-.cause-section{
-  background:white;border-radius:var(--radius);padding:24px;
-  box-shadow:var(--shadow);margin-bottom:24px;
-}
-.cause-section h3{
-  font-family:'Fredoka One',sans-serif;font-size:1.3rem;
-  color:var(--purple);margin-bottom:6px;
-}
-.cause-section p{font-size:.9rem;color:var(--ink-lt);margin-bottom:14px;font-weight:600;}
-.cause-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.cause-btn{
-  background:var(--purple-lt);border:3px solid transparent;
-  border-radius:var(--radius-sm);padding:12px 8px;text-align:center;
-  cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif;
-}
-.cause-btn:hover{transform:scale(1.05);}
-.cause-btn.selected{border-color:var(--purple);background:var(--purple);color:white;}
-.cause-btn .c-emoji{font-size:1.8rem;display:block;margin-bottom:4px;}
-.cause-btn .c-name{font-size:.75rem;font-weight:800;}
+    /* Progress bar */
+    .missionbar{
+      margin-top:10px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+    }
+    .missionbar .label{ font-weight:1000; font-size:13px; }
+    .barwrap{
+      flex:1; min-width:260px;
+      height:12px; background:#eef2fb;
+      border-radius:999px; border:1px solid var(--line);
+      overflow:hidden;
+    }
+    .barfill{
+      height:100%; width:0%;
+      background:linear-gradient(90deg, var(--primary), #35c2ff);
+      border-radius:999px;
+      transition:width .25s ease;
+    }
+    .stepmeta{ font-weight:900; font-size:12px; color:var(--muted); }
 
-/* ── SAVINGS GOAL ─────────────────────────────────────────────── */
-.goal-section{
-  background:white;border-radius:var(--radius);padding:24px;
-  box-shadow:var(--shadow);margin-bottom:24px;
-}
-.goal-section h3{font-family:'Fredoka One',sans-serif;font-size:1.3rem;color:var(--coral);margin-bottom:6px;}
-.goal-section p{font-size:.9rem;color:var(--ink-lt);margin-bottom:14px;font-weight:600;}
-.goal-options{display:flex;gap:12px;}
-.goal-btn{
-  flex:1;background:var(--coral-lt);border:3px solid transparent;
-  border-radius:var(--radius-sm);padding:14px 8px;text-align:center;
-  cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif;
-}
-.goal-btn:hover{transform:scale(1.04);}
-.goal-btn.selected{border-color:var(--coral);background:var(--coral);color:white;}
-.goal-btn .g-amount{font-size:1.5rem;font-weight:900;display:block;}
-.goal-btn .g-label{font-size:.8rem;font-weight:700;}
+    main{
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:12px;
+      padding:12px;
+      background:var(--bg);
+    }
+    @media (max-width: 1000px){ main{ grid-template-columns:1fr; } }
 
-.start-btn{
-  display:block;width:100%;
-  background:linear-gradient(135deg,var(--grass),var(--mint));
-  color:white;border:none;border-radius:50px;
-  font-family:'Fredoka One',sans-serif;font-size:1.5rem;
-  padding:16px;cursor:pointer;letter-spacing:.5px;
-  box-shadow:0 6px 20px rgba(93,187,99,.4);
-  transition:transform .15s,box-shadow .15s;
-}
-.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(93,187,99,.5);}
-.start-btn:active{transform:translateY(0);}
-.start-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+    .card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:0 6px 18px rgba(25,45,80,.06);
+      overflow:hidden;
+    }
+    .card h3{
+      margin:0; padding:12px 12px 10px;
+      border-bottom:1px solid var(--line);
+      font-size:14px; letter-spacing:.2px;
+    }
+    .card .body{ padding:12px; }
+    .muted{ color:var(--muted); font-size:12px; line-height:1.35; }
 
-.jr-reset-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
-.jr-mini-btn{border:none;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer;box-shadow:var(--shadow);}
-.jr-mini-btn.reset{background:#fff7e8;color:#9a5a00;}
-.jr-mini-btn.clear{background:#ffe9ec;color:#a12b41;}
+    /* Tabs */
+    .tabs{
+      display:flex; gap:8px; flex-wrap:wrap;
+      padding:10px 12px; border-bottom:1px solid var(--line);
+      background:#fff;
+    }
+    .tab{
+      padding:9px 11px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-weight:1000; font-size:12px;
+      cursor:pointer; user-select:none;
+    }
+    .tab.active{
+      background:linear-gradient(180deg,#e9f2ff,#ffffff);
+      border-color:#bcd3ff;
+      color:var(--primary2);
+    }
+    .panel{ display:none; }
+    .panel.active{ display:block; }
 
-/* ── MAIN GAME SCREEN ─────────────────────────────────────────── */
-.game-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+    /* Fields */
+    .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .field{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px;
+      background:#fff;
+    }
+    .field .name{ font-weight:1000; font-size:12px; color:var(--muted); }
+    .field .value{ font-weight:1100; font-size:18px; margin-top:4px; }
+    .field .def{ margin-top:6px; font-size:11px; color:var(--muted); font-weight:800; }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+    .chip{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:999px;
+      padding:7px 10px;
+      font-weight:1000;
+      cursor:pointer;
+      font-size:12px;
+      user-select:none;
+    }
+    .chip:active{ transform:translateY(1px); }
+    .minirow{ display:flex; gap:8px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+    .minirow .btn{ padding:8px 10px; border-radius:12px; font-size:12px; }
 
-/* ── JAR PANEL ────────────────────────────────────────────────── */
-.jar-panel{
-  background:white;border-radius:var(--radius);
-  padding:20px;box-shadow:var(--shadow);
-}
-.jar-panel h3{
-  font-family:'Fredoka One',sans-serif;font-size:1.1rem;
-  color:var(--ink-lt);margin-bottom:16px;text-align:center;
-}
-.jars{display:flex;gap:12px;justify-content:center;align-items:flex-end;}
-.jar-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;}
-.jar-label{
-  min-height:44px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-end;
-  text-align:center;
-  font-size:.75rem;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-  line-height:1.1;
-}
-.jar-label-text{display:block;}
-.jar-label .term-link{margin-top:4px;}
-.jar-label-empty{display:block;height:20px;}
-.jar-container{
-  width:64px;height:90px;
-  border-radius:0 0 14px 14px;
-  border:3px solid;
-  position:relative;overflow:hidden;
-  background:rgba(255,255,255,.6);
-}
-.jar-fill{
-  position:absolute;bottom:0;left:0;right:0;
-  transition:height .7s cubic-bezier(.34,1.56,.64,1);
-  border-radius:0 0 10px 10px;
-}
-.jar-amount{font-size:.95rem;font-weight:900;}
-.jar-spend .jar-label,.jar-spend .jar-amount{color:var(--coral);}
-.jar-spend .jar-container{border-color:var(--coral);}
-.jar-spend .jar-fill{background:linear-gradient(180deg,rgba(244,99,58,.7),rgba(244,99,58,.9));}
-.jar-save .jar-label,.jar-save .jar-amount{color:var(--grass);}
-.jar-save .jar-container{border-color:var(--grass);}
-.jar-save .jar-fill{background:linear-gradient(180deg,rgba(93,187,99,.7),rgba(93,187,99,.9));}
-.jar-share .jar-label,.jar-share .jar-amount{color:var(--purple);}
-.jar-share .jar-container{border-color:var(--purple);}
-.jar-share .jar-fill{background:linear-gradient(180deg,rgba(123,94,167,.7),rgba(123,94,167,.9));}
+    /* Glow (used for BOTH buttons + tabs) */
+    .glow{
+      border-radius:16px;
+      animation: glowPulse 1.1s ease-in-out infinite;
+    }
+    .tab.glow{ border-radius:999px; } /* tab-friendly glow */
+    @keyframes glowPulse{
+      0%{ box-shadow:0 0 0 0 rgba(53,194,255,.0), 0 0 0 0 rgba(31,122,224,.0); }
+      35%{ box-shadow:0 0 0 4px rgba(53,194,255,.20), 0 0 0 12px rgba(31,122,224,.12); }
+      100%{ box-shadow:0 0 0 0 rgba(53,194,255,.0), 0 0 0 0 rgba(31,122,224,.0); }
+    }
+    /* Green pulse for the ONE next required action button */
+    .glow-next{
+      border-radius:16px;
+      animation: glowNextPulse 1.1s ease-in-out infinite;
+    }
+    @keyframes glowNextPulse{
+      0%{ box-shadow:0 0 0 0 rgba(34,197,94,.0), 0 0 0 0 rgba(22,163,74,.0); }
+      35%{ box-shadow:0 0 0 5px rgba(34,197,94,.35), 0 0 0 14px rgba(22,163,74,.18); }
+      100%{ box-shadow:0 0 0 0 rgba(34,197,94,.0), 0 0 0 0 rgba(22,163,74,.0); }
+    }
 
-/* Jar shine */
-.jar-container::after{
-  content:'';position:absolute;top:0;left:6px;
-  width:10px;bottom:0;
-  background:linear-gradient(90deg,rgba(255,255,255,.45),transparent);
-  border-radius:0 0 0 6px;pointer-events:none;
-}
+    /* Banner */
+    .banner{
+      position:fixed; left:50%; top:18px; transform:translateX(-50%);
+      background:#ffffff; border:1px solid var(--line);
+      border-radius:999px; padding:10px 14px;
+      box-shadow:var(--shadow);
+      font-weight:1100; z-index:999;
+      display:none; gap:10px; align-items:center;
+    }
+    .banner.show{ display:flex; }
+    .banner .ok{ color:var(--success); }
+    .decision-badge{position:fixed;top:72px;right:16px;z-index:52;display:none;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(0,0,0,.88);border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 28px rgba(0,0,0,.35);font-weight:800;font-size:13px;color:#fff;transform:translateY(-4px);opacity:0;transition:opacity .18s ease, transform .18s ease;}
+    .decision-badge.show{opacity:1;transform:translateY(0);}
+    .decision-badge .icon{font-size:16px;}
+    @media (max-width:700px){.decision-badge{left:12px;right:12px;top:66px;justify-content:center;font-size:12px;padding:10px 12px;}}
 
-.jar-coins{
-  font-size:.6rem;position:absolute;
-  animation:coinFall .8s ease forwards;
-  top:-20px;left:50%;transform:translateX(-50%);
-}
-@keyframes coinFall{from{top:-10px;opacity:1}to{top:80%;opacity:0}}
-@keyframes jarPulse{0%{transform:translateY(0);box-shadow:0 0 0 rgba(0,0,0,0)}35%{transform:translateY(-2px);box-shadow:0 0 18px rgba(255,255,255,.55)}100%{transform:translateY(0);box-shadow:0 0 0 rgba(0,0,0,0)}}
-.jar-fill.jar-pulse{animation:jarPulse .65s ease;}
-.jar-delta-pop{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-weight:1000;font-size:.9rem;pointer-events:none;animation:jarDeltaRise .95s ease forwards;text-shadow:0 2px 6px rgba(255,255,255,.55);}
-.jar-delta-pop.plus{color:#16a34a;}
-.jar-delta-pop.minus{color:#dc2626;}
-@keyframes jarDeltaRise{0%{opacity:0;transform:translate(-50%,6px) scale(.9);}15%{opacity:1;}100%{opacity:0;transform:translate(-50%,-26px) scale(1.06);}}
+    /* Modal */
+    .overlay{
+      position:fixed; inset:0;
+      background:rgba(20,30,50,.45);
+      display:none; z-index:1000;
+      align-items:center; justify-content:center;
+      padding:14px;
+    }
+    .overlay.show{ display:flex; }
+    .modal{
+      width:min(820px, 100%);
+      max-height:min(88vh, 820px);
+      background:#fff;
+      border-radius:22px;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .modal .mhead{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#f0f6ff,#ffffff);
+    }
+    .modal .mtitle{ font-weight:1100; font-size:16px; }
+    .modal .mmeta{ margin-top:4px; font-weight:900; font-size:12px; color:var(--muted); }
+    .modal .mbody{ padding:14px; white-space:pre-line; font-weight:900; color:var(--ink); line-height:1.35; overflow-y:auto; -webkit-overflow-scrolling:touch; flex:1 1 auto; }
+    .modal .mfoot{
+      padding:12px 14px; border-top:1px solid var(--line);
+      display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;
+    }
 
-/* Savings goal bar */
-.goal-progress{
-  margin-top:16px;
-  background:var(--grass-lt);border-radius:var(--radius-sm);
-  padding:12px;
-}
-.goal-progress-label{
-  display:flex;justify-content:space-between;
-  font-size:.8rem;font-weight:800;color:var(--grass);
-  margin-bottom:6px;
-}
-.goal-track{height:16px;background:rgba(93,187,99,.2);border-radius:50px;overflow:hidden;}
-.goal-fill{
-  height:100%;border-radius:50px;
-  background:linear-gradient(90deg,var(--grass),var(--mint));
-  transition:width .8s cubic-bezier(.34,1.56,.64,1);
-}
+    .log{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-weight:900;
+      color:var(--muted);
+      font-size:12px;
+      min-height:56px;
+      white-space:pre-line;
+    }
+    .lockhint{
+      margin-top:8px; padding:10px 12px;
+      border-radius:14px;
+      border:1px dashed #bcd3ff;
+      background:#f3f8ff;
+      font-size:12px;
+      font-weight:900;
+      color:#234;
+      display:none;
+    }
+    .lockhint.show{ display:block; }
 
-/* ── LEDGER PANEL ─────────────────────────────────────────────── */
-.ledger-panel{
-  background:white;border-radius:var(--radius);
-  padding:20px;box-shadow:var(--shadow);
-  display:flex;flex-direction:column;
-}
-.ledger-panel h3{
-  font-family:'Fredoka One',sans-serif;font-size:1.1rem;
-  color:var(--ink-lt);margin-bottom:12px;
-}
-.ledger-entries{
-  flex:1;overflow-y:auto;max-height:260px;
-  display:flex;flex-direction:column;gap:6px;
-}
-.ledger-entry{
-  display:flex;align-items:center;gap:8px;
-  background:var(--cream);border-radius:var(--radius-sm);
-  padding:8px 10px;font-size:.8rem;
-  animation:slideIn .3s ease;
-}
-@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
-.ledger-entry .l-emoji{font-size:1rem;flex-shrink:0;}
-.ledger-entry .l-text{flex:1;font-weight:600;color:var(--ink);}
-.ledger-entry .l-amount{font-weight:900;white-space:nowrap;}
-.ledger-entry.income .l-amount{color:var(--grass);}
-.ledger-entry.expense .l-amount{color:var(--coral);}
-.ledger-entry.save .l-amount{color:var(--grass);}
-.ledger-entry.share .l-amount{color:var(--purple);}
-.ledger-entry.event .l-amount{color:var(--sky);}
 
-/* ── CHOICE CARD ──────────────────────────────────────────────── */
-.choice-card{
-  background:white;border-radius:var(--radius);
-  padding:28px 24px;box-shadow:var(--shadow-lg);
-  margin-bottom:20px;
-  border-top:6px solid var(--sun);
-  animation:popIn .4s cubic-bezier(.34,1.56,.64,1);
-}
-@keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
-.choice-week-badge{
-  display:inline-block;
-  background:var(--sun);color:var(--ink);
-  font-size:.75rem;font-weight:900;
-  border-radius:50px;padding:4px 14px;margin-bottom:14px;
-  text-transform:uppercase;letter-spacing:.5px;
-}
-.choice-scenario{
-  font-size:1.1rem;font-weight:700;line-height:1.5;
-  margin-bottom:6px;color:var(--ink);
-}
-.choice-scenario .big-emoji{font-size:2rem;display:block;margin-bottom:8px;}
-.choice-question{
-  font-size:.9rem;color:var(--ink-lt);font-weight:600;margin-bottom:18px;
-}
-.choice-options{display:flex;flex-direction:column;gap:10px;}
-.choice-opt{
-  display:flex;align-items:center;gap:12px;
-  background:var(--cream);border:3px solid transparent;
-  border-radius:var(--radius-sm);padding:12px 16px;
-  cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif;
-  text-align:left;width:100%;
-}
-.choice-opt:hover{border-color:var(--sky);background:var(--sky-lt);transform:translateX(4px);}
-.choice-opt .opt-emoji{font-size:1.5rem;flex-shrink:0;}
-.choice-opt .opt-text{flex:1;font-weight:700;font-size:.95rem;}
-.choice-opt .opt-effect{font-size:.8rem;color:var(--ink-lt);font-weight:600;}
+    @media (max-width: 700px){
+      .overlay{ padding:10px; align-items:center; }
+      .modal{ width:100%; max-height:88vh; border-radius:18px; }
+      .modal .mhead{ padding:12px 12px 8px; }
+      .modal .mbody{ padding:12px; font-size:14px; line-height:1.4; }
+      .modal .mfoot{ padding:10px 12px; }
+    }
 
-/* ── CONSEQUENCE TOAST ────────────────────────────────────────── */
-.consequence-banner{
-  background:var(--purple);color:white;
-  border-radius:var(--radius);padding:16px 20px;
-  margin-bottom:16px;display:flex;align-items:center;gap:14px;
-  animation:slideDown .4s cubic-bezier(.34,1.56,.64,1);
-  box-shadow:var(--shadow);
-}
-@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
-.consequence-banner .c-emoji{font-size:2rem;}
-.consequence-banner .c-text{flex:1;}
-.consequence-banner .c-title{font-weight:900;font-size:1rem;margin-bottom:2px;}
-.consequence-banner .c-body{font-size:.85rem;opacity:.9;}
+    .choice-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-top:10px; }
+    .choice-btn{ border:2px solid var(--line); border-radius:16px; padding:12px; background:#fff; cursor:pointer; text-align:left; font-weight:900; box-shadow:0 4px 12px rgba(20,40,70,.06); }
+    .choice-btn small{ display:block; color:var(--muted); font-weight:800; margin-top:4px; line-height:1.3; }
+    .choice-btn.selected{ border-color:var(--primary); background:#edf3ff; box-shadow:0 0 0 3px rgba(31,122,224,.14); }
+    .done-ready{ animation: glowNextPulse 1.1s ease-in-out infinite; }
+    .impact-box{ margin-top:10px; padding:10px 12px; border-radius:14px; border:1px solid var(--line); background:#f8fbff; font-weight:900; font-size:12px; color:var(--ink); white-space:pre-line; }
 
-/* ── NEXT WEEK BUTTON ─────────────────────────────────────────── */
-.next-btn{
-  display:block;width:100%;
-  background:linear-gradient(135deg,var(--sky),var(--purple));
-  color:white;border:none;border-radius:50px;
-  font-family:'Fredoka One',sans-serif;font-size:1.3rem;
-  padding:14px;cursor:pointer;letter-spacing:.5px;
-  box-shadow:0 6px 20px rgba(74,171,219,.4);
-  transition:transform .15s,box-shadow .15s;
-  margin-bottom:8px;
-}
-.next-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(74,171,219,.5);}
-.next-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+    select{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:9px 10px;
+      font-weight:900;
+      background:#fff;
+      cursor:pointer;
+    }
+    .wants-box{
+      min-width:320px;
+      width:min(100%, 430px);
+      max-height:240px;
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      padding:8px;
+    }
+    .wants-option{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-weight:900;
+      cursor:pointer;
+      margin-bottom:6px;
+    }
+    .wants-option:last-child{ margin-bottom:0; }
+    .wants-option input{ accent-color:var(--primary); transform:scale(1.15); }
+    .wants-option.checked{ background:#edf3ff; border-color:#bcd3ff; }
 
-/* ── SPENDING SECTION ─────────────────────────────────────────── */
-.spend-section{
-  background:white;border-radius:var(--radius);
-  padding:20px;box-shadow:var(--shadow);
-  margin-bottom:20px;
-}
-.spend-section h3{
-  font-family:'Fredoka One',sans-serif;font-size:1.1rem;
-  color:var(--coral);margin-bottom:12px;
-}
-.spend-items{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.spend-item{
-  background:var(--coral-lt);border:3px solid transparent;
-  border-radius:var(--radius-sm);padding:12px 8px;text-align:center;
-  cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif;
-}
-.spend-item:hover{border-color:var(--coral);transform:scale(1.04);}
-.spend-item.bought{opacity:.5;cursor:not-allowed;border-color:var(--coral);background:rgba(244,99,58,.15);}
-.spend-item .s-emoji{font-size:1.8rem;display:block;margin-bottom:4px;}
-.spend-item .s-name{font-size:.75rem;font-weight:800;}
-.spend-item .s-cost{font-size:.85rem;font-weight:900;color:var(--coral);}
+    .bank-jar-board{margin-top:14px;padding:14px;border:1px solid #d9e6fb;border-radius:18px;background:linear-gradient(180deg,#fbfdff,#f1f7ff);}
+    .bank-jar-title{font-weight:1100;color:#24416c;margin-bottom:8px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+    .bank-jar-sub{font-size:12px;color:#567;}
+    .bank-jars{display:flex;gap:12px;justify-content:center;align-items:flex-end;flex-wrap:wrap;}
+    .bank-jar-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:74px;}
+    .bank-jar-label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;color:#365;}
+    .bank-jar{width:60px;height:92px;position:relative;overflow:hidden;border-radius:0 0 14px 14px;background:rgba(255,255,255,.75);border:3px solid #b8cfff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);}
+    .bank-jar-fill{position:absolute;left:0;right:0;bottom:0;height:0%;transition:height .8s cubic-bezier(.34,1.56,.64,1);}
+    .bank-jar-fill::before{content:'';position:absolute;left:-10%;right:-10%;top:-10px;height:14px;border-radius:50%;background:rgba(255,255,255,.25);}    
+    .bank-jar-amt{font-size:12px;font-weight:1000;color:#234;}
+    .bank-jar-checking .bank-jar{border-color:#5b8def;}
+    .bank-jar-checking .bank-jar-fill{background:linear-gradient(180deg,rgba(91,141,239,.55),rgba(91,141,239,.88));}
+    .bank-jar-savings .bank-jar{border-color:#4caf50;}
+    .bank-jar-savings .bank-jar-fill{background:linear-gradient(180deg,rgba(76,175,80,.5),rgba(76,175,80,.88));}
+    .bank-jar-cash .bank-jar{border-color:#ff9800;}
+    .bank-jar-cash .bank-jar-fill{background:linear-gradient(180deg,rgba(255,152,0,.45),rgba(255,152,0,.88));}
+    .bank-jar-hysa .bank-jar{border-color:#8e44ad;}
+    .bank-jar-hysa .bank-jar-fill{background:linear-gradient(180deg,rgba(142,68,173,.45),rgba(142,68,173,.9));}
+    .bank-jar-cd .bank-jar{border-color:#00a8a8;}
+    .bank-jar-cd .bank-jar-fill{background:linear-gradient(180deg,rgba(0,168,168,.42),rgba(0,168,168,.9));}
+    .meter{
+      margin-top:10px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      padding:10px 12px;
+    }
+    .meter-bar{
+      height:12px;
+      background:#eef2fb;
+      border-radius:999px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      margin-top:8px;
+    }
+    .meter-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, var(--success), #8fe3b7);
+      transition:width .25s ease;
+    }
+    .tracker-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:8px;
+      margin-top:10px;
+    }
+    .tracker-item{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px;
+      background:#fff;
+      font-weight:900;
+      font-size:12px;
+    }
+    .tracker-item.done{
+      background:#edf9f3;
+      border-color:#a7dcc2;
+    }
+    .linkish{
+      border:none;
+      background:transparent;
+      color:var(--primary2);
+      font-weight:1000;
+      cursor:pointer;
+      padding:0;
+      text-decoration:underline;
+    }
 
-/* ── STAR REPORT CARD ─────────────────────────────────────────── */
-.report-card{
-  background:white;border-radius:var(--radius);
-  padding:32px 28px;box-shadow:var(--shadow-lg);
-  text-align:center;
-  border-top:8px solid var(--sun);
-}
-.report-card h2{
-  font-family:'Fredoka One',sans-serif;font-size:2rem;
-  color:var(--ink);margin-bottom:6px;
-}
-.report-card .subtitle{color:var(--ink-lt);font-size:.95rem;font-weight:600;margin-bottom:24px;}
-.report-stars{display:flex;justify-content:center;gap:8px;margin-bottom:24px;}
-.report-star{
-  font-size:2.4rem;
-  animation:starPop .4s cubic-bezier(.34,1.56,.64,1) both;
-}
-.report-star:nth-child(1){animation-delay:.1s}
-.report-star:nth-child(2){animation-delay:.2s}
-.report-star:nth-child(3){animation-delay:.3s}
-.report-star:nth-child(4){animation-delay:.4s}
-.report-star:nth-child(5){animation-delay:.5s}
-@keyframes starPop{from{transform:scale(0) rotate(-30deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+    /* Teacher mode entry + save toolkit */
+    .mode-screen{
+      position:fixed; inset:0; z-index:1200;
+      background:rgba(10,16,30,.82);
+      backdrop-filter:blur(4px);
+      display:flex; align-items:center; justify-content:center;
+      padding:16px;
+    }
+    .mode-card{
+      width:min(980px,100%);
+      background:#fff; border:1px solid var(--line); border-radius:24px;
+      box-shadow:var(--shadow); padding:22px;
+    }
+    .mode-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-top:14px; }
+    .mode-grid-6{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    @media (max-width:900px){ .mode-grid-6{ grid-template-columns:1fr; } }
+    .mode-btn{
+      border:2px solid #bcd3ff; border-radius:20px; background:linear-gradient(180deg,#f7fbff,#eef5ff);
+      padding:16px; text-align:left; cursor:pointer; font-weight:1000; color:var(--ink);
+      box-shadow:0 6px 18px rgba(25,45,80,.08);
+    }
+    .mode-btn:hover{ transform:translateY(-1px); }
+    .mode-btn .emoji{ font-size:28px; display:block; margin-bottom:8px; }
+    .mode-btn small{ display:block; color:var(--muted); font-weight:800; line-height:1.35; margin-top:6px; }
+    .mode-screen-actions{ margin-top:14px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+    .save-toolkit{
+      border:1px solid var(--line); border-radius:18px; padding:14px; background:#fff;
+    }
+    .save-toolkit h4{ margin:0 0 8px; font-size:15px; }
+    .save-toolkit .summary{ color:var(--muted); font-size:13px; margin-bottom:10px; }
+    .save-toolkit .quick-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; }
+    .save-status{ margin-top:10px; font-size:12px; color:var(--muted); }
+    .reflection-list{ display:grid; gap:10px; margin-top:10px; }
+    .reflection-card{
+      border:1px solid var(--line); border-radius:14px; background:#fff; padding:10px 12px;
+      font-size:12px; line-height:1.4;
+    }
+    .reflection-card h4{ margin:0 0 6px; font-size:13px; }
+    .reflection-meta{ color:var(--muted); font-size:11px; margin-bottom:8px; }
+    .reflection-row{ margin-top:6px; }
+    .reflection-delete-bar{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px;
+    }
+    .reflection-empty{ color:var(--muted); font-size:12px; }
+    .teacher-badge{
+      display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px;
+      border:1px solid var(--line); background:#fff; font-weight:900; font-size:12px;
+    }
 
-.report-stats{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:14px;margin-bottom:24px;
-}
-.report-stat{
-  border-radius:var(--radius-sm);padding:16px 10px;
-}
-.report-stat.earned{background:var(--sun-lt);}
-.report-stat.saved{background:var(--grass-lt);}
-.report-stat.shared{background:var(--purple-lt);}
-.report-stat .rs-emoji{font-size:1.8rem;display:block;margin-bottom:4px;}
-.report-stat .rs-label{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-.report-stat .rs-value{font-size:1.5rem;font-weight:900;}
-.report-stat.earned .rs-label{color:var(--sun);}
-.report-stat.earned .rs-value{color:#B8860B;}
-.report-stat.saved .rs-label,.report-stat.saved .rs-value{color:var(--grass);}
-.report-stat.shared .rs-label,.report-stat.shared .rs-value{color:var(--purple);}
-
-.report-badge{
-  background:linear-gradient(135deg,var(--sun),var(--coral));
-  color:white;border-radius:var(--radius);
-  padding:20px;margin-bottom:20px;
-  font-family:'Fredoka One',sans-serif;
-}
-.report-badge .badge-title{font-size:1.4rem;margin-bottom:4px;}
-.report-badge .badge-sub{font-size:.9rem;opacity:.9;font-weight:600;}
-
-.skills-earned{
-  background:var(--sky-lt);border-radius:var(--radius-sm);
-  padding:16px;margin-bottom:20px;text-align:left;
-}
-.skills-earned h4{
-  font-family:'Fredoka One',sans-serif;color:var(--sky);
-  font-size:1rem;margin-bottom:10px;
-}
-.skill-item{
-  display:flex;align-items:center;gap:8px;
-  font-size:.85rem;font-weight:700;color:var(--ink);
-  margin-bottom:6px;
-}
-.skill-item .sk-emoji{font-size:1rem;}
-
-.play-again-btn{
-  background:linear-gradient(135deg,var(--sky),var(--purple));
-  color:white;border:none;border-radius:50px;
-  font-family:'Fredoka One',sans-serif;font-size:1.2rem;
-  padding:14px 40px;cursor:pointer;
-  box-shadow:0 6px 20px rgba(74,171,219,.4);
-  transition:transform .15s;
-}
-.play-again-btn:hover{transform:translateY(-2px);}
-
-/* ── CONFETTI ─────────────────────────────────────────────────── */
-.confetti-piece{
-  position:fixed;pointer-events:none;z-index:1000;
-  width:10px;height:10px;border-radius:2px;
-  animation:confettiFall linear forwards;
-}
-@keyframes confettiFall{
-  0%{transform:translateY(-20px) rotate(0deg);opacity:1;}
-  100%{transform:translateY(110vh) rotate(720deg);opacity:0;}
-}
-
-/* ── COIN ANIMATION ───────────────────────────────────────────── */
-.flying-coin{
-  position:fixed;pointer-events:none;z-index:999;
-  font-size:1.5rem;
-  animation:coinFly .6s cubic-bezier(.34,1.56,.64,1) forwards;
-}
-@keyframes coinFly{
-  0%{transform:scale(0) translate(0,0);opacity:1;}
-  60%{transform:scale(1.4) translate(var(--dx),var(--dy));opacity:1;}
-  100%{transform:scale(0.6) translate(var(--dx2),var(--dy2));opacity:0;}
-}
-
-/* ── MODAL OVERLAY ────────────────────────────────────────────── */
-.modal-overlay{
-  position:fixed;inset:0;z-index:500;
-  background:rgba(44,62,80,.5);backdrop-filter:blur(4px);
-  display:flex;align-items:center;justify-content:center;
-  padding:20px;
-  animation:fadeIn .2s ease;
-}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal-box{
-  background:white;border-radius:var(--radius);
-  padding:32px 28px;max-width:480px;width:100%;
-  text-align:center;box-shadow:var(--shadow-lg);
-  animation:popIn .35s cubic-bezier(.34,1.56,.64,1);
-}
-.modal-box .m-emoji{font-size:3rem;display:block;margin-bottom:12px;}
-.modal-box h3{font-family:'Fredoka One',sans-serif;font-size:1.5rem;margin-bottom:8px;}
-.modal-box p{color:var(--ink-lt);font-weight:600;font-size:.95rem;margin-bottom:20px;line-height:1.6;}
-.modal-btn{
-  background:linear-gradient(135deg,var(--grass),var(--mint));
-  color:white;border:none;border-radius:50px;
-  font-family:'Fredoka One',sans-serif;font-size:1.1rem;
-  padding:12px 32px;cursor:pointer;
-  box-shadow:0 4px 14px rgba(93,187,99,.4);
-  transition:transform .15s;
-}
-.modal-btn:hover{transform:translateY(-2px);}
-
-/* ── TEACHER PANEL ────────────────────────────────────────────── */
-.teacher-panel{
-  background:var(--ink);border-radius:var(--radius);
-  padding:18px 20px;margin-top:20px;
-  box-shadow:var(--shadow);
-}
-.teacher-panel h4{
-  font-family:'Fredoka One',sans-serif;
-  color:var(--sun);font-size:1rem;margin-bottom:8px;
-}
-.teacher-row{display:flex;gap:10px;flex-wrap:wrap;}
-.teacher-btn{
-  background:rgba(255,255,255,.12);color:white;border:2px solid rgba(255,255,255,.2);
-  border-radius:50px;font-family:'Nunito',sans-serif;
-  font-size:.8rem;font-weight:700;padding:6px 14px;cursor:pointer;
-  transition:background .15s;
-}
-.teacher-btn:hover{background:rgba(255,255,255,.22);}
-.teacher-info{
-  margin-top:10px;color:rgba(255,255,255,.6);
-  font-size:.78rem;font-weight:600;line-height:1.5;
-}
-
-/* ── AVATAR PICKER ────────────────────────────────────────────── */
-.avatar-section{
-  background:white;border-radius:var(--radius);padding:24px;
-  box-shadow:var(--shadow);margin-bottom:24px;
-}
-.avatar-section h3{
-  font-family:'Fredoka One',sans-serif;font-size:1.3rem;
-  color:var(--sky);margin-bottom:6px;
-}
-.avatar-section p{font-size:.9rem;color:var(--ink-lt);margin-bottom:14px;font-weight:600;}
-
-.name-row{
-  display:flex;align-items:center;gap:12px;margin-bottom:18px;
-}
-.name-input{
-  flex:1;border:3px solid #E0E0E0;border-radius:var(--radius-sm);
-  padding:10px 16px;font-family:'Nunito',sans-serif;font-size:1rem;
-  font-weight:700;color:var(--ink);background:var(--cream);
-  transition:border-color .2s;outline:none;
-}
-.name-input:focus{border-color:var(--sky);}
-.name-input::placeholder{color:#B0BEC5;font-weight:600;}
-
-.avatar-grid{
-  display:grid;grid-template-columns:repeat(6,1fr);gap:10px;
-}
-.avatar-btn{
-  background:var(--sky-lt);border:3px solid transparent;
-  border-radius:var(--radius-sm);padding:10px 6px;
-  text-align:center;cursor:pointer;
-  transition:all .2s;font-family:'Nunito',sans-serif;
-  position:relative;
-}
-.avatar-btn:hover{transform:scale(1.1);border-color:var(--sky);}
-.avatar-btn.selected{
-  border-color:var(--sky);
-  background:var(--sky);
-  transform:scale(1.1);
-  box-shadow:0 0 0 3px rgba(74,171,219,.3);
-}
-.avatar-btn .av-emoji{font-size:2rem;display:block;line-height:1.2;}
-.avatar-btn .av-name{font-size:.62rem;font-weight:800;color:var(--ink-lt);margin-top:2px;display:block;}
-.avatar-btn.selected .av-name{color:white;}
-
-/* header avatar badge */
-.header-avatar{
-  font-size:1.8rem;line-height:1;
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-}
-.header-avatar-name{
-  font-size:.6rem;font-weight:800;color:rgba(255,255,255,.85);
-  text-transform:uppercase;letter-spacing:.5px;max-width:60px;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;
-}
-
-/* report card avatar */
-.report-avatar{font-size:4rem;display:block;margin-bottom:8px;animation:bounce 2s ease infinite;}
-
-/* ── RESPONSIVE ───────────────────────────────────────────────── */
-
-.back-link-wrap{display:flex;justify-content:flex-end;max-width:860px;margin:0 auto 10px;position:relative;z-index:2;padding:0 16px;}
-.back-link{display:inline-flex;align-items:center;gap:8px;background:white;color:var(--ink);text-decoration:none;border:3px solid var(--sky);border-radius:999px;padding:10px 14px;font-weight:900;box-shadow:var(--shadow);}
-.back-link:hover{transform:translateY(-2px);}
-
-@media(max-width:620px){
-  .game-layout{grid-template-columns:1fr;}
-  .job-picker{grid-template-columns:1fr;}
-  .cause-grid{grid-template-columns:repeat(2,1fr);}
-  .spend-items{grid-template-columns:repeat(2,1fr);}
-  .report-stats{grid-template-columns:1fr;}
-  .header-stats{display:none;}
-  .avatar-grid{grid-template-columns:repeat(4,1fr);}
-}
-
-.term-link{background:none;border:none;padding:0;color:inherit;font:inherit;font-weight:800;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
-.term-link:hover{opacity:.85;}
-.resume-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
-.resume-btn{background:#fff;border:2px solid rgba(74,171,219,.35);color:var(--ink);border-radius:16px;padding:12px 18px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(22,34,66,.08);}
-.resume-btn[disabled]{opacity:.45;cursor:not-allowed;}
-.teacher-reflection-grid{display:grid;gap:10px;margin-top:10px;}
-.teacher-reflection-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:12px;}
-.teacher-reflection-card h5{margin:0 0 6px;font-size:.92rem;}
-.teacher-reflection-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
-.teacher-q-btn{border:none;border-radius:999px;padding:8px 12px;font-weight:800;background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.12);}
-.teacher-q-btn:hover{transform:translateY(-1px);}
-.teacher-mini{font-size:.82rem;opacity:.9;}
-.save-strip{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0 6px;}
-.save-strip .jr-mini-btn{min-width:170px;}
-.earned-income-line{margin-top:10px;padding:10px 12px;border-radius:14px;background:rgba(74,171,219,.12);font-weight:800;color:var(--ink);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;}
-''</style>
+  </style>
 </head>
+
 <body>
-
-<!-- background clouds -->
-<div class="bg-clouds">
-  <div class="cloud cloud-1"></div>
-  <div class="cloud cloud-2"></div>
-  <div class="cloud cloud-3"></div>
-</div>
-
-
-<div class="back-link-wrap">
-  <a class="back-link" href="index.html">⬅️ Back to Role + Difficulty Select</a>
-</div>
-
-<div id="app">
-  <!-- HEADER -->
-  <header class="app-header">
-    <div class="header-logo" id="header-logo">🌟</div>
-    <div class="header-avatar" id="header-avatar" style="display:none">
-      <span id="header-avatar-emoji" style="font-size:1.8rem"></span>
-      <span class="header-avatar-name" id="header-avatar-name"></span>
-    </div>
-    <div class="header-text">
-      <h1>Budget Boss Jr.</h1>
-      <p>WGLT Financial Literacy • Elementary Edition</p>
-    </div>
-    <div class="header-stats">
-      <div class="stat-pill"><span class="label">Week</span><span class="value" id="hdr-week">—</span></div>
-      <div class="stat-pill"><span class="label">Total</span><span class="value" id="hdr-total">$0</span></div>
-      <div class="stat-pill"><span class="label">Saved</span><span class="value" id="hdr-saved">$0</span></div>
-    </div>
-  </header>
-
-  <!-- PROGRESS BAR (hidden until game starts) -->
-  <div class="week-progress" id="week-progress" style="display:none">
-    <span class="week-label" id="progress-label">Week 1 of 12</span>
-    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:10%"></div></div>
-    <span class="progress-emoji" id="progress-emoji">☀️</span>
+  <div class="banner" id="banner">
+    <span class="ok">✅</span>
+    <span id="bannerText">Done</span>
+  </div>
+  <div class="decision-badge" id="decisionBadge" aria-live="polite">
+    <span class="icon">💡</span><span id="decisionBadgeText">Paid from Checking</span>
   </div>
 
-  <!-- ── SCREEN 1: WELCOME ── -->
-  <div class="screen active" id="screen-welcome">
-    <div class="welcome-hero">
-      <span class="big-emoji">🌟</span>
-      <h2>Welcome to Budget Boss Jr.!</h2>
-      <p>Pick a job, earn money, and learn to Save · Spend · Share your way through the season!</p>
-    </div>
-
-    <!-- Avatar + Name Picker -->
-    <div class="avatar-section">
-      <h3>👋 First, Tell Us About You!</h3>
-      <p>Type your name and pick your buddy — they'll cheer you on all season!</p>
-      <div class="name-row">
-        <span style="font-size:1.4rem">✏️</span>
-        <input class="name-input" id="player-name-input" type="text" maxlength="18"
-          placeholder="What's your name?" oninput="onNameInput(this.value)" autocomplete="off" />
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="mhead">
+        <div class="mtitle" id="mTitle">Modal Title</div>
+        <div class="mmeta" id="mMeta">Meta</div>
       </div>
-      <div class="avatar-grid" id="avatar-grid">
-        <div class="avatar-btn" onclick="selectAvatar('🦊','Fox')"><span class="av-emoji">🦊</span><span class="av-name">Fox</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🐸','Frog')"><span class="av-emoji">🐸</span><span class="av-name">Frog</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🐼','Panda')"><span class="av-emoji">🐼</span><span class="av-name">Panda</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🦁','Lion')"><span class="av-emoji">🦁</span><span class="av-name">Lion</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🐶','Pup')"><span class="av-emoji">🐶</span><span class="av-name">Pup</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🐱','Kitty')"><span class="av-emoji">🐱</span><span class="av-name">Kitty</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🦄','Unicorn')"><span class="av-emoji">🦄</span><span class="av-name">Unicorn</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🐯','Tiger')"><span class="av-emoji">🐯</span><span class="av-name">Tiger</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🦋','Butterfly')"><span class="av-emoji">🦋</span><span class="av-name">Butterfly</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🐙','Octopus')"><span class="av-emoji">🐙</span><span class="av-name">Octopus</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🧑‍🚀','Astronaut')"><span class="av-emoji">🧑‍🚀</span><span class="av-name">Astronaut</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🦸','Hero')"><span class="av-emoji">🦸</span><span class="av-name">Hero</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('👩🏽‍🚀','Astronaut Girl')"><span class="av-emoji">👩🏽‍🚀</span><span class="av-name">Astronaut Girl</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('👨🏿‍🚀','Astronaut Boy')"><span class="av-emoji">👨🏿‍🚀</span><span class="av-name">Astronaut Boy</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🦸🏽‍♀️','Hero Girl')"><span class="av-emoji">🦸🏽‍♀️</span><span class="av-name">Hero Girl</span></div>
-        <div class="avatar-btn" onclick="selectAvatar('🦸🏿‍♂️','Hero Boy')"><span class="av-emoji">🦸🏿‍♂️</span><span class="av-name">Hero Boy</span></div>
-      </div>
-    </div>
-
-    <!-- Job Picker -->
-    <div class="job-picker">
-      <div class="job-card lemon" id="job-lemon" onclick="selectJob('lemon')">
-        <span class="check">✓</span>
-        <span class="emoji">🍋</span>
-        <h3>Lemonade Stand</h3>
-        <p class="pay">Earn $5 – $8 per week</p>
-      </div>
-      <div class="job-card yard" id="job-yard" onclick="selectJob('yard')">
-        <span class="check">✓</span>
-        <span class="emoji">🌿</span>
-        <h3>Yard Helper</h3>
-        <p class="pay">Earn $8 – $12 per week</p>
-      </div>
-      <div class="job-card chores" id="job-chores" onclick="selectJob('chores')">
-        <span class="check">✓</span>
-        <span class="emoji">🧹</span>
-        <h3>Household Chores</h3>
-        <p class="pay">Earn $4 – $6 per week</p>
-      </div>
-      <div class="job-card errands" id="job-errands" onclick="selectJob('errands')">
-        <span class="check">✓</span>
-        <span class="emoji">🚲</span>
-        <h3>Running Errands</h3>
-        <p class="pay">Earn $5 – $7 per week</p>
-      </div>
-    </div>
-
-    <!-- Cause Picker -->
-    <div class="cause-section">
-      <h3>💜 Choose a Cause to Share With</h3>
-      <p>Part of your earnings will go to help others! Who do you want to help?</p>
-      <div class="cause-grid">
-        <div class="cause-btn" id="cause-animals" onclick="selectCause('animals','🐾 Animal Shelter')">
-          <span class="c-emoji">🐾</span><span class="c-name">Animal Shelter</span>
-        </div>
-        <div class="cause-btn" id="cause-food" onclick="selectCause('food','🥫 Food Bank')">
-          <span class="c-emoji">🥫</span><span class="c-name">Food Bank</span>
-        </div>
-        <div class="cause-btn" id="cause-trees" onclick="selectCause('trees','🌳 Plant Trees')">
-          <span class="c-emoji">🌳</span><span class="c-name">Plant Trees</span>
-        </div>
-        <div class="cause-btn" id="cause-books" onclick="selectCause('books','📚 Books for Kids')">
-          <span class="c-emoji">📚</span><span class="c-name">Books for Kids</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Savings Goal -->
-    <div class="goal-section">
-      <h3>🎯 Pick a Savings Goal</h3>
-      <p>What are you saving up for this summer? Pick a goal!</p>
-      <div class="goal-options">
-        <div class="goal-btn" id="goal-10" onclick="selectGoal(10)">
-          <span class="g-amount">$10</span><span class="g-label">Small Goal 🌱</span>
-        </div>
-        <div class="goal-btn" id="goal-20" onclick="selectGoal(20)">
-          <span class="g-amount">$20</span><span class="g-label">Medium Goal 🌟</span>
-        </div>
-        <div class="goal-btn" id="goal-30" onclick="selectGoal(30)">
-          <span class="g-amount">$30</span><span class="g-label">Big Goal 🏆</span>
-        </div>
-      </div>
-    </div>
-
-    <button class="start-btn" id="start-btn" onclick="startGame()" disabled>
-      🚀 Let's Start Earning!
-    </button>
-    <div class="resume-row">
-      <button class="resume-btn" id="resume-btn" type="button" onclick="resumeGame()" disabled>▶️ Resume Last Game</button>
-      <button class="resume-btn" id="save-menu-btn" type="button" onclick="saveGameProgress()">💾 Save My Progress</button>
+      <div class="mbody" id="mBody">Body</div>
+      <div class="mfoot" id="mFoot"></div>
     </div>
   </div>
 
-  <!-- ── SCREEN 2: GAME ── -->
-  <div class="screen" id="screen-game">
 
-    <!-- Consequence banner (hidden by default) -->
-    <div class="consequence-banner" id="consequence-banner" style="display:none">
-      <span class="c-emoji" id="cb-emoji">⚡</span>
-      <div class="c-text">
-        <div class="c-title" id="cb-title">Something happened!</div>
-        <div class="c-body"  id="cb-body">Details here.</div>
+  <div class="mode-screen" id="modeSelectScreen">
+    <div class="mode-card">
+      <div style="font-size:28px;font-weight:1100">Choose Role + Experience</div>
+      <div class="muted" style="margin-top:6px;font-size:13px">This GitHub-ready build separates <b>Presentation / Role</b> from <b>Difficulty / Experience</b>. Pick any combo below and the simulator loads the same core engine with different support tools and pressure rules.</div>
+      <div class="impact-box" style="margin-top:12px">
+        <b>Presentation / Role</b>: Student or Teacher<br>
+        <b>Difficulty / Experience</b>: Beginner, Standard, or Elite
       </div>
-    </div>
-
-    <!-- Choice card (hidden until ready) -->
-    <div class="choice-card" id="choice-card" style="display:none">
-      <span class="choice-week-badge" id="cc-week">Week 1</span>
-      <div class="choice-scenario">
-        <span class="big-emoji" id="cc-emoji">🤔</span>
-        <span id="cc-scenario"></span>
+      <div class="mode-grid mode-grid-6">
+        <button class="mode-btn glow-next" id="modeStudentBeginnerBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','beginner')" type="button"><span class="emoji">🧭</span>Student + Beginner<small>Cleaner student view, softer pressure, and extra room to learn the loop.</small></button>
+        <button class="mode-btn" id="modeStudentStandardBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','standard')" type="button"><span class="emoji">🎮</span>Student + Standard<small>Balanced gameplay with the normal event mix and fewer scaffolds.</small></button>
+        <button class="mode-btn" id="modeStudentEliteBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('student','elite')" type="button"><span class="emoji">🚀</span>Student + Elite<small>Advanced contracts, stronger tradeoffs, and monthly reflection pressure.</small></button>
+        <button class="mode-btn" id="modeTeacherBeginnerBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','beginner')" type="button"><span class="emoji">🧑‍🏫</span>Teacher + Beginner<small>Facilitator prompts and notes with the gentlest gameplay pressure.</small></button>
+        <button class="mode-btn" id="modeTeacherStandardBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','standard')" type="button"><span class="emoji">📘</span>Teacher + Standard<small>Guided classroom flow with balanced simulation pressure and full teaching tools.</small></button>
+        <button class="mode-btn" id="modeTeacherEliteBtn" onclick="window.startRoleDifficulty && window.startRoleDifficulty('teacher','elite')" type="button"><span class="emoji">⚡</span>Teacher + Elite<small>All teaching tools plus elite pressure, consequence chains, advanced contracts, and required reflections.</small></button>
       </div>
-      <div class="choice-question" id="cc-question"></div>
-      <div class="choice-options" id="cc-options"></div>
+      <div class="impact-box" style="margin-top:14px">JSON banks now drive the content layer for roles, experiences, contracts, teacher prompts, and elite extensions, which makes the simulator much easier to scale.</div>
+      <div class="mode-screen-actions">
+        <button class="btn secondary" id="btnLoadLocalFromMenu" type="button">Resume Local Save</button>
+        <button class="btn secondary" id="btnImportSaveFromMenu" type="button">Upload Save File</button>
+      </div>
+      <input type="file" id="saveFileInput" accept="application/json,.json" style="display:none" />
     </div>
+  </div>
 
-    <!-- Jars + Ledger side by side -->
-    <div class="game-layout">
-      <!-- JAR PANEL -->
-      <div class="jar-panel">
-        <h3>💰 My Money Jars</h3>
-        <div class="jars">
-          <div class="jar-wrap jar-spend">
-            <span class="jar-label"><span class="jar-label-text">Spend</span><button class="term-link" type="button" onclick="showTermDefinition('needswants')">(needs vs. wants)</button></span>
-            <div class="jar-container">
-              <div class="jar-fill" id="jar-spend-fill" style="height:0%"></div>
+
+  <div class="app">
+    <header>
+      <div class="toprow">
+        <div class="brand">📚 WGLT Budget Boss <span class="muted">(Year Mission • Tap-Only • Ledger)</span></div>
+
+        <div class="row">
+          <span class="pill">Cash: <span class="money" id="cash">$200</span></span>
+          <span class="pill">Week <span id="weekNum">1</span>/48 • <span id="monthName">June</span></span>
+          <span class="pill">Credit: <span class="credit" id="credit">650</span></span>
+          <span class="pill">Savings Goal: <span id="goalBadge">$0</span></span>
+          <span class="pill" id="sharedProfilePill" style="display:none">Player: <span id="sharedProfileBadge"></span></span>
+        </div>
+      </div>
+
+      <div class="missionbar">
+        <div class="label">🎯 Year Mission</div>
+        <div class="barwrap"><div class="barfill" id="barFill"></div></div>
+        <div class="stepmeta" id="stepMeta">No mission active</div>
+      </div>
+
+      <div class="missionbar" id="impactStrip">
+        <div class="label">📈 Live Impact</div>
+        <span class="pill">Cash Flow: <span id="impactCash">steady</span></span>
+        <span class="pill">Credit Trend: <span id="impactCredit">stable</span></span>
+        <span class="pill">Savings Goal: <span id="impactGoal">not set</span></span>
+        <span class="pill">Monthly Growth: <span id="impactGrowth">pick a savings account</span></span>
+      </div>
+    </header>
+
+    <main>
+      <!-- LEFT: Mission control -->
+      <section class="card">
+        <h3>Mission Control</h3>
+        <div class="body">
+          <div class="muted">
+            Start the year mission and complete all 48 weeks (June → May). Required actions glow. Weekly choice cards fire automatically — your decisions have real consequences later!
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="field">
+            <div class="name">Student Job</div>
+            <div class="minirow" style="margin-top:10px">
+              <button class="btn secondary" id="jobPrev">◀</button>
+              <div style="flex:1; min-width:180px">
+                <div style="font-weight:1100" id="jobName">Lawn Care</div>
+                <div class="muted" id="jobPay">Weekly Pay: $80</div>
+              </div>
+              <button class="btn secondary" id="jobNext">▶</button>
             </div>
-            <span class="jar-amount jar-spend" id="jar-spend-amt">$0</span>
+            <div class="chips" id="jobTags"></div>
           </div>
-          <div class="jar-wrap jar-save">
-            <span class="jar-label"><span class="jar-label-text">Save</span><button class="term-link" type="button" onclick="showTermDefinition('goal')">(goal)</button></span>
-            <div class="jar-container">
-              <div class="jar-fill" id="jar-save-fill" style="height:0%"></div>
+
+          <div style="height:10px"></div>
+
+          <div class="minirow">
+            <button class="btn success" id="btnStartMission">Start Year Mission</button>
+            <button class="btn secondary" id="btnPauseMission">Pause</button>
+            <button class="btn secondary" id="btnResetMission">Reset</button>
+            <button class="btn warn" id="btnLockJob">Lock Job After Your Choice ✓</button>
+            <button class="btn secondary" id="btnQuitToMenu">Quit to Main Menu</button>
+          </div>
+
+          <div class="minirow" style="margin-top:8px">
+            <span class="teacher-badge">Mode: <span id="teacherModeLabel">Teacher Mode</span></span><span class="teacher-badge" id="modeSummaryLabel">Guided classroom flow</span>
+          </div>
+
+          <div class="log" id="log">Ready. Choose Teacher Mode to begin, then lock a year plan first.</div>
+
+          <div style="height:14px"></div>
+
+          <div class="save-toolkit">
+            <h4>💾 Save + Resume Toolkit</h4>
+            <div class="summary">Save the lesson on this browser, or export a save file and upload it in another classroom to keep going from the same spot.</div>
+            <div class="quick-grid">
+              <button class="btn secondary" id="btnSaveLocal">Save Local</button>
+              <button class="btn secondary" id="btnLoadLocal">Load Local</button>
+              <button class="btn secondary" id="btnDownloadSave">Download Save File</button>
+              <button class="btn secondary" id="btnUploadSave">Upload Save File</button>
+              <button class="btn secondary" id="btnOpenReflection">Open Reflection</button>
             </div>
-            <span class="jar-amount jar-save" id="jar-save-amt">$0</span>
+            <div class="save-status" id="saveStatus">No local save yet.</div>
           </div>
-          <div class="jar-wrap jar-share">
-            <span class="jar-label"><span class="jar-label-text">Share</span><span class="jar-label-empty" aria-hidden="true"></span></span>
-            <div class="jar-container">
-              <div class="jar-fill" id="jar-share-fill" style="height:0%"></div>
+
+          <div style="height:14px"></div>
+
+          <div class="field">
+            <div class="name">Scenario Playlist (optional)</div>
+            <div class="muted">Force lesson events (Inheritance → Dispute → Local Tax → Contract)</div>
+            <div class="minirow">
+              <button class="btn" id="playlistStart">Start</button>
+              <button class="btn secondary" id="playlistPause">Pause</button>
+              <button class="btn secondary" id="playlistLoop">Loop: Off</button>
             </div>
-            <span class="jar-amount jar-share" id="jar-share-amt">$0</span>
+            <div class="minirow">
+              <button class="btn warn" id="btnPlaylistNext">Run Next Step</button>
+              <button class="btn secondary" id="btnPlaylistProgress">Progress</button>
+            </div>
           </div>
         </div>
+      </section>
 
-        <!-- Savings goal -->
-        <div class="goal-progress">
-          <div class="goal-progress-label">
-            <span>🎯 Savings Goal</span>
-            <span id="goal-progress-text">$0 / $20</span>
-          </div>
-          <div class="goal-track">
-            <div class="goal-fill" id="goal-fill" style="width:0%"></div>
-          </div>
-          <div class="earned-income-line"><span><button class="term-link" type="button" onclick="showTermDefinition('earnedIncome')">Earned Income</button></span><span id="earned-income-text">Not picked yet</span></div>
+      <!-- RIGHT: Tabs -->
+      <section class="card">
+        <div class="tabs">
+          <div class="tab active" data-tab="plan">Plan</div>
+          <div class="tab" data-tab="bank">Banking</div>
+          <div class="tab" data-tab="ledger">Business Ledger</div>
+          <div class="tab" data-tab="events">Events</div>
+          <div class="tab" data-tab="contracts">Contracts</div>
+          <div class="tab" data-tab="reports">Reports</div>
+          <div class="tab" data-tab="teacherToolkit">Teacher Toolkit</div>
+          <div class="tab" data-tab="sheet">Budget Sheet</div>
+          <div class="tab" data-tab="help">How to Play</div>
         </div>
-      </div>
 
-      <!-- LEDGER PANEL -->
-      <div class="ledger-panel">
-        <h3>📋 My Money Log</h3>
-        <div class="ledger-entries" id="ledger-entries">
-          <div class="ledger-entry event">
-            <span class="l-emoji">🌟</span>
-            <span class="l-text">Game started! Good luck!</span>
-            <span class="l-amount"></span>
+        <div class="body">
+          <!-- PLAN -->
+          <div class="panel active" id="panel-plan">
+            <div class="grid2">
+              <div class="field">
+                <div class="name"><button class="linkish" onclick="showSectionDef('income')">Monthly Salary ℹ️</button></div>
+                <div class="value" id="incomeVal">$320</div>
+                <div class="def">This is locked to the student job you selected. Change the job on the left to change income.</div>
+              </div>
+
+              <div class="field">
+                <div class="name"><button class="linkish" onclick="showSectionDef('tax')">Payroll Tax Withholding ℹ️</button></div>
+                <div class="value" id="taxVal">10%</div>
+                <div class="def">Money taken out before you get paid (funds public services).</div>
+                <div class="chips">
+                  <div class="chip" data-tax="0">0%</div>
+                  <div class="chip" data-tax="10">10%</div>
+                  <div class="chip" data-tax="15">15%</div>
+                  <div class="chip" data-tax="20">20%</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="grid2">
+              <div class="field">
+                <div class="name"><button class="linkish" onclick="showSectionDef('needs')">Needs ℹ️</button></div>
+                <div class="value" id="needsVal">$40</div>
+                <div class="def" id="needsDef">Examples: food, basic phone, hygiene, room/rent share, school supplies.</div>
+                <div class="def" style="margin-top:8px">Locked for this version.</div>
+              </div>
+
+              <div class="field">
+                <div class="name"><button class="linkish" onclick="showSectionDef('wants')">Wants ℹ️</button></div>
+                <div class="value" id="wantsVal" style="color:var(--danger)">$0</div>
+                <div class="def" id="wantsDef">Pick one or more wants that add up to at least your plan target before you start the year.</div>
+                <div class="minirow" style="margin-top:10px; align-items:flex-start">
+                  <div id="wantsPick" class="wants-box" aria-label="Choose one or more wants">
+                    <label class="wants-option"><input type="checkbox" value="3" data-label="Candy ($3)"> <span>Candy ($3)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="5" data-label="Snacks ($5)"> <span>Snacks ($5)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="10" data-label="Movie Ticket ($10)"> <span>Movie Ticket ($10)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="12" data-label="Music Streaming ($12)"> <span>Music Streaming ($12)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="15" data-label="New Game Skin ($15)"> <span>New Game Skin ($15)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="18" data-label="Pizza Night ($18)"> <span>Pizza Night ($18)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="20" data-label="Video Game Rental ($20)"> <span>Video Game Rental ($20)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="25" data-label="Arcade Day ($25)"> <span>Arcade Day ($25)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="30" data-label="Shoes/Style Item ($30)"> <span>Shoes/Style Item ($30)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="40" data-label="Game Purchase ($40)"> <span>Game Purchase ($40)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="50" data-label="Weekend Fun Pack ($50)"> <span>Weekend Fun Pack ($50)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="75" data-label="Concert/Big Trip ($75)"> <span>Concert/Big Trip ($75)</span></label>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:8px">
+                    <button class="btn secondary" id="btnAddWant">Add Wants to Plan</button>
+                    <button class="btn secondary" id="btnClearWants">Clear Wants</button>
+                    <span class="pill">Target: <span id="wantsTargetLabel">$0</span></span>
+                    <span class="pill">Selected: <span id="wantsPendingLabel">$0</span></span>
+                  </div>
+                </div>
+                <div class="muted" style="margin-top:8px">Tip: check as many wants as needed. Reach the target, then tap Add Wants to Plan.</div>
+              </div>
+
+              <div class="field">
+                <div class="name"><button class="linkish" onclick="showSectionDef('savings')">Savings + Debt ℹ️</button></div>
+                <div class="value" id="saveVal">$64</div>
+                <div class="def" id="saveDef">This benchmark covers savings and debt together. In the 70-20-10 rule it uses 20% total, then auto-splits that total into savings first and debt second.</div>
+                <div class="def" style="margin-top:8px">Locked for this version.</div>
+              </div>
+
+              <div class="field">
+                <div class="name">Current Split</div>
+                <div class="value" id="debtVal">S $48 • D $16</div>
+                <div class="def">The combined benchmark auto-splits 75% to savings and 25% to debt pay so students can still see both pieces in action.</div>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="field">
+              <div class="name"><button class="linkish" onclick="showSectionDef('insurance')">Insurance ℹ️</button></div>
+              <div class="value" id="insValLabel">Basic</div>
+              <div class="def" id="insExplain">Insurance can reduce emergency costs (repairs, accidents).</div>
+              <div class="chips">
+                <div class="chip" data-ins="none">None</div>
+                <div class="chip" data-ins="basic">Basic</div>
+                <div class="chip" data-ins="strong">Strong</div>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="minirow">
+              <button class="btn warn" id="btnSuggestedPlan">Choose Year Plan</button>
+              <span class="pill">Budget Model: <span id="budgetModelLabel">70-20-10 Rule (Beginner)</span></span>
+              <button class="btn success" id="btnApplyPlan">Lock Plan for Year</button>
+              <button class="btn secondary" id="btnNextWeek">Next Week ▶</button>
+              <button class="btn secondary" id="btnSavingsChallenge">Savings Challenge</button>
+              <span class="pill">Goal: <span id="goalStatusInline">Not set</span></span>
+              <span class="pill">Plan Lock: <span id="planLockLabel">Unlocked</span></span>
+            </div>
           </div>
+
+          <!-- BANK -->
+          <div class="panel" id="panel-bank">
+            <div class="grid2">
+              <div class="field">
+                <div class="name">Balances</div>
+                <div class="value">Checking: <span id="checkingVal">$0</span> <button class="linkish" id="btnBucket4Checking" type="button">Benchmark #4</button></div>
+                <div class="value" style="font-size:16px">Savings: <span id="savingsVal">$0</span> <button class="linkish" id="btnBucket4Savings" type="button">Benchmark #4</button></div>
+                <div class="value" style="font-size:16px">Cash: <span id="cashBankVal">$200</span></div>
+                <div class="value" style="font-size:16px">Credit Score: <span id="creditInlineVal">650</span> <button class="linkish" id="btnCreditInfo" type="button">Benchmark #5</button></div>
+                <div class="def" id="bankTypeLabel">Bank Types: Not chosen</div>
+                <div class="bank-jar-board">
+                  <div class="bank-jar-title">
+                    <span>Visual Money Benchmarks</span>
+                    <span class="bank-jar-sub" id="bankJarScaleLabel">Scale: $0 to $100</span>
+                  </div>
+                  <div class="bank-jars">
+                    <div class="bank-jar-wrap bank-jar-checking">
+                      <div class="bank-jar-label">Checking</div>
+                      <div class="bank-jar"><div class="bank-jar-fill" id="jarCheckingFill"></div></div>
+                      <div class="bank-jar-amt" id="jarCheckingAmt">$0</div>
+                    </div>
+                    <div class="bank-jar-wrap bank-jar-savings">
+                      <div class="bank-jar-label">Savings</div>
+                      <div class="bank-jar"><div class="bank-jar-fill" id="jarSavingsFill"></div></div>
+                      <div class="bank-jar-amt" id="jarSavingsAmt">$0</div>
+                    </div>
+                    <div class="bank-jar-wrap bank-jar-cash">
+                      <div class="bank-jar-label">Cash</div>
+                      <div class="bank-jar"><div class="bank-jar-fill" id="jarCashFill"></div></div>
+                      <div class="bank-jar-amt" id="jarCashAmt">$0</div>
+                    </div>
+                    <div class="bank-jar-wrap bank-jar-hysa">
+                      <div class="bank-jar-label">HYSA</div>
+                      <div class="bank-jar"><div class="bank-jar-fill" id="jarHysaFill"></div></div>
+                      <div class="bank-jar-amt" id="jarHysaAmt">$0</div>
+                    </div>
+                    <div class="bank-jar-wrap bank-jar-cd">
+                      <div class="bank-jar-label">CDs</div>
+                      <div class="bank-jar"><div class="bank-jar-fill" id="jarCdFill"></div></div>
+                      <div class="bank-jar-amt" id="jarCdAmt">$0</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="name">Write Check Amount (tap-variable)</div>
+                <div class="value" id="checkAmt">$10</div>
+                <div class="def">No typing. Tap +/- chips to set the amount.</div>
+                <div class="chips">
+                  <div class="chip" data-check="-10">-10</div>
+                  <div class="chip" data-check="-5">-5</div>
+                  <div class="chip" data-check="+5">+5</div>
+                  <div class="chip" data-check="+10">+10</div>
+                  <div class="chip" data-check="+25">+25</div>
+                </div>
+                <div class="minirow">
+                  <button class="btn" id="btnWriteCheck">Write Check</button>
+                  <button class="btn secondary" id="btnDepositCheck">Deposit Check</button>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="field">
+              <div class="name">Bank Tools</div>
+              <div class="def">Checking and savings start at $0. Use your $200 cash to fund them. High-Yield needs $30 into savings so $25 can go to high-yield and $5 stays behind to keep savings open.</div>
+              <div class="minirow">
+                <button class="btn secondary" id="btnChooseStartup">Choose Bank + Insurance (Start)</button>
+                <button class="btn secondary" id="btnCompareBanks">Compare Banks</button>
+                <button class="btn secondary" id="btnGoals">Goals</button>
+              </div>
+              <div class="impact-box" id="bankChoiceStatus">Checking: Not chosen
+Savings: Not chosen
+Insurance: Not chosen</div>
+              <div class="impact-box" id="choiceImpactBox">Choice Impact
+• Cash: no change yet
+• Credit Score: no change yet
+• Savings Goal: set this next in Plan</div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="field">
+              <div class="name">Transfer Money</div>
+              <div class="def">Move money either direction so students can cover bills and compare account growth.</div>
+              <div class="minirow" style="margin-top:10px">
+                <select id="transferAmt">
+                  <option value="10">$10</option>
+                  <option value="25" selected>$25</option>
+                  <option value="50">$50</option>
+                  <option value="100">$100</option>
+                </select>
+                <button class="btn secondary" id="btnTransferToSavings">Checking ➜ Savings</button>
+                <button class="btn secondary" id="btnTransferToChecking">Savings ➜ Checking</button>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="field">
+              <div class="name">CD Builder <button class="linkish" id="btnBucket4CD" type="button">Benchmark #4</button></div>
+              <div class="def">Open 3-month, 6-month, or 1-year CDs. If there is time left in the year, students can open another one.</div>
+              <div class="minirow" style="margin-top:10px">
+                <select id="cdTermPick">
+                  <option value="3m">3-Month CD • 4.0% APR</option>
+                  <option value="6m">6-Month CD • 4.5% APR</option>
+                </select>
+                <select id="cdDepositPick">
+                  <option value="25">$25</option>
+                  <option value="50" selected>$50</option>
+                  <option value="100">$100</option>
+                  <option value="200">$200</option>
+                </select>
+                <button class="btn secondary" id="btnOpenCD">Open CD</button>
+              </div>
+              <div class="impact-box" id="cdStatusBox">No active CDs yet.</div>
+              <div class="meter">
+                <div style="font-weight:1100">High-Yield Growth Meter <button class="linkish" id="btnBucket4HYSA" type="button">Benchmark #4</button></div>
+                <div class="muted" id="hysaMeterText">Choose and fund a high-yield account to see growth.</div>
+                <div class="meter-bar"><div class="meter-fill" id="hysaMeterFill"></div></div>
+              </div>
+              <div class="meter">
+                <div style="font-weight:1100">CD Maturity Meter <button class="linkish" id="btnBucket4CD2" type="button">Benchmark #4</button></div>
+                <div class="muted" id="cdMeterText">Open a CD to start the maturity tracker.</div>
+                <div class="meter-bar"><div class="meter-fill" id="cdMeterFill"></div></div>
+              </div>
+              <div id="cdMetersWrap" style="display:grid;gap:8px;margin-top:10px"></div>
+            </div>
+          </div>
+
+          <!-- LEDGER -->
+          <div class="panel" id="panel-ledger">
+            <div class="field">
+              <div class="name">Mini Business Ledger (tap-only)</div>
+              <div class="def">Track supplies (inventory) and expenses for your job. Purchases affect profit and cash flow.</div>
+
+              <div class="minirow" style="margin-top:10px">
+                <select id="ledgerItemPick"></select>
+                <button class="btn secondary" id="btnLedgerBuy">Buy Item</button>
+                <button class="btn secondary" id="btnLedgerUse">Use Item</button>
+                <button class="btn secondary" id="btnLedgerInventory">Inventory</button>
+              </div>
+
+              <div class="minirow">
+                <button class="btn secondary" id="btnLedgerExpense">Add Expense</button>
+                <button class="btn secondary" id="btnLedgerClearWeek">Clear Month</button>
+              </div>
+
+              <div class="log" id="ledgerBox" style="min-height:220px;max-height:320px;overflow-y:auto;font-size:12px;white-space:pre-wrap">Ledger empty.</div>
+
+              <div class="minirow">
+                <span class="pill">Inventory Value: <span id="invVal">$0</span></span>
+                <span class="pill">Month Expenses: <span id="wkExp">$0</span></span>
+                <span class="pill">Profit This Month: <span id="wkProfit">$0</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- EVENTS -->
+          <div class="panel" id="panel-events">
+            <div class="field">
+              <div class="name">Local Tax (Guaranteed)</div>
+              <div class="def">Use this if you need the Local Tax benchmark every time.</div>
+              <div class="minirow">
+                <button class="btn" id="btnGenLocalTax">Generate Local Tax (Lesson)</button>
+                <button class="btn secondary" id="btnPayLocalTax">Pay Local Tax Bill</button>
+                <span class="pill">Due: <span id="localTaxDue">$0</span></span>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="field">
+              <div class="name">Life + Job Events</div>
+              <div class="def">Every week can use the mixed event system: Life Scenario (40%) from the 48-week lesson engine, Job Event (30%) tied to the selected job, or Financial Decision (30%) using school/social style money choices.</div>
+              <div class="minirow">
+                <button class="btn secondary" id="btnInheritance">Trigger Inheritance</button>
+                <button class="btn secondary" id="btnDispute">Start Billing Dispute</button>
+                <button class="btn secondary" id="btnJobEvent">Run Job Real-Life Event</button>
+                <button class="btn secondary" id="btnSchoolEvent">Run School Decision</button>
+                <button class="btn secondary" id="btnSocialEvent">Run Social Decision</button>
+                <button class="btn warn" id="btnRandomEvent">Run Random Event</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTRACTS -->
+          <div class="panel" id="panel-contracts">
+            <div class="field">
+              <div class="name">Contracts (choose one during the year)</div>
+              <div class="def">A mission step will require selecting a contract and deciding to accept/decline.</div>
+
+              <div class="minirow" style="margin-top:10px">
+                <select id="contractPick"></select>
+                <button class="btn secondary" id="btnOpenContract">Review Selected Contract</button>
+                <button class="btn danger" id="btnCancelContract">Cancel Contract</button>
+              </div>
+
+              <div class="def" style="margin-top:10px">Active: <b id="contractState">None</b></div>
+            </div>
+          </div>
+
+          <!-- REPORTS -->
+          <div class="panel" id="panel-reports">
+            <div class="field">
+              <div class="name">12 Benchmark Tracker</div>
+              <div class="def">Live tracker for the 12 Florida financial literacy benchmarks covered during play.</div>
+              <div class="tracker-grid" id="bucketTracker"></div>
+            </div>
+            <div style="height:10px"></div>
+            <div class="field">
+              <div class="name">Standards Coverage</div>
+              <div class="minirow">
+                <button class="btn" id="btnReport">Generate Standards Report</button>
+                <button class="btn secondary" id="btnReflectionReport">View Reflections</button>
+                <button class="btn secondary" id="btnOpenReflectionReport">New Reflection</button>
+                <button class="btn secondary" id="btnClearReport">Clear Session</button>
+              </div>
+              <div class="log" id="reportBox">No report yet.</div>
+              <div class="log" id="reflectionReportBox" style="margin-top:10px;display:none">No reflections yet.</div>
+            </div>
+          </div>
+
+
+          <div class="panel" id="panel-teacherToolkit" style="display:none">
+            <div class="field">
+              <div class="name">Teacher Toolkit</div>
+              <div class="def">Discussion prompts, hidden notes, vocabulary, scenario reason, visible consequence tracking, and rubric notes appear here for Teacher role combinations.</div>
+              <div class="log" id="teacherToolkitBox" style="min-height:260px; overflow-y:auto; max-height:600px;">Teacher tools are hidden in Student role.</div>
+            </div>
+          </div>
+
+          <!-- SHEET -->
+          <div class="panel" id="panel-sheet">
+            <div class="field">
+              <div class="name">Budget Sheet</div>
+              <div class="def">This tab mirrors your worksheet idea and auto-fills from the selected job, plan, and live balances.</div>
+              <div class="log" id="sheetBox" style="min-height:260px; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-y:auto; max-height:600px;">Loading sheet...</div>
+            </div>
+          </div>
+
+          <!-- HELP -->
+          <div class="panel" id="panel-help">
+            <div class="field">
+              <div class="name">How to Play</div>
+              <div class="minirow">
+                <button class="btn secondary" id="btnHowToPlay">How to Play</button>
+                <button class="btn warn" id="btnCraftsWalkthrough">Selling Crafts Walkthrough</button>
+              </div>
+              <div class="def" style="margin-top:10px">
+                Tip: Choose and lock a year plan first, then choose a Student Job, build wants, and tap Start Year Mission. Required buttons and tabs glow so players know what to do next.
+              </div>
+              <div class="log" style="margin-top:10px">Teacher example: open the Selling Crafts Walkthrough to see a full sample run from setup to report.</div>
+            </div>
+          </div>
+
         </div>
-      </div>
-    </div>
-
-    <!-- Spend section -->
-    <div class="spend-section" id="spend-section" style="display:none">
-      <h3>🛍️ Spend Some of Your Money?</h3>
-      <div class="spend-items" id="spend-items"></div>
-    </div>
-
-    <!-- Next week button -->
-    <button class="next-btn" id="next-btn" onclick="nextWeek()" disabled>
-      Next Week ➡️
-    </button>
-    <div class="save-strip">
-      <button class="jr-mini-btn" type="button" onclick="saveGameProgress()">💾 Save Progress</button>
-      <button class="jr-mini-btn" type="button" onclick="returnToMenu()">🏠 Main Menu</button>
-      <button class="jr-mini-btn" type="button" onclick="resumeGame()">▶️ Resume</button>
-    </div>
-    <div class="jr-reset-row">
-      <button class="jr-mini-btn reset" type="button" onclick="confirmResetGame()">🔁 Reset Jr Game</button>
-      <button class="jr-mini-btn clear" type="button" onclick="clearProfileAndReset()">🗑️ Clear Saved Player</button>
-    </div>
-
-    <!-- Teacher panel -->
-    <div class="teacher-panel" id="teacher-panel" style="display:none">
-      <h4>👩‍🏫 Teacher Tools</h4>
-      <div class="teacher-row">
-        <button class="teacher-btn" onclick="teacherTriggerBonus()">💰 Bonus Payday</button>
-        <button class="teacher-btn" onclick="teacherTriggerExpense()">🔧 Surprise Expense</button>
-        <button class="teacher-btn" onclick="teacherDiscussion()">💬 Discussion Pause</button>
-        <button class="teacher-btn" onclick="teacherShowBuckets()">📋 FL Standards</button>
-      </div>
-      <div class="teacher-info" id="teacher-info">
-        Use these tools to add teachable moments anytime. The class votes together on every choice card.
-      </div>
-      <div class="teacher-info" id="teacher-reflection-box" style="margin-top:10px;display:none">
-        <b>🪞 Reflection Checkpoint</b>
-        <div id="teacher-reflection-content" style="margin-top:8px">Reflection prompts will appear here during teacher mode.</div>
-      </div>
-    </div>
+      </section>
+    </main>
   </div>
 
-  <!-- ── SCREEN 3: END REPORT ── -->
-  <div class="screen" id="screen-report">
-    <div class="report-card" id="report-card">
-      <span class="report-avatar" id="report-avatar">🎉</span>
-      <h2 id="report-title">🎉 Summer Complete!</h2>
-      <p class="subtitle" id="report-subtitle">You finished all 12 weeks! Here's how you did:</p>
-      <div class="report-stars" id="report-stars"></div>
-      <div class="report-stats">
-        <div class="report-stat earned">
-          <span class="rs-emoji">💵</span>
-          <div class="rs-label">Total Earned</div>
-          <div class="rs-value" id="rs-earned">$0</div>
-        </div>
-        <div class="report-stat saved">
-          <span class="rs-emoji">🏦</span>
-          <div class="rs-label">Total Saved</div>
-          <div class="rs-value" id="rs-saved">$0</div>
-        </div>
-        <div class="report-stat shared">
-          <span class="rs-emoji">💜</span>
-          <div class="rs-label">Shared With</div>
-          <div class="rs-value" id="rs-shared">$0</div>
-        </div>
-      </div>
-      <div class="report-badge" id="report-badge">
-        <div class="badge-title" id="badge-title">🏆 Super Saver!</div>
-        <div class="badge-sub" id="badge-sub">You hit your savings goal!</div>
-      </div>
-      <div class="skills-earned">
-        <h4>✅ Financial Skills You Practiced:</h4>
-        <div class="skill-item"><span class="sk-emoji">💵</span> Earning income and understanding where money comes from</div>
-        <div class="skill-item"><span class="sk-emoji">🏦</span> Saving money toward a goal you chose yourself</div>
-        <div class="skill-item"><span class="sk-emoji">🛍️</span> Making spending choices between needs and wants</div>
-        <div class="skill-item"><span class="sk-emoji">💜</span> Sharing with others and why it matters</div>
-        <div class="skill-item"><span class="sk-emoji">⚡</span> Handling surprises — unexpected expenses and windfalls</div>
-      </div>
-      <button class="play-again-btn" onclick="resetGame()">🔄 Play Again!</button>
-    </div>
-  </div>
-</div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal" style="display:none">
-  <div class="modal-box">
-    <span class="m-emoji" id="modal-emoji">🌟</span>
-    <h3 id="modal-title">Title</h3>
-    <p id="modal-body">Body</p>
-    <button class="modal-btn" id="modal-btn" onclick="closeModal()">Got it! 👍</button>
-  </div>
-</div>
 
 <script>
-// ══════════════════════════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════════════════════════
-const TOTAL_WEEKS = 12;
-const JR_GAME_SAVE_KEY = 'wglt_budget_boss_jr_save_v2';
-const TERM_DEFINITIONS = {
-  budgeting: {
-    title: 'What is budgeting?',
-    body: 'Budgeting means making a simple plan for your money. You decide how much to Spend, Save, and Share before all your dollars run off like squirrels with sneakers.'
-  },
-  needswants: {
-    title: 'Needs vs. Wants',
-    body: '<b>Need</b> means something important for living and learning, like food, school supplies, or basic clothes. <br><br><b>Want</b> means something fun or extra, like a treat, game item, or movie snack.'
-  },
-  goal: {
-    title: 'What is a goal?',
-    body: 'A money goal is something you are saving for on purpose. A goal helps your Save jar have a mission instead of just sitting there.'
-  },
-  earnedIncome: {
-    title: 'What is earned income?',
-    body: 'Earned income is money you get for doing work, like chores, helping in a yard, or running a stand. You worked for it, so you earned it.'
-  }
-};
-const JOB_PAY_LABELS = {
-  lemon: 'Lemonade Stand · $5–$8 per week',
-  yard: 'Yard Helper · $8–$12 per week',
-  chores: 'Household Chores · $4–$6 per week',
-  errands: 'Running Errands · $5–$7 per week'
-};
-const JR_REFLECTION_PROMPTS = {
-  default: {
-    discussion: 'What made this choice smart, tricky, or both?',
-    reflection: [
-      'What was the best part of your decision?',
-      'Would you do anything differently next time?',
-      'Did this choice help now or later?'
-    ],
-    note: 'Point students back to the jars: Spend, Save, and Share.'
-  },
-  spend: {
-    discussion: "This was a spending choice. Let's think about what the money did.",
-    reflection: [
-      'Was this worth the money?',
-      'Was that a need or a want?',
-      'How did this choice affect your money?',
-      'Would you make the same choice again?',
-      'Did this help your future or just right now?',
-      'What could you have done differently?',
-      'Was this a smart money move? Why?',
-      'Did you follow your plan or change it?',
-      'How might this choice affect you later?',
-      'Was this worth the money you spent?'
-    ],
-    note: 'Keep the language simple: what did the student get now, and what did they give up later?'
-  },
-  save: {
-    discussion: 'This choice helped the Save jar. Future-you just got a tiny high-five.',
-    reflection: [
-      'Did this help future you?',
-      'Did you save as much as you wanted?',
-      'How did saving change your money?',
-      'Was saving now a smart move?',
-      'Would you make this save choice again?',
-      'Did you stick to your plan?'
-    ],
-    note: 'Connect the action back to the savings goal and patience.'
-  },
-  share: {
-    discussion: 'This choice helped someone else too.',
-    reflection: [
-      'How did sharing affect your money?',
-      'Was helping worth it for your budget?',
-      'Did you help and still protect your plan?',
-      'Would you share the same way again?',
-      'Was this kind and smart?'
-    ],
-    note: 'Show students that generosity can live next to planning.'
-  },
-  monthly: {
-    discussion: "Let's zoom out and look at the month so far.",
-    reflection: [
-      'Which jar grew the most this month?',
-      'What would you change before next month?'
-    ],
-    note: 'Use this as a class checkpoint.'
-  },
-  final: {
-    discussion: 'Which choice changed the whole game the most?',
-    reflection: [
-      'What was your best money choice in the game?',
-      'What would you do differently if you played again?'
-    ],
-    note: 'End by naming one habit the class practiced.'
-  }
-};
-
-let state = {
-  playerName: '', avatar: '', avatarName: '',
-  job:null, cause:null, causeName:'', goal:20,
-  week:0, jars:{spend:0,save:0,share:0},
-  totalEarned:0, pendingConsequences:[],
-  boughtItems:{}, choiceMade:false,
-  gameActive:false, finalReached:false,
-  reflectionHistory: [],
-  currentTeacherReflectionType: 'default'
-};
-const JOBS = {
-  lemon: {
-    name: 'Lemonade Stand', emoji: '🍋',
-    basePay: 6,   // avg $5–8
-    supplies: { name:'Lemons & Cups', emoji:'🍋', cost:2 },
-    scenarios: [
-      // format: { week, emoji, scenario, question, options:[{emoji,text,effect,spend:null|n,save:n,share:n,consequence:{week,emoji,title,body}}] }
-      { week:1, emoji:'☀️', scenario:"It's your first day! You set up your stand and earn money.", question:'What do you do with your $6?', skipChoice:true, autoEarn:6 },
-      { week:2, emoji:'🌤️', scenario:"A neighbor walks by and buys 3 cups of lemonade!", question:'You earned extra this week! Do you save it or spend it on something fun?',
-        options:[
-          { emoji:'🏦', text:'Save it all!', effect:'+$2 to Save jar', save:2, spend:0, share:0 },
-          { emoji:'🍦', text:'Buy an ice cream ($2)', effect:'+$0 to Save, −$2 Spend', save:0, spend:-2, share:0 },
-          { emoji:'🤝', text:'Split: save $1, spend $1', effect:'+$1 Save, −$1 Spend', save:1, spend:-1, share:0 },
-        ]
-      },
-      { week:3, emoji:'🌡️', scenario:"Uh oh! It's super hot and you ran out of cups!", question:'What should you do?',
-        options:[
-          { emoji:'🛒', text:'Buy more cups ($1)', effect:'−$1 now, business keeps going!', save:0, spend:-1, share:0,
-            consequence:{ week:4, emoji:'💰', title:'Great planning!', body:'Because you bought cups, you stayed open and earned $2 extra next week!' }, bonusNextWeek:2 },
-          { emoji:'🏠', text:'Close the stand for today', effect:'No cost, but miss some sales', save:0, spend:0, share:0 },
-        ]
-      },
-      { week:4, emoji:'🌈', scenario:"Your lemonade is so popular, you made extra money this week! 🎉", question:'How do you split the extra $3?',
-        options:[
-          { emoji:'🎯', text:'All to Save jar!', effect:'+$3 to Save', save:3, spend:0, share:0 },
-          { emoji:'💜', text:'$2 Save, $1 to Share', effect:'+$2 Save, +$1 Share', save:2, spend:0, share:1 },
-          { emoji:'🍕', text:'Treat yourself ($2) + $1 Save', effect:'+$1 Save, −$2 Spend', save:1, spend:-2, share:0 },
-        ]
-      },
-      { week:5, emoji:'🌧️', scenario:"It rained all week and nobody bought lemonade. You earned less this week.", question:'Your Save jar is looking small. What do you do?',
-        options:[
-          { emoji:'💪', text:"Keep saving — I'll be patient!", effect:'Keep what you have saved', save:0, spend:0, share:0 },
-          { emoji:'😟', text:'Take $2 from Save to spend', effect:'−$2 from Save jar', save:-2, spend:0, share:0 },
-        ]
-      },
-      { week:6, emoji:'🎪', scenario:"A community fair is happening! Lots of people want lemonade!", question:'You earned double this week! How do you use the extra $5?',
-        options:[
-          { emoji:'🏆', text:'Save $3, Share $1, Spend $1', effect:'Best split!', save:3, spend:-1, share:1 },
-          { emoji:'🛍️', text:'Spend it all on fun', effect:'−$5 Spend, $0 Save', save:0, spend:-5, share:0 },
-          { emoji:'💜', text:'Save $2, Share $3', effect:'+$2 Save, +$3 Share!', save:2, spend:0, share:3 },
-        ]
-      },
-      { week:7, emoji:'🤝', scenario:"A friend asks to borrow $2. They promise to pay you back next week.", question:'What do you do?',
-        options:[
-          { emoji:'😊', text:'Lend them $2', effect:'You give $2 now, get it back Week 8', save:0, spend:-2, share:0,
-            consequence:{ week:8, emoji:'🤝', title:'Your friend paid you back!', body:'Your friend returned the $2 you lent them. Lending to trustworthy people works out!' }, bonusNextWeek:2 },
-          { emoji:'🙅', text:"No thanks, I'm saving", effect:'Keep your $2 safe', save:0, spend:0, share:0 },
-          { emoji:'💜', text:'Give it as a gift ($2)', effect:'$2 goes to Share jar', save:0, spend:0, share:2 },
-        ]
-      },
-      { week:8, emoji:'🌟', scenario:"You've been working hard all summer! A customer left a $3 tip!", question:'What do you do with the surprise tip?',
-        options:[
-          { emoji:'🏦', text:'Add it to savings!', effect:'+$3 to Save jar!', save:3, spend:0, share:0 },
-          { emoji:'💜', text:'Donate it to your cause', effect:'+$3 to Share jar!', save:0, spend:0, share:3 },
-          { emoji:'🍭', text:'Buy a treat ($2) + save $1', effect:'+$1 Save, −$2 Spend', save:1, spend:-2, share:0 },
-        ]
-      },
-      { week:9, emoji:'🎒', scenario:"School is almost starting. Do you want to buy something for back to school?",
-        question:'You have money in your Spend jar. Do you want to use some of it?',
-        options:[
-          { emoji:'✏️', text:'Buy school supplies ($3)', effect:'−$3 Spend (good use!)', save:0, spend:-3, share:0 },
-          { emoji:'🏦', text:'Keep saving!', effect:'Save it for your goal', save:0, spend:0, share:0 },
-          { emoji:'🎒', text:'Buy something fun ($2)', effect:'−$2 Spend', save:0, spend:-2, share:0 },
-        ]
-      },
-      { week:10, emoji:'🍁', scenario:"Fall is here! Customers love stopping by after school for a cup of cold lemonade.", question:'You earned extra this week! What do you do with the bonus $2?',
-        options:[
-          { emoji:'🏦', text:'Add $2 to Save!', effect:'+$2 Save — so close to the goal!', save:2, spend:0, share:0 },
-          { emoji:'💜', text:'Give $2 to your cause!', effect:'+$2 Share — generous!', save:0, spend:0, share:2 },
-          { emoji:'🍭', text:'Buy a treat ($2)', effect:'−$2 Spend — you earned it!', save:0, spend:-2, share:0 },
-        ]
-      },
-      { week:11, emoji:'❄️', scenario:"Getting cooler outside! You decide to add hot cocoa to your stand to keep customers coming.", question:'Do you spend $2 from your Spend jar to buy cocoa supplies?',
-        options:[
-          { emoji:'☕', text:'Yes! Buy cocoa supplies ($2)', effect:'−$2 Spend, but more customers!', save:0, spend:-2, share:0,
-            consequence:{ week:12, emoji:'🎉', title:'Great business thinking!', body:'The hot cocoa brought new customers! You earned $3 extra this final week!' }, bonusNextWeek:3 },
-          { emoji:'🍋', text:'Stick with lemonade only', effect:'No extra cost — keep it simple', save:0, spend:0, share:0 },
-        ]
-      },
-      { week:12, emoji:'🏁', scenario:"Last week of the season! Your lemonade (and cocoa!) stand was a huge success! 🎉", question:'For your very last earnings, how do you split the money?',
-        options:[
-          { emoji:'🏆', text:'Save + Share + tiny treat', effect:'Perfect final split!', save:2, spend:-1, share:1, isFinal:true },
-          { emoji:'🏦', text:'Save it all! Final push!', effect:'+$3 to Save — goal time!', save:3, spend:0, share:0, isFinal:true },
-          { emoji:'🎉', text:'Celebrate — spend some!', effect:'You earned this celebration!', save:1, spend:-2, share:0, isFinal:true },
-        ]
-      },
-    ]
-  },
-  yard: {
-    name: 'Yard Helper', emoji: '🌿',
-    basePay: 9,   // avg $8–12
-    supplies: { name:'Work Gloves & Bags', emoji:'🧤', cost:2 },
-    scenarios: [
-      { week:1, emoji:'🌳', scenario:"Your first yard job! You rake leaves and bag them up. Great work!", question:'You earned $9 this week. What do you do with it?', skipChoice:true, autoEarn:9 },
-      { week:2, emoji:'🌻', scenario:"A neighbor wants you to weed their garden. Extra job, extra money!", question:'You earned $3 extra. Save it or spend it?',
-        options:[
-          { emoji:'🏦', text:'Save all $3!', effect:'+$3 to Save jar', save:3, spend:0, share:0 },
-          { emoji:'🍦', text:'Buy a snack ($2)', effect:'+$1 Save, −$2 Spend', save:1, spend:-2, share:0 },
-          { emoji:'💜', text:'$2 Save, $1 Share', effect:'+$2 Save, +$1 Share', save:2, spend:0, share:1 },
-        ]
-      },
-      { week:3, emoji:'🌧️', scenario:"Your work gloves got a hole in them! You need new ones to work safely.", question:'What do you do?',
-        options:[
-          { emoji:'🧤', text:'Buy new gloves ($2)', effect:'−$2 now, safe to keep working!', save:0, spend:-2, share:0,
-            consequence:{ week:4, emoji:'💪', title:'Good choice!', body:'New gloves kept you safe and you finished more jobs this week — earning $2 extra!' }, bonusNextWeek:2 },
-          { emoji:'😬', text:'Keep using old gloves', effect:'No cost, but risky...', save:0, spend:0, share:0 },
-        ]
-      },
-      { week:4, emoji:'🏡', scenario:"Three neighbors hired you this week — your best week yet!", question:'You earned $4 extra! How do you split it?',
-        options:[
-          { emoji:'🎯', text:'All to Save jar!', effect:'+$4 Save — goal getting closer!', save:4, spend:0, share:0 },
-          { emoji:'💜', text:'$2 Save, $2 Share', effect:'+$2 Save, +$2 Share', save:2, spend:0, share:2 },
-          { emoji:'🎉', text:'$2 Save, $1 Spend, $1 Share', effect:'Balanced split!', save:2, spend:-1, share:1 },
-        ]
-      },
-      { week:5, emoji:'😓', scenario:"It was so hot this week that you could only do two jobs instead of four.", question:"You earned less than usual. How do you feel about your savings?",
-        options:[
-          { emoji:'💪', text:"I'll keep being patient!", effect:'Great attitude — save what you have', save:0, spend:0, share:0 },
-          { emoji:'💸', text:'Take $2 from Save to feel better', effect:'−$2 from Save jar', save:-2, spend:0, share:0 },
-        ]
-      },
-      { week:6, emoji:'🎃', scenario:"A neighbor wants their yard decorated for a party! Big job, big pay!", question:'You earned $5 extra this week! How do you split it?',
-        options:[
-          { emoji:'🏆', text:'Save $3, Share $1, Spend $1', effect:'Great balance!', save:3, spend:-1, share:1 },
-          { emoji:'💜', text:'Save $2, Share $3', effect:'+$2 Save, +$3 to your cause!', save:2, spend:0, share:3 },
-          { emoji:'🛍️', text:'Spend $3, Save $2', effect:'You earned it!', save:2, spend:-3, share:0 },
-        ]
-      },
-      { week:7, emoji:'❓', scenario:"You find $3 on the ground near where you were working. Nobody is around.",
-        question:'What is the right thing to do?',
-        options:[
-          { emoji:'🏠', text:"Tell the neighbor — it's probably theirs", effect:'You did the right thing! +karma', save:0, spend:0, share:0,
-            consequence:{ week:8, emoji:'🙏', title:'The neighbor was so grateful!', body:'The $3 was theirs. They gave you a $4 tip for being honest! Honesty pays!' }, bonusNextWeek:4 },
-          { emoji:'💰', text:'Keep it — finders keepers!', effect:'+$3 to Spend jar', save:0, spend:3, share:0 },
-          { emoji:'💜', text:'Donate it to your cause', effect:'+$3 to Share jar', save:0, spend:0, share:3 },
-        ]
-      },
-      { week:8, emoji:'🍂', scenario:"Fall is here and there are TONS of leaves! Super busy week!", question:'You earned $4 extra. Last big push for your savings goal!',
-        options:[
-          { emoji:'🏆', text:'Save $4 — goal time!', effect:'+$4 to Save! Almost there!', save:4, spend:0, share:0 },
-          { emoji:'🎯', text:'$3 Save, $1 Share', effect:'+$3 Save, +$1 Share', save:3, spend:0, share:1 },
-          { emoji:'🎉', text:'$2 Save, $2 fun', effect:'+$2 Save, −$2 Spend', save:2, spend:-2, share:0 },
-        ]
-      },
-      { week:9, emoji:'🏫', scenario:"School starts soon. Your neighbor says they'll need you every weekend this fall!",
-        question:'Will you keep working after summer?',
-        options:[
-          { emoji:'✅', text:'Yes! I can handle it!', effect:'More income coming!', save:0, spend:0, share:0 },
-          { emoji:'📚', text:'Maybe just one job a week', effect:'Balance school + work', save:0, spend:0, share:0 },
-          { emoji:'😴', text:'Take a break, focus on school', effect:'Rest and recharge!', save:0, spend:0, share:0 },
-        ]
-      },
-      { week:10, emoji:'🍁', scenario:"Fall is really here now! Raking leaves is your busiest time of year!", question:'You earned $3 extra this week from all the leaf piles! How do you use it?',
-        options:[
-          { emoji:'🏦', text:'Save all $3! Big push!', effect:'+$3 Save — almost at goal!', save:3, spend:0, share:0 },
-          { emoji:'🎯', text:'$2 Save, $1 Share', effect:'+$2 Save, +$1 to your cause!', save:2, spend:0, share:1 },
-          { emoji:'🍫', text:'Treat yourself ($2) + $1 Save', effect:'+$1 Save, −$2 Spend', save:1, spend:-2, share:0 },
-        ]
-      },
-      { week:11, emoji:'❄️', scenario:"It's getting cold! A neighbor asks if you can help rake AND bag their leaves before winter.", question:'You can take on an extra big job for $4 more — but it is hard work!',
-        options:[
-          { emoji:'💪', text:'Take the job! ($4 extra)', effect:'+$4 bonus this week!', save:0, spend:0, share:0, bonusNextWeek:4 },
-          { emoji:'😴', text:'Take a break — I worked hard all season', effect:'No extra, rest up!', save:0, spend:0, share:0 },
-          { emoji:'🤝', text:'Do it and donate the $4', effect:'+$4 to Share jar!', save:0, spend:0, share:4 },
-        ]
-      },
-      { week:12, emoji:'🏁', scenario:"Last week of the season! The whole neighborhood loves your yard work! 🎉", question:'Final week! How do you split your last earnings?',
-        options:[
-          { emoji:'🏆', text:'Save + Share + celebrate!', effect:'Perfect ending!', save:3, spend:-2, share:2, isFinal:true },
-          { emoji:'🏦', text:'Save it all! Goal first!', effect:'Final push to the goal!', save:5, spend:0, share:0, isFinal:true },
-          { emoji:'💜', text:'$3 Save, $4 Share', effect:'Generous ending!', save:3, spend:0, share:4, isFinal:true },
-        ]
-      },
-    ]
-  },
-
-  chores: {
-    name: 'Household Chores', emoji: '🧹',
-    basePay: 5,   // avg $4–6
-    supplies: { name:'Cleaning Supplies', emoji:'🧴', cost:1 },
-    scenarios: [
-      { week:1, emoji:'🏠', scenario:"First week of chores! You cleaned your room, washed dishes, and vacuumed. Great job!", question:'You earned $5 this week. Watch your jars fill up!', skipChoice:true, autoEarn:5 },
-      { week:2, emoji:'✨', scenario:"Mom asked you to clean the bathroom too — and paid you extra!", question:'You got $2 extra for the bathroom job! What do you do with it?',
-        options:[
-          { emoji:'🏦', text:'Save the whole $2!', effect:'+$2 to Save jar', save:2, spend:0, share:0 },
-          { emoji:'🍭', text:'Buy a treat ($2)', effect:'Fun now, nothing to Save', save:0, spend:-2, share:0 },
-          { emoji:'🤝', text:'$1 Save, $1 Share', effect:'+$1 Save, +$1 Share', save:1, spend:0, share:1 },
-        ]
-      },
-      { week:3, emoji:'🧴', scenario:"You ran out of cleaning spray! You need it to finish your chores properly.", question:'What do you do?',
-        options:[
-          { emoji:'🛒', text:'Buy more spray ($1)', effect:'−$1 now, chores get done right!', save:0, spend:-1, share:0,
-            consequence:{ week:4, emoji:'⭐', title:'Nice work!', body:'You finished every chore perfectly and got a $2 bonus for doing such a great job!' }, bonusNextWeek:2 },
-          { emoji:'😬', text:'Skip the cleaning — no spray', effect:'No cost, but chores not done well', save:0, spend:0, share:0 },
-        ]
-      },
-      { week:4, emoji:'🌟', scenario:"Your family noticed how clean the house is! They gave you a bonus!", question:'You earned an extra $3 this week! How do you split it?',
-        options:[
-          { emoji:'🎯', text:'All to Save jar!', effect:'+$3 Save — goal getting closer!', save:3, spend:0, share:0 },
-          { emoji:'💜', text:'$2 Save, $1 Share', effect:'+$2 Save, +$1 Share', save:2, spend:0, share:1 },
-          { emoji:'🎉', text:'Treat yourself ($2), save $1', effect:'+$1 Save, −$2 Spend', save:1, spend:-2, share:0 },
-        ]
-      },
-      { week:5, emoji:'😓', scenario:"This week was really busy with school. You only finished half your chores.", question:'You earned less this week. How do you feel about your Save jar?',
-        options:[
-          { emoji:'💪', text:'Stay patient — keep saving!', effect:'Great attitude! Keep going.', save:0, spend:0, share:0 },
-          { emoji:'😟', text:'Take $2 from Save jar', effect:'−$2 from Save jar', save:-2, spend:0, share:0 },
-        ]
-      },
-      { week:6, emoji:'🎂', scenario:"It's a family celebration! You helped set up, cook, and clean up the whole party!", question:'You earned $4 extra for helping at the party! How do you split it?',
-        options:[
-          { emoji:'🏆', text:'$2 Save, $1 Share, $1 Spend', effect:'Perfect balance!', save:2, spend:-1, share:1 },
-          { emoji:'🏦', text:'Save it all!', effect:'+$4 Save — amazing push!', save:4, spend:0, share:0 },
-          { emoji:'💜', text:'$2 Save, $2 Share', effect:'+$2 Save, +$2 Share!', save:2, spend:0, share:2 },
-        ]
-      },
-      { week:7, emoji:'🔍', scenario:"While dusting, you find $2 behind the couch cushions. Nobody saw you find it.", question:'What do you do with the found $2?',
-        options:[
-          { emoji:'🏠', text:"Tell your family — it's probably theirs", effect:'Honest choice!', save:0, spend:0, share:0,
-            consequence:{ week:8, emoji:'🤗', title:'Your family was so happy!', body:'Your family said keep it as a reward for being honest. They gave you $3 for doing the right thing!' }, bonusNextWeek:3 },
-          { emoji:'💰', text:'Keep it — you found it!', effect:'+$2 to Spend jar', save:0, spend:2, share:0 },
-          { emoji:'💜', text:'Donate it to your cause', effect:'+$2 to Share jar', save:0, spend:0, share:2 },
-        ]
-      },
-      { week:8, emoji:'💫', scenario:"You've been helping all summer! Your chores are looking really professional.", question:'You earned a $3 bonus for quality work! What do you do?',
-        options:[
-          { emoji:'🏦', text:'Save the whole $3!', effect:'+$3 Save — so close to goal!', save:3, spend:0, share:0 },
-          { emoji:'💜', text:'$2 Save, $1 Share', effect:'+$2 Save, +$1 Share', save:2, spend:0, share:1 },
-          { emoji:'🎉', text:'Celebrate with $2, save $1', effect:'+$1 Save, −$2 Spend', save:1, spend:-2, share:0 },
-        ]
-      },
-      { week:9, emoji:'🎒', scenario:"School started! You still want to help at home, but homework comes first.", question:'How much time will you give to chores this week?',
-        options:[
-          { emoji:'✅', text:'All my usual chores!', effect:'Keep earning full amount', save:0, spend:0, share:0 },
-          { emoji:'📚', text:'Half my chores — school first', effect:'Less income, more study time', save:0, spend:0, share:0 },
-          { emoji:'😴', text:'Take a break this week', effect:'No income, but well rested!', save:0, spend:0, share:0 },
-        ]
-      },
-      { week:10, emoji:'🍂', scenario:"Fall means more chores — raking inside porch, putting away summer stuff!", question:'You earned $2 extra for fall cleanup. How do you use it?',
-        options:[
-          { emoji:'🏦', text:'Save $2 — final push!', effect:'+$2 Save — almost there!', save:2, spend:0, share:0 },
-          { emoji:'💜', text:'$1 Save, $1 Share', effect:'+$1 Save, +$1 Share', save:1, spend:0, share:1 },
-          { emoji:'🍫', text:'Buy a treat ($2)', effect:'You earned some fun!', save:0, spend:-2, share:0 },
-        ]
-      },
-      { week:11, emoji:'❄️', scenario:"It's getting cold! Your family asks you to help prepare the house for winter — big job!", question:'Do you take on the extra winter-prep chores for $3 more?',
-        options:[
-          { emoji:'💪', text:'Yes! I can do it! (+$3)', effect:'+$3 bonus next week!', save:0, spend:0, share:0, bonusNextWeek:3 },
-          { emoji:'☕', text:'Take it easy this week', effect:'Rest and relax', save:0, spend:0, share:0 },
-          { emoji:'💜', text:'Do it and donate the $3', effect:'+$3 to Share jar!', save:0, spend:0, share:3 },
-        ]
-      },
-      { week:12, emoji:'🏁', scenario:"Final week! Your home sparkles! The whole family is proud of how helpful you've been! 🎉", question:'Last week! How do you split your final earnings?',
-        options:[
-          { emoji:'🏆', text:'Save + Share + tiny treat', effect:'Perfect final split!', save:2, spend:-1, share:1, isFinal:true },
-          { emoji:'🏦', text:'Save it all — goal time!', effect:'Final push to your goal!', save:3, spend:0, share:0, isFinal:true },
-          { emoji:'💜', text:'Big share week!', effect:'+$2 Save, +$2 Share', save:2, spend:0, share:2, isFinal:true },
-        ]
-      },
-    ]
-  },
-
-  errands: {
-    name: 'Running Errands', emoji: '🚲',
-    basePay: 6,   // avg $5–7
-    supplies: { name:'Errand Bag', emoji:'🎒', cost:1 },
-    scenarios: [
-      { week:1, emoji:'🚲', scenario:"First errand day! You picked up groceries for a neighbor and mailed a letter. Off to a great start!", question:'You earned $6 this week. Watch your jars fill up!', skipChoice:true, autoEarn:6 },
-      { week:2, emoji:'🛒', scenario:"A neighbor asked you to do TWO errands this week — double the trips!", question:'You earned $2 extra! What do you do with it?',
-        options:[
-          { emoji:'🏦', text:'Save it all!', effect:'+$2 to Save jar', save:2, spend:0, share:0 },
-          { emoji:'🍦', text:'Buy a treat ($2)', effect:'Fun now, $0 to Save', save:0, spend:-2, share:0 },
-          { emoji:'🤝', text:'$1 Save, $1 Share', effect:'+$1 Save, +$1 Share', save:1, spend:0, share:1 },
-        ]
-      },
-      { week:3, emoji:'🗺️', scenario:"You went to the wrong store! You have to go back and do the errand again — embarrassing!", question:'How do you feel, and what do you do differently next time?',
-        options:[
-          { emoji:'📝', text:'Write down the address next time', effect:'Good planning! Neighbor gives a tip', save:0, spend:0, share:0,
-            consequence:{ week:4, emoji:'⭐', title:'Great learning!', body:'You wrote things down and got every errand right this week. Neighbor tipped you $2!' }, bonusNextWeek:2 },
-          { emoji:'😞', text:'Just try to remember better', effect:'No extra cost, but risky', save:0, spend:0, share:0 },
-        ]
-      },
-      { week:4, emoji:'⭐', scenario:"Best errand week yet — four neighbors hired you!", question:'You earned $3 extra! How do you split it?',
-        options:[
-          { emoji:'🎯', text:'All to Save!', effect:'+$3 Save — great progress!', save:3, spend:0, share:0 },
-          { emoji:'💜', text:'$2 Save, $1 Share', effect:'+$2 Save, +$1 Share', save:2, spend:0, share:1 },
-          { emoji:'🎉', text:'$1 Save, $2 treat', effect:'+$1 Save, −$2 Spend', save:1, spend:-2, share:0 },
-        ]
-      },
-      { week:5, emoji:'🌧️', scenario:"It rained every day this week and it wasn't safe to bike. You only did one errand.", question:'The Save jar barely grew. What do you do?',
-        options:[
-          { emoji:'💪', text:"Stay patient! Rain can't last forever.", effect:'Good attitude! Keep saving.', save:0, spend:0, share:0 },
-          { emoji:'😟', text:'Take $2 out of Save jar', effect:'−$2 from Save — sets back goal', save:-2, spend:0, share:0 },
-        ]
-      },
-      { week:6, emoji:'🏪', scenario:"The whole block has errands this week — back to school supply runs for every family!", question:'You earned $5 extra! How do you split the big haul?',
-        options:[
-          { emoji:'🏆', text:'$3 Save, $1 Share, $1 Spend', effect:'Great balance!', save:3, spend:-1, share:1 },
-          { emoji:'🏦', text:'Save it all!', effect:'+$5 Save — huge week!', save:5, spend:0, share:0 },
-          { emoji:'💜', text:'$2 Save, $3 Share', effect:'+$2 Save, +$3 to your cause!', save:2, spend:0, share:3 },
-        ]
-      },
-      { week:7, emoji:'📦', scenario:"A neighbor asks you to return a package to the store. There's a $5 gift card inside that wasn't supposed to be there.", question:'What do you do with the gift card?',
-        options:[
-          { emoji:'🏠', text:"Tell the neighbor — it belongs to them", effect:'Honest choice!', save:0, spend:0, share:0,
-            consequence:{ week:8, emoji:'🤗', title:'The neighbor was thrilled!', body:'You returned the gift card. The neighbor was so thankful they gave you a $4 tip! Honesty always pays.' }, bonusNextWeek:4 },
-          { emoji:'💳', text:'Keep it — you found it!', effect:'+$5 Spend (but is it really yours?)', save:0, spend:5, share:0 },
-          { emoji:'💜', text:'Donate the gift card value', effect:'+$5 to Share jar', save:0, spend:0, share:5 },
-        ]
-      },
-      { week:8, emoji:'🌟', scenario:"You've built a great reputation! Three new neighbors want YOU to run their errands.", question:'You got a $3 tip for being so reliable! What do you do?',
-        options:[
-          { emoji:'🏦', text:'Save the whole $3!', effect:'+$3 Save — so close!', save:3, spend:0, share:0 },
-          { emoji:'💜', text:'$2 Save, $1 Share', effect:'+$2 Save, +$1 Share', save:2, spend:0, share:1 },
-          { emoji:'🎊', text:'Celebrate $2, save $1', effect:'+$1 Save, −$2 Spend', save:1, spend:-2, share:0 },
-        ]
-      },
-      { week:9, emoji:'🎒', scenario:"School started! You still want to run errands on weekends, but homework matters most.", question:'How do you balance errands and school?',
-        options:[
-          { emoji:'✅', text:'Weekend errands only — I can do it!', effect:'Full weekend earnings', save:0, spend:0, share:0 },
-          { emoji:'📚', text:'One errand a week — school first', effect:'Smaller income, more study time', save:0, spend:0, share:0 },
-          { emoji:'😴', text:'Take a month off for school', effect:'No income — but fully focused', save:0, spend:0, share:0 },
-        ]
-      },
-      { week:10, emoji:'🍂', scenario:"Fall errands are busiest — pumpkins to carry, donations to drop off!", question:'You earned $2 extra from fall errands. How do you use it?',
-        options:[
-          { emoji:'🏦', text:'Save $2 — final stretch!', effect:'+$2 Save — almost there!', save:2, spend:0, share:0 },
-          { emoji:'💜', text:'$1 Save, $1 Share', effect:'+$1 Save, +$1 Share', save:1, spend:0, share:1 },
-          { emoji:'🍫', text:'Treat yourself ($2)', effect:'You earned some fun!', save:0, spend:-2, share:0 },
-        ]
-      },
-      { week:11, emoji:'❄️', scenario:"Cold outside! A neighbor needs help picking up winter supplies — heavy bags, long list!", question:'Take on the big cold-weather errand run for $3 extra?',
-        options:[
-          { emoji:'🧥', text:'Bundle up and do it! (+$3)', effect:'+$3 bonus next week!', save:0, spend:0, share:0, bonusNextWeek:3 },
-          { emoji:'🏠', text:"Too cold — I'll stay in", effect:'No extra, stay warm!', save:0, spend:0, share:0 },
-          { emoji:'💜', text:'Do it and donate the $3', effect:'+$3 to Share jar!', save:0, spend:0, share:3 },
-        ]
-      },
-      { week:12, emoji:'🏁', scenario:"Last errand week! The whole neighborhood trusts you. You're the best helper on the block! 🎉", question:'Final week! How do you split your last earnings?',
-        options:[
-          { emoji:'🏆', text:'Save + Share + celebrate!', effect:'Perfect final split!', save:2, spend:-1, share:2, isFinal:true },
-          { emoji:'🏦', text:'Save it all — hit that goal!', effect:'Final push!', save:4, spend:0, share:0, isFinal:true },
-          { emoji:'💜', text:'$2 Save, $3 Share', effect:'Generous ending!', save:2, spend:0, share:3, isFinal:true },
-        ]
-      },
-    ]
-  },
-
-};
-
-// Spend shop items (same for both jobs)
-const SHOP_ITEMS = [
-  { id:'icecream', emoji:'🍦', name:'Ice Cream', cost:2, oneTime:false },
-  { id:'book',     emoji:'📖', name:'Fun Book',  cost:3, oneTime:true  },
-  { id:'stickers', emoji:'✨', name:'Stickers',  cost:1, oneTime:false },
-  { id:'toy',      emoji:'🧸', name:'Small Toy', cost:4, oneTime:true  },
-  { id:'snack',    emoji:'🍿', name:'Snacks',    cost:2, oneTime:false },
-  { id:'card',     emoji:'🎴', name:'Trading Card', cost:3, oneTime:false },
-];
-
-const WEEK_EMOJIS = ['☀️','🌤️','⛅','🌡️','🌧️','🌈','🌟','🍂','🎒','🍁','❄️','🏁'];
-const SHARED_PROFILE_KEY = 'wgltSharedPlayerProfile';
-function saveSharedProfile(){ try{ localStorage.setItem(SHARED_PROFILE_KEY, JSON.stringify({ playerName: state.playerName || '', avatar: state.avatar || '', avatarName: state.avatarName || '', updatedAt: new Date().toISOString() })); }catch(err){} }
-function loadSharedProfile(){ try{ const raw = localStorage.getItem(SHARED_PROFILE_KEY); return raw ? JSON.parse(raw) : null; }catch(err){ return null; } }
-function clearSharedProfile(){ try{ localStorage.removeItem(SHARED_PROFILE_KEY); }catch(err){} }
-function snapshotGameState(){
-  return {
-    savedAt: new Date().toISOString(),
-    state: JSON.parse(JSON.stringify(state)),
-    teacherMode: isTeacherJrMode()
-  };
-}
-function saveGameProgress(silent=false){
-  try{
-    localStorage.setItem(JR_GAME_SAVE_KEY, JSON.stringify(snapshotGameState()));
-    updateResumeButton();
-    if(!silent) showModal('💾','Progress Saved!','Your Jr game is saved on this browser. You can use Resume Last Game later.','Nice! 👍', closeModal);
-  }catch(err){
-    if(!silent) showModal('⚠️','Save Problem','This browser would not save the game right now.','OK', closeModal);
-  }
-}
-function loadSavedGame(){
-  try{
-    const raw = localStorage.getItem(JR_GAME_SAVE_KEY);
-    return raw ? JSON.parse(raw) : null;
-  }catch(err){ return null; }
-}
-function clearSavedGame(){ try{ localStorage.removeItem(JR_GAME_SAVE_KEY); }catch(err){} updateResumeButton(); }
-function updateResumeButton(){
-  const btn = document.getElementById('resume-btn');
-  const data = loadSavedGame();
-  if(btn) btn.disabled = !(data && data.state && (data.state.gameActive || data.state.week > 0 || data.state.finalReached));
-}
-function syncEarnedIncomeLabel(){
-  const el = document.getElementById('earned-income-text');
-  if(!el) return;
-  el.textContent = state.job ? (JOB_PAY_LABELS[state.job] || JOBS[state.job].name) : 'Not picked yet';
-}
-function restoreSelectionsUI(){
-  document.querySelectorAll('.job-card').forEach(c=>c.classList.remove('selected'));
-  document.querySelectorAll('.cause-btn').forEach(b=>b.classList.remove('selected'));
-  document.querySelectorAll('.goal-btn').forEach(b=>b.classList.remove('selected'));
-  if(state.job && document.getElementById('job-'+state.job)) document.getElementById('job-'+state.job).classList.add('selected');
-  if(state.cause && document.getElementById('cause-'+state.cause)) document.getElementById('cause-'+state.cause).classList.add('selected');
-  if(state.goal && document.getElementById('goal-'+state.goal)) document.getElementById('goal-'+state.goal).classList.add('selected');
-  syncEarnedIncomeLabel();
-}
-function refreshGameUIAfterLoad(){
-  updateHeaderAvatar();
-  updateHeader();
-  updateJars();
-  restoreSelectionsUI();
-  document.getElementById('week-progress').style.display = state.gameActive || state.finalReached ? 'flex' : 'none';
-  document.getElementById('choice-card').style.display = 'none';
-  document.getElementById('spend-section').style.display = state.gameActive || state.finalReached ? 'block' : 'none';
-  document.getElementById('next-btn').disabled = false;
-  if(state.gameActive || state.finalReached){
-    showScreen(state.finalReached ? 'screen-report' : 'screen-game');
-    if(!state.finalReached){
-      const scenario = JOBS[state.job]?.scenarios?.[Math.max(0, state.week-1)];
-      if(scenario) updateTeacherWeekPrompt(scenario, state.currentTeacherReflectionType || 'default');
+window.startRoleDifficulty = window.startRoleDifficulty || function(role, experience){
+  try {
+    if(experience === 'beginner'){
+      try{
+        sessionStorage.setItem('wglt_jr_role', role);
+        sessionStorage.setItem('wglt_jr_experience', experience);
+      }catch(e){}
+      window.location.href = './budget-boss-jr.html?teacher=' + (role === 'teacher' ? '1' : '0') + '&role=' + encodeURIComponent(role) + '&experience=' + encodeURIComponent(experience);
+      return;
     }
-  }else{
-    showScreen('screen-welcome');
-  }
-  if(state.finalReached) buildReport();
-}
-function resumeGame(){
-  const saved = loadSavedGame();
-  if(!(saved && saved.state)) return;
-  state = Object.assign({}, state, saved.state);
-  if(!state.reflectionHistory) state.reflectionHistory = [];
-  if(!state.currentTeacherReflectionType) state.currentTeacherReflectionType = 'default';
-  hydrateSharedProfileUI();
-updateResumeButton();
-syncEarnedIncomeLabel();
-  refreshGameUIAfterLoad();
-}
-function returnToMenu(){
-  saveGameProgress(true);
-  showScreen('screen-welcome');
-  updateResumeButton();
-}
-function showTermDefinition(termKey){
-  const term = TERM_DEFINITIONS[termKey];
-  if(!term) return;
-  showModal('📘', term.title, term.body, 'Got it! 👍', closeModal);
-}
-function openTeacherQuestion(question, type='default'){
-  const pack = JR_REFLECTION_PROMPTS[type] || JR_REFLECTION_PROMPTS.default;
-  showModal('🪞','Class Reflection Question', question + '<br><br><b>Teacher tip:</b> ' + pack.note + '<br><br><b>Teacher Mode prompt:</b> What would you tell a friend to do here?', 'Read it out loud 🎤', closeModal);
-}
-
-// ══════════════════════════════════════════════════════════════════
-// AVATAR & NAME
-// ══════════════════════════════════════════════════════════════════
-function selectAvatar(emoji, name) {
-  state.avatar = emoji;
-  state.avatarName = name;
-  // Update grid selection
-  document.querySelectorAll('.avatar-btn').forEach(b => b.classList.remove('selected'));
-  // Find the clicked button by matching emoji
-  document.querySelectorAll('.avatar-btn').forEach(b => {
-    if (b.querySelector('.av-emoji') && b.querySelector('.av-emoji').textContent === emoji) {
-      b.classList.add('selected');
-    }
-  });
-  saveSharedProfile();
-  checkStartReady();
-}
-
-function onNameInput(val) {
-  state.playerName = val.trim();
-  saveSharedProfile();
-  saveGameProgress(true);
-  checkStartReady();
-}
-
-function updateHeaderAvatar() {
-  if (state.avatar) {
-    document.getElementById('header-logo').style.display = 'none';
-    const ha = document.getElementById('header-avatar');
-    ha.style.display = 'flex';
-    document.getElementById('header-avatar-emoji').textContent = state.avatar;
-    document.getElementById('header-avatar-name').textContent = state.playerName || state.avatarName;
-  }
-}
-
-// ══════════════════════════════════════════════════════════════════
-// SETUP
-// ══════════════════════════════════════════════════════════════════
-function selectJob(id) {
-  state.job = id;
-  document.querySelectorAll('.job-card').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('job-'+id).classList.add('selected');
-  syncEarnedIncomeLabel();
-  saveGameProgress(true);
-  checkStartReady();
-}
-
-function selectCause(id, name) {
-  state.cause = id;
-  state.causeName = name;
-  document.querySelectorAll('.cause-btn').forEach(b=>b.classList.remove('selected'));
-  document.getElementById('cause-'+id).classList.add('selected');
-  saveGameProgress(true);
-  checkStartReady();
-}
-
-function selectGoal(amount) {
-  state.goal = amount;
-  document.querySelectorAll('.goal-btn').forEach(b=>b.classList.remove('selected'));
-  document.getElementById('goal-'+amount).classList.add('selected');
-  saveGameProgress(true);
-  checkStartReady();
-}
-
-function checkStartReady() {
-  document.getElementById('start-btn').disabled = !(state.job && state.cause && state.goal && state.avatar);
-}
-
-// ══════════════════════════════════════════════════════════════════
-// GAME START
-// ══════════════════════════════════════════════════════════════════
-function startGame() {
-  saveSharedProfile();
-  state.week = 0;
-  state.jars = { spend:0, save:0, share:0 };
-  state.totalEarned = 0;
-  state.pendingConsequences = [];
-  state.boughtItems = {};
-  state.gameActive = true;
-  state.finalReached = false;
-  state.reflectionHistory = [];
-  state.currentTeacherReflectionType = 'default';
-
-  updateHeaderAvatar();
-  showScreen('screen-game');
-  document.getElementById('week-progress').style.display = 'flex';
-
-  const greeting = state.playerName ? `Ready, ${state.playerName}? ${state.avatar}` : `Let's go! ${state.avatar}`;
-  // Auto-split jar explanation
-  saveGameProgress(true);
-  showModal('💰', 'How Money Works Here!',
-    'When you earn money, it gets split into 3 jars:\n\n' +
-    '🛍️ Spend — money for fun things\n' +
-    '🏦 Save — money for your goal\n' +
-    '💜 Share — money for ' + state.causeName +
-    '\n\nEach week you\'ll earn money and make choices. Ready?',
-    greeting, () => advanceWeek()
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════
-// WEEK FLOW
-// ══════════════════════════════════════════════════════════════════
-function advanceWeek() {
-  state.week++;
-  if (state.week > TOTAL_WEEKS) { endGame(); return; }
-
-  updateProgressBar();
-  hideConsequenceBanner();
-  document.getElementById('choice-card').style.display = 'none';
-  document.getElementById('spend-section').style.display = 'none';
-  document.getElementById('next-btn').disabled = true;
-  state.choiceMade = false;
-
-  // Fire pending consequences for this week
-  firePendingConsequences(state.week, () => {
-    loadWeekScenario(state.week);
-  });
-}
-
-function firePendingConsequences(week, cb) {
-  const due = state.pendingConsequences.filter(c => c.week === week);
-  state.pendingConsequences = state.pendingConsequences.filter(c => c.week !== week);
-
-  if (due.length === 0) { cb(); return; }
-
-  const c = due[0];
-  if (c.bonusAmount) {
-    earnMoney(c.bonusAmount, 'Bonus from last week\'s choice!', '🎉');
-  }
-  showConsequenceBanner(c.emoji, c.title, c.body);
-  setTimeout(cb, 2800);
-}
-
-function loadWeekScenario(week) {
-  const job = JOBS[state.job];
-  const scenario = job.scenarios[week - 1];
-  if (!scenario) { endGame(); return; }
-
-  // Auto-earn base pay
-  const pay = job.basePay + (Math.random() > .5 ? 1 : 0); // small variance
-  earnMoney(pay, job.name + ' pay 💵', job.emoji);
-
-  // Update teacher info
-  document.getElementById('teacher-info').textContent =
-    `Week ${week}: ${scenario.scenario} | FL Standards: Earning (#1), Saving (#3), Spending (#2), Sharing`;
-  updateTeacherWeekPrompt(scenario);
-
-  if (scenario.skipChoice) {
-    // Week 1 — just earn, show a modal, then allow next
-    setTimeout(() => {
-      showModal(scenario.emoji, 'Week ' + week + ' — ' + scenario.emoji,
-        'You earned $' + pay + ' this week! It was split into your three jars automatically.\n\n' +
-        '🛍️ Spend: $' + fmt(state.jars.spend) + '   🏦 Save: $' + fmt(state.jars.save) + '   💜 Share: $' + fmt(state.jars.share),
-        'Got it! 👍', () => {
-          showSpendSection();
-          document.getElementById('next-btn').disabled = false;
-          state.choiceMade = true;
-        }
-      );
-    }, 400);
-  } else {
-    setTimeout(() => showChoiceCard(scenario), 400);
-  }
-}
-
-// ══════════════════════════════════════════════════════════════════
-// EARN MONEY — splits into jars automatically (60/30/10)
-// ══════════════════════════════════════════════════════════════════
-function earnMoney(amount, label, emoji) {
-  // Split: 60% spend, 30% save, 10% share
-  const saveAmt  = Math.round(amount * 0.30);
-  const shareAmt = Math.round(amount * 0.10);
-  const spendAmt = amount - saveAmt - shareAmt;
-
-  state.jars.spend  += spendAmt;
-  state.jars.save   += saveAmt;
-  state.jars.share  += shareAmt;
-  state.totalEarned += amount;
-
-  addLedger('income', emoji || '💵', label, '+$' + amount);
-  updateJars();
-  updateHeader();
-  animateCoin();
-}
-
-function adjustJars(save, spend, share) {
-  // spend is negative when removing (buying)
-  state.jars.spend = Math.max(0, state.jars.spend + spend);
-  state.jars.save  = Math.max(0, state.jars.save  + save);
-  state.jars.share = Math.max(0, state.jars.share + share);
-  updateJars();
-  updateHeader();
-}
-
-// ══════════════════════════════════════════════════════════════════
-// CHOICE CARD
-// ══════════════════════════════════════════════════════════════════
-function showChoiceCard(scenario) {
-  const card = document.getElementById('choice-card');
-  document.getElementById('cc-week').textContent = 'Week ' + scenario.week + ' ' + scenario.emoji;
-  document.getElementById('cc-emoji').textContent = scenario.emoji;
-  document.getElementById('cc-scenario').textContent = scenario.scenario;
-  document.getElementById('cc-question').textContent = scenario.question;
-
-  const opts = document.getElementById('cc-options');
-  opts.innerHTML = '';
-  scenario.options.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-opt';
-    btn.innerHTML = `<span class="opt-emoji">${opt.emoji}</span>
-      <div><div class="opt-text">${opt.text}</div><div class="opt-effect">${opt.effect}</div></div>`;
-    btn.onclick = () => makeChoice(opt, scenario, btn);
-    opts.appendChild(btn);
-  });
-
-  card.style.display = 'block';
-}
-
-function makeChoice(opt, scenario, btn) {
-  if (state.choiceMade) return;
-  state.choiceMade = true;
-
-  // Disable all buttons
-  document.querySelectorAll('.choice-opt').forEach(b => {
-    b.style.opacity = '.5'; b.style.cursor = 'default';
-  });
-  btn.style.opacity = '1';
-  btn.style.borderColor = 'var(--sky)';
-  btn.style.background = 'var(--sky-lt)';
-
-  // Apply jar adjustments
-  adjustJars(opt.save || 0, opt.spend || 0, opt.share || 0);
-
-  // Log the choice
-  const jarNote = [];
-  if (opt.save > 0) jarNote.push('Save +$'+opt.save);
-  if (opt.share > 0) jarNote.push('Share +$'+opt.share);
-  if (opt.spend < 0) jarNote.push('Spend −$'+Math.abs(opt.spend));
-  addLedger('event', opt.emoji, 'Choice: ' + opt.text, jarNote.join(' | '));
-
-  // Queue consequence
-  if (opt.consequence) {
-    state.pendingConsequences.push({
-      week: opt.consequence.week,
-      emoji: opt.consequence.emoji,
-      title: opt.consequence.title,
-      body: opt.consequence.body,
-      bonusAmount: opt.bonusNextWeek || 0,
-    });
-  } else if (opt.bonusNextWeek) {
-    state.pendingConsequences.push({
-      week: state.week + 1,
-      emoji: '🎉', title: 'Bonus from your choice!',
-      body: 'Your decision last week paid off!',
-      bonusAmount: opt.bonusNextWeek
-    });
-  }
-
-  // Check if final
-  if (opt.isFinal) state.finalReached = true;
-
-  const reflectionType = getReflectionTypeForChoice(opt);
-  state.currentTeacherReflectionType = reflectionType;
-  const pack = JR_REFLECTION_PROMPTS[reflectionType] || JR_REFLECTION_PROMPTS.default;
-  const leadQuestion = pack.reflection[0];
-  state.reflectionHistory = state.reflectionHistory || [];
-  state.reflectionHistory.unshift({ week: state.week, type: reflectionType, typeLabel: reflectionType.charAt(0).toUpperCase() + reflectionType.slice(1), question: leadQuestion, choiceText: opt.text });
-
-  // Show spend section
-  setTimeout(() => {
-    showSpendSection();
-    document.getElementById('next-btn').disabled = false;
-    if (isTeacherJrMode()) updateTeacherWeekPrompt(scenario, reflectionType);
-    saveGameProgress(true);
-  }, 400);
-}
-
-// ══════════════════════════════════════════════════════════════════
-// SPEND SECTION
-// ══════════════════════════════════════════════════════════════════
-function showSpendSection() {
-  const section = document.getElementById('spend-section');
-  const grid = document.getElementById('spend-items');
-  grid.innerHTML = '';
-
-  // Only show items the player can potentially afford
-  SHOP_ITEMS.forEach(item => {
-    const alreadyBought = item.oneTime && state.boughtItems[item.id];
-    const div = document.createElement('div');
-    div.className = 'spend-item' + (alreadyBought ? ' bought' : '');
-    div.innerHTML = `<span class="s-emoji">${item.emoji}</span>
-      <span class="s-name">${item.name}</span>
-      <span class="s-cost">$${item.cost}</span>`;
-    if (!alreadyBought) {
-      div.onclick = () => buyItem(item, div);
-    }
-    grid.appendChild(div);
-  });
-
-  section.style.display = 'block';
-}
-
-function buyItem(item, el) {
-  if (state.jars.spend < item.cost) {
-    showModal('😅', 'Not Enough!',
-      'You only have $' + fmt(state.jars.spend) + ' in your Spend jar. Keep earning!',
-      'OK', closeModal);
-    return;
-  }
-  state.jars.spend -= item.cost;
-  if (item.oneTime) { state.boughtItems[item.id] = true; el.classList.add('bought'); }
-  addLedger('expense', item.emoji, 'Bought: '+item.name, '−$'+item.cost);
-  updateJars();
-  updateHeader();
-  saveGameProgress(true);
-
-  // mini celebration
-  el.style.background='var(--grass-lt)';
-  setTimeout(()=>{ el.style.background=''; },600);
-}
-
-// ══════════════════════════════════════════════════════════════════
-// NEXT WEEK
-// ══════════════════════════════════════════════════════════════════
-function nextWeek() {
-  if (state.week >= TOTAL_WEEKS) { endGame(); return; }
-  advanceWeek();
-  scrollTop();
-}
-
-// ══════════════════════════════════════════════════════════════════
-// END GAME
-// ══════════════════════════════════════════════════════════════════
-function endGame() {
-  state.gameActive = false;
-  saveGameProgress(true);
-  launchConfetti();
-  setTimeout(() => {
-    buildReport();
-    showScreen('screen-report');
-  }, 800);
-}
-
-function buildReport() {
-  const saved  = state.jars.save;
-  const shared = state.jars.share;
-  const earned = state.totalEarned;
-  const goalHit = saved >= state.goal;
-  const name = state.playerName || 'Budget Boss';
-
-  // Avatar & personalized title
-  document.getElementById('report-avatar').textContent = state.avatar || '🎉';
-  document.getElementById('report-title').textContent = `🎉 Amazing work, ${name}!`;
-
-  document.getElementById('rs-earned').textContent = '$' + fmt(earned);
-  document.getElementById('rs-saved').textContent  = '$' + fmt(saved);
-  document.getElementById('rs-shared').textContent = '$' + fmt(shared) + ' to ' + state.causeName;
-
-  // Stars (1–5)
-  let stars = 1;
-  if (saved >= state.goal * .4) stars = 2;
-  if (saved >= state.goal * .7) stars = 3;
-  if (saved >= state.goal)       stars = 4;
-  if (saved >= state.goal && shared >= 3) stars = 5;
-
-  const starsEl = document.getElementById('report-stars');
-  starsEl.innerHTML = '';
-  for (let i=0;i<5;i++) {
-    const s = document.createElement('span');
-    s.className = 'report-star';
-    s.textContent = i < stars ? '⭐' : '☆';
-    starsEl.appendChild(s);
-  }
-
-  // Badge
-  const badges = [
-    { min:5, title:'🏆 Super Star Saver!',    sub:'You crushed your goal AND helped others!' },
-    { min:4, title:'🎯 Goal Getter!',           sub:'You hit your savings goal! Amazing work!' },
-    { min:3, title:'💪 Great Progress!',        sub:'You saved a lot this summer. Keep it up!' },
-    { min:2, title:'🌱 Growing Saver!',         sub:'You\'re learning to save. Practice makes perfect!' },
-    { min:1, title:'🎉 You Finished Summer!',   sub:'Every week you learned something about money!' },
-  ];
-  const badge = badges.find(b => stars >= b.min) || badges[badges.length-1];
-  document.getElementById('badge-title').textContent = badge.title;
-  document.getElementById('badge-sub').textContent   = badge.sub;
-
-  document.getElementById('report-subtitle').textContent =
-    `${name} finished all ${TOTAL_WEEKS} weeks as a ${JOBS[state.job].name}!`;
-  if(isTeacherJrMode()){
-    renderTeacherReflectionBox(`
-      <div><b>🏁 Final Reflection</b></div>
-      <div style="margin-top:8px"><b>Discussion Prompt</b><br>${JR_REFLECTION_PROMPTS.final.discussion}</div>
-      <div style="margin-top:8px"><b>Ask students</b><ul style="margin:6px 0 0 18px"><li>${JR_REFLECTION_PROMPTS.final.reflection[0]}</li><li>${JR_REFLECTION_PROMPTS.final.reflection[1]}</li></ul></div>
-      <div style="margin-top:8px"><b>Teaching Note</b><br>${JR_REFLECTION_PROMPTS.final.note}</div>
-    `);
-  }
-}
-
-
-function isTeacherJrMode(){
-  const params = new URLSearchParams(window.location.search);
-  if(params.get('teacher') === '1') return true;
-  try{ return sessionStorage.getItem('wglt_jr_role') === 'teacher'; }catch(err){ return false; }
-}
-
-function getReflectionPackForChoice(opt){
-  if(!opt) return JR_REFLECTION_PROMPTS.default;
-  if((opt.share || 0) > 0) return JR_REFLECTION_PROMPTS.share;
-  if((opt.save || 0) > 0 && (opt.spend || 0) >= 0) return JR_REFLECTION_PROMPTS.save;
-  if((opt.spend || 0) < 0) return JR_REFLECTION_PROMPTS.spend;
-  return JR_REFLECTION_PROMPTS.default;
-}
-
-function getReflectionTypeForChoice(opt){
-  if(!opt) return 'default';
-  if((opt.share || 0) > 0) return 'share';
-  if((opt.save || 0) > 0 && (opt.spend || 0) >= 0) return 'save';
-  if((opt.spend || 0) < 0) return 'spend';
-  return 'default';
-}
-
-function renderTeacherReflectionBox(html){
-  const box = document.getElementById('teacher-reflection-box');
-  const content = document.getElementById('teacher-reflection-content');
-  if(!box || !content) return;
-  if(!isTeacherJrMode()){
-    box.style.display = 'none';
-    return;
-  }
-  box.style.display = '';
-  content.innerHTML = html;
-}
-
-function buildRecentReflectionMarkup(){
-  if(!state.reflectionHistory || !state.reflectionHistory.length){
-    return '<div class="teacher-mini">No logged reflections yet. After a choice, the question bank for that choice will show up here.</div>';
-  }
-  return state.reflectionHistory.slice(0,6).map(item => `<div class="teacher-mini">Week ${item.week}: <b>${item.typeLabel}</b> · ${item.question}</div>`).join('');
-}
-
-function updateTeacherWeekPrompt(scenario, reflectionType='default'){
-  if(!isTeacherJrMode() || !scenario) return;
-  const type = reflectionType || state.currentTeacherReflectionType || 'default';
-  const pack = JR_REFLECTION_PROMPTS[type] || JR_REFLECTION_PROMPTS.default;
-  const monthCheckpoint = state.week > 0 && state.week % 4 === 0
-    ? `<div class="teacher-reflection-card"><h5>📅 Month Checkpoint</h5><div class="teacher-reflection-actions">${JR_REFLECTION_PROMPTS.monthly.reflection.map(q => `<button class="teacher-q-btn" type="button" onclick="openTeacherQuestion('${q.replace(/'/g,"&#39;")}', 'monthly')">${q}</button>`).join('')}</div></div>`
-    : '';
-  renderTeacherReflectionBox(`
-    <div class="teacher-reflection-grid">
-      <div class="teacher-reflection-card">
-        <h5>💬 Teacher Prompt</h5>
-        <div>${pack.discussion}</div>
-        <div class="teacher-mini" style="margin-top:8px">Teacher Mode add-on: <b>What would you tell a friend to do here?</b></div>
-      </div>
-      <div class="teacher-reflection-card">
-        <h5>📝 Click a reflection question for the class</h5>
-        <div class="teacher-reflection-actions">${pack.reflection.map(q => `<button class="teacher-q-btn" type="button" onclick="openTeacherQuestion('${q.replace(/'/g,"&#39;")}', '${type}')">${q}</button>`).join('')}</div>
-      </div>
-      <div class="teacher-reflection-card">
-        <h5>📚 Full reflection library</h5>
-        <div class="teacher-mini"><b>Spend</b></div><div class="teacher-reflection-actions">${JR_REFLECTION_PROMPTS.spend.reflection.slice(0,4).map(q => `<button class="teacher-q-btn" type="button" onclick="openTeacherQuestion('${q.replace(/'/g,"&#39;")}', 'spend')">${q}</button>`).join('')}</div>
-        <div class="teacher-mini" style="margin-top:8px"><b>Save</b></div><div class="teacher-reflection-actions">${JR_REFLECTION_PROMPTS.save.reflection.slice(0,4).map(q => `<button class="teacher-q-btn" type="button" onclick="openTeacherQuestion('${q.replace(/'/g,"&#39;")}', 'save')">${q}</button>`).join('')}</div>
-        <div class="teacher-mini" style="margin-top:8px"><b>Share</b></div><div class="teacher-reflection-actions">${JR_REFLECTION_PROMPTS.share.reflection.slice(0,4).map(q => `<button class="teacher-q-btn" type="button" onclick="openTeacherQuestion('${q.replace(/'/g,"&#39;")}', 'share')">${q}</button>`).join('')}</div>
-        <div class="teacher-mini" style="margin-top:8px"><b>General</b></div><div class="teacher-reflection-actions">${JR_REFLECTION_PROMPTS.default.reflection.map(q => `<button class="teacher-q-btn" type="button" onclick="openTeacherQuestion('${q.replace(/'/g,"&#39;")}', 'default')">${q}</button>`).join('')}</div>
-      </div>
-      <div class="teacher-reflection-card">
-        <h5>🧾 Recent reflection log</h5>
-        ${buildRecentReflectionMarkup()}
-      </div>
-      ${monthCheckpoint}
-    </div>
-  `);
-}
-
-function openTeacherReflectionModal(opt, scenario){
-  return;
-}
-
-// ══════════════════════════════════════════════════════════════════
-// TEACHER TOOLS
-// ══════════════════════════════════════════════════════════════════
-function teacherTriggerBonus() {
-  if (!state.gameActive) return;
-  earnMoney(5, 'Teacher Bonus Payday! 🎉', '🎉');
-  showConsequenceBanner('🎉', 'Bonus Payday!', 'The teacher gave everyone $5 extra! A reminder: unexpected money = opportunity to save or share more!');
-  document.getElementById('teacher-info').textContent =
-    'FL Standard #1 (Earning Income): Discuss — where does money come from? Is bonus money different from earned money?';
-}
-
-function teacherTriggerExpense() {
-  if (!state.gameActive) return;
-  const amt = 3;
-  state.jars.spend = Math.max(0, state.jars.spend - amt);
-  addLedger('expense','⚠️','Surprise expense!','−$'+amt);
-  updateJars(); updateHeader();
-  showConsequenceBanner('⚠️','Surprise Expense!','A $3 unexpected expense came up — like a broken item or a surprise fee. This is why we keep money in our Spend jar!');
-  document.getElementById('teacher-info').textContent =
-    'FL Standard #3 (Saving) & #11 (Financial Decisions): Discuss — why do we need savings for surprises? What would happen if the jar was empty?';
-}
-
-function teacherDiscussion() {
-  const monthExtra = state.week > 0 && state.week % 4 === 0
-    ? '\n\n📅 Month Check: What pattern do you notice in the jars this month? What would you change before the next month starts?'
-    : '';
-  showModal('💬','Discussion Time!',
-    'Ask the class:\n\n' +
-    '1️⃣ Which jar do you wish was bigger right now?\n' +
-    '2️⃣ Was it hard to save instead of spend this week?\n' +
-    '3️⃣ How does it feel to see your Save jar growing?\n' +
-    '4️⃣ What would happen if we spent from the Save jar?' + monthExtra,
-    'Resume Game ▶️', closeModal
-  );
-}
-
-function teacherShowBuckets() {
-  showModal('📋','Florida Standards Covered',
-    'This game covers:\n\n' +
-    '✅ Benchmark #1 — Earning Income\n' +
-    '✅ Benchmark #2 — Spending (needs vs. wants)\n' +
-    '✅ Benchmark #3 — Saving toward a goal\n' +
-    '✅ Benchmark #7 — Budgeting (3-jar method)\n' +
-    '✅ Benchmark #11 — Financial Decisions\n\n' +
-    'Each weekly choice card connects to at least 2 of these standards.',
-    'Got it! 👍', closeModal
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════
-// UI HELPERS
-// ══════════════════════════════════════════════════════════════════
-function spawnJarDelta(jarKey, delta){
-  if(!delta) return;
-  const wrap = document.querySelector('.jar-wrap.jar-' + jarKey);
-  if(!wrap) return;
-  const el = document.createElement('div');
-  el.className = 'jar-delta-pop ' + (delta > 0 ? 'plus' : 'minus');
-  el.textContent = (delta > 0 ? '+' : '') + fmt(delta);
-  wrap.appendChild(el);
-  setTimeout(() => el.remove(), 950);
-}
-
-function updateJars() {
-  const prev = state._lastJarSnapshot || {spend:0, save:0, share:0};
-  const MAX = Math.max(100, state.goal || 0, state.jars.spend, state.jars.save, state.jars.share);
-  ['spend','save','share'].forEach(j => {
-    const pct = Math.min(100, (state.jars[j]/MAX)*100);
-    const fillEl = document.getElementById('jar-'+j+'-fill');
-    fillEl.style.height = pct + '%';
-    fillEl.title = '$' + fmt(state.jars[j]) + ' out of visual max $' + fmt(MAX);
-    document.getElementById('jar-'+j+'-amt').textContent = '$' + fmt(state.jars[j]);
-    const delta = state.jars[j] - (prev[j] || 0);
-    if (delta !== 0) {
-      fillEl.classList.remove('jar-pulse');
-      void fillEl.offsetWidth;
-      fillEl.classList.add('jar-pulse');
-      spawnJarDelta(j, delta);
-      setTimeout(() => fillEl.classList.remove('jar-pulse'), 700);
-    }
-  });
-  state._lastJarSnapshot = { ...state.jars };
-  // Goal bar
-  const pct = Math.min(100, (state.jars.save / state.goal)*100);
-  document.getElementById('goal-fill').style.width = pct + '%';
-  document.getElementById('goal-progress-text').textContent =
-    '$' + fmt(state.jars.save) + ' / $' + state.goal;
-  syncEarnedIncomeLabel();
-
-  // Celebrate goal hit
-  if (state.jars.save >= state.goal && !state._goalCelebrated) {
-    state._goalCelebrated = true;
-    setTimeout(() => {
-      launchConfetti(30);
-      showModal('🏆','You Hit Your Goal!',
-        'Your Save jar reached $' + state.goal + '! 🎉\n\nYou practiced one of the most important money skills: saving toward something you really want. Keep going!',
-        'Keep saving! 💪', closeModal
-      );
-    }, 600);
-  }
-}
-
-function updateHeader() {
-  const total = state.jars.spend + state.jars.save + state.jars.share;
-  document.getElementById('hdr-week').textContent  = state.week + '/' + TOTAL_WEEKS;
-  document.getElementById('hdr-total').textContent = '$' + fmt(total);
-  document.getElementById('hdr-saved').textContent = '$' + fmt(state.jars.save);
-}
-
-function updateProgressBar() {
-  const pct = (state.week / TOTAL_WEEKS) * 100;
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('progress-label').textContent = 'Week ' + state.week + ' of ' + TOTAL_WEEKS;
-  document.getElementById('progress-emoji').textContent = WEEK_EMOJIS[state.week - 1] || '🌟';
-}
-
-function addLedger(type, emoji, text, amount) {
-  const el = document.createElement('div');
-  el.className = 'ledger-entry ' + type;
-  el.innerHTML = `<span class="l-emoji">${emoji}</span>
-    <span class="l-text">${text}</span>
-    <span class="l-amount">${amount}</span>`;
-  const container = document.getElementById('ledger-entries');
-  container.insertBefore(el, container.firstChild);
-  // Trim to 20 entries
-  while (container.children.length > 20) container.removeChild(container.lastChild);
-}
-
-function showConsequenceBanner(emoji, title, body) {
-  const b = document.getElementById('consequence-banner');
-  document.getElementById('cb-emoji').textContent = emoji;
-  document.getElementById('cb-title').textContent = title;
-  document.getElementById('cb-body').textContent  = body;
-  b.style.display = 'flex';
-  scrollTop();
-}
-function hideConsequenceBanner() {
-  document.getElementById('consequence-banner').style.display = 'none';
-}
-
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function showModal(emoji, title, body, btnText, onClose) {
-  document.getElementById('modal-emoji').textContent = emoji;
-  document.getElementById('modal-title').textContent = title;
-  // Handle newlines
-  document.getElementById('modal-body').innerHTML = body.replace(/\n/g,'<br>');
-  document.getElementById('modal-btn').textContent = btnText || 'OK';
-  document.getElementById('modal').style.display = 'flex';
-  document.getElementById('modal-btn').onclick = () => { closeModal(); if(onClose) onClose(); };
-}
-function closeModal() {
-  document.getElementById('modal').style.display = 'none';
-}
-
-function animateCoin() {
-  const coin = document.createElement('div');
-  coin.className = 'flying-coin';
-  coin.textContent = '🪙';
-  coin.style.left = (40 + Math.random()*60) + '%';
-  coin.style.top  = '30%';
-  coin.style.setProperty('--dx', (Math.random()*60-30)+'px');
-  coin.style.setProperty('--dy', (-60-Math.random()*40)+'px');
-  coin.style.setProperty('--dx2',(Math.random()*100-50)+'px');
-  coin.style.setProperty('--dy2',(-20)+'px');
-  document.body.appendChild(coin);
-  setTimeout(()=>coin.remove(), 700);
-}
-
-function launchConfetti(count=80) {
-  const colors = ['#FFB800','#F4633A','#5DBB63','#4AABDB','#7B5EA7','#2CC4A0'];
-  for (let i=0;i<count;i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    piece.style.left  = Math.random()*100 + 'vw';
-    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
-    piece.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
-    piece.style.width  = (6+Math.random()*8)+'px';
-    piece.style.height = (6+Math.random()*8)+'px';
-    piece.style.animationDuration = (1.5+Math.random()*2)+'s';
-    piece.style.animationDelay = Math.random()*1+'s';
-    document.body.appendChild(piece);
-    setTimeout(()=>piece.remove(), 4000);
-  }
-}
-
-function scrollTop() {
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-function fmt(n) {
-  return (Math.round(n * 10)/10).toFixed(0);
-}
-
-function resetGame() {
-  state = {
-    playerName:'', avatar:'', avatarName:'',
-    job:null, cause:null, causeName:'', goal:20,
-    week:0, jars:{spend:0,save:0,share:0},
-    totalEarned:0, pendingConsequences:[],
-    boughtItems:{}, choiceMade:false,
-    gameActive:false, finalReached:false,
-  };
-  document.querySelectorAll('.job-card').forEach(c=>c.classList.remove('selected'));
-  document.querySelectorAll('.cause-btn').forEach(b=>b.classList.remove('selected'));
-  document.querySelectorAll('.goal-btn').forEach(b=>b.classList.remove('selected'));
-  document.getElementById('start-btn').disabled = true;
-  document.getElementById('week-progress').style.display = 'none';
-  document.getElementById('header-logo').style.display = '';
-  document.getElementById('header-avatar').style.display = 'none';
-  document.getElementById('ledger-entries').innerHTML =
-    '<div class="ledger-entry event"><span class="l-emoji">🌟</span><span class="l-text">Game started! Good luck!</span><span class="l-amount"></span></div>';
-  hydrateSharedProfileUI();
-updateResumeButton();
-syncEarnedIncomeLabel();
-  clearSavedGame();
-  showScreen('screen-welcome');
-}
-
-function confirmResetGame(){
-  showModal('🔁','Reset Budget Boss Jr?',
-    'This will restart the current Jr game and take you back to the welcome screen. Your saved player name and avatar will stay unless you choose the clear option.',
-    'Reset Now', resetGame
-  );
-}
-
-function clearProfileAndReset(){
-  showModal('🗑️','Clear Saved Player?',
-    'This will delete the saved player name and avatar for Budget Boss Jr and restart the game fresh.',
-    'Delete + Reset', ()=>{ clearSharedProfile(); resetGame(); }
-  );
-}
-
-// ── Cloud animation re-randomize on load ──
-document.querySelectorAll('.cloud').forEach(c=>{
-  c.style.top = (5+Math.random()*50)+'%';
-  c.style.animationDelay = -(Math.random()*30)+'s';
-});
-
-(function(){
-  const params = new URLSearchParams(window.location.search);
-  const teacherPanel = document.getElementById('teacher-panel');
-  const teacherOn = params.get('teacher') === '1' || (function(){ try{ return sessionStorage.getItem('wglt_jr_role') === 'teacher'; }catch(err){ return false; }})();
-  if(teacherPanel && teacherOn) teacherPanel.style.display = '';
-  if(teacherOn) renderTeacherReflectionBox('<div><b>Teacher mode ready.</b><br>Click a question in the reflection area to show it to the class.</div>');
-})();
-
-
-function hydrateSharedProfileUI(){
-  const profile = loadSharedProfile();
-  document.querySelectorAll('.avatar-btn').forEach(b => b.classList.remove('selected'));
-  const inp = document.getElementById('player-name-input');
-  if(inp) inp.value = '';
-  if(!profile){
-    updateHeaderAvatar();
-    checkStartReady();
-    return;
-  }
-  if(profile.playerName){
-    state.playerName = profile.playerName;
-    if(inp) inp.value = profile.playerName;
-  }
-  if(profile.avatar){
-    state.avatar = profile.avatar;
-    state.avatarName = profile.avatarName || '';
-    document.querySelectorAll('.avatar-btn').forEach(b => {
-      if (b.querySelector('.av-emoji') && b.querySelector('.av-emoji').textContent === profile.avatar) {
-        b.classList.add('selected');
-      }
-    });
-  }
-  updateHeaderAvatar();
-  checkStartReady();
-}
-
-hydrateSharedProfileUI();
-updateResumeButton();
-syncEarnedIncomeLabel();
-
+    var screen = document.getElementById('modeSelectScreen');
+    if(screen) screen.style.display = 'none';
+    var app = document.querySelector('.app');
+    if(app) app.style.display = '';
+    window.__WGLT_PENDING_MODE__ = { role: role, experience: experience };
+  } catch(err) { console.error(err); }
+};
 </script>
-<script>
-/* Notify Wix loader that the HTML game is ready */
-window.addEventListener("load", function () {
-  if (window.parent) {
-    window.parent.postMessage({ type: "WGLT_READY" }, "*");
-  }
-});
-
-
-
-</script>
+<script src="./js/bootstrap.js"></script>
 </body>
 </html>
