@@ -1861,7 +1861,7 @@ function submitBenchmarkQuiz(){
   document.getElementById('quiz-overlay').setAttribute('aria-hidden','true');
   updateReportQuizSummary();
   if(mode === 'pre'){
-    showModal('🧠','Pre-Quiz Saved', `You got <b>${score} out of ${BENCHMARK_QUIZ.length}</b>. Now let’s play and grow those money skills.`, 'Let's Go! 🚀', () => {
+    showModal('🧠','Pre-Quiz Saved', `You got <b>${score} out of ${BENCHMARK_QUIZ.length}</b>. Now let’s play and grow those money skills.`, "Let's Go! 🚀", () => {
       closeModal();
       launchGameExperience();
     });
