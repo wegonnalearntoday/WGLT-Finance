@@ -673,6 +673,71 @@ body{
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;
 }
 
+
+.quiz-overlay{
+  position:fixed; inset:0; z-index:2000; display:none;
+  background:rgba(3,12,20,.78); backdrop-filter:blur(4px);
+  align-items:center; justify-content:center; padding:20px;
+}
+.quiz-overlay.show{display:flex;}
+.quiz-box{
+  width:min(920px, 96vw); max-height:90vh; overflow:auto;
+  background:linear-gradient(180deg,#0f1a22 0%, #132433 100%);
+  border:3px solid rgba(123, 210, 146, .35);
+  border-radius:24px; box-shadow:0 20px 50px rgba(0,0,0,.35);
+  padding:22px;
+}
+.quiz-header{text-align:center; margin-bottom:16px;}
+.quiz-kicker{font-weight:900; color:var(--mint); letter-spacing:.4px; text-transform:uppercase; font-size:.8rem;}
+.quiz-title{font-size:1.7rem; margin:6px 0 8px;}
+.quiz-subtitle{color:var(--ink-lt); font-weight:600; margin-bottom:8px;}
+.quiz-progress{height:12px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; margin:10px 0 18px;}
+.quiz-progress-fill{height:100%; width:0%; background:linear-gradient(90deg, var(--mint), #76ffb6);}
+.quiz-grid{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px;}
+.quiz-card{
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+  border-radius:18px; padding:14px;
+}
+.quiz-card h4{margin:0 0 8px; font-size:1rem;}
+.quiz-card p{margin:0 0 10px; color:#e6eef5; font-weight:700;}
+.quiz-choices{display:grid; gap:8px;}
+.quiz-choice{
+  width:100%; text-align:left; border:none; cursor:pointer;
+  background:rgba(255,255,255,.06); color:#fff; padding:10px 12px; border-radius:14px;
+  font-weight:700; transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.quiz-choice:hover{transform:translateY(-1px); box-shadow:0 8px 20px rgba(0,0,0,.15);}
+.quiz-choice.selected{background:rgba(123,210,146,.22); box-shadow:0 0 0 2px rgba(123,210,146,.45) inset;}
+.quiz-actions{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:18px;}
+.quiz-btn{
+  border:none; border-radius:999px; padding:12px 18px; font-weight:900; cursor:pointer;
+}
+.quiz-btn.primary{background:var(--mint); color:#072713;}
+.quiz-btn.secondary{background:rgba(255,255,255,.1); color:#fff;}
+.quiz-score-grid{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px; margin:16px 0;}
+.quiz-score-chip{
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+  border-radius:18px; padding:12px; text-align:center;
+}
+.quiz-score-chip .label{display:block; font-size:.8rem; text-transform:uppercase; font-weight:900; color:var(--ink-lt);}
+.quiz-score-chip .value{display:block; font-size:1.5rem; font-weight:900; margin-top:4px;}
+.report-quiz-box{
+  margin-top:18px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+  border-radius:22px; padding:16px;
+}
+.report-quiz-box h4{margin:0 0 10px; font-size:1.15rem;}
+.report-quiz-summary{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; margin:12px 0;}
+.report-quiz-mini{
+  border-radius:16px; background:rgba(255,255,255,.05); padding:12px; text-align:center;
+}
+.report-quiz-mini .label{display:block; font-size:.78rem; text-transform:uppercase; font-weight:900; color:var(--ink-lt);}
+.report-quiz-mini .value{display:block; font-size:1.2rem; font-weight:900; margin-top:4px;}
+.report-quiz-note{font-weight:700; color:#eef7ff;}
+@media (max-width: 760px){
+  .quiz-grid,.quiz-score-grid,.report-quiz-summary{grid-template-columns:1fr;}
+  .quiz-box{padding:16px;}
+}
+
 /* report card avatar */
 .report-avatar{font-size:4rem;display:block;margin-bottom:8px;animation:bounce 2s ease infinite;}
 
@@ -1032,6 +1097,16 @@ body{
         <div class="skill-item"><span class="sk-emoji">💜</span> Sharing with others and why it matters</div>
         <div class="skill-item"><span class="sk-emoji">⚡</span> Handling surprises — unexpected expenses and windfalls</div>
       </div>
+      <div class="report-quiz-box" id="report-quiz-box">
+        <h4>🧠 Benchmark Quiz Check-In</h4>
+        <div class="report-quiz-note" id="report-quiz-note">Take the beginning quiz before Week 1, then the same quiz after Week 12 to see your growth.</div>
+        <div class="report-quiz-summary" id="report-quiz-summary">
+          <div class="report-quiz-mini"><span class="label">Before</span><span class="value" id="report-pre-score">--</span></div>
+          <div class="report-quiz-mini"><span class="label">After</span><span class="value" id="report-post-score">--</span></div>
+          <div class="report-quiz-mini"><span class="label">Growth</span><span class="value" id="report-growth-score">--</span></div>
+        </div>
+        <button class="play-again-btn" type="button" id="report-quiz-btn" onclick="openBenchmarkQuiz('post')">📝 Take Final Quiz</button>
+      </div>
       <button class="play-again-btn" onclick="resetGame()">🔄 Play Again!</button>
     </div>
   </div>
@@ -1047,12 +1122,27 @@ body{
   </div>
 </div>
 
+<div class="quiz-overlay" id="quiz-overlay" aria-hidden="true">
+  <div class="quiz-box">
+    <div class="quiz-header">
+      <div class="quiz-kicker" id="quiz-kicker">Benchmark Quiz</div>
+      <h3 class="quiz-title" id="quiz-title">Before We Start</h3>
+      <div class="quiz-subtitle" id="quiz-subtitle">Let’s see what you already know.</div>
+      <div class="quiz-progress"><div class="quiz-progress-fill" id="quiz-progress-fill"></div></div>
+    </div>
+    <div class="quiz-grid" id="quiz-questions"></div>
+    <div class="quiz-actions" id="quiz-actions">
+      <button class="quiz-btn primary" id="quiz-submit-btn" type="button" onclick="submitBenchmarkQuiz()">✅ Submit Quiz</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════════════════════════
 const TOTAL_WEEKS = 12;
-const JR_GAME_SAVE_KEY = 'wglt_budget_boss_jr_save_v2';
+const JR_GAME_SAVE_KEY = 'wglt_budget_boss_jr_save_v3';
 const TERM_DEFINITIONS = {
   budgeting: {
     title: 'What is budgeting?',
@@ -1077,6 +1167,106 @@ const JOB_PAY_LABELS = {
   chores: 'Household Chores · $4–$6 per week',
   errands: 'Running Errands · $5–$7 per week'
 };
+
+const BENCHMARK_QUIZ = [
+  {
+    id:'earning',
+    benchmark:'Earning Income',
+    question:'What is earned income?',
+    options:[
+      'Money you get for doing work',
+      'Money that disappears from your jar',
+      'Money only adults can have'
+    ],
+    answer:0,
+    explain:'Earned income is money you get because you did work.'
+  },
+  {
+    id:'budgeting',
+    benchmark:'Budgeting',
+    question:'What is a budget?',
+    options:[
+      'A plan for how to use your money',
+      'A toy you buy with your money',
+      'A place where money sleeps'
+    ],
+    answer:0,
+    explain:'A budget is a plan that helps you decide where your money should go.'
+  },
+  {
+    id:'needswants',
+    benchmark:'Spending',
+    question:'Which one is usually a need?',
+    options:[
+      'A snack at the movies',
+      'School supplies',
+      'A new game skin'
+    ],
+    answer:1,
+    explain:'Needs are important for living or learning, like school supplies.'
+  },
+  {
+    id:'saving',
+    benchmark:'Saving',
+    question:'Why do people save money?',
+    options:[
+      'To make it vanish',
+      'To reach a goal later',
+      'To spend it all right away'
+    ],
+    answer:1,
+    explain:'Saving helps you reach a future goal.'
+  },
+  {
+    id:'sharing',
+    benchmark:'Financial Decision Making',
+    question:'What does sharing money mean here?',
+    options:[
+      'Giving part of it to help others',
+      'Hiding all of it in one jar',
+      'Using all of it for treats'
+    ],
+    answer:0,
+    explain:'Sharing means using some money to help a cause or another person.'
+  },
+  {
+    id:'banking',
+    benchmark:'Banking',
+    question:'A bank is mostly a place where people...',
+    options:[
+      'Keep and manage money',
+      'Trade homework',
+      'Buy vegetables only'
+    ],
+    answer:0,
+    explain:'Banks help people keep, save, and manage money.'
+  },
+  {
+    id:'goal',
+    benchmark:'Career Planning and Financial Goals',
+    question:'A savings goal is...',
+    options:[
+      'Something you are saving for on purpose',
+      'A snack you forgot to eat',
+      'Any random thing you see'
+    ],
+    answer:0,
+    explain:'A goal gives your savings a job to do.'
+  },
+  {
+    id:'decision',
+    benchmark:'Financial Decision Making',
+    question:'A smart money choice usually means...',
+    options:[
+      'Thinking about now and later',
+      'Picking the first thing you see',
+      'Never asking questions'
+    ],
+    answer:0,
+    explain:'Smart choices look at what happens now and later.'
+  }
+];
+
 const JR_REFLECTION_PROMPTS = {
   default: {
     discussion: 'What made this choice smart, tricky, or both?',
@@ -1546,6 +1736,143 @@ function ensureEliteState(){
   if(!Array.isArray(state.scenarioCoverage.usedScenarioIds)) state.scenarioCoverage.usedScenarioIds = [];
   if(!Array.isArray(state.scenarioCoverage.usedTags)) state.scenarioCoverage.usedTags = [];
 }
+
+function ensureQuizState(){
+  if(!state.quiz || typeof state.quiz !== 'object'){
+    state.quiz = {
+      preCompleted:false,
+      postCompleted:false,
+      preAnswers:{},
+      postAnswers:{},
+      preScore:null,
+      postScore:null
+    };
+  }
+  if(typeof state.quiz.preCompleted !== 'boolean') state.quiz.preCompleted = false;
+  if(typeof state.quiz.postCompleted !== 'boolean') state.quiz.postCompleted = false;
+  if(!state.quiz.preAnswers || typeof state.quiz.preAnswers !== 'object') state.quiz.preAnswers = {};
+  if(!state.quiz.postAnswers || typeof state.quiz.postAnswers !== 'object') state.quiz.postAnswers = {};
+}
+function getQuizStore(mode){
+  ensureQuizState();
+  return mode === 'post'
+    ? { answers: state.quiz.postAnswers, completedKey:'postCompleted', scoreKey:'postScore' }
+    : { answers: state.quiz.preAnswers, completedKey:'preCompleted', scoreKey:'preScore' };
+}
+function openBenchmarkQuiz(mode='pre'){
+  ensureQuizState();
+  state.activeQuizMode = mode;
+  const overlay = document.getElementById('quiz-overlay');
+  const title = document.getElementById('quiz-title');
+  const subtitle = document.getElementById('quiz-subtitle');
+  const kicker = document.getElementById('quiz-kicker');
+  kicker.textContent = mode === 'post' ? 'Final Benchmark Quiz' : 'Pre-Benchmark Quiz';
+  title.textContent = mode === 'post' ? 'After Week 12: Show What You Know' : 'Before Week 1: Show What You Know';
+  subtitle.textContent = mode === 'post'
+    ? 'These are the same questions from the beginning. Let’s see how much grew.'
+    : 'Quick multiple-choice check-in on the money ideas coming up in this game.';
+  overlay.classList.add('show');
+  overlay.setAttribute('aria-hidden','false');
+  renderBenchmarkQuiz();
+}
+function renderBenchmarkQuiz(){
+  ensureQuizState();
+  const mode = state.activeQuizMode || 'pre';
+  const store = getQuizStore(mode);
+  const wrap = document.getElementById('quiz-questions');
+  wrap.innerHTML = '';
+  BENCHMARK_QUIZ.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    const selected = store.answers[item.id];
+    card.innerHTML = `<h4>${idx + 1}. ${item.benchmark}</h4><p>${item.question}</p>`;
+    const choices = document.createElement('div');
+    choices.className = 'quiz-choices';
+    item.options.forEach((opt, optIdx) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'quiz-choice' + (selected === optIdx ? ' selected' : '');
+      btn.textContent = opt;
+      btn.onclick = () => selectQuizOption(item.id, optIdx);
+      choices.appendChild(btn);
+    });
+    card.appendChild(choices);
+    wrap.appendChild(card);
+  });
+  const answered = Object.keys(store.answers).length;
+  document.getElementById('quiz-progress-fill').style.width = `${(answered / BENCHMARK_QUIZ.length) * 100}%`;
+}
+function selectQuizOption(questionId, optionIndex){
+  ensureQuizState();
+  const store = getQuizStore(state.activeQuizMode || 'pre');
+  store.answers[questionId] = optionIndex;
+  saveGameProgress(true);
+  renderBenchmarkQuiz();
+}
+function scoreQuiz(answers){
+  let score = 0;
+  BENCHMARK_QUIZ.forEach(item => {
+    if(Number(answers[item.id]) === Number(item.answer)) score++;
+  });
+  return score;
+}
+function updateReportQuizSummary(){
+  ensureQuizState();
+  const preEl = document.getElementById('report-pre-score');
+  const postEl = document.getElementById('report-post-score');
+  const growthEl = document.getElementById('report-growth-score');
+  const noteEl = document.getElementById('report-quiz-note');
+  const btnEl = document.getElementById('report-quiz-btn');
+  if(!preEl || !postEl || !growthEl || !noteEl || !btnEl) return;
+  preEl.textContent = state.quiz.preCompleted ? `${state.quiz.preScore}/${BENCHMARK_QUIZ.length}` : '--';
+  postEl.textContent = state.quiz.postCompleted ? `${state.quiz.postScore}/${BENCHMARK_QUIZ.length}` : '--';
+  if(state.quiz.preCompleted && state.quiz.postCompleted){
+    const growth = Number(state.quiz.postScore || 0) - Number(state.quiz.preScore || 0);
+    growthEl.textContent = (growth > 0 ? '+' : '') + growth;
+    noteEl.textContent = growth > 0
+      ? `Nice growth. The class improved by ${growth} point${Math.abs(growth) === 1 ? '' : 's'} on the same benchmark quiz.`
+      : growth === 0
+        ? 'Steady work. The score stayed the same on the final benchmark quiz.'
+        : `The final score was ${Math.abs(growth)} point${Math.abs(growth) === 1 ? '' : 's'} lower, so this is a good review moment.`;
+    btnEl.textContent = '🔁 Retake Final Quiz';
+  } else if(state.quiz.preCompleted){
+    growthEl.textContent = '--';
+    noteEl.textContent = 'The beginning quiz is saved. After Week 12, take the same quiz again to compare growth.';
+    btnEl.textContent = '📝 Take Final Quiz';
+  } else {
+    growthEl.textContent = '--';
+    noteEl.textContent = 'Take the beginning quiz before Week 1, then the same quiz after Week 12 to see your growth.';
+    btnEl.textContent = '📝 Take Final Quiz';
+  }
+}
+function submitBenchmarkQuiz(){
+  ensureQuizState();
+  const mode = state.activeQuizMode || 'pre';
+  const store = getQuizStore(mode);
+  if(Object.keys(store.answers).length < BENCHMARK_QUIZ.length){
+    showModal('🧠','Finish the Quiz First',`Please answer all ${BENCHMARK_QUIZ.length} questions before you submit.`, 'Got it!', closeModal);
+    return;
+  }
+  const score = scoreQuiz(store.answers);
+  state.quiz[store.completedKey] = true;
+  state.quiz[store.scoreKey] = score;
+  saveGameProgress(true);
+  document.getElementById('quiz-overlay').classList.remove('show');
+  document.getElementById('quiz-overlay').setAttribute('aria-hidden','true');
+  updateReportQuizSummary();
+  if(mode === 'pre'){
+    showModal('🧠','Pre-Quiz Saved', `You got <b>${score} out of ${BENCHMARK_QUIZ.length}</b>. Now let’s play and grow those money skills.`, 'Let's Go! 🚀', () => {
+      closeModal();
+      launchGameExperience();
+    });
+  } else {
+    const growth = state.quiz.preCompleted ? (score - Number(state.quiz.preScore || 0)) : null;
+    showModal('🎓','Final Quiz Saved', growth === null
+      ? `You got <b>${score} out of ${BENCHMARK_QUIZ.length}</b> on the final quiz.`
+      : `You got <b>${score} out of ${BENCHMARK_QUIZ.length}</b>. Growth from the beginning quiz: <b>${growth > 0 ? '+' : ''}${growth}</b>.`,
+      'Awesome! 🌟', closeModal);
+  }
+}
 function getEliteThemeForWeek(week){
   return ELITE_WEEK_THEMES[(Math.max(1, week) - 1) % ELITE_WEEK_THEMES.length];
 }
@@ -1860,10 +2187,12 @@ function resumeGame(){
   if(!state.reflectionHistory) state.reflectionHistory = [];
   if(!state.currentTeacherReflectionType) state.currentTeacherReflectionType = 'default';
   ensureEliteState();
+ensureQuizState();
 hydrateSharedProfileUI();
 updateResumeButton();
 syncEarnedIncomeLabel();
 updateTeacherEliteUI();
+updateReportQuizSummary();
   refreshGameUIAfterLoad();
 }
 function returnToMenu(){
@@ -1962,24 +2291,12 @@ function checkStartReady() {
 // ══════════════════════════════════════════════════════════════════
 // GAME START
 // ══════════════════════════════════════════════════════════════════
-function startGame() {
-  saveSharedProfile();
-  state.week = 0;
-  state.jars = { spend:0, save:0, share:0 };
-  state.totalEarned = 0;
-  state.pendingConsequences = [];
-  state.boughtItems = {};
-  state.gameActive = true;
-  state.finalReached = false;
-  state.reflectionHistory = [];
-  state.currentTeacherReflectionType = 'default';
-
+function launchGameExperience(){
   updateHeaderAvatar();
   showScreen('screen-game');
   document.getElementById('week-progress').style.display = 'flex';
 
   const greeting = state.playerName ? `Ready, ${state.playerName}? ${state.avatar}` : `Let's go! ${state.avatar}`;
-  // Auto-split jar explanation
   saveGameProgress(true);
   showModal('💰', 'How Money Works Here!',
     'When you earn money, it gets split into 3 jars:\n\n' +
@@ -1989,6 +2306,31 @@ function startGame() {
     '\n\nEach week you\'ll earn money and make choices. Ready?',
     greeting, () => advanceWeek()
   );
+}
+
+function startGame() {
+  saveSharedProfile();
+  ensureQuizState();
+  state.week = 0;
+  state.jars = { spend:0, save:0, share:0 };
+  state.totalEarned = 0;
+  state.pendingConsequences = [];
+  state.boughtItems = {};
+  state.gameActive = true;
+  state.finalReached = false;
+  state.reflectionHistory = [];
+  state.currentTeacherReflectionType = 'default';
+  state.quiz.postCompleted = false;
+  state.quiz.postAnswers = {};
+  state.quiz.postScore = null;
+
+  updateHeaderAvatar();
+  if(!state.quiz.preCompleted){
+    saveGameProgress(true);
+    openBenchmarkQuiz('pre');
+    return;
+  }
+  launchGameExperience();
 }
 
 
@@ -2299,6 +2641,10 @@ function endGame() {
   setTimeout(() => {
     buildReport();
     showScreen('screen-report');
+    updateReportQuizSummary();
+    if(state.quiz && state.quiz.preCompleted && !state.quiz.postCompleted){
+      setTimeout(() => openBenchmarkQuiz('post'), 500);
+    }
   }, 800);
 }
 
@@ -2347,6 +2693,7 @@ function buildReport() {
 
   document.getElementById('report-subtitle').textContent =
     `${name} finished all ${TOTAL_WEEKS} weeks as a ${JOBS[state.job].name}!`;
+  updateReportQuizSummary();
   if(isTeacherJrMode()){
     renderTeacherReflectionBox(`
       <div><b>🏁 Final Reflection</b></div>
@@ -2639,6 +2986,11 @@ function resetGame() {
     totalEarned:0, pendingConsequences:[],
     boughtItems:{}, choiceMade:false,
     gameActive:false, finalReached:false,
+    quiz:{
+      preCompleted:false, postCompleted:false,
+      preAnswers:{}, postAnswers:{},
+      preScore:null, postScore:null
+    }
   };
   document.querySelectorAll('.job-card').forEach(c=>c.classList.remove('selected'));
   document.querySelectorAll('.cause-btn').forEach(b=>b.classList.remove('selected'));
@@ -2647,13 +2999,16 @@ function resetGame() {
   document.getElementById('week-progress').style.display = 'none';
   document.getElementById('header-logo').style.display = '';
   document.getElementById('header-avatar').style.display = 'none';
+  document.getElementById('quiz-overlay').classList.remove('show');
+  document.getElementById('quiz-overlay').setAttribute('aria-hidden','true');
   document.getElementById('ledger-entries').innerHTML =
     '<div class="ledger-entry event"><span class="l-emoji">🌟</span><span class="l-text">Game started! Good luck!</span><span class="l-amount"></span></div>';
   ensureEliteState();
-hydrateSharedProfileUI();
-updateResumeButton();
-syncEarnedIncomeLabel();
-updateTeacherEliteUI();
+  ensureQuizState();
+  hydrateSharedProfileUI();
+  updateResumeButton();
+  syncEarnedIncomeLabel();
+  updateTeacherEliteUI();
   clearSavedGame();
   showScreen('screen-welcome');
 }
@@ -2718,10 +3073,12 @@ function hydrateSharedProfileUI(){
 }
 
 ensureEliteState();
+ensureQuizState();
 hydrateSharedProfileUI();
 updateResumeButton();
 syncEarnedIncomeLabel();
 updateTeacherEliteUI();
+updateReportQuizSummary();
 
 </script>
 <script>
