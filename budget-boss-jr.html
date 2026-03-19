@@ -260,22 +260,7 @@ body{
 }
 .jars{display:flex;gap:12px;justify-content:center;align-items:flex-end;}
 .jar-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;}
-.jar-label{
-  min-height:44px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-end;
-  text-align:center;
-  font-size:.75rem;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-  line-height:1.1;
-}
-.jar-label-text{display:block;}
-.jar-label .term-link{margin-top:4px;}
-.jar-label-empty{display:block;height:20px;}
+.jar-label{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;}
 .jar-container{
   width:64px;height:90px;
   border-radius:0 0 14px 14px;
@@ -873,21 +858,21 @@ body{
         <h3>💰 My Money Jars</h3>
         <div class="jars">
           <div class="jar-wrap jar-spend">
-            <span class="jar-label"><span class="jar-label-text">Spend</span><button class="term-link" type="button" onclick="showTermDefinition('needswants')">(needs vs. wants)</button></span>
+            <span class="jar-label">Spend <button class="term-link" type="button" onclick="showTermDefinition('needswants')">(needs vs. wants)</button></span>
             <div class="jar-container">
               <div class="jar-fill" id="jar-spend-fill" style="height:0%"></div>
             </div>
             <span class="jar-amount jar-spend" id="jar-spend-amt">$0</span>
           </div>
           <div class="jar-wrap jar-save">
-            <span class="jar-label"><span class="jar-label-text">Save</span><button class="term-link" type="button" onclick="showTermDefinition('goal')">(goal)</button></span>
+            <span class="jar-label">Save <button class="term-link" type="button" onclick="showTermDefinition('goal')">(goal)</button></span>
             <div class="jar-container">
               <div class="jar-fill" id="jar-save-fill" style="height:0%"></div>
             </div>
             <span class="jar-amount jar-save" id="jar-save-amt">$0</span>
           </div>
           <div class="jar-wrap jar-share">
-            <span class="jar-label"><span class="jar-label-text">Share</span><span class="jar-label-empty" aria-hidden="true"></span></span>
+            <span class="jar-label">Share</span>
             <div class="jar-container">
               <div class="jar-fill" id="jar-share-fill" style="height:0%"></div>
             </div>
