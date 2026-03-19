@@ -242,6 +242,8 @@ body{
 .start-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
 
 .jr-reset-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.welcome-reset-row{margin-top:12px;justify-content:center;}
+.welcome-reset-row .jr-mini-btn{min-width:180px;}
 .jr-mini-btn{border:none;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer;box-shadow:var(--shadow);}
 .jr-mini-btn.reset{background:#fff7e8;color:#9a5a00;}
 .jr-mini-btn.clear{background:#ffe9ec;color:#a12b41;}
@@ -923,6 +925,10 @@ body{
       <button class="resume-btn" id="resume-btn" type="button" onclick="resumeGame()" disabled>▶️ Resume Last Game</button>
       <button class="resume-btn" id="save-menu-btn" type="button" onclick="saveGameProgress()">💾 Save My Progress</button>
     </div>
+    <div class="jr-reset-row welcome-reset-row">
+      <button class="jr-mini-btn reset" type="button" onclick="confirmResetGame()">🔁 Reset Jr Game</button>
+      <button class="jr-mini-btn clear" type="button" onclick="clearProfileAndReset()">🗑️ Clear Saved Player</button>
+    </div>
   </div>
 
   <!-- ── SCREEN 2: GAME ── -->
@@ -1020,11 +1026,6 @@ body{
       <button class="jr-mini-btn" type="button" onclick="returnToDifficultySelect()">🧭 All Difficulties</button>
       <button class="jr-mini-btn" type="button" onclick="resumeGame()">▶️ Resume</button>
     </div>
-    <div class="jr-reset-row">
-      <button class="jr-mini-btn reset" type="button" onclick="confirmResetGame()">🔁 Reset Jr Game</button>
-      <button class="jr-mini-btn clear" type="button" onclick="clearProfileAndReset()">🗑️ Clear Saved Player</button>
-    </div>
-
     <!-- Teacher panel -->
     <div class="teacher-panel" id="teacher-panel" style="display:none">
       <h4>👩‍🏫 Teacher Tools</h4>
