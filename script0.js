@@ -1014,10 +1014,6 @@ function updateTeacherWeekPrompt(scenario, reflectionType='default'){
         <div class="teacher-mini" style="margin-top:8px">Teacher Mode add-on: <b>What would you tell a friend to do here?</b></div>
       </div>
       <div class="teacher-reflection-card">
-        <h5>📝 Click a reflection question for the class</h5>
-        <div class="teacher-reflection-actions">${pack.reflection.map(q => `<button class="teacher-q-btn" type="button" onclick="openTeacherQuestion('${q.replace(/'/g,"&#39;")}', '${type}')">${q}</button>`).join('')}</div>
-      </div>
-      <div class="teacher-reflection-card">
         <h5>📚 Full reflection library</h5>
         <div class="teacher-mini"><b>Spend</b></div><div class="teacher-reflection-actions">${JR_REFLECTION_PROMPTS.spend.reflection.slice(0,4).map(q => `<button class="teacher-q-btn" type="button" onclick="openTeacherQuestion('${q.replace(/'/g,"&#39;")}', 'spend')">${q}</button>`).join('')}</div>
         <div class="teacher-mini" style="margin-top:8px"><b>Save</b></div><div class="teacher-reflection-actions">${JR_REFLECTION_PROMPTS.save.reflection.slice(0,4).map(q => `<button class="teacher-q-btn" type="button" onclick="openTeacherQuestion('${q.replace(/'/g,"&#39;")}', 'save')">${q}</button>`).join('')}</div>

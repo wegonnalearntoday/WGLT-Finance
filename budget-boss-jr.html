@@ -877,14 +877,14 @@ body{
         <h3>💰 My Money Jars</h3>
         <div class="jars">
           <div class="jar-wrap jar-spend">
-            <span class="jar-label"><span class="jar-label-text">Spend</span><button class="term-link" type="button" onclick="showTermDefinition('needswants')">(needs vs. wants)</button></span>
+            <span class="jar-label"><span class="jar-label-text">Spend</span><span class="jar-label-empty" aria-hidden="true"></span></span>
             <div class="jar-container">
               <div class="jar-fill" id="jar-spend-fill" style="height:0%"></div>
             </div>
             <span class="jar-amount jar-spend" id="jar-spend-amt">$0</span>
           </div>
           <div class="jar-wrap jar-save">
-            <span class="jar-label"><span class="jar-label-text">Save</span><button class="term-link" type="button" onclick="showTermDefinition('goal')">(goal)</button></span>
+            <span class="jar-label"><span class="jar-label-text">Save</span><span class="jar-label-empty" aria-hidden="true"></span></span>
             <div class="jar-container">
               <div class="jar-fill" id="jar-save-fill" style="height:0%"></div>
             </div>
@@ -902,7 +902,7 @@ body{
         <!-- Savings goal -->
         <div class="goal-progress">
           <div class="goal-progress-label">
-            <span>🎯 Savings Goal</span>
+            <span>🎯 <button class="term-link" type="button" onclick="showTermDefinition('goal')">Savings Goal</button></span>
             <span id="goal-progress-text">$0 / $20</span>
           </div>
           <div class="goal-track">
@@ -914,7 +914,7 @@ body{
 
       <!-- LEDGER PANEL -->
       <div class="ledger-panel">
-        <h3>📋 My Money Log</h3>
+        <h3>📋 My Money Log <button class="term-link" type="button" onclick="showTermDefinition('needswants')">(needs vs. wants)</button></h3>
         <div class="ledger-entries" id="ledger-entries">
           <div class="ledger-entry event">
             <span class="l-emoji">🌟</span>
@@ -2215,10 +2215,6 @@ function updateTeacherWeekPrompt(scenario, reflectionType='default'){
         <h5>💬 Teacher Prompt</h5>
         <div>${pack.discussion}</div>
         <div class="teacher-mini" style="margin-top:8px">Teacher Mode add-on: <b>What would you tell a friend to do here?</b></div>
-      </div>
-      <div class="teacher-reflection-card">
-        <h5>📝 Click a reflection question for the class</h5>
-        <div class="teacher-reflection-actions">${pack.reflection.map(q => `<button class="teacher-q-btn" type="button" onclick="openTeacherQuestion('${q.replace(/'/g,"&#39;")}', '${type}')">${q}</button>`).join('')}</div>
       </div>
       <div class="teacher-reflection-card">
         <h5>📚 Full reflection library</h5>
