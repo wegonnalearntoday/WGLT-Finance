@@ -3670,40 +3670,20 @@ function openTab(name, opts={}){
   const p=$("panel-"+name);
   if(p) p.classList.add("active");
 
-  // Monthly snapshot review: clicking the Budget Sheet should let the student review it first,
-  // then explicitly continue into the next scenario flow. Do not auto-fire a scenario just
-  // because the sheet tab opened.
+  // Monthly snapshot review: once the student clicks Budget Sheet, resume the new month flow
   if(name === "sheet" && !opts.auto){
     if(state.ui && state.ui.pendingBudgetSheetReview){
+      state.ui.pendingBudgetSheetReview = false;
       applyLockRules();
       setTimeout(()=>{
-        openModal({
-          title:"📊 Budget Sheet Check-In",
-          meta:"Monthly snapshot",
-          body:`You are now on the Budget Sheet for your month-end review.\n\nLook at how the student finished the month, then tap Continue to launch the next random event.`,
-          buttons:[
-            {id:"continue", label:"Continue →", kind:"primary"},
-            {id:"stay", label:"Keep Reviewing", kind:"secondary"}
-          ],
-          onPick:(id)=>{
-            if(id !== 'continue'){
-              state.ui.pendingBudgetSheetReview = true;
-              applyLockRules();
-              showBanner("Keep reviewing the Budget Sheet");
-              return;
-            }
-            state.ui.pendingBudgetSheetReview = false;
-            applyLockRules();
-            if(state.weekEngine && state.mission.active){
-              runWeeklyScenarios(state.weekEngine.week, ()=>{
-                renderAll();
-                renderSheet();
-                notifyAction("next_week");
-              });
-            }
-          }
-        });
-      }, 180);
+        if(state.weekEngine && state.mission.active){
+          runWeeklyScenarios(state.weekEngine.week, ()=>{
+            renderAll();
+            renderSheet();
+            notifyAction("next_week");
+          });
+        }
+      }, 220);
     } else {
       const currentStep = state.mission.active ? state.mission.steps[state.mission.index] : null;
       const expectsBudgetSheet = !!(currentStep && currentStep.requireActions && currentStep.requireActions.includes("view_budget_sheet"));
@@ -6043,16 +6023,44 @@ Action Plan: ${getMonthlyActionPlan({})}`,
 }
 
 function promptMonthlyBudgetSheetReview(onDone){
-  if(!state.ui) state.ui = {};
   state.ui.pendingBudgetSheetReview = true;
-  state.ui.afterBudgetSheetReview = onDone ? 'custom' : 'scenario';
   applyLockRules();
   openTab("sheet", {auto:true});
   setTimeout(()=>{
     const sheetPanel = $("panel-sheet");
     if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth", block:"start"});
   }, 120);
-  showBanner("Month complete. Tap the Budget Sheet tab to review, then continue");
+  showBanner("Month complete. Review the Budget Sheet, then continue");
+  setTimeout(()=>{
+    openModal({
+      title:"📊 Budget Sheet Check-In",
+      meta:"Monthly snapshot",
+      body:`You are now on the Budget Sheet for your month-end review.
+
+Look at how the student finished the month, then tap Continue to launch the next step's scenario flow.`,
+      buttons:[
+        {id:"continue", label:"Continue →", kind:"primary"},
+        {id:"stay", label:"Keep Reviewing", kind:"secondary"}
+      ],
+      onPick:(id)=>{
+        if(id !== 'continue'){
+          state.ui.pendingBudgetSheetReview = true;
+          applyLockRules();
+          return;
+        }
+        state.ui.pendingBudgetSheetReview = false;
+        applyLockRules();
+        if(onDone) onDone();
+        if(state.weekEngine && state.mission.active){
+          runWeeklyScenarios(state.weekEngine.week, ()=>{
+            renderAll();
+            renderSheet();
+            notifyAction("next_week");
+          });
+        }
+      }
+    });
+  }, 220);
 }
 
 
