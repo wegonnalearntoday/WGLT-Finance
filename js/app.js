@@ -6025,48 +6025,42 @@ Action Plan: ${getMonthlyActionPlan({})}`,
 function promptMonthlyBudgetSheetReview(onDone){
   state.ui.pendingBudgetSheetReview = true;
   applyLockRules();
-  openModal({
-    title:"📊 Budget Sheet Check-In",
-    meta:"Monthly snapshot",
-    body:"Let's take a look at our Budget Sheet to see how we're doing.\n\nTap the button below to jump to the Budget Sheet. After you review it, tap Continue to launch the next step.",
-    buttons:[{id:"go", label:"Go View Budget Sheet →", kind:"primary"}],
-    onPick:()=>{
-      openTab("sheet", {auto:true});
-      setTimeout(()=>{
-        const sheetPanel = $("panel-sheet");
-        if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth", block:"start"});
-      }, 120);
-      showBanner("Review the Budget Sheet, then continue");
-      setTimeout(()=>{
-        openModal({
-          title:"✅ Ready to Continue?",
-          meta:"Budget Sheet reviewed",
-          body:"When you're ready, continue to launch the next step's scenario flow.",
-          buttons:[
-            {id:"continue", label:"Continue →", kind:"primary"},
-            {id:"stay", label:"Keep Reviewing", kind:"secondary"}
-          ],
-          onPick:(id)=>{
-            if(id !== 'continue'){
-              state.ui.pendingBudgetSheetReview = true;
-              applyLockRules();
-              return;
-            }
-            state.ui.pendingBudgetSheetReview = false;
-            applyLockRules();
-            if(onDone) onDone();
-            if(state.weekEngine && state.mission.active){
-              runWeeklyScenarios(state.weekEngine.week, ()=>{
-                renderAll();
-                renderSheet();
-                notifyAction("next_week");
-              });
-            }
-          }
-        });
-      }, 260);
-    }
-  });
+  openTab("sheet", {auto:true});
+  setTimeout(()=>{
+    const sheetPanel = $("panel-sheet");
+    if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth", block:"start"});
+  }, 120);
+  showBanner("Month complete. Review the Budget Sheet, then continue");
+  setTimeout(()=>{
+    openModal({
+      title:"📊 Budget Sheet Check-In",
+      meta:"Monthly snapshot",
+      body:`You are now on the Budget Sheet for your month-end review.
+
+Look at how the student finished the month, then tap Continue to launch the next step's scenario flow.`,
+      buttons:[
+        {id:"continue", label:"Continue →", kind:"primary"},
+        {id:"stay", label:"Keep Reviewing", kind:"secondary"}
+      ],
+      onPick:(id)=>{
+        if(id !== 'continue'){
+          state.ui.pendingBudgetSheetReview = true;
+          applyLockRules();
+          return;
+        }
+        state.ui.pendingBudgetSheetReview = false;
+        applyLockRules();
+        if(onDone) onDone();
+        if(state.weekEngine && state.mission.active){
+          runWeeklyScenarios(state.weekEngine.week, ()=>{
+            renderAll();
+            renderSheet();
+            notifyAction("next_week");
+          });
+        }
+      }
+    });
+  }, 220);
 }
 
 
