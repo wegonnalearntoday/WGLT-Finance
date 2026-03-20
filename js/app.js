@@ -6002,15 +6002,20 @@ Action Plan: ${getMonthlyActionPlan({})}`,
           onPick:()=>{
             // Step 3: Paycheck investment prompt
             promptPaycheckInvestmentSimple(takeHome, tax, ()=>{
-              const continueToReview = ()=> promptWeeklyGoalIfNeeded(()=>{ renderSheet(); promptMonthlyBudgetSheetReview(()=>{
-                if(state.weekEngine && state.mission.active){
-                  runWeeklyScenarios(state.weekEngine.week, ()=>{
-                    renderAll();
-                    renderSheet();
-                    notifyAction("next_week");
+              const continueToReview = ()=>{
+                renderSheet();
+                promptMonthlyBudgetSheetReview(()=>{
+                  promptWeeklyGoalIfNeeded(()=>{
+                    if(state.weekEngine && state.mission.active){
+                      runWeeklyScenarios(state.weekEngine.week, ()=>{
+                        renderAll();
+                        renderSheet();
+                        notifyAction("next_week");
+                      });
+                    }
                   });
-                }
-              }); });
+                });
+              };
               const continueAfterElite = ()=> isEliteExperience() ? promptEliteCreditOpportunity(continueToReview) : continueToReview();
               if(state.plan.wantsSelections && state.plan.wantsSelections.length > 0){
                 triggerMonthlyWantsChoice(()=>{
@@ -6076,7 +6081,7 @@ function promptMonthlyBudgetSheetReview(onDone){
   openModal({
     title:"📊 Budget Sheet Check-In",
     meta:"Monthly snapshot",
-    body:"Let's take a look at our Budget Sheet to see how we're doing. Review the sheet, then tap Continue to move into the next random event.",
+    body:"Let's take a look at our Budget Sheet to see how we're doing. Review the sheet, then tap Continue. If you need to pick a monthly focus, that will happen after the Budget Sheet before the next random event.",
     buttons:[{id:"continue", label:"Continue →", kind:"primary"}],
     onPick:()=>{
       state.ui.pendingBudgetSheetReview = false;
