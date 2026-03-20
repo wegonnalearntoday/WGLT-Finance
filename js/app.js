@@ -3216,13 +3216,18 @@ function openGeneratedEventModal(ev, week, onDone){
 }
 function runEventEngineV1(week, onAllDone){
   const pickedType = getFocusWeightedType();
-  const main = pickUniqueEventFromPool(pickedType, week) || pickUniqueEventFromPool('life', week);
+  const main = pickUniqueEventFromPool(pickedType, week) || pickUniqueEventFromPool('life', week) || pickUniqueEventFromPool('job', week) || pickUniqueEventFromPool('financial', week);
   const queue = [];
   if(main) queue.push(main);
   if(Math.random() < 0.28){
     const bonusType = ['life','job','financial'].filter(x => x !== pickedType)[Math.floor(Math.random()*2)] || 'life';
     const bonus = pickUniqueEventFromPool(bonusType, week);
     if(bonus && bonus.id !== main?.id) queue.push(bonus);
+  }
+  if(!queue.length){
+    const fallbackPool = createJobTemplatePool(getCurrentJob());
+    const fallback = fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
+    if(fallback) queue.push(fallback);
   }
   let idx = 0;
   function next(){
@@ -4501,108 +4506,47 @@ function currentWeekIndex(){
 }
 
 function buildMonthMissionSteps(){
-  const job = state.jobs[state.jobIndex];
   const steps = [
     {
-      title:"Month 1: Choose bank + insurance",
+      title:"Choose bank + insurance",
       bucket:[1,6,12,3],
       prompt:`Choose your checking account, savings account, and insurance.
 
 Required:
-• Tap "Choose Bank + Insurance (Start)" (Banking tab)`,
+• Tap "Choose Bank + Insurance (Start)" in Banking`,
       requireActions:["startup_choose"]
     },
     {
-      title:"Month 1: Set Savings Challenge Goal",
+      title:"Set Savings Challenge Goal",
       bucket:[12,3],
       prompt:`Pick a year-end savings goal.
 
 Required:
-• Tap "Savings Challenge" (Plan tab) and set a goal`,
+• Tap "Savings Challenge" in Plan and set a goal`,
       requireActions:["savings_goal"]
     },
-  ];
-
-  for(let m=1; m<=12; m++){
-    if(m % 2 === 1){
-      steps.push({
-        title:`Month ${m}: Stock up supplies`,
-        bucket:[3,1],
-        prompt:`Use the Ledger to buy one job item for this month.
+    {
+      title:"Stock up first job item",
+      bucket:[3,1],
+      prompt:`Use the Ledger to buy one job item before the weekly scenario engine starts.
 
 Required:
 • Buy ONE item in the Ledger tab`,
-        requireActions:["ledger_buy"]
-      });
-    } else {
-      steps.push({
-        title:`Month ${m}: Run a real-life event`,
-        bucket:[3,6,12],
-        prompt:`Handle the real-life job event for this month.
+      requireActions:["ledger_buy"]
+    }
+  ];
 
-Required:
-• Run Job Real-Life Event`,
-        requireActions:["job_event"]
-      });
-    }
-
-    if(m===2){
-      steps.push({ title:"Month 2: Move money to savings", bucket:[1,12], prompt:`Show the student how moving money changes growth.
-
-Required:
-• Transfer money from checking to savings`, requireActions:["transfer_savings"] });
-    }
-    if(m===3){
-      steps.push({ title:"Month 3: Inheritance lesson", bucket:[5,3], prompt:`Required:
-• Trigger Inheritance and choose an option.`, requireActions:["inheritance"] });
-    }
-    if(m===4){
-      steps.push({ title:"Month 4: Local tax lesson", bucket:[8,7], prompt:`Required:
-• Generate Local Tax (Lesson)
-• Pay Local Tax Bill`, requireActions:["gen_local_tax","pay_local_tax"] });
-    }
-    if(m===5){
-      steps.push({ title:"Month 5: Open a CD", bucket:[9,12], prompt:`Open a CD and explain the term length.
-
-Required:
-• Open CD`, requireActions:["open_cd"] });
-    }
-    if(m===6){
-      steps.push({ title:"Month 6: Billing dispute", bucket:[11,13], prompt:`Required:
-• Start Billing Dispute and choose an action.`, requireActions:["dispute"] });
-    }
-    if(m===8){
-      steps.push({ title:"Month 8: Contract review", bucket:[10,13], prompt:`Pick one contract from the dropdown and review it.
-
-Required:
-• Review Selected Contract`, requireActions:["contract_pick","review_contract"] });
-    }
-    if(m===9){
-      steps.push({ title:"Month 9: Transfer more savings", bucket:[1,12], prompt:`Move more money from checking to savings.
-
-Required:
-• Transfer money from checking to savings`, requireActions:["transfer_savings"] });
-    }
-    if(m===10){
-      steps.push({ title:"Month 10: Write a check", bucket:[2,1], prompt:`Show money movement with a check.
-
-Required:
-• Write Check`, requireActions:["write_check"] });
-    }
-    if(m===11){
-      steps.push({ title:"Month 11: Deposit a check", bucket:[1,2], prompt:`Bring money back into the account.
-
-Required:
-• Deposit Check`, requireActions:["deposit_check"] });
-    }
-
+  for(let week=1; week<=48; week++){
+    const monthName = weekToMonthName ? weekToMonthName(week) : `Month ${weekToMonth ? weekToMonth(week) : 1}`;
     steps.push({
-      title:`Month ${m}: Advance to next week`,
-      bucket:[9,12],
-      prompt:`Tap "Next Week ▶" to advance. Interest, fees, growth, and credit effects apply when the month turns.`,
-      requireActions:["next_week"]
-    });
+      title:`Advance to next step`,
+      bucket:[3,6,9,12],
+      prompt:`Tap "Next Week ▶" to run this week's random scenario for ${monthName}.
 
+The event engine will pull a job-based, life, or financial decision with consequences. Month turns still trigger paycheck, budget review, growth, fees, and credit effects automatically.`,
+      requireActions:["next_week"],
+      weekNumber: week
+    });
   }
   return steps;
 }
@@ -4620,7 +4564,7 @@ function getMissionStepDisplay(step){
     const fallbackWeek = Number(step.weekReview || 0) || 4;
     const liveWeek = state?.weekEngine?.week || 0;
     const completedWeek = liveWeek > 0 ? liveWeek : fallbackWeek;
-    title = `Week ${completedWeek}: Review Budget Sheet`;
+    title = `Step ${completedWeek}: Review Budget Sheet`;
     prompt = `📊 Tap the "Budget Sheet" tab to review Week ${completedWeek}.\n\nSee your balances, growth, inventory value, and savings goal progress for the paycheck you just finished — then come back to continue.`;
   }
 
@@ -4701,7 +4645,7 @@ function startMission(){
   state.standardV1.chainHistory = [];
   state.standardV1.chainWindowsFired = {};
 
-  setLog("Year mission started! June Week 1 — follow the glowing actions. Monthly focus, health, and choice echoes are now live.");
+  setLog("Year mission started! Follow the glowing actions. Monthly focus, health, choice echoes, and the 48-step random event engine are now live.");
   setTimeout(()=>promptWeeklyGoalIfNeeded(()=>jumpToBankingAfterMonthlyFocus()), 200);
   renderAll();
   runCurrentMissionStep();
