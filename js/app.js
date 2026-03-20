@@ -132,6 +132,8 @@ function ensureStandardV1State(){
   if(!state.standardV1.chainWindowsFired) state.standardV1.chainWindowsFired = {};
   if(!state.standardV1.actionPlans) state.standardV1.actionPlans = [];
   if(!state.standardV1.bigConsequenceLog) state.standardV1.bigConsequenceLog = [];
+  if(!state.standardV1.focusProgressByMonth) state.standardV1.focusProgressByMonth = {};
+  if(!state.standardV1.focusBaselines) state.standardV1.focusBaselines = {};
 }
 function derivePressureTrack(item){
   const hay = `${item?.label || ''} ${item?.sourceLabel || ''}`.toLowerCase();
@@ -200,32 +202,104 @@ function maybeQueueConsequenceChain(currentWeek, reason){
   state.standardV1.chainHistory.unshift({ week:Number(currentWeek || 1), triggerWeek, key:summary.key, reason:reason || summary.label, label:labelMap[summary.key] || 'Pressure Wave' });
   state.standardV1.chainHistory = state.standardV1.chainHistory.slice(0, 20);
 }
-const WEEKLY_GOAL_BANK = [
-  { id:'save', name:'Build Savings', emoji:'🏦', desc:'Put future-you first this week.', weights:{life:-5,job:-5,financial:10} },
+const MONTHLY_FOCUS_BANK = [
+  { id:'save', name:'Build Savings', emoji:'🏦', desc:'Put future-you first this month.', weights:{life:-5,job:-5,financial:10} },
   { id:'credit', name:'Protect Credit', emoji:'🛡️', desc:'Avoid fees, missed payments, and bad paper trails.', weights:{life:0,job:-5,financial:5} },
   { id:'income', name:'Grow Job Income', emoji:'💼', desc:'Lean into work opportunities and reputation wins.', weights:{life:-10,job:15,financial:-5} },
-  { id:'wants', name:'Control Wants', emoji:'🎯', desc:'Beat impulse spending and stay on plan.', weights:{life:10,job:-5,financial:-5} }
+  { id:'wants', name:'Control Wants', emoji:'🎯', desc:'Beat impulse spending and stay on plan this month.', weights:{life:10,job:-5,financial:-5} }
 ];
+function getCurrentFocusMonth(){
+  return Number(state.weekEngine ? weekToMonth(state.weekEngine.week || 1) : state.day || 1);
+}
 function getWeeklyGoalForWeek(week){
   ensureStandardV1State();
-  return state.standardV1.weeklyGoals[String(week)] || null;
+  const month = Number(weekToMonth ? weekToMonth(Number(week || (state.weekEngine && state.weekEngine.week) || 1)) : week || 1);
+  return state.standardV1.weeklyGoals[String(month)] || null;
 }
 function getCurrentWeeklyGoal(){
-  const week = Number((state.weekEngine && state.weekEngine.week) || state.day || 1);
-  return getWeeklyGoalForWeek(week);
+  const month = getCurrentFocusMonth();
+  return state.standardV1.weeklyGoals[String(month)] || null;
 }
 function setWeeklyGoalForWeek(week, goalId){
   ensureStandardV1State();
-  const goal = WEEKLY_GOAL_BANK.find(g => g.id === goalId) || WEEKLY_GOAL_BANK[0];
-  state.standardV1.weeklyGoals[String(week)] = { week, id:goal.id, name:goal.name, emoji:goal.emoji, desc:goal.desc, selectedAt:new Date().toISOString() };
-  state.standardV1.goalHistory.push({ week, id:goal.id, name:goal.name });
-  showBanner(`${goal.emoji} Weekly Goal: ${goal.name}`);
+  const month = Number(weekToMonth ? weekToMonth(Number(week || (state.weekEngine && state.weekEngine.week) || 1)) : week || 1);
+  const goal = MONTHLY_FOCUS_BANK.find(g => g.id === goalId) || MONTHLY_FOCUS_BANK[0];
+  const saved = Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0) + Number(totalStockFunds ? totalStockFunds() : 0);
+  state.standardV1.weeklyGoals[String(month)] = { month, id:goal.id, name:goal.name, emoji:goal.emoji, desc:goal.desc, selectedAt:new Date().toISOString() };
+  state.standardV1.focusBaselines[String(month)] = {
+    savings:saved,
+    credit:Number(state.credit || 650),
+    checking:Number(state.bank?.checking || 0),
+    careerLevel:Number(state.elite?.career?.level || 1),
+    income:Number(state.plan?.income || 0),
+    unplanned:Boolean(state.plan && state.plan.unplannedWantUsedThisMonth)
+  };
+  state.standardV1.goalHistory.push({ month, id:goal.id, name:goal.name });
+  showBanner(`${goal.emoji} Monthly Focus: ${goal.name}`);
   scheduleAutoSave(150);
+}
+function getCurrentMonthFocusProgress(){
+  ensureStandardV1State();
+  const month = getCurrentFocusMonth();
+  const goal = getCurrentWeeklyGoal();
+  if(!goal) return { score:0, label:'Pick focus', detail:'No monthly focus selected yet.' };
+  const base = state.standardV1.focusBaselines[String(month)] || {};
+  const savedNow = Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0) + Number(totalStockFunds ? totalStockFunds() : 0);
+  const savingsGain = Math.max(0, savedNow - Number(base.savings || 0));
+  const creditGain = Number(state.credit || 650) - Number(base.credit || state.credit || 650);
+  const checking = Number(state.bank?.checking || 0);
+  const currentIncome = Number(state.plan?.income || 0) + Number(state.elite?.career?.payBonus || 0);
+  const incomeGain = currentIncome - Number(base.income || state.plan?.income || 0);
+  const pressure = getPressureTrackSummary();
+  const unplanned = Boolean(state.plan && state.plan.unplannedWantUsedThisMonth);
+  let score = 28;
+  if(goal.id === 'save'){
+    score += Math.min(48, Math.round(savingsGain * 1.8));
+    if(!unplanned) score += 14;
+    if(checking >= 40) score += 10;
+  } else if(goal.id === 'credit'){
+    score += 28 + Math.max(-20, Math.min(26, creditGain * 3));
+    if((pressure.key || '') !== 'bills') score += 12;
+    if(checking >= 30) score += 8;
+  } else if(goal.id === 'income'){
+    score += 24 + Math.max(0, Math.min(28, Math.round(incomeGain / 2)));
+    if(Number(state.ledger?.weekIncome || 0) > 0) score += 12;
+    if(Number(state.elite?.career?.level || 1) > Number(base.careerLevel || 1)) score += 16;
+  } else if(goal.id === 'wants'){
+    score += unplanned ? 0 : 36;
+    if((pressure.key || '') !== 'impulse') score += 16;
+    if(checking >= 35) score += 8;
+  }
+  if(Number(pressure.total || 0) > 0) score -= Math.min(18, Number(pressure.total || 0) * 2);
+  score = Math.max(0, Math.min(100, Math.round(score)));
+  let label = 'Needs work';
+  if(score >= 85) label = 'Locked in';
+  else if(score >= 70) label = 'On track';
+  else if(score >= 50) label = 'Building';
+  const detailMap = {
+    save:`Saved ${money(savingsGain)} this month`,
+    credit:`Credit ${creditGain >= 0 ? '+' : ''}${creditGain} this month`,
+    income:`Income trend ${incomeGain >= 0 ? '+' : ''}${money(incomeGain)}`,
+    wants: unplanned ? 'Impulse hit the plan once' : 'Wants stayed on plan'
+  };
+  const out = { score, label, detail: detailMap[goal.id] || 'Progress is updating' };
+  state.standardV1.focusProgressByMonth[String(month)] = out;
+  return out;
+}
+function getMonthlyGoalStatusText(){
+  const goal = getCurrentWeeklyGoal();
+  const progress = getCurrentMonthFocusProgress();
+  if(!goal) return 'Pick focus';
+  if(goal.id === 'save') return progress.score >= 70 ? 'Savings focus holding' : 'Feed savings again';
+  if(goal.id === 'credit') return progress.score >= 70 ? 'Credit protected' : 'Watch bills and fees';
+  if(goal.id === 'income') return progress.score >= 70 ? 'Income momentum up' : 'Look for one work win';
+  if(goal.id === 'wants') return progress.score >= 70 ? 'Wants under control' : 'Impulse watch';
+  return progress.label;
 }
 function getDynamicRandomEventWeights(){
   const base = Object.assign({life:40,job:30,financial:30}, getRandomEventWeights());
   const goal = getCurrentWeeklyGoal();
-  const shift = goal ? ((WEEKLY_GOAL_BANK.find(g => g.id === goal.id) || {}).weights || {}) : {};
+  const shift = goal ? ((MONTHLY_FOCUS_BANK.find(g => g.id === goal.id) || {}).weights || {}) : {};
   const out = {
     life: Math.max(10, Number(base.life || 0) + Number(shift.life || 0)),
     job: Math.max(10, Number(base.job || 0) + Number(shift.job || 0)),
@@ -245,6 +319,8 @@ function ensureEliteState(){
   if(!state.elite.career) state.elite.career = { level:1, title:'Starter Worker', promotions:0, payBonus:0, history:[], branch:'' };
   if(!state.elite.endings) state.elite.endings = { final:null, track:'⚖️ Survivor' };
   if(!state.elite.creditAccess) state.elite.creditAccess = { apartment:false, car:false, loan:false };
+  if(!state.elite.obligations) state.elite.obligations = [];
+  if(state.elite.loanDecisionMonth == null) state.elite.loanDecisionMonth = 0;
 }
 function totalStockFunds(){
   ensureEliteState();
@@ -289,6 +365,88 @@ function getJobCareerBranch(){
   if(['babysitting','pet','dogwalk'].includes(id)) return { key:'care', name:'Care Services', titles:['Neighborhood Helper','Trusted Care Pro','Senior Care Lead','Family Services Captain','Community Care Director','Youth Care Manager','Care Business Owner'], bonus:[15,20,25,30,35,40] };
   if(['lawn','cars','chores','errands'].includes(id)) return { key:'ops', name:'Operations', titles:['Starter Worker','Route Runner','Shift Lead','Operations Captain','Service Manager','Field Director','Neighborhood Ops Owner'], bonus:[15,20,25,30,35,40] };
   return { key:'specialist', name:'Creative & Academic', titles:['Starter Specialist','Skilled Builder','Lead Specialist','Program Captain','Studio Manager','Community Expert','Brand Owner'], bonus:[20,25,30,35,40,45] };
+}
+
+function getEliteObligationSummary(){
+  ensureEliteState();
+  const active = (state.elite.obligations || []).filter(o => Number(o.monthsLeft || 0) > 0);
+  if(!active.length) return 'No active financing';
+  const total = active.reduce((sum,o)=>sum + Number(o.monthly || 0), 0);
+  return `${active.length} active • ${money(total)}/mo`;
+}
+function addEliteObligation(kind, config){
+  ensureEliteState();
+  const existing = (state.elite.obligations || []).find(o => o.kind === kind && Number(o.monthsLeft || 0) > 0);
+  if(existing) return false;
+  state.elite.obligations.push(Object.assign({ kind }, config || {}));
+  return true;
+}
+function applyEliteObligationCharges(monthName){
+  ensureEliteState();
+  if(!isEliteExperience()) return [];
+  const active = (state.elite.obligations || []).filter(o => Number(o.monthsLeft || 0) > 0);
+  const results = [];
+  active.forEach(o=>{
+    const payment = Number(o.monthly || 0);
+    const available = Number(state.bank?.checking || 0) + Number(state.cash || 0) + Number(state.bank?.savings || 0);
+    if(available >= payment){
+      payFromCheckingThenCashThenSavings(payment);
+      state.ledger.weekExpenses += payment;
+      o.monthsLeft = Math.max(0, Number(o.monthsLeft || 0) - 1);
+      addLedgerLine(`${monthName}: ${o.name} payment -${money(payment)} (${o.monthsLeft} mo left)`);
+      if(o.kind === 'car') state.plan.income = Number(state.plan?.income || 0) + 10;
+      if(o.kind === 'apartment') state.credit = clamp(Number(state.credit || 650) + 3, 300, 850);
+      results.push(`${o.name} -${money(payment)}`);
+      if(Number(o.monthsLeft || 0) <= 0){
+        addLedgerLine(`${monthName}: ${o.name} paid off`);
+        state.credit = clamp(Number(state.credit || 650) + 10, 300, 850);
+      }
+    } else {
+      o.monthsLeft = Math.max(0, Number(o.monthsLeft || 0) - 1);
+      state.credit = clamp(Number(state.credit || 650) - 18, 300, 850);
+      addLedgerLine(`${monthName}: Missed ${o.name} payment — credit -18`);
+      queueBigConsequence(`Missed ${o.name} payment`, `⚠️ This decision is catching up to you... Your ${o.name.toLowerCase()} payment was missed and your credit dropped.`);
+      results.push(`Missed ${o.name} payment`);
+    }
+  });
+  state.elite.obligations = (state.elite.obligations || []).filter(o => Number(o.monthsLeft || 0) > 0);
+  return results;
+}
+function promptEliteCreditOpportunity(onDone){
+  ensureEliteState();
+  if(!isEliteExperience()) return onDone && onDone();
+  const month = getCurrentFocusMonth();
+  if(state.elite.loanDecisionMonth === month) return onDone && onDone();
+  const unlocks = getCreditUnlocks();
+  const offers = [];
+  const hasKind = kind => (state.elite.obligations || []).some(o => o.kind === kind && Number(o.monthsLeft || 0) > 0);
+  if(state.elite.creditAccess.loan && !hasKind('loan')) offers.push({ id:'loan', label:'Starter Loan +$150 now', hint:'Pay $35/month for 5 months', apply:()=>{ state.bank.checking += 150; addEliteObligation('loan', { name:'Starter Loan', monthly:35, monthsLeft:5 }); state.credit = clamp(Number(state.credit || 650) + 4, 300, 850); addLedgerLine('Elite v1.2: Starter Loan approved +$150 • $35/mo for 5 months'); return 'Starter Loan approved. +$150 now, $35/month for 5 months.'; } });
+  if(state.elite.creditAccess.car && !hasKind('car')) offers.push({ id:'car', label:'Used Car Plan', hint:'Down $90 • $55/month for 6 months', apply:()=>{ if((Number(state.bank?.checking||0)+Number(state.cash||0)) < 90) return 'Not enough for the down payment.'; payFromCheckingThenCashThenSavings(90); addEliteObligation('car', { name:'Used Car Plan', monthly:55, monthsLeft:6 }); state.plan.income = Number(state.plan?.income || 0) + 20; state.credit = clamp(Number(state.credit || 650) + 6, 300, 850); addLedgerLine('Elite v1.2: Used Car financed -$90 down • $55/mo for 6 months • income +$20/mo'); return 'Used Car Plan started. Income potential +$20/month.'; } });
+  if(state.elite.creditAccess.apartment && !hasKind('apartment')) offers.push({ id:'apartment', label:'Shared Apartment Setup', hint:'Down $120 • $85/month for 6 months', apply:()=>{ if((Number(state.bank?.checking||0)+Number(state.cash||0)) < 120) return 'Not enough for the setup payment.'; payFromCheckingThenCashThenSavings(120); addEliteObligation('apartment', { name:'Shared Apartment Setup', monthly:85, monthsLeft:6 }); state.credit = clamp(Number(state.credit || 650) + 8, 300, 850); addLedgerLine('Elite v1.2: Shared Apartment setup -$120 down • $85/mo for 6 months'); return 'Shared Apartment setup approved. On-time payments can strengthen credit.'; } });
+  state.elite.loanDecisionMonth = month;
+  if(!offers.length) return onDone && onDone();
+  openHtmlModal({
+    title:`🏁 Elite Credit Paths • ${weekToMonthName(state.weekEngine ? state.weekEngine.week : 1)}`,
+    meta:`Credit can unlock real monthly obligations now`,
+    html:`<div style="font-weight:900;margin-bottom:10px">Your credit opened new doors. Pick one path, or skip and stay flexible this month.</div><div class="choice-grid">${offers.map(o=>`<button class="choice-btn" data-credit-offer="${o.id}">${o.label}<small>${o.hint}</small></button>`).join('')}<button class="choice-btn" data-credit-offer="skip">Skip for now<small>No new monthly payment this month</small></button></div>`,
+    buttons:[],
+    onRender:()=>{
+      document.querySelectorAll('[data-credit-offer]').forEach(btn=>{
+        btn.onclick=()=>{
+          const pick = btn.dataset.creditOffer;
+          let msg = 'Skipped new financing for now.';
+          if(pick !== 'skip'){
+            const offer = offers.find(o => o.id === pick);
+            if(offer) msg = offer.apply();
+          }
+          closeHtmlModal();
+          showBanner(msg);
+          renderAll();
+          if(onDone) onDone();
+        };
+      });
+    }
+  });
 }
 function getEliteEndingTrack(){
   ensureEliteState();
@@ -389,6 +547,7 @@ function renderEliteOverview(){
   if(document.getElementById('eliteStockMix')) document.getElementById('eliteStockMix').textContent = getStockMixSummary();
   if(document.getElementById('eliteCreditUnlocks')) document.getElementById('eliteCreditUnlocks').textContent = `Apt: ${unlocks.apartment} • Car: ${unlocks.car} • Loan: ${unlocks.loan}`;
   if(document.getElementById('eliteCareerBranch')) document.getElementById('eliteCareerBranch').textContent = career.branch || getJobCareerBranch().name;
+  if(document.getElementById('eliteObligations')) document.getElementById('eliteObligations').textContent = getEliteObligationSummary();
   const latestPlan = (state.standardV1.actionPlans || []).slice(-1)[0] || getMonthlyActionPlan({});
   if(document.getElementById('eliteActionPlan')) document.getElementById('eliteActionPlan').textContent = latestPlan;
 }
@@ -485,14 +644,7 @@ function computeFinancialHealth(){
   return {score, label};
 }
 function getWeeklyGoalStatusText(){
-  const goal = getCurrentWeeklyGoal();
-  if(!goal) return 'Pick goal';
-  const saved = Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0);
-  if(goal.id === 'save') return saved >= 25 ? 'On track' : 'Keep feeding savings';
-  if(goal.id === 'credit') return Number(state.credit || 650) >= 650 ? 'Protecting your score' : 'Watch fees and bills';
-  if(goal.id === 'income') return Number(state.ledger?.weekIncome || 0) > 0 ? 'Income moving' : 'Look for work wins';
-  if(goal.id === 'wants') return state.plan && state.plan.unplannedWantUsedThisMonth ? 'Impulse watch' : 'On plan';
-  return computeFinancialHealth().label;
+  return getMonthlyGoalStatusText();
 }
 function renderStandardV1HUD(){
   ensureStandardV1State();
@@ -502,12 +654,17 @@ function renderStandardV1HUD(){
   const identity = getIdentitySnapshot({ healthScore: health.score });
   if(document.getElementById('healthScore')) document.getElementById('healthScore').textContent = `${health.score}`;
   if(document.getElementById('healthLabel')) document.getElementById('healthLabel').textContent = health.label;
-  if(document.getElementById('weeklyGoalBadge')) document.getElementById('weeklyGoalBadge').textContent = goal ? `${goal.emoji} ${goal.name}` : 'Pick goal';
+  if(document.getElementById('weeklyGoalBadge')) document.getElementById('weeklyGoalBadge').textContent = goal ? `${goal.emoji} ${goal.name}` : 'Pick focus';
   if(document.getElementById('consequenceBadge')) document.getElementById('consequenceBadge').textContent = echo.count ? `${echo.count} active` : '0 pending';
   if(document.getElementById('identityBadge')) document.getElementById('identityBadge').textContent = `${identity.emoji} ${identity.title}`;
   if(document.getElementById('impactHealth')) document.getElementById('impactHealth').textContent = `${health.score}/100 • ${health.label}`;
   if(document.getElementById('impactEchoes')) document.getElementById('impactEchoes').textContent = echo.text;
-  if(document.getElementById('impactGoalStatus')) document.getElementById('impactGoalStatus').textContent = getWeeklyGoalStatusText();
+  if(document.getElementById('impactGoalStatus')) document.getElementById('impactGoalStatus').textContent = getMonthlyGoalStatusText();
+  const focusProgress = getCurrentMonthFocusProgress();
+  if(document.getElementById('impactFocusProgress')) document.getElementById('impactFocusProgress').textContent = `${focusProgress.score}% • ${focusProgress.label}`;
+  if(document.getElementById('focusProgressDetail')) document.getElementById('focusProgressDetail').textContent = focusProgress.detail;
+  if(document.getElementById('focusProgressFill')) document.getElementById('focusProgressFill').style.width = `${focusProgress.score}%`;
+  if(document.getElementById('focusProgressFill')) document.getElementById('focusProgressFill').setAttribute('aria-valuenow', String(focusProgress.score));
   if(document.getElementById('impactIdentity')) document.getElementById('impactIdentity').textContent = `${identity.emoji} ${identity.title}`;
   renderEliteOverview();
 }
@@ -518,15 +675,16 @@ function promptWeeklyGoalIfNeeded(onDone){
     return;
   }
   const week = Number((state.weekEngine && state.weekEngine.week) || 1);
-  if(getWeeklyGoalForWeek(week)){
+  const month = getCurrentFocusMonth();
+  if(getCurrentWeeklyGoal()){
     if(onDone) onDone();
     return;
   }
   openHtmlModal({
-    title:`🎯 Week ${week} Goal`,
-    meta:`Set your focus before this week's choices`,
-    html:`<div style="font-weight:900;margin-bottom:10px">Choose a focus for this week. Your random event mix and health tracker will react to this choice.</div>
-      <div class="choice-grid">${WEEKLY_GOAL_BANK.map(g=>`<button class="choice-btn" data-weekly-goal="${g.id}">${g.emoji} ${g.name}<small>${g.desc}</small></button>`).join('')}</div>`,
+    title:`🎯 ${weekToMonthName ? weekToMonthName(week) : `Month ${month}`} Focus`,
+    meta:`Choose one focus for this month`,
+    html:`<div style="font-weight:900;margin-bottom:10px">Choose a focus for this month. Your random events, coaching, and focus progress tracker will react to this choice.</div>
+      <div class="choice-grid">${MONTHLY_FOCUS_BANK.map(g=>`<button class="choice-btn" data-weekly-goal="${g.id}">${g.emoji} ${g.name}<small>${g.desc}</small></button>`).join('')}</div>`,
     buttons:[],
     onRender:()=>{
       document.querySelectorAll('[data-weekly-goal]').forEach(btn=>{
@@ -4255,7 +4413,7 @@ function startMission(){
   state.standardV1.chainHistory = [];
   state.standardV1.chainWindowsFired = {};
 
-  setLog("Year mission started! June Week 1 — follow the glowing actions. Weekly goals, health, and choice echoes are now live.");
+  setLog("Year mission started! June Week 1 — follow the glowing actions. Monthly focus, health, and choice echoes are now live.");
   setTimeout(()=>promptWeeklyGoalIfNeeded(), 200);
   renderAll();
   runCurrentMissionStep();
@@ -5532,6 +5690,7 @@ Action Plan: ${getMonthlyActionPlan({})}`,
         const newMonthName = weekToMonthName(currentW+1);
         addLedgerLine(`--- ${newMonthName} started --- Paycheck: +${money(takeHome)} (tax withheld: ${money(tax)})`);
         const contractCharge = applyRecurringContractCharge(newM, newMonthName);
+        const eliteObligationResults = applyEliteObligationCharges(newMonthName);
         state.weekEngine.week += 1;
         renderWeekHeader();
         fireDueConsequences(state.weekEngine.week);
@@ -5571,20 +5730,21 @@ Action Plan: ${getMonthlyActionPlan({})}`,
         openModal({
           title:`📅 ${prevMonthName} Complete!`,
           meta:`Your budget snapshot is on the Budget Sheet`,
-          body:`Here's how ${prevMonthName} ended:\n• Checking: ${money(snapChecking)}\n• Savings: ${money(snapSavings)}\n• HYSA Balance: ${money(snapHysa)}\n• HYSA Growth This Month: +${money(snapHysaGrowthMonth)}\n• HYSA Growth Total: +${money(snapHysaGrowthTotal)}\n• CD Total: ${money(snapCd)}\n• Credit: ${snapCredit}\n• Inventory Value: ${money(calcInventoryValue())}\n\n\nYour ledger and wants are saved to the Budget Sheet.\n\nReady for your ${newMonthName} paycheck of ${money(takeHome)}?`,
+          body:`Here's how ${prevMonthName} ended:\n• Checking: ${money(snapChecking)}\n• Savings: ${money(snapSavings)}\n• HYSA Balance: ${money(snapHysa)}\n• HYSA Growth This Month: +${money(snapHysaGrowthMonth)}\n• HYSA Growth Total: +${money(snapHysaGrowthTotal)}\n• CD Total: ${money(snapCd)}\n• Credit: ${snapCredit}\n• Inventory Value: ${money(calcInventoryValue())}\n\n\nYour ledger and wants are saved to the Budget Sheet.\n\nReady for your ${newMonthName} paycheck of ${money(takeHome)}?${eliteObligationResults && eliteObligationResults.length ? `\n\nElite payments this month: ${eliteObligationResults.join(', ')}` : ''}`,
           buttons:[{id:"ok", label:`Get ${newMonthName} Paycheck 💵`, kind:"primary"}],
           onPick:()=>{
             // Step 3: Paycheck investment prompt
             promptPaycheckInvestmentSimple(takeHome, tax, ()=>{
-              // Step 4: Wants refresh for new month, then Budget Sheet review prompt
+              const continueToReview = ()=> promptWeeklyGoalIfNeeded(()=>{ renderSheet(); promptMonthlyBudgetSheetReview(); });
+              const continueAfterElite = ()=> isEliteExperience() ? promptEliteCreditOpportunity(continueToReview) : continueToReview();
               if(state.plan.wantsSelections && state.plan.wantsSelections.length > 0){
                 triggerMonthlyWantsChoice(()=>{
                   renderSheet();
-                  promptMonthlyBudgetSheetReview();
+                  continueAfterElite();
                 });
               } else {
                 renderSheet();
-                promptMonthlyBudgetSheetReview();
+                continueAfterElite();
               }
             });
           }
@@ -6105,7 +6265,7 @@ function runRandomEvent(){
 
     const meta = getRandomEventPresentation(finalType);
     const goal = getCurrentWeeklyGoal();
-    const goalLine = goal ? ` • Goal: ${goal.name}` : "";
+    const goalLine = goal ? ` • Focus: ${goal.name}` : "";
     showBanner(`🎲 Random pick: ${meta.label}${goalLine}. Tap the glowing button.`);
     scrollToBtn(getRandomEventButtonId(finalType));
   }
