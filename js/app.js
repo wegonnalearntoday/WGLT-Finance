@@ -3670,40 +3670,57 @@ function openTab(name, opts={}){
   const p=$("panel-"+name);
   if(p) p.classList.add("active");
 
-  // Monthly snapshot review: clicking the Budget Sheet should let the student review it first,
-  // then explicitly continue into the next scenario flow. Do not auto-fire a scenario just
-  // because the sheet tab opened.
-  if(name === "sheet" && !opts.auto){
+  // Monthly snapshot review: opening the Budget Sheet should always let the student
+  // review it, then explicitly continue into the next scenario flow.
+  if(name === "sheet"){
     if(state.ui && state.ui.pendingBudgetSheetReview){
-      applyLockRules();
-      setTimeout(()=>{
-        openModal({
-          title:"📊 Budget Sheet Check-In",
-          meta:"Monthly snapshot",
-          body:`You are now on the Budget Sheet for your month-end review.\n\nLook at how the student finished the month, then tap Continue to launch the next random event.`,
-          buttons:[
-            {id:"continue", label:"Continue →", kind:"primary"},
-            {id:"stay", label:"Keep Reviewing", kind:"secondary"}
-          ],
-          onPick:(id)=>{
-            if(id !== 'continue'){
-              state.ui.pendingBudgetSheetReview = true;
+      const showBudgetReviewModal = ()=>{
+        if(state.ui.budgetSheetReviewHandled) return;
+        state.ui.budgetSheetReviewHandled = true;
+        applyLockRules();
+        setTimeout(()=>{
+          openModal({
+            title:"📊 Budget Sheet Check-In",
+            meta:"Monthly snapshot",
+            body:`You are now on the Budget Sheet for your month-end review.
+
+Look at how the student finished the month, then tap Continue to launch the next random event.`,
+            buttons:[
+              {id:"continue", label:"Continue →", kind:"primary"},
+              {id:"stay", label:"Keep Reviewing", kind:"secondary"}
+            ],
+            onPick:(id)=>{
+              if(id !== 'continue'){
+                state.ui.budgetSheetReviewHandled = false;
+                state.ui.pendingBudgetSheetReview = true;
+                applyLockRules();
+                showBanner("Keep reviewing the Budget Sheet");
+                return;
+              }
+              const cb = state.ui.budgetSheetReviewCallback;
+              state.ui.pendingBudgetSheetReview = false;
+              state.ui.afterBudgetSheetReview = null;
+              state.ui.budgetSheetReviewHandled = false;
+              state.ui.budgetSheetReviewCallback = null;
               applyLockRules();
-              showBanner("Keep reviewing the Budget Sheet");
-              return;
+              if(typeof cb === 'function'){
+                cb();
+              } else if(state.weekEngine && state.mission.active){
+                runWeeklyScenarios(state.weekEngine.week, ()=>{
+                  renderAll();
+                  renderSheet();
+                  notifyAction("next_week");
+                });
+              }
             }
-            state.ui.pendingBudgetSheetReview = false;
-            applyLockRules();
-            if(state.weekEngine && state.mission.active){
-              runWeeklyScenarios(state.weekEngine.week, ()=>{
-                renderAll();
-                renderSheet();
-                notifyAction("next_week");
-              });
-            }
-          }
-        });
-      }, 180);
+          });
+        }, 180);
+      };
+      if(opts.auto) {
+        setTimeout(showBudgetReviewModal, 60);
+      } else {
+        showBudgetReviewModal();
+      }
     } else {
       const currentStep = state.mission.active ? state.mission.steps[state.mission.index] : null;
       const expectsBudgetSheet = !!(currentStep && currentStep.requireActions && currentStep.requireActions.includes("view_budget_sheet"));
@@ -3712,6 +3729,7 @@ function openTab(name, opts={}){
       }
     }
   }
+
 
   // keep glow accurate after switching tabs
   applyLockRules();
@@ -5798,7 +5816,7 @@ function nextWeek(){
   // Block advancement until the student actually reviews the Budget Sheet snapshot
   if(state.ui && state.ui.pendingBudgetSheetReview){
     beep("warn");
-    openTab("sheet", {auto:true});
+    openTab("sheet");
     setTimeout(()=>{
       const sheetPanel = $("panel-sheet");
       if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth", block:"start"});
@@ -5988,7 +6006,16 @@ Action Plan: ${getMonthlyActionPlan({})}`,
           onPick:()=>{
             // Step 3: Paycheck investment prompt
             promptPaycheckInvestmentSimple(takeHome, tax, ()=>{
-              const continueToReview = ()=> promptWeeklyGoalIfNeeded(()=>{ renderSheet(); promptMonthlyBudgetSheetReview(); });
+              const continueToReview = ()=> promptWeeklyGoalIfNeeded(()=>{ 
+                renderSheet(); 
+                promptMonthlyBudgetSheetReview(()=>{
+                  runWeeklyScenarios(state.weekEngine.week, ()=>{
+                    renderAll();
+                    renderSheet();
+                    notifyAction("next_week");
+                  });
+                }); 
+              });
               const continueAfterElite = ()=> isEliteExperience() ? promptEliteCreditOpportunity(continueToReview) : continueToReview();
               if(state.plan.wantsSelections && state.plan.wantsSelections.length > 0){
                 triggerMonthlyWantsChoice(()=>{
@@ -6046,13 +6073,15 @@ function promptMonthlyBudgetSheetReview(onDone){
   if(!state.ui) state.ui = {};
   state.ui.pendingBudgetSheetReview = true;
   state.ui.afterBudgetSheetReview = onDone ? 'custom' : 'scenario';
+  state.ui.budgetSheetReviewHandled = false;
+  state.ui.budgetSheetReviewCallback = typeof onDone === 'function' ? onDone : null;
   applyLockRules();
   openTab("sheet", {auto:true});
   setTimeout(()=>{
     const sheetPanel = $("panel-sheet");
     if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth", block:"start"});
   }, 120);
-  showBanner("Month complete. Tap the Budget Sheet tab to review, then continue");
+  showBanner("Month complete. Review the Budget Sheet, then tap Continue");
 }
 
 
