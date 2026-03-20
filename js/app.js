@@ -884,6 +884,7 @@ function shouldAskDecisionReflection(meta={}){
 }
 
 function queueDecisionReflection(meta={}){
+  if(state.ui && state.ui.suppressDecisionReflections) return;
   if(!shouldAskDecisionReflection(meta)) return;
   const type = inferDecisionReflectionType(meta);
   const question = getNextReflectionQuestion(type);
@@ -3398,7 +3399,7 @@ const state = {
   jobLocked: false,
 
   playlist: { active:false, paused:false, loop:false, index:0, items:["inheritance","dispute","gen_local_tax","contract_pick"] },
-  ui: { pendingBudgetSheetReview:false, realLifeSelections:{}, randomEventPendingType:null, randomEventCycling:false },
+  ui: { pendingBudgetSheetReview:false, realLifeSelections:{}, randomEventPendingType:null, randomEventCycling:false, suppressDecisionReflections:false },
   elite: {
     investments: { stocks:0, costBasis:0, lastChange:0, history:[] },
     career: { level:1, title:'Starter Worker', promotions:0, payBonus:0, history:[] },
@@ -6007,8 +6008,10 @@ Action Plan: ${getMonthlyActionPlan({})}`,
           buttons:[{id:"ok", label:`Get ${newMonthName} Paycheck 💵`, kind:"primary"}],
           onPick:()=>{
             // Step 3: Paycheck investment prompt
+            if(state.ui) state.ui.suppressDecisionReflections = true;
             promptPaycheckInvestmentSimple(takeHome, tax, ()=>{
               const continueAfterBudgetSheet = ()=>{
+                if(state.ui) state.ui.suppressDecisionReflections = false;
                 promptWeeklyGoalIfNeeded(()=>{
                   if(state.weekEngine && state.mission.active){
                     runWeeklyScenarios(state.weekEngine.week, ()=>{
