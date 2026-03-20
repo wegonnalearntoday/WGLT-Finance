@@ -14,10 +14,6 @@ const EXPERIENCE_MODES = (APP_DATA.experienceModes && APP_DATA.experienceModes.e
 const PRESENTATION_ROLES = (APP_DATA.presentationRoles && APP_DATA.presentationRoles.presentationRoles) || [];
 const TEACHER_TOOLS = APP_DATA.teacherTools || {defaults:{},themes:[]};
 const ELITE_SCENARIOS = (APP_DATA.eliteScenarios && APP_DATA.eliteScenarios.events) || [];
-const DELAYED_CONSEQUENCE_DEFS = (APP_DATA.delayedConsequences && APP_DATA.delayedConsequences.consequences) || [];
-const REAL_LIFE_EVENTS = (APP_DATA.realLifeEvents && APP_DATA.realLifeEvents.events) || [];
-const FINANCIAL_EVENTS = (APP_DATA.financialEvents && APP_DATA.financialEvents.events) || [];
-const OPPORTUNITY_EVENTS = (APP_DATA.opportunityEvents && APP_DATA.opportunityEvents.events) || [];
 const ADVANCED_DELAYED = (APP_DATA.advancedDelayedConsequences && APP_DATA.advancedDelayedConsequences.chains) || [];
 const LEGACY_MODES = APP_DATA.modes || [];
 
@@ -3006,223 +3002,27 @@ function shouldFireBonus(scenario){
   return Math.random() < 0.37;
 }
 
-/* Event Engine v1 helpers */
-function ensureEventEngineState(){
-  if(!state.eventEngine) state.eventEngine = { usedIds:[], jobUsedIds:{}, weekHistory:[] };
-  if(!state.eventEngine.jobUsedIds) state.eventEngine.jobUsedIds = {};
-  if(!state.eventEngine.weekHistory) state.eventEngine.weekHistory = [];
-}
-function getCurrentJob(){ return (state.jobs && state.jobs[state.jobIndex]) || JOBS[0] || {id:'student', name:'Student Job'}; }
-function getLiquidFunds(){ return Number(state.cash || 0) + Number(state.bank?.checking || 0) + Number(state.bank?.savings || 0); }
-function getDelayedDefinition(id){ return DELAYED_CONSEQUENCE_DEFS.find(x => x && x.id === id) || null; }
-function getFocusWeightedType(){
-  const base = Object.assign({life:40,job:30,financial:30}, getRandomEventWeights() || {});
-  const goal = getCurrentWeeklyGoal();
-  const shift = goal ? ((MONTHLY_FOCUS_BANK.find(g => g.id === goal.id) || {}).weights || {}) : {};
-  const weights = {
-    life: Math.max(10, Number(base.life || 0) + Number(shift.life || 0)),
-    job: Math.max(10, Number(base.job || 0) + Number(shift.job || 0)),
-    financial: Math.max(10, Number(base.financial || 0) + Number(shift.financial || 0))
-  };
-  const roll = Math.random() * (weights.life + weights.job + weights.financial);
-  if(roll < weights.life) return 'life';
-  if(roll < weights.life + weights.job) return 'job';
-  return 'financial';
-}
-function inferChoiceCost(choice){
-  if(Number.isFinite(Number(choice?.cost))) return Math.abs(Number(choice.cost));
-  const fx = choice?.effects || {};
-  return Math.abs(Number(fx.cash || 0)) + Math.abs(Number(fx.checking || 0)) + Math.abs(Number(fx.savings || 0));
-}
-function buildGenericEventPrompt(ev, job){
-  const typeMap = {life:'real-life situation', job:'job-based situation', financial:'money decision', elite:'elite decision'};
-  const t = ev.typeKey || 'life';
-  const hook = ev.description || ev.prompt || '';
-  const lead = `Step ${Number((state.weekEngine && state.weekEngine.week) || state.day || 1)} brings a ${typeMap[t] || 'decision'} for your ${job.name} path.`;
-  return `${lead}
-
-${hook || ev.title + '. What do you do?'}`;
-}
-function createJobTemplatePool(job){
-  const name = job.name || 'Student Job';
-  const id = job.id || 'job';
-  const templates = [
-    ['rush_order', `${name}: Rush Order Request`, `A customer asks for a rush version of your ${name.toLowerCase()} work. You can pay a little now to deliver faster or keep your normal pace.`, 8, 18, 3],
-    ['supply_shortage', `${name}: Supply Shortage`, `You're low on a key supply for ${name.toLowerCase()}. Restock now or try to stretch what you have.`, 10, 0, 2],
-    ['quality_upgrade', `${name}: Quality Upgrade`, `A better tool could improve your ${name.toLowerCase()} work. Spend a little now for a stronger reputation later?`, 14, 22, 4],
-    ['repeat_client', `${name}: Repeat Client Offer`, `A repeat client wants to book you again for ${name.toLowerCase()} work. Give a small discount or hold your rate?`, 0, 16, 3],
-    ['weather_shift', `${name}: Schedule Shift`, `A schedule problem hits your ${name.toLowerCase()} plans this week. Pivot for a smaller win or cancel and protect your energy?`, 0, 12, 2],
-    ['helper_choice', `${name}: Work Solo or Get Help`, `You could pay a friend a little to help with ${name.toLowerCase()} tasks and finish more jobs.`, 9, 20, 4],
-    ['materials_sale', `${name}: Materials on Sale`, `Supplies for ${name.toLowerCase()} work are discounted today. Buy ahead now or wait and keep cash free?`, 12, 0, 2],
-    ['customer_review', `${name}: Customer Review Moment`, `A customer asks you to fix a small issue before leaving a good review.`, 6, 14, 3],
-    ['seasonal_push', `${name}: Seasonal Push`, `Demand for ${name.toLowerCase()} work is up this week. You can invest a little effort for a bigger payday.`, 5, 24, 5],
-    ['transport_issue', `${name}: Transportation Issue`, `Getting to your ${name.toLowerCase()} job costs more than usual this week.`, 7, 0, 2],
-    ['bundle_offer', `${name}: Bundle Offer`, `Someone wants a bundle deal for your ${name.toLowerCase()} service.`, 0, 15, 2],
-    ['late_client', `${name}: Late Client`, `A client for your ${name.toLowerCase()} work is late and asks for flexibility.`, 0, 10, 2],
-    ['referral_chain', `${name}: Referral Chain`, `One happy customer could turn into more ${name.toLowerCase()} jobs if you invest in a polished finish today.`, 8, 20, 4],
-    ['repair_cost', `${name}: Minor Repair`, `A small piece of gear for your ${name.toLowerCase()} work needs attention before it becomes a bigger problem.`, 11, 0, 3],
-    ['promo_choice', `${name}: Promo Flyer`, `You can spend a little to promote your ${name.toLowerCase()} work this week.`, 9, 18, 4],
-    ['client_bonus', `${name}: Bonus Tip Decision`, `A customer offers a bonus if you can squeeze in one extra ${name.toLowerCase()} task.`, 4, 12, 2]
-  ];
-  return templates.map((t, idx) => ({
-    id:`job_${id}_${t[0]}_${idx+1}`,
-    title:t[1],
-    prompt:t[2],
-    typeKey:'job',
-    choices:[
-      { id:'invest', label:`Put in ${money(t[3])} to improve the week`, effects:{}, paymentRequired:true, cost:t[3], reward:{checking:t[4], credit:t[5]}, delayedConsequenceId: t[4] >= 18 ? 'side_hustle_profit' : '' },
-      { id:'steady', label:'Stay steady and protect cash', effects:{checking: Math.max(4, Math.round(t[4] * 0.45))} },
-      { id:'pass', label:'Pass on it and keep flexibility', effects:{credit: Math.max(-3, -Math.round(t[5] / 2))} }
-    ]
-  }));
-}
-function buildUnifiedEventPool(week){
-  ensureEventEngineState();
-  const job = getCurrentJob();
-  const exp = state.experienceLevel || 'standard';
-  const allow = (arr) => !Array.isArray(arr) || !arr.length || arr.includes('all') || arr.includes(job.id) || arr.includes(exp) || arr.includes('standard') || arr.includes('elite');
-  const inWeek = (ev) => {
-    const range = ev.weeksAllowed || [1,48];
-    return Number(week) >= Number(range[0] || 1) && Number(week) <= Number(range[1] || 48);
-  };
-  const diffOk = (ev) => !Array.isArray(ev.difficulty) || !ev.difficulty.length || ev.difficulty.includes(exp) || (exp === 'elite' && ev.difficulty.includes('standard'));
-  const genericLife = REAL_LIFE_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'life', prompt:ev.description || ''}, ev));
-  const genericFin = FINANCIAL_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'financial', prompt:ev.description || ''}, ev));
-  const genericOpp = OPPORTUNITY_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'job', prompt:ev.description || ''}, ev));
-  const elitePool = isEliteExperience() ? ELITE_SCENARIOS.filter(ev => inWeek(ev)).map(ev => ({
-    id:ev.id, title:ev.title, prompt:ev.description || '', typeKey:'financial', choices:(ev.choices || []).map((c, i)=>({ id:`elite_${i+1}`, label:c.label, effects:c.effects || {}, tag:c.tag || '' }))
-  })) : [];
-  const jobPool = buildJobTemplatePool(job);
-  return {
-    life: genericLife,
-    financial: genericFin.concat(elitePool),
-    job: jobPool.concat(genericOpp)
-  };
-}
-function pickUniqueEventFromPool(type, week){
-  ensureEventEngineState();
-  const poolByType = buildUnifiedEventPool(week);
-  const pool = poolByType[type] || [];
-  const used = new Set(state.eventEngine.usedIds || []);
-  let available = pool.filter(ev => !used.has(ev.id));
-  if(!available.length){
-    state.eventEngine.usedIds = [];
-    available = pool.slice();
-  }
-  if(!available.length) return null;
-  return available[Math.floor(Math.random() * available.length)];
-}
-function applyGenericEffects(effects, opts={}){
-  const fx = Object.assign({}, effects || {});
-  let notes = [];
-  if(fx.income){
-    state.bank.checking = Number(state.bank.checking || 0) + Number(fx.income || 0);
-    state.ledger.weekIncome = Number(state.ledger.weekIncome || 0) + Number(fx.income || 0);
-    notes.push(`${Number(fx.income) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.income)))} income`);
-  }
-  if(fx.cash){
-    state.cash = Math.max(0, Number(state.cash || 0) + Number(fx.cash || 0));
-    if(Number(fx.cash) < 0) state.ledger.weekExpenses = Number(state.ledger.weekExpenses || 0) + Math.abs(Number(fx.cash));
-    notes.push(`${Number(fx.cash) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.cash)))} cash`);
-  }
-  if(fx.checking){
-    state.bank.checking = Math.max(0, Number(state.bank.checking || 0) + Number(fx.checking || 0));
-    if(Number(fx.checking) < 0) state.ledger.weekExpenses = Number(state.ledger.weekExpenses || 0) + Math.abs(Number(fx.checking));
-    notes.push(`${Number(fx.checking) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.checking)))} checking`);
-  }
-  if(fx.savings){
-    state.bank.savings = Math.max(0, Number(state.bank.savings || 0) + Number(fx.savings || 0));
-    notes.push(`${Number(fx.savings) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.savings)))} savings`);
-  }
-  if(fx.credit){
-    state.credit = clamp(Number(state.credit || 650) + Number(fx.credit || 0), 300, 850);
-    notes.push(`${Number(fx.credit) >= 0 ? '+' : ''}${Number(fx.credit)} credit`);
-  }
-  if(fx.stress){ registerPressureTrack({label:'Stress', category:'life'}, Number(fx.stress) > 0 ? 1 : -1); notes.push(`${Number(fx.stress) >= 0 ? '+' : ''}${Number(fx.stress)} stress`); }
-  if(fx.social){ notes.push(`${Number(fx.social) >= 0 ? '+' : ''}${Number(fx.social)} social`); }
-  if(fx.time){ notes.push(`${Number(fx.time) >= 0 ? '+' : ''}${Number(fx.time)} time`); }
-  return notes.join(' • ') || 'No major balance change';
-}
-function queueGenericDelayedConsequence(choice, week, title){
-  const id = choice?.delayedConsequenceId;
-  if(!id) return;
-  const def = getDelayedDefinition(id);
-  if(!def) return;
-  const triggerWeek = Math.min(48, Number(week || 1) + Number(def.triggerWeeks || 1));
-  const major = !!(Number(def.effects?.cash || 0) < -15 || Number(def.effects?.checking || 0) < -15 || Number(def.effects?.credit || 0) < -5 || Number(def.effects?.stress || 0) > 0);
-  queueConsequenceObject({
-    triggerWeek,
-    id:def.id,
-    label:def.title || title || 'Delayed Consequence',
-    major,
-    apply:(st)=> applyGenericEffects(def.effects || {})
-  }, title || def.title || 'Event Engine v1');
-}
-function applyGenericChoice(choice, ev, week, onDone){
-  const finish = (sourceLabel='')=>{
-    const parts = [];
-    if(choice.reward) parts.push(applyGenericEffects(choice.reward || {}));
-    parts.push(applyGenericEffects(choice.effects || {}));
-    const summary = parts.filter(Boolean).join(' • ');
-    if(choice.tag === 'delay') registerPressureTrack({label:ev.title, category:'financial'}, 1);
-    if(choice.tag === 'growth') registerPressureTrack({label:ev.title, category:'job'}, -1);
-    queueGenericDelayedConsequence(choice, week, ev.title);
-    if(ev.id){
-      ensureEventEngineState();
-      state.eventEngine.usedIds.push(ev.id);
-      state.eventEngine.usedIds = state.eventEngine.usedIds.slice(-80);
-      state.eventEngine.weekHistory.unshift({ week, id:ev.id, title:ev.title, type:ev.typeKey || 'life' });
-      state.eventEngine.weekHistory = state.eventEngine.weekHistory.slice(0, 60);
-    }
-    addLedgerLine(`Step ${week}: ${ev.title} → ${choice.label}${sourceLabel ? ` (${sourceLabel})` : ''} • ${summary}`);
-    queueDecisionReflection({ title: ev.title, label: choice.label, summary, amount: inferChoiceCost(choice) || 0 });
-    renderAll();
-    if(onDone) onDone();
-  };
-  const payment = choice.paymentRequired || inferChoiceCost(choice) > 0 && ((choice.effects && (Number(choice.effects.cash || 0) < 0 || Number(choice.effects.checking || 0) < 0 || Number(choice.effects.savings || 0) < 0)) || choice.cost);
-  const amt = inferChoiceCost(choice);
-  if(payment && amt > 0){
-    chooseFundingSource(amt, `${ev.title}
-
-Choose where to take ${money(amt)} from.`, (src)=> finish(`from ${src}`));
-  } else finish('');
-}
-function openGeneratedEventModal(ev, week, onDone){
-  const job = getCurrentJob();
-  const choices = (ev.choices || []).slice(0,3);
-  openModal({
-    title:`🎲 Step ${week}: ${ev.title}`,
-    meta:`${(ev.typeKey || 'life').toUpperCase()} • ${job.name}`,
-    body:buildGenericEventPrompt(ev, job),
-    buttons:choices.map((choice, idx)=>({ id:String(idx), label:choice.label, kind: idx === 0 ? 'primary' : (idx === 1 ? 'secondary' : 'warn') })),
-    onPick:(pickId)=>{
-      const choice = choices[Number(pickId)];
-      if(!choice) return;
-      applyGenericChoice(choice, ev, week, onDone);
-    }
-  });
-}
-function runEventEngineV1(week, onAllDone){
-  const pickedType = getFocusWeightedType();
-  const main = pickUniqueEventFromPool(pickedType, week) || pickUniqueEventFromPool('life', week);
-  const queue = [];
-  if(main) queue.push(main);
-  if(Math.random() < 0.28){
-    const bonusType = ['life','job','financial'].filter(x => x !== pickedType)[Math.floor(Math.random()*2)] || 'life';
-    const bonus = pickUniqueEventFromPool(bonusType, week);
-    if(bonus && bonus.id !== main?.id) queue.push(bonus);
-  }
-  let idx = 0;
-  function next(){
-    if(idx >= queue.length){ if(onAllDone) onAllDone(); return; }
-    openGeneratedEventModal(queue[idx++], week, next);
-  }
-  next();
-}
-
 /* Main weekly scenario runner — called from nextWeek() */
 function runWeeklyScenarios(week, onAllDone){
-  return runEventEngineV1(week, onAllDone);
+  const all = getScenariosForWeek(week);
+  const main = all.find(s => !s.bonus);
+  // Support multiple bonus scenarios per week (filter, not find)
+  const bonuses = all.filter(s => s.bonus && shouldFireBonus(s));
+  const queue = [];
+
+  if(main) queue.push(main);
+  bonuses.forEach(b => {
+    queue.push(b);
+    state.weekEngine.ranBonus[week] = true;
+  });
+
+  let idx = 0;
+  function runNext(){
+    if(idx >= queue.length){ if(onAllDone) onAllDone(); return; }
+    const s = queue[idx++];
+    openScenarioModal(s, runNext);
+  }
+  runNext();
 }
 
 /* Update the header week/month display */
@@ -4003,7 +3803,7 @@ function renderProgress(){
   const cur=m.steps[m.index];
   const actualWeek = state.weekEngine ? state.weekEngine.week : (state.day * 4);
   const weekLabel = `Week ${actualWeek}/48`;
-  if(cur) $("stepMeta").textContent = `${weekLabel} • Step ${m.index+1}/${total} • ${(cur.title || "").replace(/^Month\s+\d+:\s*/i,"").replace(/^Week\s+\d+:\s*/i,"")}`;
+  if(cur) $("stepMeta").textContent = `${weekLabel} • Step ${m.index+1}/${total} • ${cur.title}`;
   else $("stepMeta").textContent = `${weekLabel} • Mission complete! ✅`;
 }
 
@@ -4599,9 +4399,13 @@ function getMissionStepDisplay(step){
   let title = step?.title || "";
   let prompt = step?.prompt || "";
 
-  title = title.replace(/^Month\s+\d+:\s*/i, '').replace(/^Week\s+\d+:\s*/i, '').trim();
+  if(/^Month\s+(\d+):/i.test(title)){
+    const n = Number(title.match(/^Month\s+(\d+):/i)[1] || 0);
+    if(n > 0) title = title.replace(/^Month\s+\d+:/i, `Week ${n*4}:`);
+  }
 
   prompt = prompt
+    .replace(/\bthis month\b/gi, "this week")
     .replace(/\bfor this month\b/gi, "for this week");
 
   if(step && step.requireActions && step.requireActions.includes("view_budget_sheet")) {
@@ -4830,9 +4634,8 @@ function runCurrentMissionStep(){
 
   const displayStep = getMissionStepDisplay(step);
 
-  const cleanTitle = (displayStep.title || '').replace(/^Step\s+\d+:\s*/i,'').trim();
   openModal({
-    title:`🎯 Step ${m.index + 1}: ${cleanTitle || 'Mission Task'}`,
+    title:`🎯 ${displayStep.title}`,
     meta: bucketText,
     body: displayStep.prompt + (nextAction ? `\n\nNext required action: ${nextAction.replaceAll("_"," ").toUpperCase()}` : ""),
     buttons:[{id:"ok",label:"Got it",kind:"primary"}],
@@ -6830,14 +6633,153 @@ function clearWantsExtras(){
 
 /* Real-life events */
 function runJobRealLifeEvent(){
-  const week = currentWeekIndex();
-  const ev = pickUniqueEventFromPool('job', week) || pickUniqueEventFromPool('life', week);
-  if(!ev){
-    showBanner('No job event available right now.');
+  const job = state.jobs[state.jobIndex];
+  const month = currentWeekIndex();
+
+  function useInventoryOrPay(itemId, fallbackCost, itemName, onDone){
+    if(invQty(itemId)>0){
+      setInvQty(itemId, invQty(itemId)-1);
+      const invVal = calcInventoryValue();
+      addLedgerLine(`Used inventory: ${itemName} (free) | Inv. value: ${money(invVal)}`);
+      renderHeader();
+      renderLedger();
+      onDone && onDone(true);
+      recalcProfit();
+      notifyAction("job_event");
+      return;
+    }
+    // Rush buy — pay and add to inventory (then immediately used)
+    chooseFundingSource(fallbackCost, `No ${itemName} in inventory.\nRush price: ${money(fallbackCost)}. Choose where to pay from:`, (src)=>{
+      setInvQty(itemId, invQty(itemId)+1);  // add it
+      setInvQty(itemId, invQty(itemId)-1);  // immediately use it
+      state.ledger.weekExpenses += fallbackCost;
+      const invVal = calcInventoryValue();
+      addLedgerLine(`Rush buy & used: ${itemName} -${money(fallbackCost)} from ${src} | Inv. value: ${money(invVal)}`);
+      renderHeader();
+      renderLedger();
+      onDone && onDone(false);
+      recalcProfit();
+      notifyAction("job_event");
+    });
+  }
+
+  const catalogPack = ((LEDGER_CATALOG[job.id] || LEDGER_CATALOG.lawn || [])
+    .filter(item => item && item.type === 'inventory')
+    .map(item => [item.name, item.id, item.cost]));
+  const fallbackPacks={
+    babysitting:[['Snacks Pack','snacks',10],['Craft Kit','craft',12]],
+    pet:[['Pet Food','petfood',12],['Treats','treats',8]],
+    dogwalk:[['Rain Poncho','poncho',8],['Waste Bags','bags',7]],
+    lawn:[['Gas Can','gas',12],['Gloves','gloves',9],['Yard Bags','bags',8]],
+    cars:[['Car Soap','soap',11],['Wax','wax',13],['Microfiber Towels','towels',9]],
+    tutor:[['Flash Cards','cards',9],['Markers','markers',7]],
+    chores:[['Cleaning Spray','spray',7],['Sponges','sponges',6]],
+    errands:[['Bus Pass (1 ride)','fare',6],['Reusable Bag','bag',5]],
+    crafts:[['Craft Materials','materials',14],['Stickers Pack','stickers',8]]
+  };
+  const pack = catalogPack.length ? catalogPack : (fallbackPacks[job.id] || fallbackPacks.lawn);
+  if(!state.ui.lastRealLifeItemByJob) state.ui.lastRealLifeItemByJob = {};
+  if(!state.ui.recentRealLifeItemsByJob) state.ui.recentRealLifeItemsByJob = {};
+  const recent = Array.isArray(state.ui.recentRealLifeItemsByJob[job.id]) ? state.ui.recentRealLifeItemsByJob[job.id] : [];
+  let idx = Math.floor(Math.random() * pack.length);
+  if(pack.length > 1){
+    let guard = 0;
+    while((pack[idx][1] === state.ui.lastRealLifeItemByJob[job.id] || recent.includes(pack[idx][1])) && guard < 16){
+      idx = Math.floor(Math.random() * pack.length);
+      guard += 1;
+    }
+  }
+  const pair = pack[idx];
+  state.ui.lastRealLifeItemByJob[job.id] = pair[1];
+  if(!Array.isArray(state.ui.recentRealLifeItemsByJob[job.id])) state.ui.recentRealLifeItemsByJob[job.id] = [];
+  state.ui.recentRealLifeItemsByJob[job.id].push(pair[1]);
+  state.ui.recentRealLifeItemsByJob[job.id] = state.ui.recentRealLifeItemsByJob[job.id].slice(-3);
+  const itemName=pair[0], itemId=pair[1], rushCost=pair[2];
+  const haveIt = invQty(itemId) > 0;
+  const bonus = month>=3;
+
+  if(!bonus){
+    // Split-panel: left = decision, right = inventory
+    const leftHTML = `
+      <div style="margin-bottom:10px;padding:10px;background:var(--card-bg,#f8f9fa);border-radius:8px">
+        <div style="font-weight:bold;margin-bottom:4px">${itemName}</div>
+        <div style="color:${haveIt?'var(--success)':'var(--danger)'}">
+          ${haveIt ? `✅ You have ${invQty(itemId)} in inventory — use it FREE` : `❌ None in inventory — rush cost ${money(rushCost)}`}
+        </div>
+      </div>
+      <div style="font-size:13px">
+        <strong>Option A:</strong> Use ${itemName} from inventory (free if you have it, rush price if not)<br><br>
+        <strong>Option B:</strong> Buy it as a rush purchase for ${money(rushCost)} and add to inventory
+      </div>`;
+
+    openSplitShopModal({
+      title:`${job.name}: Supply Decision`,
+      leftTitle:"This Week's Decision",
+      leftHTML,
+      rightTitle:"Your Inventory",
+      rightHTML: buildInventoryPanel(),
+      buttons:[
+        { label:`Option A — Use ${itemName}${haveIt?' (FREE)':' (rush '+money(rushCost)+')'}`,
+          kind: haveIt ? "success" : "warn",
+          onClick:()=>{
+            useInventoryOrPay(itemId, rushCost, itemName, hadInv=>{
+              if(hadInv){ state.plan.needs += 1; }
+              else { state.plan.wants = Math.max(0,state.plan.wants-1); }
+            });
+          }
+        },
+        { label:`Option B — Rush Buy & Stock ${itemName} (${money(rushCost)})`,
+          kind:"secondary",
+          onClick:()=>{
+            chooseFundingSource(rushCost, `Rush buy ${itemName} for ${job.name}.\nAdds to inventory.`, (src)=>{
+              setInvQty(itemId, invQty(itemId)+1);
+              state.ledger.weekExpenses += rushCost;
+              state.plan.needs += 1;
+              const invVal = calcInventoryValue();
+              addLedgerLine(`Rush stocked: ${itemName} -${money(rushCost)} from ${src} | Inv. value: ${money(invVal)}`);
+              recalcProfit();
+              renderHeader();
+              renderLedger();
+              notifyAction('job_event');
+            });
+          }
+        }
+      ]
+    });
     return;
   }
-  openGeneratedEventModal(ev, week, ()=>{
-    notifyAction('job_event');
+
+  // Month 3+ money choice — still show inventory panel
+  const leftHTML2 = `
+    <div style="font-size:13px">
+      <strong>Option A — Reinvest:</strong> Put money back into the job. Builds savings discipline (+$12 income, +$4 savings).<br><br>
+      <strong>Option B — Take it easy:</strong> Coast this week. Gets some income but leans toward wants (+$6, wants +$4).
+    </div>`;
+
+  openSplitShopModal({
+    title:`${job.name}: Money Choice`,
+    leftTitle:"This Week's Decision",
+    leftHTML: leftHTML2,
+    rightTitle:"Your Inventory",
+    rightHTML: buildInventoryPanel(),
+    buttons:[
+      { label:"Option A — Reinvest (+$12)", kind:"success",
+        onClick:()=>{
+          state.bank.checking += 12; state.ledger.weekIncome += 12;
+          state.plan.save += 4; state.plan.needs += 1;
+          addLedgerLine(`${job.name} bonus earned: +$12 and stronger saving habit.`);
+          renderAll(); notifyAction('job_event');
+        }
+      },
+      { label:"Option B — Take It Easy (+$6)", kind:"secondary",
+        onClick:()=>{
+          state.bank.checking += 6; state.ledger.weekIncome += 6;
+          state.plan.wants += 4;
+          addLedgerLine(`${job.name} money choice leaned toward wants.`);
+          renderAll(); notifyAction('job_event');
+        }
+      }
+    ]
   });
 }
 
