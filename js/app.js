@@ -359,6 +359,42 @@ function getCreditUnlocks(){
   state.elite.creditAccess = { apartment:score >= 700, car:score >= 660, loan:score >= 620 };
   return { apartment, car, loan, score };
 }
+
+function getDynamicTomorrowBill(){
+  const checkingFee = state.bank.checkingType ? Number((BANK_PRODUCTS.checking.find(x=>x.id===state.bank.checkingType) || {}).monthlyFee || 0) : 0;
+  const contractFee = state.contractActive ? Number((CONTRACTS.find(x=>x.id===state.contractId) || {}).monthly || 0) : 0;
+  const eliteFee = ((state.elite && state.elite.obligations) || []).filter(o=>Number(o.monthsLeft||0)>0).reduce((sum,o)=>sum + Number(o.monthly || 0), 0);
+  const fallback = 15;
+  const bill = Math.max(8, contractFee || eliteFee || checkingFee || fallback);
+  let label = 'planned bill';
+  if(contractFee) label = 'contract charge';
+  else if(eliteFee) label = 'financing payment';
+  else if(checkingFee) label = 'bank fee';
+  return { amount: bill, label };
+}
+
+function getTeacherDashboardSummary(){
+  const goal = getCurrentWeeklyGoal ? getCurrentWeeklyGoal() : null;
+  const health = computeFinancialHealth ? computeFinancialHealth() : { score:0, label:'—' };
+  const focus = getCurrentMonthFocusProgress ? getCurrentMonthFocusProgress() : { score:0, label:'—' };
+  const unlocks = getCreditUnlocks ? getCreditUnlocks() : { apartment:'—', car:'—', loan:'—', score:Number(state.credit || 650) };
+  const activeObligations = ((state.elite && state.elite.obligations) || []).filter(o=>Number(o.monthsLeft||0)>0);
+  return {
+    week: state.weekEngine ? state.weekEngine.week : state.day,
+    month: typeof weekToMonthName === 'function' ? weekToMonthName(state.weekEngine ? state.weekEngine.week : 1) : `Month ${state.day || 1}`,
+    focusName: goal ? `${goal.emoji} ${goal.name}` : 'Not selected',
+    focusScore: focus.score || 0,
+    focusLabel: focus.label || '—',
+    healthScore: health.score || 0,
+    healthLabel: health.label || '—',
+    credit: Number(state.credit || 650),
+    unlocks,
+    obligations: activeObligations.length,
+    obligationTotal: activeObligations.reduce((sum,o)=>sum + Number(o.monthly || 0), 0),
+    ending: (state.elite && state.elite.endings && (state.elite.endings.track || state.elite.endings.final)) || 'In progress'
+  };
+}
+
 function getJobCareerBranch(){
   const job = (state.jobs && state.jobs[state.jobIndex]) || {};
   const id = job.id || '';
@@ -1273,13 +1309,13 @@ function runApplyWithFundingOverride(applyFn, paymentInfo, job){
   return applyFn(stateProxy, job);
 }
 
+
 function openScenarioModal(scenario, onDone){
   const job = state.jobs[state.jobIndex];
   const title = scenario.title(job);
   const body  = scenario.body(job);
   const opts  = scenario.options(job, state);
 
-  // Use scenario's own week number so the header matches
   const displayWeek = scenario.week || state.weekEngine.week;
   const displayMonth = weekToMonthName(displayWeek);
 
@@ -1288,6 +1324,32 @@ function openScenarioModal(scenario, onDone){
   $("mBody").innerHTML    = `<div style="font-weight:900;margin-bottom:12px">${body}</div><div class="choice-grid" id="scenChoiceGrid"></div>`;
 
   const grid = document.getElementById("scenChoiceGrid");
+
+  function finalizeChoice(opt, choiceIndex, summary, paymentInfo){
+    if(summary){
+      const suffix = paymentInfo && paymentInfo.source ? ` (from ${paymentInfo.source})` : '';
+      addLedgerLine(`✏ ${title}: ${summary}${suffix}`);
+    }
+    if(opt.consequences){
+      opt.consequences.forEach(c => queueConsequenceObject(Object.assign({}, c), title));
+    }
+    if(scenario.id) state.weekEngine.choices[scenario.id] = choiceIndex;
+    renderHeader();
+    renderLedger();
+    renderSheet();
+    renderTeacherToolkit();
+    updateImpactStrip();
+    if(!opt.skipReflection){
+      queueDecisionReflection({
+        title,
+        label: opt.label,
+        summary,
+        amount: paymentInfo && paymentInfo.amount ? paymentInfo.amount : 0
+      });
+    }
+    if(onDone) onDone();
+  }
+
   opts.forEach((opt, i) => {
     const btn = document.createElement("button");
     btn.className = "choice-btn";
@@ -1295,35 +1357,31 @@ function openScenarioModal(scenario, onDone){
     btn.onclick = () => {
       beep("click");
 
-      // Resolve cost — can be a number, a function(job), or undefined
-      const resolvedCost = typeof opt.cost === "function" ? opt.cost(job) : opt.cost;
-
-      function applyAndContinue(){
+      if(typeof opt.onSelect === "function"){
         closeModal();
-        const summary = opt.apply(state, job);
-        if(summary) addLedgerLine(`✏ ${title}: ${summary}`);
-        if(opt.consequences){
-          opt.consequences.forEach(c => {
-            queueConsequenceObject(Object.assign({}, c), title);
-          });
-        }
-        if(scenario.id) state.weekEngine.choices[scenario.id] = i;
-        renderHeader();
-        queueDecisionReflection({ title, label: opt.label, summary });
-        if(onDone) onDone();
+        opt.onSelect({
+          state,
+          job,
+          scenario,
+          complete:(summary, extra={})=>{
+            if(extra.banner) showBanner(extra.banner);
+            if(extra.badge) showDecisionBadge(extra.badge);
+            finalizeChoice(opt, i, summary, extra.paymentInfo || extra);
+          }
+        });
+        return;
       }
 
+      const resolvedCost = typeof opt.cost === "function" ? opt.cost(job) : opt.cost;
       const inferredFunding = (!resolvedCost || resolvedCost <= 0) ? inferScenarioFunding(opt, job) : null;
       const paymentAmount = (resolvedCost && resolvedCost > 0) ? resolvedCost : (inferredFunding ? inferredFunding.amount : 0);
 
       if(paymentAmount && paymentAmount > 0){
-        // Option has a declared or inferred cost — ask funding source first
         closeModal();
         setTimeout(()=>{
           chooseFundingSource(paymentAmount, `${opt.label}
 
 Choose which account to pay from:`, (src)=>{
-            // Money already deducted by chooseFundingSource — use applyAfterFunding if defined
             let summary;
             if(opt.applyAfterFunding){
               summary = opt.applyAfterFunding(state, job, src);
@@ -1333,33 +1391,25 @@ Choose which account to pay from:`, (src)=>{
               summary = opt.apply(state, job);
             }
             showDecisionBadge(`Paid from ${formatSourceLabel(src)}: ${money(paymentAmount)}`);
-            if(summary) addLedgerLine(`✏ ${title}: ${summary} (paid from ${src})`);
-            if(opt.consequences){
-              opt.consequences.forEach(c => {
-                queueConsequenceObject(Object.assign({}, c), title);
-              });
-            }
-            if(scenario.id) state.weekEngine.choices[scenario.id] = i;
-            renderHeader();
-            queueDecisionReflection({ title, label: opt.label, summary, amount: paymentAmount || resolvedCost || 0 });
-            if(onDone) onDone();
+            finalizeChoice(opt, i, summary, {source:src, amount:paymentAmount});
           });
         }, 50);
       } else {
-        applyAndContinue();
+        closeModal();
+        const summary = opt.apply(state, job);
+        finalizeChoice(opt, i, summary, {amount: resolvedCost || 0});
       }
     };
     grid.appendChild(btn);
   });
 
-  const foot = $("mFoot");
-  foot.innerHTML = "";
-
+  $("mFoot").innerHTML = '<button class="btn secondary" id="mCancel">Skip</button>';
+  $("mCancel").onclick = () => { beep("warn"); closeModal(); if(onDone) onDone(); };
   $("overlay").classList.add("show");
   $("overlay").setAttribute("aria-hidden","false");
 }
 
-/* ── End-of-week summary ─────────────────────────────────── */
+/* ── End-of-week summary/* ── End-of-week summary ─────────────────────────────────── */
 function showWeekSummary(week, onDone){
   const echoes = state.weekEngine.pending.filter(c => c.triggerWeek <= week + 6 && c.triggerWeek > week);
   const lines = [];
@@ -1816,14 +1866,17 @@ ${c.disclosure}`;
       consequences:[{ triggerWeek:16, id:"c_gift_save", label:"Savings Milestone", major:false,
         apply:(st)=>{ st.bank.savings+=12; addLedgerLine("↩ Consistent saving from gift — growth bonus +$12"); return "+$12 savings milestone reward"; } }]
     },
-    { label:"Invest it", hint:"Choose HYSA or CD",
-      apply:(st)=>{
-        openInvestmentChoiceModal(150, "Birthday gift", (summary)=>{
-          addCoverage(5);
-          addCoverage(8);
-          addLedgerLine(`Week 10: ${summary}`);
-        });
-        return "Choose HYSA or CD for the birthday gift.";
+    { label:"Invest it", hint:"Choose HYSA, CD, or stock path",
+      skipReflection:true,
+      onSelect:({complete})=>{
+        setTimeout(()=>{
+          openInvestmentChoiceModal(150, "Birthday gift", (summary)=>{
+            addCoverage(5);
+            addCoverage(8);
+            addLedgerLine(`Week 10: ${summary}`);
+            complete(summary, { badge:`Birthday gift invested: ${money(150)}`, banner:"Pick confirmed for the birthday gift." });
+          });
+        }, 60);
       },
       consequences:[{ triggerWeek:20, id:"c_gift_invest", label:"Investment Growth Check", major:false,
         apply:(st)=>{
@@ -2041,10 +2094,14 @@ ${c.disclosure}`;
 {
   id:"w16_main", week:16, bonus:false, category:"banking",
   title: j => "Overdraft Warning",
-  body:  j => "Your checking account is at $8. A planned bill of $15 hits tomorrow. You'll overdraft unless you act now. What do you do?",
+  body:  j => {
+    const bill = getDynamicTomorrowBill();
+    const checking = Number(state.bank?.checking || 0);
+    return `Your checking account is at ${money(checking)}. A ${bill.label} of ${money(bill.amount)} hits tomorrow. You'll overdraft unless you act now. What do you do?`;
+  },
   options: (j,s) => [
     { label:"Transfer from savings immediately", hint:"-savings, +checking",
-      apply:(st)=>{ const amt=20; st.bank.savings=Math.max(0,st.bank.savings-amt); st.bank.checking+=amt; addLedgerLine("Week 16: Emergency transfer from savings to avoid overdraft"); addCoverage(4); return `Transferred $${amt} from savings — overdraft avoided`; }
+      apply:(st)=>{ const bill=getDynamicTomorrowBill(); const checking=Number(st.bank?.checking||0); const amt=Math.max(0, bill.amount - checking + 2); st.bank.savings=Math.max(0,st.bank.savings-amt); st.bank.checking+=amt; addLedgerLine(`Week 16: Emergency transfer from savings to avoid overdraft (+${money(amt)})`); addCoverage(4); return `Transferred ${money(amt)} from savings — overdraft avoided`; }
     },
     { label:"Do nothing — accept overdraft", hint:"-$10 to $20 fee",
       apply:(st)=>{ const ct=state.bank.checkingType?BANK_PRODUCTS.checking.find(x=>x.id===state.bank.checkingType):null; const fee=ct?ct.overdraftFee:15; st.bank.checking-=fee; st.credit=Math.max(300,st.credit-10); addLedgerLine(`Week 16: Overdraft fee -$${fee}, credit -10`); addCoverage(4); return `-$${fee} overdraft fee, credit -10`; }
@@ -2131,8 +2188,16 @@ ${c.disclosure}`;
   title: j => "CD Maturity — Reinvest or Cash Out?",
   body:  j => "Your 3-month CD from week 12 is about to mature. You'll get principal + 4% back. Do you reinvest it or cash out?",
   options: (j,s) => [
-    { label:"Reinvest into a 6-month CD", hint:"Locked until May • 4.5%",
-      apply:(st)=>{ const val=Math.round(55*1.04); createCD("6m",val,true,"bonus"); addLedgerLine(`Week 20: Reinvested matured CD into 6-month CD — $${val}`); addCoverage(4); addCoverage(9); return `Reinvested $${val} into 6-month CD`; }
+    { label:"Reinvest into a 6-month CD", hint:"Locked until May • choose account",
+      onSelect:({complete})=>{
+        const val=Math.round(55*1.04);
+        chooseFundingSource(val, `Reinvest the matured CD amount of ${money(val)}. Choose where the money comes from:`, (src)=>{
+          createCD("6m",val,true,"bonus");
+          addLedgerLine(`Week 20: Reinvested matured CD into 6-month CD — ${money(val)} from ${src}`);
+          addCoverage(4); addCoverage(9);
+          complete(`Reinvested ${money(val)} into 6-month CD`, { paymentInfo:{source:src, amount:val}, badge:`Reinvested from ${formatSourceLabel(src)}: ${money(val)}` });
+        });
+      }
     },
     { label:"Cash it out — take the profit", hint:"Money back + small gain",
       apply:(st)=>{ const gain=Math.round(50*0.04); st.bank.savings+=50+gain; addLedgerLine(`Week 20: CD cashed out +$${50+gain}`); addCoverage(4); return `+$${50+gain} to savings`; }
@@ -2718,7 +2783,22 @@ ${c.disclosure}`;
   body:  j => "Any CDs you opened earlier are maturing. You can reinvest for the final stretch or cash out. Your HYSA has also been growing. Do you check and optimize?",
   options: (j,s) => [
     { label:"Reinvest maturing CDs", hint:"Max growth to year end",
-      apply:(st)=>{ if(st.bank.cds.length){ addLedgerLine("Week 42: CDs reinvested for final stretch"); addCoverage(4); addCoverage(9); return "CDs reinvested"; } else { st.bank.savings+=10; addLedgerLine("Week 42: No CDs — added $10 directly"); return "+$10 to savings"; } }
+      onSelect:({complete})=>{
+        const val = Math.max(0, totalCdFunds());
+        if(val <= 0){
+          state.bank.savings += 10;
+          addLedgerLine("Week 42: No CDs — added $10 directly");
+          complete("+$10 to savings", { banner:"No active CDs, so the simulator gave a small savings boost instead." });
+          return;
+        }
+        chooseFundingSource(val, `Roll ${money(val)} from maturing CDs into a fresh investment path. Choose which account to use:`, (src)=>{
+          if(state.bank.cds && state.bank.cds.length) state.bank.cds = [];
+          addToHysa(val, "CD rollover");
+          addLedgerLine(`Week 42: Reinvested maturing CDs into HYSA — ${money(val)} from ${src}`);
+          addCoverage(4); addCoverage(9);
+          complete(`Moved ${money(val)} into HYSA for the final stretch`, { paymentInfo:{source:src, amount:val}, badge:`Rolled CDs into HYSA from ${formatSourceLabel(src)}` });
+        });
+      }
     },
     { label:"Cash out and put in HYSA", hint:"Flexible high growth",
       apply:(st)=>{ const val=totalCdFunds(); if(val>0){ st.bank.cds=[]; addToHysa(val); addLedgerLine(`Week 42: CD funds moved to HYSA — $${val}`); addCoverage(4); return `+$${val} to HYSA`; } else { st.bank.savings+=10; addLedgerLine("Week 42: No CDs — added $10 to HYSA"); addToHysa(10); return "+$10 to HYSA"; } }
@@ -5771,17 +5851,17 @@ Action Plan: ${getMonthlyActionPlan({})}`,
     return;
   }
   // Legacy / pre-mission path
-  if(state.day >= 12){ renderAll(); notifyAction("next_week"); return; }
+  if(state.day >= 48){ renderAll(); notifyAction("next_week"); return; }
   if(state.plan.lockedForYear){
     applyWeeklyBankEffects(); checkSavingsMilestones();
     recordMonthSnapshot();
-    state.day = clamp(state.day + 1, 1, 12);
+    state.day = clamp(state.day + 1, 1, 48);
     state.ledger.weekExpenses = 0; state.ledger.weekIncome = 0; state.ledger.weekProfit = 0;
     addLedgerLine(`--- New week started (Week ${state.day}) ---`);
     applyMonthlyPlanForCurrentMonth();
   } else {
     applyWeeklyBankEffects(); checkSavingsMilestones();
-    state.day = clamp(state.day + 1, 1, 12);
+    state.day = clamp(state.day + 1, 1, 48);
     state.ledger.weekExpenses = 0; state.ledger.weekIncome = 0; state.ledger.weekProfit = 0;
     addLedgerLine(`--- New week started (Week ${state.day}) ---`);
     setLog("Choose and lock a year plan before the next week auto-runs.");
@@ -7964,8 +8044,17 @@ function renderTeacherToolkit(){
   const recentReflections = teacherReflections.length
     ? teacherReflections.slice(0,5).map(r=>`<li><b>Week ${escapeHtml(String(r.week || 1))}</b> • ${escapeHtml(r.decisionType || 'general')}<br><span class="muted">${escapeHtml(r.q1 || 'No question recorded')}</span><br>Student: ${escapeHtml(r.q2 || '—')}<br>Teacher: ${escapeHtml(r.q3 || '—')}</li>`).join('')
     : '<li>No reflection responses saved yet this session.</li>';
+  const dash = getTeacherDashboardSummary();
   box.innerHTML = `
     <div style="display:grid;gap:10px">
+      <div class="impact-box" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+        <div><b>Week / Month</b><br>Week ${escapeHtml(String(dash.week))} • ${escapeHtml(dash.month)}</div>
+        <div><b>Monthly Focus</b><br>${escapeHtml(dash.focusName)}<br><span class="muted">${escapeHtml(String(dash.focusScore))}% • ${escapeHtml(dash.focusLabel)}</span></div>
+        <div><b>Financial Health</b><br>${escapeHtml(String(dash.healthScore))}/100 • ${escapeHtml(dash.healthLabel)}</div>
+        <div><b>Credit</b><br>${escapeHtml(String(dash.credit))}</div>
+        <div><b>Active Payments</b><br>${escapeHtml(String(dash.obligations))} • ${escapeHtml(money(dash.obligationTotal))}/mo</div>
+        <div><b>Unlock Board</b><br>Apt ${escapeHtml(dash.unlocks.apartment)} • Car ${escapeHtml(dash.unlocks.car)} • Loan ${escapeHtml(dash.unlocks.loan)}</div>
+      </div>
       <div class="impact-box"><b>Scenario Reason Preview</b><br>${escapeHtml(getScenarioReasonText())}</div>
       <div class="impact-box"><b>Discussion Prompt</b><br>${escapeHtml(tool.discussionPrompt || 'No prompt loaded.')}</div>
       ${cfg.showHiddenNotes ? `<div class="impact-box"><b>Hidden Teaching Note</b><br>${escapeHtml(tool.hiddenTeachingNote || 'No hidden teaching note loaded.')}</div>` : ''}
