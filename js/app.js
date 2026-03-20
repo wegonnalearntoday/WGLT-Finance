@@ -14,6 +14,10 @@ const EXPERIENCE_MODES = (APP_DATA.experienceModes && APP_DATA.experienceModes.e
 const PRESENTATION_ROLES = (APP_DATA.presentationRoles && APP_DATA.presentationRoles.presentationRoles) || [];
 const TEACHER_TOOLS = APP_DATA.teacherTools || {defaults:{},themes:[]};
 const ELITE_SCENARIOS = (APP_DATA.eliteScenarios && APP_DATA.eliteScenarios.events) || [];
+const DELAYED_CONSEQUENCE_DEFS = (APP_DATA.delayedConsequences && APP_DATA.delayedConsequences.consequences) || [];
+const REAL_LIFE_EVENTS = (APP_DATA.realLifeEvents && APP_DATA.realLifeEvents.events) || [];
+const FINANCIAL_EVENTS = (APP_DATA.financialEvents && APP_DATA.financialEvents.events) || [];
+const OPPORTUNITY_EVENTS = (APP_DATA.opportunityEvents && APP_DATA.opportunityEvents.events) || [];
 const ADVANCED_DELAYED = (APP_DATA.advancedDelayedConsequences && APP_DATA.advancedDelayedConsequences.chains) || [];
 const LEGACY_MODES = APP_DATA.modes || [];
 
@@ -730,6 +734,13 @@ function promptWeeklyGoalIfNeeded(onDone){
           closeHtmlModal();
           renderAll();
           if(onDone) onDone();
+          setTimeout(()=>{
+            openTab('bank', {auto:true});
+            const bankPanel = $('panel-bank');
+            if(bankPanel) bankPanel.scrollIntoView({behavior:'smooth', block:'start'});
+            const startupBtn = $('btnChooseStartup');
+            if(startupBtn) startupBtn.scrollIntoView({behavior:'smooth', block:'center'});
+          }, 140);
         };
       });
     }
@@ -3002,27 +3013,211 @@ function shouldFireBonus(scenario){
   return Math.random() < 0.37;
 }
 
-/* Main weekly scenario runner — called from nextWeek() */
-function runWeeklyScenarios(week, onAllDone){
-  const all = getScenariosForWeek(week);
-  const main = all.find(s => !s.bonus);
-  // Support multiple bonus scenarios per week (filter, not find)
-  const bonuses = all.filter(s => s.bonus && shouldFireBonus(s));
-  const queue = [];
+/* Event Engine v1 helpers */
+function ensureEventEngineState(){
+  if(!state.eventEngine) state.eventEngine = { usedIds:[], weekHistory:[] };
+  if(!state.eventEngine.weekHistory) state.eventEngine.weekHistory = [];
+}
+function getCurrentJob(){ return (state.jobs && state.jobs[state.jobIndex]) || JOBS[0] || {id:'student', name:'Student Job'}; }
+function getDelayedDefinition(id){ return DELAYED_CONSEQUENCE_DEFS.find(x => x && x.id === id) || null; }
+function getFocusWeightedType(){
+  const weights = getDynamicRandomEventWeights();
+  const roll = Math.random() * (Number(weights.life||40) + Number(weights.job||30) + Number(weights.financial||30));
+  if(roll < Number(weights.life||40)) return 'life';
+  if(roll < Number(weights.life||40) + Number(weights.job||30)) return 'job';
+  return 'financial';
+}
+function inferChoiceCost(choice){
+  if(Number.isFinite(Number(choice?.cost))) return Math.abs(Number(choice.cost));
+  const fx = choice?.effects || {};
+  return Math.abs(Number(fx.cash || 0)) + Math.abs(Number(fx.checking || 0)) + Math.abs(Number(fx.savings || 0));
+}
+function buildGenericEventPrompt(ev, job){
+  const typeMap = {life:'real-life situation', job:'job-based situation', financial:'money decision'};
+  const t = ev.typeKey || 'life';
+  const hook = ev.description || ev.prompt || '';
+  const lead = `Step ${Number((state.weekEngine && state.weekEngine.week) || state.day || 1)} brings a ${typeMap[t] || 'decision'} for your ${job.name} path.`;
+  return `${lead}
 
-  if(main) queue.push(main);
-  bonuses.forEach(b => {
-    queue.push(b);
-    state.weekEngine.ranBonus[week] = true;
+${hook || ((ev.title || 'Decision') + '. What do you do?')}`;
+}
+function createJobTemplatePool(job){
+  const name = job.name || 'Student Job';
+  const id = job.id || 'job';
+  const templates = [
+    ['rush_order', `${name}: Rush Order Request`, `A customer asks for a rush version of your ${name.toLowerCase()} work. You can pay a little now to deliver faster or keep your normal pace.`, 8, 18, 3],
+    ['supply_shortage', `${name}: Supply Shortage`, `You're low on a key supply for ${name.toLowerCase()}. Restock now or try to stretch what you have.`, 10, 0, 2],
+    ['quality_upgrade', `${name}: Quality Upgrade`, `A better tool could improve your ${name.toLowerCase()} work. Spend a little now for a stronger reputation later?`, 14, 22, 4],
+    ['repeat_client', `${name}: Repeat Client Offer`, `A repeat client wants to book you again for ${name.toLowerCase()} work. Give a small discount or hold your rate?`, 0, 16, 3],
+    ['weather_shift', `${name}: Schedule Shift`, `A schedule problem hits your ${name.toLowerCase()} plans this week. Pivot for a smaller win or cancel and protect your energy?`, 0, 12, 2],
+    ['helper_choice', `${name}: Work Solo or Get Help`, `You could pay a friend a little to help with ${name.toLowerCase()} tasks and finish more jobs.`, 9, 20, 4],
+    ['materials_sale', `${name}: Materials on Sale`, `Supplies for ${name.toLowerCase()} work are discounted today. Buy ahead now or wait and keep cash free?`, 12, 0, 2],
+    ['customer_review', `${name}: Customer Review Moment`, `A customer asks you to fix a small issue before leaving a good review.`, 6, 14, 3],
+    ['seasonal_push', `${name}: Seasonal Push`, `Demand for ${name.toLowerCase()} work is up this week. You can invest a little effort for a bigger payday.`, 5, 24, 5],
+    ['transport_issue', `${name}: Transportation Issue`, `Getting to your ${name.toLowerCase()} job costs more than usual this week.`, 7, 0, 2],
+    ['bundle_offer', `${name}: Bundle Offer`, `Someone wants a bundle deal for your ${name.toLowerCase()} service.`, 0, 15, 2],
+    ['late_client', `${name}: Late Client`, `A client for your ${name.toLowerCase()} work is late and asks for flexibility.`, 0, 10, 2],
+    ['referral_chain', `${name}: Referral Chain`, `One happy customer could turn into more ${name.toLowerCase()} jobs if you invest in a polished finish today.`, 8, 20, 4],
+    ['repair_cost', `${name}: Minor Repair`, `A small piece of gear for your ${name.toLowerCase()} work needs attention before it becomes a bigger problem.`, 11, 0, 3],
+    ['promo_choice', `${name}: Promo Flyer`, `You can spend a little to promote your ${name.toLowerCase()} work this week.`, 9, 18, 4],
+    ['client_bonus', `${name}: Bonus Tip Decision`, `A customer offers a bonus if you can squeeze in one extra ${name.toLowerCase()} task.`, 4, 12, 2]
+  ];
+  return templates.map((t, idx) => ({
+    id:`job_${id}_${t[0]}_${idx+1}`,
+    title:t[1],
+    prompt:t[2],
+    typeKey:'job',
+    choices:[
+      { id:'invest', label:`Put in ${money(t[3])} to improve the week`, effects:{}, paymentRequired:true, cost:t[3], reward:{checking:t[4], credit:t[5]}, delayedConsequenceId: t[4] >= 18 ? 'side_hustle_profit' : '' },
+      { id:'steady', label:'Stay steady and protect cash', effects:{checking: Math.max(4, Math.round(t[4] * 0.45))} },
+      { id:'pass', label:'Pass on it and keep flexibility', effects:{credit: Math.max(-3, -Math.round(t[5] / 2))} }
+    ]
+  }));
+}
+function buildUnifiedEventPool(week){
+  ensureEventEngineState();
+  const job = getCurrentJob();
+  const exp = state.experienceLevel || 'standard';
+  const inWeek = (ev) => {
+    const range = ev.weeksAllowed || [1,48];
+    return Number(week) >= Number(range[0] || 1) && Number(week) <= Number(range[1] || 48);
+  };
+  const diffOk = (ev) => !Array.isArray(ev.difficulty) || !ev.difficulty.length || ev.difficulty.includes(exp) || (exp === 'elite' && ev.difficulty.includes('standard'));
+  const genericLife = REAL_LIFE_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'life', prompt:ev.description || ''}, ev));
+  const genericFin = FINANCIAL_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'financial', prompt:ev.description || ''}, ev));
+  const genericOpp = OPPORTUNITY_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'job', prompt:ev.description || ''}, ev));
+  const elitePool = isEliteExperience() ? ELITE_SCENARIOS.filter(ev => inWeek(ev)).map(ev => ({
+    id:ev.id, title:ev.title, prompt:ev.description || '', typeKey:'financial', choices:(ev.choices || []).map((c, i)=>({ id:`elite_${i+1}`, label:c.label, effects:c.effects || {}, tag:c.tag || '' }))
+  })) : [];
+  const jobPool = createJobTemplatePool(job);
+  return { life: genericLife, financial: genericFin.concat(elitePool), job: jobPool.concat(genericOpp) };
+}
+function pickUniqueEventFromPool(type, week){
+  ensureEventEngineState();
+  const poolByType = buildUnifiedEventPool(week);
+  const pool = poolByType[type] || [];
+  const used = new Set(state.eventEngine.usedIds || []);
+  let available = pool.filter(ev => !used.has(ev.id));
+  if(!available.length){
+    state.eventEngine.usedIds = [];
+    available = pool.slice();
+  }
+  if(!available.length) return null;
+  return available[Math.floor(Math.random() * available.length)];
+}
+function applyGenericEffects(effects){
+  const fx = Object.assign({}, effects || {});
+  let notes = [];
+  if(fx.income){
+    state.bank.checking = Number(state.bank.checking || 0) + Number(fx.income || 0);
+    state.ledger.weekIncome = Number(state.ledger.weekIncome || 0) + Number(fx.income || 0);
+    notes.push(`${Number(fx.income) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.income))) } income`);
+  }
+  if(fx.cash){
+    state.cash = Math.max(0, Number(state.cash || 0) + Number(fx.cash || 0));
+    if(Number(fx.cash) < 0) state.ledger.weekExpenses = Number(state.ledger.weekExpenses || 0) + Math.abs(Number(fx.cash));
+    notes.push(`${Number(fx.cash) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.cash))) } cash`);
+  }
+  if(fx.checking){
+    state.bank.checking = Math.max(0, Number(state.bank.checking || 0) + Number(fx.checking || 0));
+    if(Number(fx.checking) < 0) state.ledger.weekExpenses = Number(state.ledger.weekExpenses || 0) + Math.abs(Number(fx.checking));
+    notes.push(`${Number(fx.checking) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.checking))) } checking`);
+  }
+  if(fx.savings){
+    state.bank.savings = Math.max(0, Number(state.bank.savings || 0) + Number(fx.savings || 0));
+    notes.push(`${Number(fx.savings) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.savings))) } savings`);
+  }
+  if(fx.credit){
+    state.credit = clamp(Number(state.credit || 650) + Number(fx.credit || 0), 300, 850);
+    notes.push(`${Number(fx.credit) >= 0 ? '+' : ''}${Number(fx.credit)} credit`);
+  }
+  return notes.join(' • ') || 'No major balance change';
+}
+function queueGenericDelayedConsequence(choice, week, title){
+  const id = choice?.delayedConsequenceId;
+  if(!id) return;
+  const def = getDelayedDefinition(id);
+  if(!def) return;
+  const triggerWeek = Math.min(48, Number(week || 1) + Number(def.triggerWeeks || 1));
+  const major = !!(Number(def.effects?.cash || 0) < -15 || Number(def.effects?.checking || 0) < -15 || Number(def.effects?.credit || 0) < -5);
+  queueConsequenceObject({
+    triggerWeek,
+    id:def.id,
+    label:def.title || title || 'Delayed Consequence',
+    major,
+    apply:(st)=> applyGenericEffects(def.effects || {})
+  }, title || def.title || 'Event Engine v1');
+}
+function applyGenericChoice(choice, ev, week, onDone){
+  const finish = (sourceLabel='')=>{
+    const parts = [];
+    if(choice.reward) parts.push(applyGenericEffects(choice.reward || {}));
+    parts.push(applyGenericEffects(choice.effects || {}));
+    const summary = parts.filter(Boolean).join(' • ');
+    queueGenericDelayedConsequence(choice, week, ev.title);
+    if(ev.id){
+      ensureEventEngineState();
+      state.eventEngine.usedIds.push(ev.id);
+      state.eventEngine.usedIds = state.eventEngine.usedIds.slice(-120);
+      state.eventEngine.weekHistory.unshift({ week, id:ev.id, title:ev.title, type:ev.typeKey || 'life' });
+      state.eventEngine.weekHistory = state.eventEngine.weekHistory.slice(0, 80);
+    }
+    addLedgerLine(`Step ${week}: ${ev.title} → ${choice.label}${sourceLabel ? ` (${sourceLabel})` : ''} • ${summary}`);
+    queueDecisionReflection({ title: ev.title, label: choice.label, summary, amount: inferChoiceCost(choice) || 0 });
+    renderAll();
+    if(onDone) onDone();
+  };
+  const payment = choice.paymentRequired || (inferChoiceCost(choice) > 0 && ((choice.effects && (Number(choice.effects.cash || 0) < 0 || Number(choice.effects.checking || 0) < 0 || Number(choice.effects.savings || 0) < 0)) || choice.cost));
+  const amt = inferChoiceCost(choice);
+  if(payment && amt > 0){
+    chooseFundingSource(amt, `${ev.title}
+
+Choose where to take ${money(amt)} from.`, (src)=> finish(`from ${src}`));
+  } else finish('');
+}
+function openGeneratedEventModal(ev, week, onDone){
+  const job = getCurrentJob();
+  const choices = (ev.choices || []).slice(0,3);
+  openModal({
+    title:`🎲 Step ${week}: ${ev.title}`,
+    meta:`${(ev.typeKey || 'life').toUpperCase()} • ${job.name}`,
+    body:buildGenericEventPrompt(ev, job),
+    buttons:choices.map((choice, idx)=>({ id:String(idx), label:choice.label, kind: idx === 0 ? 'primary' : (idx === 1 ? 'secondary' : 'warn') })),
+    onPick:(pickId)=>{
+      const choice = choices[Number(pickId)];
+      if(!choice) return;
+      applyGenericChoice(choice, ev, week, onDone);
+    }
   });
-
+}
+function runEventEngineV1(week, onAllDone){
+  const pickedType = getFocusWeightedType();
+  const main = pickUniqueEventFromPool(pickedType, week) || pickUniqueEventFromPool('life', week) || pickUniqueEventFromPool('job', week) || pickUniqueEventFromPool('financial', week);
+  const queue = [];
+  if(main) queue.push(main);
+  if(Math.random() < 0.28){
+    const alt = ['life','job','financial'].filter(x => x !== pickedType);
+    const bonusType = alt[Math.floor(Math.random() * alt.length)] || 'life';
+    const bonus = pickUniqueEventFromPool(bonusType, week);
+    if(bonus && bonus.id !== main?.id) queue.push(bonus);
+  }
+  if(!queue.length){
+    const fallbackPool = createJobTemplatePool(getCurrentJob());
+    const fallback = fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
+    if(fallback) queue.push(fallback);
+  }
   let idx = 0;
   function runNext(){
     if(idx >= queue.length){ if(onAllDone) onAllDone(); return; }
-    const s = queue[idx++];
-    openScenarioModal(s, runNext);
+    const ev = queue[idx++];
+    openGeneratedEventModal(ev, week, runNext);
   }
   runNext();
+}
+
+/* Main weekly scenario runner — called from nextWeek() */
+function runWeeklyScenarios(week, onAllDone){
+  return runEventEngineV1(week, onAllDone);
 }
 
 /* Update the header week/month display */
