@@ -708,7 +708,7 @@ function renderStandardV1HUD(){
   if(document.getElementById('impactIdentity')) document.getElementById('impactIdentity').textContent = `${identity.emoji} ${identity.title}`;
   renderEliteOverview();
 }
-function promptWeeklyGoalIfNeeded(onDone){
+function promptWeeklyGoalIfNeeded(onDone, opts={}){
   ensureStandardV1State();
   if(!isStandardV1Experience() || !(state.mission && state.mission.active)){
     if(onDone) onDone();
@@ -734,13 +734,15 @@ function promptWeeklyGoalIfNeeded(onDone){
           closeHtmlModal();
           renderAll();
           if(onDone) onDone();
-          setTimeout(()=>{
-            openTab('bank', {auto:true});
-            const bankPanel = $('panel-bank');
-            if(bankPanel) bankPanel.scrollIntoView({behavior:'smooth', block:'start'});
-            const startupBtn = $('btnChooseStartup');
-            if(startupBtn) startupBtn.scrollIntoView({behavior:'smooth', block:'center'});
-          }, 140);
+          if(opts && opts.jumpToBankAfterPick){
+            setTimeout(()=>{
+              openTab('bank', {auto:true});
+              const bankPanel = $('panel-bank');
+              if(bankPanel) bankPanel.scrollIntoView({behavior:'smooth', block:'start'});
+              const startupBtn = $('btnChooseStartup');
+              if(startupBtn) startupBtn.scrollIntoView({behavior:'smooth', block:'center'});
+            }, 140);
+          }
         };
       });
     }
@@ -3651,17 +3653,7 @@ function openTab(name, opts={}){
   // Monthly snapshot review: once the student clicks Budget Sheet, resume the new month flow
   if(name === "sheet" && !opts.auto){
     if(state.ui && state.ui.pendingBudgetSheetReview){
-      state.ui.pendingBudgetSheetReview = false;
-      applyLockRules();
-      setTimeout(()=>{
-        if(state.weekEngine && state.mission.active){
-          runWeeklyScenarios(state.weekEngine.week, ()=>{
-            renderAll();
-            renderSheet();
-            notifyAction("next_week");
-          });
-        }
-      }, 220);
+      showBanner("Review the Budget Sheet, then tap Continue");
     } else {
       const currentStep = state.mission.active ? state.mission.steps[state.mission.index] : null;
       const expectsBudgetSheet = !!(currentStep && currentStep.requireActions && currentStep.requireActions.includes("view_budget_sheet"));
@@ -4689,7 +4681,7 @@ function startMission(){
   state.standardV1.chainWindowsFired = {};
 
   setLog("Year mission started! June Week 1 — follow the glowing actions. Monthly focus, health, and choice echoes are now live.");
-  setTimeout(()=>promptWeeklyGoalIfNeeded(), 200);
+  setTimeout(()=>promptWeeklyGoalIfNeeded(null, {jumpToBankAfterPick:true}), 200);
   renderAll();
   runCurrentMissionStep();
 }
@@ -6010,7 +6002,15 @@ Action Plan: ${getMonthlyActionPlan({})}`,
           onPick:()=>{
             // Step 3: Paycheck investment prompt
             promptPaycheckInvestmentSimple(takeHome, tax, ()=>{
-              const continueToReview = ()=> promptWeeklyGoalIfNeeded(()=>{ renderSheet(); promptMonthlyBudgetSheetReview(); });
+              const continueToReview = ()=> promptWeeklyGoalIfNeeded(()=>{ renderSheet(); promptMonthlyBudgetSheetReview(()=>{
+                if(state.weekEngine && state.mission.active){
+                  runWeeklyScenarios(state.weekEngine.week, ()=>{
+                    renderAll();
+                    renderSheet();
+                    notifyAction("next_week");
+                  });
+                }
+              }); });
               const continueAfterElite = ()=> isEliteExperience() ? promptEliteCreditOpportunity(continueToReview) : continueToReview();
               if(state.plan.wantsSelections && state.plan.wantsSelections.length > 0){
                 triggerMonthlyWantsChoice(()=>{
@@ -6066,20 +6066,24 @@ Action Plan: ${getMonthlyActionPlan({})}`,
 
 function promptMonthlyBudgetSheetReview(onDone){
   state.ui.pendingBudgetSheetReview = true;
+  state.ui.pendingBudgetSheetReviewCallback = onDone || null;
   applyLockRules();
+  openTab("sheet", {auto:true});
+  setTimeout(()=>{
+    const sheetPanel = $("panel-sheet");
+    if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth", block:"start"});
+  }, 120);
   openModal({
     title:"📊 Budget Sheet Check-In",
     meta:"Monthly snapshot",
-    body:"Let's take a look at our Budget Sheet to see how we're doing.\n\nTap the button below to jump to the Budget Sheet, then tap the Budget Sheet tab once more after you review it to continue.",
-    buttons:[{id:"go", label:"Go View Budget Sheet →", kind:"primary"}],
+    body:"Let's take a look at our Budget Sheet to see how we're doing. Review the sheet, then tap Continue to move into the next random event.",
+    buttons:[{id:"continue", label:"Continue →", kind:"primary"}],
     onPick:()=>{
-      openTab("sheet", {auto:true});
-      setTimeout(()=>{
-        const sheetPanel = $("panel-sheet");
-        if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth", block:"start"});
-      }, 120);
-      showBanner("Review the Budget Sheet, then tap the Budget Sheet tab again to continue");
-      if(onDone) onDone();
+      state.ui.pendingBudgetSheetReview = false;
+      const cb = state.ui.pendingBudgetSheetReviewCallback;
+      state.ui.pendingBudgetSheetReviewCallback = null;
+      applyLockRules();
+      if(cb) cb();
     }
   });
 }
