@@ -6101,6 +6101,8 @@ function promptPaycheckInvestmentSimple(takeHome, tax, onDone){
   const depositDest = state.bank.paycheckDestination || (state.bank.checkingType ? "checking" : "cash");
   const destLabel = depositDest === "checking" ? (BANK_PRODUCTS.checking.find(x=>x.id===state.bank.checkingType)?.name || "Checking") : "Cash";
 
+  const stockButton = isEliteExperience() ? [{id:"stock", label:"Move $25 → Stock Index", kind:"warn"}] : [];
+
   const cdOptions = [];
   if(monthsLeft >= 3) cdOptions.push({id:"cd3", label:"Open 3-Month CD (4.0% APR)", kind:"secondary"});
   if(monthsLeft >= 6) cdOptions.push({id:"cd6", label:"Open 6-Month CD (4.5% APR)", kind:"secondary"});
