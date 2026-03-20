@@ -739,6 +739,18 @@ function promptWeeklyGoalIfNeeded(onDone){
     }
   });
 }
+
+function jumpToBankingAfterMonthlyFocus(){
+  openTab('bank', {auto:true});
+  setTimeout(()=>{
+    const bankPanel = $('panel-bank');
+    if(bankPanel) bankPanel.scrollIntoView({behavior:'smooth', block:'start'});
+    const startupBtn = $('btnChooseStartup');
+    if(startupBtn) startupBtn.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 140);
+  showBanner('Banking is next');
+  applyLockRules();
+}
 function queueConsequenceObject(item, sourceLabel=''){
   ensureStandardV1State();
   if(!state.weekEngine) initWeekEngine();
@@ -4690,7 +4702,7 @@ function startMission(){
   state.standardV1.chainWindowsFired = {};
 
   setLog("Year mission started! June Week 1 — follow the glowing actions. Monthly focus, health, and choice echoes are now live.");
-  setTimeout(()=>promptWeeklyGoalIfNeeded(), 200);
+  setTimeout(()=>promptWeeklyGoalIfNeeded(()=>jumpToBankingAfterMonthlyFocus()), 200);
   renderAll();
   runCurrentMissionStep();
 }
@@ -6072,7 +6084,7 @@ function promptMonthlyBudgetSheetReview(onDone){
   openModal({
     title:"📊 Budget Sheet Check-In",
     meta:"Monthly snapshot",
-    body:"Let's take a look at our Budget Sheet to see how we're doing.\n\nTap the button below to jump to the Budget Sheet, then tap the Budget Sheet tab once more after you review it to continue.",
+    body:"Let's take a look at our Budget Sheet to see how we're doing.\n\nTap the button below to jump to the Budget Sheet. After you review it, tap Continue to launch the next step.",
     buttons:[{id:"go", label:"Go View Budget Sheet →", kind:"primary"}],
     onPick:()=>{
       openTab("sheet", {auto:true});
@@ -6080,11 +6092,39 @@ function promptMonthlyBudgetSheetReview(onDone){
         const sheetPanel = $("panel-sheet");
         if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth", block:"start"});
       }, 120);
-      showBanner("Review the Budget Sheet, then tap the Budget Sheet tab again to continue");
-      if(onDone) onDone();
+      showBanner("Review the Budget Sheet, then continue");
+      setTimeout(()=>{
+        openModal({
+          title:"✅ Ready to Continue?",
+          meta:"Budget Sheet reviewed",
+          body:"When you're ready, continue to launch the next step's scenario flow.",
+          buttons:[
+            {id:"continue", label:"Continue →", kind:"primary"},
+            {id:"stay", label:"Keep Reviewing", kind:"secondary"}
+          ],
+          onPick:(id)=>{
+            if(id !== 'continue'){
+              state.ui.pendingBudgetSheetReview = true;
+              applyLockRules();
+              return;
+            }
+            state.ui.pendingBudgetSheetReview = false;
+            applyLockRules();
+            if(onDone) onDone();
+            if(state.weekEngine && state.mission.active){
+              runWeeklyScenarios(state.weekEngine.week, ()=>{
+                renderAll();
+                renderSheet();
+                notifyAction("next_week");
+              });
+            }
+          }
+        });
+      }, 260);
     }
   });
 }
+
 
 /* Simplified paycheck investment prompt used in nextWeek */
 function promptPaycheckInvestmentSimple(takeHome, tax, onDone){
