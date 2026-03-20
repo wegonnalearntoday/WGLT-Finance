@@ -3650,10 +3650,16 @@ function openTab(name, opts={}){
   const p=$("panel-"+name);
   if(p) p.classList.add("active");
 
-  // Monthly snapshot review: once the student clicks Budget Sheet, resume the new month flow
+  // Monthly snapshot review: once the student clicks Budget Sheet again, resume the new month flow
   if(name === "sheet" && !opts.auto){
     if(state.ui && state.ui.pendingBudgetSheetReview){
-      showBanner("Review the Budget Sheet, then tap Continue");
+      state.ui.pendingBudgetSheetReview = false;
+      const cb = state.ui.pendingBudgetSheetReviewCallback;
+      state.ui.pendingBudgetSheetReviewCallback = null;
+      applyLockRules();
+      setTimeout(()=>{
+        if(cb) cb();
+      }, 120);
     } else {
       const currentStep = state.mission.active ? state.mission.steps[state.mission.index] : null;
       const expectsBudgetSheet = !!(currentStep && currentStep.requireActions && currentStep.requireActions.includes("view_budget_sheet"));
@@ -6002,19 +6008,20 @@ Action Plan: ${getMonthlyActionPlan({})}`,
           onPick:()=>{
             // Step 3: Paycheck investment prompt
             promptPaycheckInvestmentSimple(takeHome, tax, ()=>{
+              const continueAfterBudgetSheet = ()=>{
+                promptWeeklyGoalIfNeeded(()=>{
+                  if(state.weekEngine && state.mission.active){
+                    runWeeklyScenarios(state.weekEngine.week, ()=>{
+                      renderAll();
+                      renderSheet();
+                      notifyAction("next_week");
+                    });
+                  }
+                });
+              };
               const continueToReview = ()=>{
                 renderSheet();
-                promptMonthlyBudgetSheetReview(()=>{
-                  promptWeeklyGoalIfNeeded(()=>{
-                    if(state.weekEngine && state.mission.active){
-                      runWeeklyScenarios(state.weekEngine.week, ()=>{
-                        renderAll();
-                        renderSheet();
-                        notifyAction("next_week");
-                      });
-                    }
-                  });
-                });
+                promptMonthlyBudgetSheetReview(continueAfterBudgetSheet);
               };
               const continueAfterElite = ()=> isEliteExperience() ? promptEliteCreditOpportunity(continueToReview) : continueToReview();
               if(state.plan.wantsSelections && state.plan.wantsSelections.length > 0){
@@ -6073,22 +6080,19 @@ function promptMonthlyBudgetSheetReview(onDone){
   state.ui.pendingBudgetSheetReview = true;
   state.ui.pendingBudgetSheetReviewCallback = onDone || null;
   applyLockRules();
-  openTab("sheet", {auto:true});
-  setTimeout(()=>{
-    const sheetPanel = $("panel-sheet");
-    if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth", block:"start"});
-  }, 120);
   openModal({
     title:"📊 Budget Sheet Check-In",
     meta:"Monthly snapshot",
-    body:"Let's take a look at our Budget Sheet to see how we're doing. Review the sheet, then tap Continue. If you need to pick a monthly focus, that will happen after the Budget Sheet before the next random event.",
-    buttons:[{id:"continue", label:"Continue →", kind:"primary"}],
+    body:"Let\'s take a look at our Budget Sheet to see how we\'re doing.\n\nTap the button below to jump to the Budget Sheet, then tap the glowing Budget Sheet tab once more after you review it to continue to your monthly focus and next random event.",
+    buttons:[{id:"go", label:"Go View Budget Sheet →", kind:"primary"}],
     onPick:()=>{
-      state.ui.pendingBudgetSheetReview = false;
-      const cb = state.ui.pendingBudgetSheetReviewCallback;
-      state.ui.pendingBudgetSheetReviewCallback = null;
+      openTab("sheet", {auto:true});
+      setTimeout(()=>{
+        const sheetPanel = $("panel-sheet");
+        if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth", block:"start"});
+      }, 120);
+      showBanner("Review the Budget Sheet, then tap the glowing Budget Sheet tab to continue");
       applyLockRules();
-      if(cb) cb();
     }
   });
 }
