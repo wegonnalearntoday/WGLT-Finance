@@ -1,0 +1,197 @@
+[
+  {
+    "id": "rl_forgot_lunch_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Forgot Your Lunch",
+    "prompt": "You forgot your lunch today. What do you do?",
+    "step_tags": [
+      "school_day",
+      "needs",
+      "wants_control"
+    ],
+    "choices": [
+      {
+        "id": "buy_lunch",
+        "label": "Buy school lunch for $4",
+        "immediate_effects": {
+          "checking": -4,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "needs_first",
+        "ledger_note": "Bought lunch"
+      },
+      {
+        "id": "buy_snack",
+        "label": "Buy a snack for $2",
+        "immediate_effects": {
+          "checking": -2,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "low_energy_risk"
+        ],
+        "reflection_tag": "short_term_tradeoff",
+        "ledger_note": "Bought snack instead of lunch"
+      },
+      {
+        "id": "skip_food",
+        "label": "Skip eating today",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -3
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "needs_neglect",
+        "ledger_note": "Skipped lunch"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "control_wants",
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": [
+        "already_used_recently"
+      ]
+    },
+    "consequence_paths": [
+      {
+        "hook": "low_energy_risk",
+        "possible_outcomes": [
+          "after_school_slump"
+        ]
+      },
+      {
+        "hook": "fatigue_chain",
+        "possible_outcomes": [
+          "reduced_performance_week",
+          "health_warning_popup"
+        ]
+      }
+    ],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 12,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "needs",
+      "food",
+      "budget_tradeoff"
+    ]
+  },
+  {
+    "id": "rl_friend_pizza_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Friends Want Pizza",
+    "prompt": "Your friends want pizza tonight. What do you do?",
+    "step_tags": [
+      "social",
+      "wants",
+      "peer_pressure"
+    ],
+    "choices": [
+      {
+        "id": "join_full",
+        "label": "Join in and spend $12",
+        "immediate_effects": {
+          "checking": -12,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "social_spending",
+        "ledger_note": "Pizza night with friends"
+      },
+      {
+        "id": "set_limit",
+        "label": "Go, but spend only $5",
+        "immediate_effects": {
+          "checking": -5,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_choice",
+        "ledger_note": "Limited social spending"
+      },
+      {
+        "id": "skip_event",
+        "label": "Skip and save the money",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "saving_over_fun",
+        "ledger_note": "Skipped pizza outing"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "control_wants",
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": [
+        "already_used_recently"
+      ]
+    },
+    "consequence_paths": [
+      {
+        "hook": "budget_squeeze",
+        "possible_outcomes": [
+          "small_bill_pressure"
+        ]
+      },
+      {
+        "hook": "social_tension_minor",
+        "possible_outcomes": [
+          "friend_followup_choice"
+        ]
+      }
+    ],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "social",
+      "wants",
+      "peer_pressure"
+    ]
+  }
+]

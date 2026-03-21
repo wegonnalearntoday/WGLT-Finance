@@ -1,0 +1,160 @@
+[
+  {
+    "id": "opp_extra_shift_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "retail",
+      "car_wash",
+      "food_service",
+      "office_helper",
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Extra Shift Offer",
+    "prompt": "Your manager offers you an extra shift. What do you do?",
+    "step_tags": [
+      "job",
+      "income",
+      "time_tradeoff"
+    ],
+    "choices": [
+      {
+        "id": "take_shift",
+        "label": "Take the shift and earn extra money",
+        "immediate_effects": {
+          "checking": 20,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_risk_minor"
+        ],
+        "reflection_tag": "income_priority",
+        "ledger_note": "Accepted extra shift"
+      },
+      {
+        "id": "decline_shift",
+        "label": "Decline and protect your time",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balance_time",
+        "ledger_note": "Declined extra shift"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [
+      {
+        "hook": "fatigue_risk_minor",
+        "possible_outcomes": [
+          "late_to_shift_warning"
+        ]
+      }
+    ],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "job",
+      "income",
+      "time"
+    ]
+  },
+  {
+    "id": "opp_contract_tool_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Monthly Tool Contract",
+    "prompt": "A tool or service contract could help you work, but it adds a monthly payment. What do you do?",
+    "step_tags": [
+      "contract",
+      "monthly_payment",
+      "job_growth"
+    ],
+    "choices": [
+      {
+        "id": "take_contract",
+        "label": "Take the contract",
+        "immediate_effects": {
+          "checking": 0,
+          "active_contracts": 1,
+          "health_score": 1
+        },
+        "delayed_hooks": [
+          "monthly_contract_charge"
+        ],
+        "reflection_tag": "invest_in_work",
+        "ledger_note": "Accepted tool/service contract"
+      },
+      {
+        "id": "skip_contract",
+        "label": "Skip it for now",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "avoid_new_bill",
+        "ledger_note": "Skipped contract"
+      }
+    ],
+    "triggers": {
+      "min_step": 4,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": [
+        "contract_already_active"
+      ]
+    },
+    "consequence_paths": [
+      {
+        "hook": "monthly_contract_charge",
+        "possible_outcomes": [
+          "ledger_contract_charge",
+          "profit_if_used_well"
+        ]
+      }
+    ],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 16,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "contract",
+      "job_growth",
+      "monthly_bill"
+    ]
+  }
+]

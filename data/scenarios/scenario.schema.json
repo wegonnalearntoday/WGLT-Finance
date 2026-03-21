@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WGLT Scenario",
+  "type": "object",
+  "required": [
+    "id",
+    "category",
+    "mode",
+    "jobs",
+    "title",
+    "prompt",
+    "choices",
+    "triggers",
+    "weight",
+    "repeat_rule",
+    "tags"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "jobs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "grade_band": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "title": {
+      "type": "string"
+    },
+    "prompt": {
+      "type": "string"
+    },
+    "step_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "choices": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "immediate_effects",
+          "delayed_hooks"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "immediate_effects": {
+            "type": "object"
+          },
+          "delayed_hooks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reflection_tag": {
+            "type": "string"
+          },
+          "ledger_note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "triggers": {
+      "type": "object",
+      "required": [
+        "min_step",
+        "max_step"
+      ],
+      "properties": {
+        "min_step": {
+          "type": "integer"
+        },
+        "max_step": {
+          "type": "integer"
+        },
+        "monthly_focus_bonus": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "blocks_if": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "consequence_paths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "hook",
+          "possible_outcomes"
+        ],
+        "properties": {
+          "hook": {
+            "type": "string"
+          },
+          "possible_outcomes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "weight": {
+      "type": "integer"
+    },
+    "repeat_rule": {
+      "type": "object",
+      "required": [
+        "cooldown_steps",
+        "max_uses_per_year"
+      ],
+      "properties": {
+        "cooldown_steps": {
+          "type": "integer"
+        },
+        "max_uses_per_year": {
+          "type": "integer"
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,157 @@
+[
+  {
+    "id": "elite_starter_loan_01",
+    "category": "elite_credit",
+    "mode": [
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "9-12"
+    ],
+    "title": "Starter Loan Offer",
+    "prompt": "You qualify for a starter loan. What do you do?",
+    "step_tags": [
+      "credit",
+      "loan",
+      "elite"
+    ],
+    "choices": [
+      {
+        "id": "accept_loan",
+        "label": "Accept the loan and make a plan to repay",
+        "immediate_effects": {
+          "checking": 100,
+          "loan_balance": 100,
+          "credit_score": 3
+        },
+        "delayed_hooks": [
+          "loan_payment_cycle"
+        ],
+        "reflection_tag": "planned_credit_use",
+        "ledger_note": "Accepted starter loan"
+      },
+      {
+        "id": "decline_loan",
+        "label": "Decline and avoid the new payment",
+        "immediate_effects": {
+          "checking": 0,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "cautious_credit",
+        "ledger_note": "Declined starter loan"
+      }
+    ],
+    "triggers": {
+      "min_step": 8,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [
+        "elite_mode"
+      ],
+      "blocks_if": [
+        "loan_already_active"
+      ]
+    },
+    "consequence_paths": [
+      {
+        "hook": "loan_payment_cycle",
+        "possible_outcomes": [
+          "monthly_loan_payment",
+          "late_payment_penalty_if_missed"
+        ]
+      }
+    ],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 24,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "elite",
+      "credit",
+      "loan"
+    ]
+  },
+  {
+    "id": "elite_apartment_check_01",
+    "category": "elite_credit",
+    "mode": [
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "9-12"
+    ],
+    "title": "Apartment Application",
+    "prompt": "An apartment application is available, but approval depends on your credit habits. What do you do?",
+    "step_tags": [
+      "credit",
+      "housing",
+      "elite"
+    ],
+    "choices": [
+      {
+        "id": "apply_now",
+        "label": "Apply now",
+        "immediate_effects": {
+          "checking": -20,
+          "credit_score": 0
+        },
+        "delayed_hooks": [
+          "apartment_approval_path"
+        ],
+        "reflection_tag": "credit_readiness",
+        "ledger_note": "Paid apartment application fee"
+      },
+      {
+        "id": "wait_build_credit",
+        "label": "Wait and build credit first",
+        "immediate_effects": {
+          "checking": 0,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "delay_for_strength",
+        "ledger_note": "Delayed apartment application"
+      }
+    ],
+    "triggers": {
+      "min_step": 16,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [
+        "elite_mode"
+      ],
+      "blocks_if": []
+    },
+    "consequence_paths": [
+      {
+        "hook": "apartment_approval_path",
+        "possible_outcomes": [
+          "approved_with_deposit",
+          "denied_due_to_credit"
+        ]
+      }
+    ],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 18,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "elite",
+      "housing",
+      "credit"
+    ]
+  }
+]

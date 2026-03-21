@@ -14,10 +14,6 @@ const EXPERIENCE_MODES = (APP_DATA.experienceModes && APP_DATA.experienceModes.e
 const PRESENTATION_ROLES = (APP_DATA.presentationRoles && APP_DATA.presentationRoles.presentationRoles) || [];
 const TEACHER_TOOLS = APP_DATA.teacherTools || {defaults:{},themes:[]};
 const ELITE_SCENARIOS = (APP_DATA.eliteScenarios && APP_DATA.eliteScenarios.events) || [];
-const DELAYED_CONSEQUENCE_DEFS = (APP_DATA.delayedConsequences && APP_DATA.delayedConsequences.consequences) || [];
-const REAL_LIFE_EVENTS = (APP_DATA.realLifeEvents && APP_DATA.realLifeEvents.events) || [];
-const FINANCIAL_EVENTS = (APP_DATA.financialEvents && APP_DATA.financialEvents.events) || [];
-const OPPORTUNITY_EVENTS = (APP_DATA.opportunityEvents && APP_DATA.opportunityEvents.events) || [];
 const ADVANCED_DELAYED = (APP_DATA.advancedDelayedConsequences && APP_DATA.advancedDelayedConsequences.chains) || [];
 const LEGACY_MODES = APP_DATA.modes || [];
 
@@ -708,7 +704,7 @@ function renderStandardV1HUD(){
   if(document.getElementById('impactIdentity')) document.getElementById('impactIdentity').textContent = `${identity.emoji} ${identity.title}`;
   renderEliteOverview();
 }
-function promptWeeklyGoalIfNeeded(onDone, opts={}){
+function promptWeeklyGoalIfNeeded(onDone){
   ensureStandardV1State();
   if(!isStandardV1Experience() || !(state.mission && state.mission.active)){
     if(onDone) onDone();
@@ -734,15 +730,6 @@ function promptWeeklyGoalIfNeeded(onDone, opts={}){
           closeHtmlModal();
           renderAll();
           if(onDone) onDone();
-          if(opts && opts.jumpToBankAfterPick){
-            setTimeout(()=>{
-              openTab('bank', {auto:true});
-              const bankPanel = $('panel-bank');
-              if(bankPanel) bankPanel.scrollIntoView({behavior:'smooth', block:'start'});
-              const startupBtn = $('btnChooseStartup');
-              if(startupBtn) startupBtn.scrollIntoView({behavior:'smooth', block:'center'});
-            }, 140);
-          }
         };
       });
     }
@@ -884,7 +871,6 @@ function shouldAskDecisionReflection(meta={}){
 }
 
 function queueDecisionReflection(meta={}){
-  if(state.ui && state.ui.suppressDecisionReflections) return;
   if(!shouldAskDecisionReflection(meta)) return;
   const type = inferDecisionReflectionType(meta);
   const question = getNextReflectionQuestion(type);
@@ -3016,211 +3002,27 @@ function shouldFireBonus(scenario){
   return Math.random() < 0.37;
 }
 
-/* Event Engine v1 helpers */
-function ensureEventEngineState(){
-  if(!state.eventEngine) state.eventEngine = { usedIds:[], weekHistory:[] };
-  if(!state.eventEngine.weekHistory) state.eventEngine.weekHistory = [];
-}
-function getCurrentJob(){ return (state.jobs && state.jobs[state.jobIndex]) || JOBS[0] || {id:'student', name:'Student Job'}; }
-function getDelayedDefinition(id){ return DELAYED_CONSEQUENCE_DEFS.find(x => x && x.id === id) || null; }
-function getFocusWeightedType(){
-  const weights = getDynamicRandomEventWeights();
-  const roll = Math.random() * (Number(weights.life||40) + Number(weights.job||30) + Number(weights.financial||30));
-  if(roll < Number(weights.life||40)) return 'life';
-  if(roll < Number(weights.life||40) + Number(weights.job||30)) return 'job';
-  return 'financial';
-}
-function inferChoiceCost(choice){
-  if(Number.isFinite(Number(choice?.cost))) return Math.abs(Number(choice.cost));
-  const fx = choice?.effects || {};
-  return Math.abs(Number(fx.cash || 0)) + Math.abs(Number(fx.checking || 0)) + Math.abs(Number(fx.savings || 0));
-}
-function buildGenericEventPrompt(ev, job){
-  const typeMap = {life:'real-life situation', job:'job-based situation', financial:'money decision'};
-  const t = ev.typeKey || 'life';
-  const hook = ev.description || ev.prompt || '';
-  const lead = `Step ${Number((state.weekEngine && state.weekEngine.week) || state.day || 1)} brings a ${typeMap[t] || 'decision'} for your ${job.name} path.`;
-  return `${lead}
-
-${hook || ((ev.title || 'Decision') + '. What do you do?')}`;
-}
-function createJobTemplatePool(job){
-  const name = job.name || 'Student Job';
-  const id = job.id || 'job';
-  const templates = [
-    ['rush_order', `${name}: Rush Order Request`, `A customer asks for a rush version of your ${name.toLowerCase()} work. You can pay a little now to deliver faster or keep your normal pace.`, 8, 18, 3],
-    ['supply_shortage', `${name}: Supply Shortage`, `You're low on a key supply for ${name.toLowerCase()}. Restock now or try to stretch what you have.`, 10, 0, 2],
-    ['quality_upgrade', `${name}: Quality Upgrade`, `A better tool could improve your ${name.toLowerCase()} work. Spend a little now for a stronger reputation later?`, 14, 22, 4],
-    ['repeat_client', `${name}: Repeat Client Offer`, `A repeat client wants to book you again for ${name.toLowerCase()} work. Give a small discount or hold your rate?`, 0, 16, 3],
-    ['weather_shift', `${name}: Schedule Shift`, `A schedule problem hits your ${name.toLowerCase()} plans this week. Pivot for a smaller win or cancel and protect your energy?`, 0, 12, 2],
-    ['helper_choice', `${name}: Work Solo or Get Help`, `You could pay a friend a little to help with ${name.toLowerCase()} tasks and finish more jobs.`, 9, 20, 4],
-    ['materials_sale', `${name}: Materials on Sale`, `Supplies for ${name.toLowerCase()} work are discounted today. Buy ahead now or wait and keep cash free?`, 12, 0, 2],
-    ['customer_review', `${name}: Customer Review Moment`, `A customer asks you to fix a small issue before leaving a good review.`, 6, 14, 3],
-    ['seasonal_push', `${name}: Seasonal Push`, `Demand for ${name.toLowerCase()} work is up this week. You can invest a little effort for a bigger payday.`, 5, 24, 5],
-    ['transport_issue', `${name}: Transportation Issue`, `Getting to your ${name.toLowerCase()} job costs more than usual this week.`, 7, 0, 2],
-    ['bundle_offer', `${name}: Bundle Offer`, `Someone wants a bundle deal for your ${name.toLowerCase()} service.`, 0, 15, 2],
-    ['late_client', `${name}: Late Client`, `A client for your ${name.toLowerCase()} work is late and asks for flexibility.`, 0, 10, 2],
-    ['referral_chain', `${name}: Referral Chain`, `One happy customer could turn into more ${name.toLowerCase()} jobs if you invest in a polished finish today.`, 8, 20, 4],
-    ['repair_cost', `${name}: Minor Repair`, `A small piece of gear for your ${name.toLowerCase()} work needs attention before it becomes a bigger problem.`, 11, 0, 3],
-    ['promo_choice', `${name}: Promo Flyer`, `You can spend a little to promote your ${name.toLowerCase()} work this week.`, 9, 18, 4],
-    ['client_bonus', `${name}: Bonus Tip Decision`, `A customer offers a bonus if you can squeeze in one extra ${name.toLowerCase()} task.`, 4, 12, 2]
-  ];
-  return templates.map((t, idx) => ({
-    id:`job_${id}_${t[0]}_${idx+1}`,
-    title:t[1],
-    prompt:t[2],
-    typeKey:'job',
-    choices:[
-      { id:'invest', label:`Put in ${money(t[3])} to improve the week`, effects:{}, paymentRequired:true, cost:t[3], reward:{checking:t[4], credit:t[5]}, delayedConsequenceId: t[4] >= 18 ? 'side_hustle_profit' : '' },
-      { id:'steady', label:'Stay steady and protect cash', effects:{checking: Math.max(4, Math.round(t[4] * 0.45))} },
-      { id:'pass', label:'Pass on it and keep flexibility', effects:{credit: Math.max(-3, -Math.round(t[5] / 2))} }
-    ]
-  }));
-}
-function buildUnifiedEventPool(week){
-  ensureEventEngineState();
-  const job = getCurrentJob();
-  const exp = state.experienceLevel || 'standard';
-  const inWeek = (ev) => {
-    const range = ev.weeksAllowed || [1,48];
-    return Number(week) >= Number(range[0] || 1) && Number(week) <= Number(range[1] || 48);
-  };
-  const diffOk = (ev) => !Array.isArray(ev.difficulty) || !ev.difficulty.length || ev.difficulty.includes(exp) || (exp === 'elite' && ev.difficulty.includes('standard'));
-  const genericLife = REAL_LIFE_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'life', prompt:ev.description || ''}, ev));
-  const genericFin = FINANCIAL_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'financial', prompt:ev.description || ''}, ev));
-  const genericOpp = OPPORTUNITY_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'job', prompt:ev.description || ''}, ev));
-  const elitePool = isEliteExperience() ? ELITE_SCENARIOS.filter(ev => inWeek(ev)).map(ev => ({
-    id:ev.id, title:ev.title, prompt:ev.description || '', typeKey:'financial', choices:(ev.choices || []).map((c, i)=>({ id:`elite_${i+1}`, label:c.label, effects:c.effects || {}, tag:c.tag || '' }))
-  })) : [];
-  const jobPool = createJobTemplatePool(job);
-  return { life: genericLife, financial: genericFin.concat(elitePool), job: jobPool.concat(genericOpp) };
-}
-function pickUniqueEventFromPool(type, week){
-  ensureEventEngineState();
-  const poolByType = buildUnifiedEventPool(week);
-  const pool = poolByType[type] || [];
-  const used = new Set(state.eventEngine.usedIds || []);
-  let available = pool.filter(ev => !used.has(ev.id));
-  if(!available.length){
-    state.eventEngine.usedIds = [];
-    available = pool.slice();
-  }
-  if(!available.length) return null;
-  return available[Math.floor(Math.random() * available.length)];
-}
-function applyGenericEffects(effects){
-  const fx = Object.assign({}, effects || {});
-  let notes = [];
-  if(fx.income){
-    state.bank.checking = Number(state.bank.checking || 0) + Number(fx.income || 0);
-    state.ledger.weekIncome = Number(state.ledger.weekIncome || 0) + Number(fx.income || 0);
-    notes.push(`${Number(fx.income) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.income))) } income`);
-  }
-  if(fx.cash){
-    state.cash = Math.max(0, Number(state.cash || 0) + Number(fx.cash || 0));
-    if(Number(fx.cash) < 0) state.ledger.weekExpenses = Number(state.ledger.weekExpenses || 0) + Math.abs(Number(fx.cash));
-    notes.push(`${Number(fx.cash) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.cash))) } cash`);
-  }
-  if(fx.checking){
-    state.bank.checking = Math.max(0, Number(state.bank.checking || 0) + Number(fx.checking || 0));
-    if(Number(fx.checking) < 0) state.ledger.weekExpenses = Number(state.ledger.weekExpenses || 0) + Math.abs(Number(fx.checking));
-    notes.push(`${Number(fx.checking) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.checking))) } checking`);
-  }
-  if(fx.savings){
-    state.bank.savings = Math.max(0, Number(state.bank.savings || 0) + Number(fx.savings || 0));
-    notes.push(`${Number(fx.savings) >= 0 ? '+' : '-'}${money(Math.abs(Number(fx.savings))) } savings`);
-  }
-  if(fx.credit){
-    state.credit = clamp(Number(state.credit || 650) + Number(fx.credit || 0), 300, 850);
-    notes.push(`${Number(fx.credit) >= 0 ? '+' : ''}${Number(fx.credit)} credit`);
-  }
-  return notes.join(' • ') || 'No major balance change';
-}
-function queueGenericDelayedConsequence(choice, week, title){
-  const id = choice?.delayedConsequenceId;
-  if(!id) return;
-  const def = getDelayedDefinition(id);
-  if(!def) return;
-  const triggerWeek = Math.min(48, Number(week || 1) + Number(def.triggerWeeks || 1));
-  const major = !!(Number(def.effects?.cash || 0) < -15 || Number(def.effects?.checking || 0) < -15 || Number(def.effects?.credit || 0) < -5);
-  queueConsequenceObject({
-    triggerWeek,
-    id:def.id,
-    label:def.title || title || 'Delayed Consequence',
-    major,
-    apply:(st)=> applyGenericEffects(def.effects || {})
-  }, title || def.title || 'Event Engine v1');
-}
-function applyGenericChoice(choice, ev, week, onDone){
-  const finish = (sourceLabel='')=>{
-    const parts = [];
-    if(choice.reward) parts.push(applyGenericEffects(choice.reward || {}));
-    parts.push(applyGenericEffects(choice.effects || {}));
-    const summary = parts.filter(Boolean).join(' • ');
-    queueGenericDelayedConsequence(choice, week, ev.title);
-    if(ev.id){
-      ensureEventEngineState();
-      state.eventEngine.usedIds.push(ev.id);
-      state.eventEngine.usedIds = state.eventEngine.usedIds.slice(-120);
-      state.eventEngine.weekHistory.unshift({ week, id:ev.id, title:ev.title, type:ev.typeKey || 'life' });
-      state.eventEngine.weekHistory = state.eventEngine.weekHistory.slice(0, 80);
-    }
-    addLedgerLine(`Step ${week}: ${ev.title} → ${choice.label}${sourceLabel ? ` (${sourceLabel})` : ''} • ${summary}`);
-    queueDecisionReflection({ title: ev.title, label: choice.label, summary, amount: inferChoiceCost(choice) || 0 });
-    renderAll();
-    if(onDone) onDone();
-  };
-  const payment = choice.paymentRequired || (inferChoiceCost(choice) > 0 && ((choice.effects && (Number(choice.effects.cash || 0) < 0 || Number(choice.effects.checking || 0) < 0 || Number(choice.effects.savings || 0) < 0)) || choice.cost));
-  const amt = inferChoiceCost(choice);
-  if(payment && amt > 0){
-    chooseFundingSource(amt, `${ev.title}
-
-Choose where to take ${money(amt)} from.`, (src)=> finish(`from ${src}`));
-  } else finish('');
-}
-function openGeneratedEventModal(ev, week, onDone){
-  const job = getCurrentJob();
-  const choices = (ev.choices || []).slice(0,3);
-  openModal({
-    title:`🎲 Step ${week}: ${ev.title}`,
-    meta:`${(ev.typeKey || 'life').toUpperCase()} • ${job.name}`,
-    body:buildGenericEventPrompt(ev, job),
-    buttons:choices.map((choice, idx)=>({ id:String(idx), label:choice.label, kind: idx === 0 ? 'primary' : (idx === 1 ? 'secondary' : 'warn') })),
-    onPick:(pickId)=>{
-      const choice = choices[Number(pickId)];
-      if(!choice) return;
-      applyGenericChoice(choice, ev, week, onDone);
-    }
-  });
-}
-function runEventEngineV1(week, onAllDone){
-  const pickedType = getFocusWeightedType();
-  const main = pickUniqueEventFromPool(pickedType, week) || pickUniqueEventFromPool('life', week) || pickUniqueEventFromPool('job', week) || pickUniqueEventFromPool('financial', week);
+/* Main weekly scenario runner — called from nextWeek() */
+function runWeeklyScenarios(week, onAllDone){
+  const all = getScenariosForWeek(week);
+  const main = all.find(s => !s.bonus);
+  // Support multiple bonus scenarios per week (filter, not find)
+  const bonuses = all.filter(s => s.bonus && shouldFireBonus(s));
   const queue = [];
+
   if(main) queue.push(main);
-  if(Math.random() < 0.28){
-    const alt = ['life','job','financial'].filter(x => x !== pickedType);
-    const bonusType = alt[Math.floor(Math.random() * alt.length)] || 'life';
-    const bonus = pickUniqueEventFromPool(bonusType, week);
-    if(bonus && bonus.id !== main?.id) queue.push(bonus);
-  }
-  if(!queue.length){
-    const fallbackPool = createJobTemplatePool(getCurrentJob());
-    const fallback = fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
-    if(fallback) queue.push(fallback);
-  }
+  bonuses.forEach(b => {
+    queue.push(b);
+    state.weekEngine.ranBonus[week] = true;
+  });
+
   let idx = 0;
   function runNext(){
     if(idx >= queue.length){ if(onAllDone) onAllDone(); return; }
-    const ev = queue[idx++];
-    openGeneratedEventModal(ev, week, runNext);
+    const s = queue[idx++];
+    openScenarioModal(s, runNext);
   }
   runNext();
-}
-
-/* Main weekly scenario runner — called from nextWeek() */
-function runWeeklyScenarios(week, onAllDone){
-  return runEventEngineV1(week, onAllDone);
 }
 
 /* Update the header week/month display */
@@ -3399,7 +3201,7 @@ const state = {
   jobLocked: false,
 
   playlist: { active:false, paused:false, loop:false, index:0, items:["inheritance","dispute","gen_local_tax","contract_pick"] },
-  ui: { pendingBudgetSheetReview:false, realLifeSelections:{}, randomEventPendingType:null, randomEventCycling:false, suppressDecisionReflections:false },
+  ui: { pendingBudgetSheetReview:false, realLifeSelections:{}, randomEventPendingType:null, randomEventCycling:false },
   elite: {
     investments: { stocks:0, costBasis:0, lastChange:0, history:[] },
     career: { level:1, title:'Starter Worker', promotions:0, payBonus:0, history:[] },
@@ -3651,16 +3453,20 @@ function openTab(name, opts={}){
   const p=$("panel-"+name);
   if(p) p.classList.add("active");
 
-  // Monthly snapshot review: once the student clicks Budget Sheet again, resume the new month flow
+  // Monthly snapshot review: once the student clicks Budget Sheet, resume the new month flow
   if(name === "sheet" && !opts.auto){
     if(state.ui && state.ui.pendingBudgetSheetReview){
       state.ui.pendingBudgetSheetReview = false;
-      const cb = state.ui.pendingBudgetSheetReviewCallback;
-      state.ui.pendingBudgetSheetReviewCallback = null;
       applyLockRules();
       setTimeout(()=>{
-        if(cb) cb();
-      }, 120);
+        if(state.weekEngine && state.mission.active){
+          runWeeklyScenarios(state.weekEngine.week, ()=>{
+            renderAll();
+            renderSheet();
+            notifyAction("next_week");
+          });
+        }
+      }, 220);
     } else {
       const currentStep = state.mission.active ? state.mission.steps[state.mission.index] : null;
       const expectsBudgetSheet = !!(currentStep && currentStep.requireActions && currentStep.requireActions.includes("view_budget_sheet"));
@@ -4688,7 +4494,7 @@ function startMission(){
   state.standardV1.chainWindowsFired = {};
 
   setLog("Year mission started! June Week 1 — follow the glowing actions. Monthly focus, health, and choice echoes are now live.");
-  setTimeout(()=>promptWeeklyGoalIfNeeded(null, {jumpToBankAfterPick:true}), 200);
+  setTimeout(()=>promptWeeklyGoalIfNeeded(), 200);
   renderAll();
   runCurrentMissionStep();
 }
@@ -6008,24 +5814,8 @@ Action Plan: ${getMonthlyActionPlan({})}`,
           buttons:[{id:"ok", label:`Get ${newMonthName} Paycheck 💵`, kind:"primary"}],
           onPick:()=>{
             // Step 3: Paycheck investment prompt
-            if(state.ui) state.ui.suppressDecisionReflections = true;
             promptPaycheckInvestmentSimple(takeHome, tax, ()=>{
-              const continueAfterBudgetSheet = ()=>{
-                if(state.ui) state.ui.suppressDecisionReflections = false;
-                promptWeeklyGoalIfNeeded(()=>{
-                  if(state.weekEngine && state.mission.active){
-                    runWeeklyScenarios(state.weekEngine.week, ()=>{
-                      renderAll();
-                      renderSheet();
-                      notifyAction("next_week");
-                    });
-                  }
-                });
-              };
-              const continueToReview = ()=>{
-                renderSheet();
-                promptMonthlyBudgetSheetReview(continueAfterBudgetSheet);
-              };
+              const continueToReview = ()=> promptWeeklyGoalIfNeeded(()=>{ renderSheet(); promptMonthlyBudgetSheetReview(); });
               const continueAfterElite = ()=> isEliteExperience() ? promptEliteCreditOpportunity(continueToReview) : continueToReview();
               if(state.plan.wantsSelections && state.plan.wantsSelections.length > 0){
                 triggerMonthlyWantsChoice(()=>{
@@ -6081,12 +5871,11 @@ Action Plan: ${getMonthlyActionPlan({})}`,
 
 function promptMonthlyBudgetSheetReview(onDone){
   state.ui.pendingBudgetSheetReview = true;
-  state.ui.pendingBudgetSheetReviewCallback = onDone || null;
   applyLockRules();
   openModal({
     title:"📊 Budget Sheet Check-In",
     meta:"Monthly snapshot",
-    body:"Let\'s take a look at our Budget Sheet to see how we\'re doing.\n\nTap the button below to jump to the Budget Sheet, then tap the glowing Budget Sheet tab once more after you review it to continue to your monthly focus and next random event.",
+    body:"Let's take a look at our Budget Sheet to see how we're doing.\n\nTap the button below to jump to the Budget Sheet, then tap the Budget Sheet tab once more after you review it to continue.",
     buttons:[{id:"go", label:"Go View Budget Sheet →", kind:"primary"}],
     onPick:()=>{
       openTab("sheet", {auto:true});
@@ -6094,8 +5883,8 @@ function promptMonthlyBudgetSheetReview(onDone){
         const sheetPanel = $("panel-sheet");
         if(sheetPanel) sheetPanel.scrollIntoView({behavior:"smooth", block:"start"});
       }, 120);
-      showBanner("Review the Budget Sheet, then tap the glowing Budget Sheet tab to continue");
-      applyLockRules();
+      showBanner("Review the Budget Sheet, then tap the Budget Sheet tab again to continue");
+      if(onDone) onDone();
     }
   });
 }
@@ -6107,8 +5896,6 @@ function promptPaycheckInvestmentSimple(takeHome, tax, onDone){
   const monthsLeft = 12 - weekToMonth(currentWeek) + 1;
   const depositDest = state.bank.paycheckDestination || (state.bank.checkingType ? "checking" : "cash");
   const destLabel = depositDest === "checking" ? (BANK_PRODUCTS.checking.find(x=>x.id===state.bank.checkingType)?.name || "Checking") : "Cash";
-
-  const stockButton = isEliteExperience() ? [{id:"stock", label:"Move $25 → Stock Index", kind:"warn"}] : [];
 
   const cdOptions = [];
   if(monthsLeft >= 3) cdOptions.push({id:"cd3", label:"Open 3-Month CD (4.0% APR)", kind:"secondary"});
@@ -8346,4 +8133,308 @@ document.addEventListener('DOMContentLoaded', ()=>{ updateModeBadge(); bindRoleD
 
 function openReflectionPrompt(){
   openTeacherReflectionModal();
+}
+
+
+/* ============================================================
+   PHASE 3 JSON SCENARIO ENGINE
+   Reads scenario-index + foundation packs, filters by mode/job/step/focus,
+   picks weighted random scenarios, and queues delayed hooks.
+   ============================================================ */
+
+const SCENARIO_INDEX = APP_DATA.scenarioIndex || null;
+const FOUNDATION_SCENARIO_PACKS = {
+  real_life: APP_DATA.scenarioRealLifeFoundation || [],
+  financial: APP_DATA.scenarioFinancialFoundation || [],
+  opportunity: APP_DATA.scenarioOpportunityFoundation || [],
+  elite_credit: APP_DATA.scenarioEliteCreditFoundation || []
+};
+const FOUNDATION_CONSEQUENCE_MAP = APP_DATA.consequenceMapFoundation || { hooks:[] };
+
+function ensureScenarioFoundationState(){
+  if(!state.scenarioFoundation){
+    state.scenarioFoundation = {
+      playedById: {},
+      lastPlayedStep: {},
+      categoryHistory: {},
+      hookHistory: {},
+      runCount: 0
+    };
+  }
+  if(!state.scenarioFoundation.playedById) state.scenarioFoundation.playedById = {};
+  if(!state.scenarioFoundation.lastPlayedStep) state.scenarioFoundation.lastPlayedStep = {};
+  if(!state.scenarioFoundation.categoryHistory) state.scenarioFoundation.categoryHistory = {};
+  if(!state.scenarioFoundation.hookHistory) state.scenarioFoundation.hookHistory = {};
+  return state.scenarioFoundation;
+}
+
+function getScenarioFoundationModeTags(){
+  const tags = [];
+  tags.push(isEliteExperience() ? 'elite' : 'standard');
+  if(isTeacherRole()) tags.push(isEliteExperience() ? 'teacher_elite' : 'teacher_standard');
+  return tags;
+}
+
+function getScenarioFoundationFocusIds(){
+  const goal = getCurrentWeeklyGoal ? getCurrentWeeklyGoal() : null;
+  const map = { save:'build_savings', credit:'protect_credit', income:'grow_job_income', wants:'control_wants' };
+  const out = [];
+  if(goal && goal.id && map[goal.id]) out.push(map[goal.id]);
+  if(goal && goal.id) out.push(goal.id);
+  return out;
+}
+
+function getScenarioFoundationCurrentStep(){
+  return Number((state.weekEngine && state.weekEngine.week) || 1);
+}
+
+function getScenarioFoundationCurrentJobIds(){
+  const ids = ['all'];
+  try{
+    const job = (state.jobs && state.jobs[state.jobIndex]) || (JOBS && JOBS[state.jobIndex]) || null;
+    if(job && job.id) ids.push(String(job.id));
+  }catch(err){}
+  return ids;
+}
+
+function getScenarioFoundationPacksByCategory(category){
+  const pack = FOUNDATION_SCENARIO_PACKS[category];
+  return Array.isArray(pack) ? pack.slice() : [];
+}
+
+function scenarioFoundationBlockedByRepeat(scenario, step){
+  const sf = ensureScenarioFoundationState();
+  const rule = scenario.repeat_rule || {};
+  const cooldown = Number(rule.cooldown_steps || 0);
+  const maxUses = Number(rule.max_uses_per_year || 999);
+  const count = Number(sf.playedById[scenario.id] || 0);
+  const last = Number(sf.lastPlayedStep[scenario.id] || 0);
+  if(count >= maxUses) return true;
+  if(last && cooldown > 0 && (step - last) < cooldown) return true;
+  return false;
+}
+
+function scenarioFoundationMatches(scenario, category){
+  const step = getScenarioFoundationCurrentStep();
+  const modeTags = getScenarioFoundationModeTags();
+  const focusIds = getScenarioFoundationFocusIds();
+  const jobIds = getScenarioFoundationCurrentJobIds();
+  if(category && String(scenario.category || '') !== String(category)) return false;
+  if(Array.isArray(scenario.mode) && scenario.mode.length && !scenario.mode.some(m => modeTags.includes(m))) return false;
+  if(Array.isArray(scenario.jobs) && scenario.jobs.length && !scenario.jobs.some(j => jobIds.includes(j))) return false;
+  const tr = scenario.triggers || {};
+  if(Number(tr.min_step || 1) > step) return false;
+  if(Number(tr.max_step || 48) < step) return false;
+  if(Array.isArray(tr.requires) && tr.requires.length){
+    for(const req of tr.requires){
+      if(req === 'elite_mode' && !isEliteExperience()) return false;
+      if(req === 'teacher_role' && !isTeacherRole()) return false;
+    }
+  }
+  if(Array.isArray(tr.blocks_if) && tr.blocks_if.length){
+    if(tr.blocks_if.includes('contract_already_active') && Array.isArray(state.activeContracts) && state.activeContracts.length) return false;
+    if(tr.blocks_if.includes('loan_already_active') && Array.isArray(state.elite?.obligations) && state.elite.obligations.some(o => /loan/i.test(String(o.type || '')))) return false;
+    if(tr.blocks_if.includes('already_used_recently') && scenarioFoundationBlockedByRepeat(scenario, step)) return false;
+  }
+  if(scenarioFoundationBlockedByRepeat(scenario, step)) return false;
+  return true;
+}
+
+function getScenarioFoundationWeight(scenario){
+  let weight = Math.max(1, Number(scenario.weight || 1));
+  const tr = scenario.triggers || {};
+  const focusIds = getScenarioFoundationFocusIds();
+  if(Array.isArray(tr.monthly_focus_bonus) && tr.monthly_focus_bonus.some(f => focusIds.includes(f))){
+    weight += 3;
+  }
+  const sf = ensureScenarioFoundationState();
+  const category = String(scenario.category || 'misc');
+  const recent = sf.categoryHistory[category] || [];
+  if(recent.length){
+    weight = Math.max(1, weight - recent.length);
+  }
+  return weight;
+}
+
+function pickWeightedScenarioFoundation(candidates){
+  if(!candidates.length) return null;
+  const weighted = candidates.map(sc => ({ scenario: sc, weight: getScenarioFoundationWeight(sc) }));
+  const total = weighted.reduce((sum, item) => sum + item.weight, 0);
+  let roll = Math.random() * total;
+  for(const item of weighted){
+    if(roll < item.weight) return item.scenario;
+    roll -= item.weight;
+  }
+  return weighted[0].scenario;
+}
+
+function markScenarioFoundationPlayed(scenario){
+  const sf = ensureScenarioFoundationState();
+  const step = getScenarioFoundationCurrentStep();
+  sf.playedById[scenario.id] = Number(sf.playedById[scenario.id] || 0) + 1;
+  sf.lastPlayedStep[scenario.id] = step;
+  const category = String(scenario.category || 'misc');
+  if(!Array.isArray(sf.categoryHistory[category])) sf.categoryHistory[category] = [];
+  sf.categoryHistory[category].push(step);
+  sf.categoryHistory[category] = sf.categoryHistory[category].slice(-3);
+  sf.runCount = Number(sf.runCount || 0) + 1;
+}
+
+function getConsequenceHookDefinition(hookId){
+  const hooks = Array.isArray(FOUNDATION_CONSEQUENCE_MAP.hooks) ? FOUNDATION_CONSEQUENCE_MAP.hooks : [];
+  return hooks.find(h => h.hook === hookId) || null;
+}
+
+function getScenarioHookDelay(hookId){
+  const map = {
+    fatigue_chain: 2,
+    low_energy_risk: 1,
+    late_fee_chain: 1,
+    monthly_contract_charge: 4,
+    loan_payment_cycle: 4,
+    steady_growth: 4,
+    locked_growth: 8,
+    budget_squeeze: 1,
+    social_tension_minor: 1,
+    apartment_approval_path: 2
+  };
+  return Number(map[hookId] || 2);
+}
+
+function applyScenarioFoundationEffects(effects){
+  if(!effects || typeof effects !== 'object') return;
+  ensureStandardV1State();
+  ensureEliteState && ensureEliteState();
+
+  for(const [key, rawVal] of Object.entries(effects)){
+    const val = Number(rawVal || 0);
+    if(!Number.isFinite(val)) continue;
+    if(key === 'checking'){
+      state.bank.checking = Math.max(0, Number(state.bank.checking || 0) + val);
+      if(val < 0) state.ledger.weekExpenses = Number(state.ledger.weekExpenses || 0) + Math.abs(val);
+      if(val > 0) state.ledger.weekIncome = Number(state.ledger.weekIncome || 0) + val;
+    } else if(key === 'savings'){
+      state.bank.savings = Math.max(0, Number(state.bank.savings || 0) + val);
+    } else if(key === 'cd_balance'){
+      if(typeof addCdFromScenarioFoundation === 'function') addCdFromScenarioFoundation(val);
+      else state.bank.savings = Math.max(0, Number(state.bank.savings || 0) + val);
+    } else if(key === 'loan_balance'){
+      state.elite.loanBalance = Math.max(0, Number(state.elite.loanBalance || 0) + val);
+    } else if(key === 'credit_score' || key === 'credit'){
+      state.credit = Math.max(300, Math.min(850, Number(state.credit || 650) + val));
+    } else if(key === 'health_score'){
+      state.standardV1.healthScore = Math.max(0, Math.min(100, Number(state.standardV1.healthScore || computeFinancialHealth().score || 50) + val));
+    } else if(key === 'active_contracts'){
+      state.scenarioFoundation.activeContracts = Math.max(0, Number(state.scenarioFoundation.activeContracts || 0) + val);
+    } else {
+      if(state.scenarioFoundation == null) state.scenarioFoundation = {};
+      state.scenarioFoundation[key] = Number(state.scenarioFoundation[key] || 0) + val;
+    }
+  }
+}
+
+function addCdFromScenarioFoundation(amount){
+  const principal = Math.max(0, Math.round(Number(amount || 0)));
+  if(principal <= 0) return;
+  if(!Array.isArray(state.bank.cds)) state.bank.cds = [];
+  state.bank.cds.push({
+    id: 'scenario_cd_' + Date.now(),
+    name: 'Scenario CD',
+    principal,
+    accrued: 0,
+    apr: 4,
+    monthsLeft: 6
+  });
+}
+
+function queueScenarioFoundationHooks(hookIds, sourceLabel){
+  if(!Array.isArray(hookIds) || !hookIds.length) return;
+  if(!state.weekEngine) initWeekEngine();
+  const currentWeek = Number(state.weekEngine.week || 1);
+  hookIds.forEach(hookId => {
+    const def = getConsequenceHookDefinition(hookId);
+    const delay = getScenarioHookDelay(hookId);
+    const triggerWeek = Math.min(48, currentWeek + delay);
+    const entry = {
+      triggerWeek,
+      id: hookId,
+      label: def ? def.title : hookId,
+      major: !!(def && def.popup_text),
+      apply: (st)=>{
+        if(def && def.effects){
+          if(def.effects.checking) st.bank.checking = Math.max(0, Number(st.bank.checking || 0) + Number(def.effects.checking || 0));
+          if(def.effects.savings) st.bank.savings = Math.max(0, Number(st.bank.savings || 0) + Number(def.effects.savings || 0));
+          if(def.effects.cd_balance && Array.isArray(st.bank.cds) && st.bank.cds.length){
+            st.bank.cds[0].principal = Math.max(0, Number(st.bank.cds[0].principal || 0) + Number(def.effects.cd_balance || 0));
+          }
+          if(def.effects.health_score){
+            ensureStandardV1State();
+            st.standardV1.healthScore = Math.max(0, Math.min(100, Number(st.standardV1.healthScore || 50) + Number(def.effects.health_score || 0)));
+          }
+        }
+        if(def && Number(def.credit_effect || 0)){
+          st.credit = Math.max(300, Math.min(850, Number(st.credit || 650) + Number(def.credit_effect || 0)));
+        }
+        if(def && def.ledger_note) addLedgerLine(def.ledger_note);
+        return def && def.popup_text ? def.popup_text : ((def && def.title) || 'A delayed consequence landed.');
+      }
+    };
+    queueConsequenceObject(entry, sourceLabel || hookId);
+  });
+}
+
+function runScenarioFoundationCategory(category, fallbackFn){
+  const pack = getScenarioFoundationPacksByCategory(category);
+  if(!pack.length) return fallbackFn ? fallbackFn() : showBanner('No scenario pack loaded.');
+  const candidates = pack.filter(sc => scenarioFoundationMatches(sc, category));
+  const picked = pickWeightedScenarioFoundation(candidates);
+  if(!picked) return fallbackFn ? fallbackFn() : showBanner('No matching scenario this step.');
+  markScenarioFoundationPlayed(picked);
+  const buttons = (picked.choices || []).map((choice, idx) => ({
+    id: 'choice_' + idx,
+    label: choice.label,
+    kind: idx === 0 ? 'primary' : 'secondary'
+  }));
+  const meta = `Step ${getScenarioFoundationCurrentStep()} • ${picked.title}`;
+  openModal({
+    title: `${category === 'real_life' ? '👥 Life Scenario' : category === 'financial' ? '⚠️ Financial Decision' : category === 'opportunity' ? '💼 Job Opportunity' : '💳 Elite Credit Scenario'}`,
+    meta,
+    body: picked.prompt,
+    buttons,
+    onPick: (id)=>{
+      const idx = Number(String(id).replace('choice_',''));
+      const choice = (picked.choices || [])[idx];
+      if(!choice) return;
+      applyScenarioFoundationEffects(choice.immediate_effects || {});
+      queueScenarioFoundationHooks(choice.delayed_hooks || [], `${picked.title} → ${choice.label}`);
+      if(choice.ledger_note) addLedgerLine(choice.ledger_note);
+      renderAll();
+      const follow = `${choice.ledger_note ? choice.ledger_note + '\n\n' : ''}${choice.reflection_tag ? 'Focus tag: ' + choice.reflection_tag : 'Decision recorded.'}`;
+      openModal({
+        title: 'Decision recorded',
+        meta: picked.title,
+        body: follow,
+        buttons:[{id:'ok',label:'Continue',kind:'primary'}],
+        onPick: ()=> {
+          renderAll();
+          notifyAction && notifyAction(category === 'opportunity' ? 'job_event' : 'weekly');
+        }
+      });
+    }
+  });
+}
+
+const __legacyRunLifeScenarioDecision = runLifeScenarioDecision;
+const __legacyRunFinancialDecision = runFinancialDecision;
+const __legacyRunJobRealLifeEvent = runJobRealLifeEvent;
+
+function runLifeScenarioDecision(){
+  return runScenarioFoundationCategory('real_life', __legacyRunLifeScenarioDecision);
+}
+function runFinancialDecision(){
+  const useEliteCredit = isEliteExperience() && Math.random() < 0.25;
+  return runScenarioFoundationCategory(useEliteCredit ? 'elite_credit' : 'financial', __legacyRunFinancialDecision);
+}
+function runJobRealLifeEvent(){
+  return runScenarioFoundationCategory('opportunity', __legacyRunJobRealLifeEvent);
 }

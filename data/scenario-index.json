@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-03-21T02:59:08.617606Z",
+  "packs": [
+    {
+      "id": "real_life",
+      "file": "data/scenarios/real-life-foundation.json",
+      "category": "real_life"
+    },
+    {
+      "id": "financial",
+      "file": "data/scenarios/financial-foundation.json",
+      "category": "financial"
+    },
+    {
+      "id": "opportunity",
+      "file": "data/scenarios/opportunity-foundation.json",
+      "category": "opportunity"
+    },
+    {
+      "id": "elite_credit",
+      "file": "data/scenarios/elite-credit-foundation.json",
+      "category": "elite_credit"
+    }
+  ],
+  "consequence_map": "data/consequences/consequence-map-foundation.json",
+  "schema_files": {
+    "scenario": "data/scenarios/scenario.schema.json",
+    "consequence": "data/consequences/consequence.schema.json"
+  }
+}

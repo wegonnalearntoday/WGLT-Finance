@@ -1,0 +1,187 @@
+[
+  {
+    "id": "fin_overdraft_warning_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Overdraft Warning",
+    "prompt": "Your checking account is running low, and a planned bill is due tomorrow. What do you do?",
+    "step_tags": [
+      "bills",
+      "checking",
+      "credit_protection"
+    ],
+    "choices": [
+      {
+        "id": "move_savings",
+        "label": "Transfer money from savings",
+        "immediate_effects": {
+          "checking": 15,
+          "savings": -15,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_bills",
+        "ledger_note": "Transfer from savings to checking"
+      },
+      {
+        "id": "delay_bill",
+        "label": "Wait and hope it works out",
+        "immediate_effects": {
+          "checking": 0,
+          "credit_score": -3
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_problem",
+        "ledger_note": "Bill delayed"
+      },
+      {
+        "id": "cut_wants",
+        "label": "Cancel a planned want and cover the bill",
+        "immediate_effects": {
+          "checking": 5,
+          "health_score": 1,
+          "credit_score": 2
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "prioritize_bills",
+        "ledger_note": "Cut wants to protect bill"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [
+      {
+        "hook": "late_fee_chain",
+        "possible_outcomes": [
+          "fee_hit",
+          "credit_drop_notice"
+        ]
+      }
+    ],
+    "weight": 8,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "bills",
+      "credit",
+      "checking"
+    ]
+  },
+  {
+    "id": "fin_birthday_gift_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Grandparent Gift",
+    "prompt": "Your grandparent gives you birthday money. What do you do with it?",
+    "step_tags": [
+      "gift",
+      "saving",
+      "investing"
+    ],
+    "choices": [
+      {
+        "id": "put_hysa",
+        "label": "Put it in HYSA",
+        "immediate_effects": {
+          "savings": 25,
+          "health_score": 1
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "safe_growth",
+        "ledger_note": "Birthday gift placed in HYSA"
+      },
+      {
+        "id": "put_cd",
+        "label": "Put it in a CD",
+        "immediate_effects": {
+          "cd_balance": 25,
+          "health_score": 1
+        },
+        "delayed_hooks": [
+          "locked_growth"
+        ],
+        "reflection_tag": "locked_saving",
+        "ledger_note": "Birthday gift placed in CD"
+      },
+      {
+        "id": "spend_some_save_some",
+        "label": "Spend some and save some",
+        "immediate_effects": {
+          "checking": 10,
+          "savings": 15,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_choice",
+        "ledger_note": "Split birthday gift between checking and savings"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [
+      {
+        "hook": "steady_growth",
+        "possible_outcomes": [
+          "interest_bonus"
+        ]
+      },
+      {
+        "hook": "locked_growth",
+        "possible_outcomes": [
+          "maturity_bonus"
+        ]
+      }
+    ],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 24,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "gift",
+      "savings",
+      "hysa",
+      "cd"
+    ]
+  }
+]
