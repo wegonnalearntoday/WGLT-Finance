@@ -1263,6 +1263,74 @@ function inferScenarioFunding(opt, job){
   return null;
 }
 
+
+function inferScenarioReward(opt, job){
+  if(!opt || !opt.apply) return null;
+  try{
+    const src = opt.apply.toString();
+    const patterns = [
+      { kind:'cash', re:/st\.cash\s*\+=\s*(\d+)/ },
+      { kind:'checking', re:/st\.bank\.checking\s*\+=\s*(\d+)/ },
+      { kind:'savings', re:/st\.bank\.savings\s*\+=\s*(\d+)/ }
+    ];
+    for(const p of patterns){
+      const m = src.match(p.re);
+      if(m) return { amount:Number(m[1]), originalDest:p.kind, inferred:true };
+    }
+    const constAmt = src.match(/const\s+\w+\s*=\s*(\d+)\s*;/);
+    if(constAmt){
+      const amt = Number(constAmt[1]);
+      if(/st\.cash\s*\+=\s*\w+/.test(src)) return { amount:amt, originalDest:'cash', inferred:true };
+      if(/st\.bank\.checking\s*\+=\s*\w+/.test(src)) return { amount:amt, originalDest:'checking', inferred:true };
+      if(/st\.bank\.savings\s*\+=\s*\w+/.test(src)) return { amount:amt, originalDest:'savings', inferred:true };
+    }
+  }catch(err){}
+  return null;
+}
+
+function runApplyWithRewardOverride(applyFn, rewardInfo, job){
+  if(!rewardInfo || !rewardInfo.amount || !rewardInfo.originalDest) return applyFn(state, job);
+  let skipped = false;
+  const targetDest = rewardInfo.originalDest;
+  const targetAmount = Number(rewardInfo.amount);
+  const bankProxy = new Proxy(state.bank, {
+    get(target, prop){ return target[prop]; },
+    set(target, prop, value){
+      if(!skipped && prop === targetDest){
+        const current = Number(target[prop] || 0);
+        const numericValue = Number(value);
+        const expected = current + targetAmount;
+        if(Number.isFinite(numericValue) && numericValue === expected){
+          skipped = true;
+          return true;
+        }
+      }
+      target[prop] = value;
+      return true;
+    }
+  });
+  const stateProxy = new Proxy(state, {
+    get(target, prop){
+      if(prop === 'bank') return bankProxy;
+      return target[prop];
+    },
+    set(target, prop, value){
+      if(!skipped && prop === targetDest){
+        const current = Number(target[prop] || 0);
+        const numericValue = Number(value);
+        const expected = current + targetAmount;
+        if(Number.isFinite(numericValue) && numericValue === expected){
+          skipped = true;
+          return true;
+        }
+      }
+      target[prop] = value;
+      return true;
+    }
+  });
+  return applyFn(stateProxy, job);
+}
+
 function runApplyWithFundingOverride(applyFn, paymentInfo, job){
   if(!paymentInfo || !paymentInfo.amount || !paymentInfo.originalSource) return applyFn(state, job);
   if(paymentInfo.originalSource === 'invest_only') return applyFn(state, job);
@@ -1388,6 +1456,7 @@ function openScenarioModal(scenario, onDone){
 
       const resolvedCost = typeof opt.cost === "function" ? opt.cost(job) : opt.cost;
       const inferredFunding = (!resolvedCost || resolvedCost <= 0) ? inferScenarioFunding(opt, job) : null;
+      const inferredReward = (!resolvedCost || resolvedCost <= 0) ? inferScenarioReward(opt, job) : null;
       const paymentAmount = (resolvedCost && resolvedCost > 0) ? resolvedCost : (inferredFunding ? inferredFunding.amount : 0);
 
       if(paymentAmount && paymentAmount > 0){
@@ -1406,6 +1475,16 @@ Choose which account to pay from:`, (src)=>{
             }
             showDecisionBadge(`Paid from ${formatSourceLabel(src)}: ${money(paymentAmount)}`);
             finalizeChoice(opt, i, summary, {source:src, amount:paymentAmount});
+          });
+        }, 50);
+      } else if(inferredReward && inferredReward.amount > 0){
+        closeModal();
+        setTimeout(()=>{
+          chooseMoneyDestination(inferredReward.amount, `${opt.label}
+
+You are receiving ${money(inferredReward.amount)}.`, (dest)=>{
+            const summary = runApplyWithRewardOverride(opt.apply, inferredReward, job);
+            finalizeChoice(opt, i, summary, {source:dest, amount:inferredReward.amount});
           });
         }, 50);
       } else {
@@ -4228,6 +4307,44 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
   });
 }
 
+
+function chooseMoneyDestination(amount, reason, onPlaced){
+  amount = Math.max(0, Math.round(amount || 0));
+  openModal({
+    title:'📥 Choose Where Money Goes',
+    meta:'Pick where to put this money',
+    body:`${reason}
+
+Where do you want to put ${money(amount)}?`,
+    buttons:[
+      {id:'cash', label:'Keep as Cash', kind:'secondary'},
+      {id:'checking', label:'Put in Checking', kind:'primary'},
+      {id:'savings', label:'Put in Savings', kind:'secondary'},
+      {id:'invest', label:'Invest It', kind:'success'},
+      {id:'cancel', label:'Cancel', kind:'secondary'}
+    ],
+    onPick:(id)=>{
+      if(id === 'cancel') return;
+      if(id === 'invest'){
+        openInvestmentChoiceModal(amount, reason, (summary)=>{
+          if(summary) addLedgerLine(summary);
+          showDecisionBadge(`Money routed to investment: ${money(amount)}`);
+          if(onPlaced) onPlaced('invest', {ok:true, summary:summary || `Invested ${money(amount)}`});
+        });
+        return;
+      }
+      if(id === 'cash') state.cash += amount;
+      else if(id === 'checking') state.bank.checking += amount;
+      else if(id === 'savings') state.bank.savings += amount;
+      addLedgerLine(`Money received: +${money(amount)} to ${formatSourceLabel(id)}`);
+      showDecisionBadge(`Sent to ${formatSourceLabel(id)}: ${money(amount)}`);
+      renderHeader();
+      renderSheet();
+      if(onPlaced) onPlaced(id, {ok:true, summary:`Placed ${money(amount)} into ${formatSourceLabel(id)}`});
+    }
+  });
+}
+
 function payFromCheckingThenCashThenSavings(amount){
   let due = amount;
 
@@ -6316,22 +6433,24 @@ function triggerInheritance(){
     buttons:[{id:"save",label:"Save it",kind:"success"},{id:"spend",label:"Spend it",kind:"warn"},{id:"invest",label:"Invest it",kind:"primary"}],
     onPick:(id)=>{
       if(id==="save"){
-        state.bank.savings += 200;
-        state.credit = clamp(state.credit+3,300,850);
-        addLedgerLine("Inheritance saved: +$200 to savings");
-        renderHeader();
-        renderSheet();
-        notifyAction("inheritance");
+        chooseMoneyDestination(200, 'Inheritance received.', (dest)=>{
+          state.credit = clamp(state.credit+3,300,850);
+          addLedgerLine(`Inheritance routed to ${formatSourceLabel(dest)}: +${money(200)}`);
+          renderHeader();
+          renderSheet();
+          notifyAction("inheritance");
+        });
         return;
       }
       if(id==="spend"){
-        state.cash = clamp(state.cash + 120, 0, 999999);
-        state.plan.wants += 20;
-        state.credit = clamp(state.credit-2,300,850);
-        addLedgerLine("Inheritance spent: +$200 received, $80 used for wants");
-        renderHeader();
-        renderSheet();
-        notifyAction("inheritance");
+        chooseMoneyDestination(120, 'You are keeping part of the inheritance available after spending $80 on wants.', (dest)=>{
+          state.plan.wants += 20;
+          state.credit = clamp(state.credit-2,300,850);
+          addLedgerLine(`Inheritance used for wants: $80 spent, ${money(120)} moved to ${formatSourceLabel(dest)}`);
+          renderHeader();
+          renderSheet();
+          notifyAction("inheritance");
+        });
         return;
       }
       openInvestmentChoiceModal(200, "Inheritance", (summary)=>{
@@ -6399,23 +6518,13 @@ function buildWantAwareSocialScenario(deckItem){
       }
       return [
         {
-          label:"Go and pay from checking",
-          hint:`-$${deckItem.cost} checking`,
-          apply:(st)=>{
-            st.bank.checking = Math.max(0, st.bank.checking - deckItem.cost);
+          label:"Go anyway",
+          hint:`Choose payment source • ${money(deckItem.cost)} unplanned`,
+          cost:deckItem.cost,
+          applyAfterFunding:(st, job, src)=>{
             st.ledger.weekExpenses += deckItem.cost;
             markUnplannedWantUsed(deckItem.title.replace(/^🎉\s*/, ""));
-            return `You went, but it was not budgeted. -$${deckItem.cost} from checking.`;
-          }
-        },
-        {
-          label:"Go and pay from cash",
-          hint:`-$${deckItem.cost} cash`,
-          apply:(st)=>{
-            st.cash = Math.max(0, st.cash - deckItem.cost);
-            st.ledger.weekExpenses += deckItem.cost;
-            markUnplannedWantUsed(deckItem.title.replace(/^🎉\s*/, ""));
-            return `You went, but it was not budgeted. -$${deckItem.cost} from cash.`;
+            return `You went, but it was not budgeted. ${money(deckItem.cost)} came from ${formatSourceLabel(src)}.`;
           }
         },
         {
@@ -6472,8 +6581,16 @@ function runSchoolDecision(){
   openScenarioModal(scenario, ()=> notifyAction("job_event"));
 }
 
+function pickSocialWantDeckItem(){
+  const activeWants = (state.plan.wantsInventoryActive || []).filter(w => w.available);
+  const normalized = activeWants.map(w => String(w.label || '').toLowerCase());
+  const matches = SOCIAL_WANTS_DECK.filter(item => normalized.some(label => label.includes(String(item.keyword || '').toLowerCase()) || label.includes(String(item.short || '').toLowerCase())));
+  if(matches.length) return matches[Math.floor(Math.random() * matches.length)];
+  return SOCIAL_WANTS_DECK[Math.floor(Math.random()*SOCIAL_WANTS_DECK.length)];
+}
+
 function runSocialDecision(){
-  const deckItem = SOCIAL_WANTS_DECK[Math.floor(Math.random()*SOCIAL_WANTS_DECK.length)];
+  const deckItem = pickSocialWantDeckItem();
   const scenario = buildWantAwareSocialScenario(deckItem);
   openScenarioModal(scenario, ()=> notifyAction("job_event"));
 }
