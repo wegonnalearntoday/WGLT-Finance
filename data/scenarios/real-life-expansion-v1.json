@@ -1,0 +1,1478 @@
+[
+  {
+    "id": "rl_bus_fare_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Bus Fare Surprise",
+    "prompt": "Your ride falls through and you need bus fare today. What do you do?",
+    "step_tags": [
+      "transport",
+      "needs",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "pay_bus",
+        "label": "Pay the fare and get where you need to go",
+        "immediate_effects": {
+          "checking": -3,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "needs_first",
+        "ledger_note": "Paid bus fare"
+      },
+      {
+        "id": "call_friend",
+        "label": "Ask a friend for help and pay them back later",
+        "immediate_effects": {
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "use_support",
+        "ledger_note": "Asked friend for ride help"
+      },
+      {
+        "id": "skip_trip",
+        "label": "Skip the trip to save the money",
+        "immediate_effects": {
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "missed_opportunity_minor"
+        ],
+        "reflection_tag": "save_now_pay_later",
+        "ledger_note": "Skipped the trip"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings",
+        "control_wants"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "transport",
+      "needs",
+      "budget"
+    ]
+  },
+  {
+    "id": "rl_school_trip_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "School Trip Fee",
+    "prompt": "A school trip sounds fun, but the fee was not in your plan. What do you do?",
+    "step_tags": [
+      "school",
+      "wants",
+      "planning"
+    ],
+    "choices": [
+      {
+        "id": "pay_full",
+        "label": "Pay the fee and go",
+        "immediate_effects": {
+          "checking": -18
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "fun_choice",
+        "ledger_note": "Paid school trip fee"
+      },
+      {
+        "id": "save_for_next",
+        "label": "Skip this one and save for next time",
+        "immediate_effects": {
+          "savings": 5,
+          "health_score": 1
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "delay_for_plan",
+        "ledger_note": "Skipped trip to save"
+      },
+      {
+        "id": "ask_family",
+        "label": "Ask family if they can help cover part of it",
+        "immediate_effects": {
+          "checking": -8
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "seek_help",
+        "ledger_note": "Asked family for partial help"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "control_wants",
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "school",
+      "wants",
+      "planning"
+    ]
+  },
+  {
+    "id": "rl_phone_damage_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Phone Screen Crack",
+    "prompt": "Your phone screen cracks. What do you do?",
+    "step_tags": [
+      "technology",
+      "repair",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "repair_now",
+        "label": "Repair it right away",
+        "immediate_effects": {
+          "checking": -25
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_tool",
+        "ledger_note": "Paid for phone repair"
+      },
+      {
+        "id": "use_as_is",
+        "label": "Keep using it for now",
+        "immediate_effects": {
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "small_bill_pressure"
+        ],
+        "reflection_tag": "delay_fix",
+        "ledger_note": "Delayed phone repair"
+      },
+      {
+        "id": "borrow_device",
+        "label": "Borrow a device when needed",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "workaround",
+        "ledger_note": "Borrowed device instead"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "technology",
+      "repair",
+      "budget"
+    ]
+  },
+  {
+    "id": "rl_locker_fine_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Locker Fine",
+    "prompt": "You get a small school fine for a late return. What do you do?",
+    "step_tags": [
+      "fine",
+      "bills",
+      "school"
+    ],
+    "choices": [
+      {
+        "id": "pay_fine",
+        "label": "Pay the fine now",
+        "immediate_effects": {
+          "checking": -6,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "clear_it_fast",
+        "ledger_note": "Paid school fine"
+      },
+      {
+        "id": "delay_fine",
+        "label": "Delay and hope it goes away",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_problem",
+        "ledger_note": "Delayed school fine"
+      },
+      {
+        "id": "cut_wants",
+        "label": "Cut a want and pay it today",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "prioritize_bills",
+        "ledger_note": "Cut wants to pay fine"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "fine",
+      "bills",
+      "school"
+    ]
+  },
+  {
+    "id": "rl_game_release_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "New Game Release",
+    "prompt": "A new game drops and everyone is talking about it. What do you do?",
+    "step_tags": [
+      "wants",
+      "social",
+      "entertainment"
+    ],
+    "choices": [
+      {
+        "id": "buy_now",
+        "label": "Buy it now",
+        "immediate_effects": {
+          "checking": -20
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "impulse_buy",
+        "ledger_note": "Bought new game"
+      },
+      {
+        "id": "wait_sale",
+        "label": "Wait for a sale",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "delay_for_value",
+        "ledger_note": "Waited for sale"
+      },
+      {
+        "id": "borrow_play",
+        "label": "Borrow or share with a friend",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "share_resource",
+        "ledger_note": "Borrowed game access"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "control_wants"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "wants",
+      "social",
+      "entertainment"
+    ]
+  },
+  {
+    "id": "rl_spirit_day_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "School Spirit Day",
+    "prompt": "There is a special shirt sale for school spirit day. What do you do?",
+    "step_tags": [
+      "school",
+      "wants",
+      "planning"
+    ],
+    "choices": [
+      {
+        "id": "buy_shirt",
+        "label": "Buy the shirt",
+        "immediate_effects": {
+          "checking": -12
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "social_spending",
+        "ledger_note": "Bought spirit shirt"
+      },
+      {
+        "id": "skip_shirt",
+        "label": "Skip it and keep your plan",
+        "immediate_effects": {
+          "savings": 4
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "keep_plan",
+        "ledger_note": "Skipped spirit shirt"
+      },
+      {
+        "id": "wear_old_colors",
+        "label": "Use what you already own",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "creative_choice",
+        "ledger_note": "Used clothes already owned"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "school",
+      "wants",
+      "planning"
+    ]
+  },
+  {
+    "id": "rl_missed_alarm_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Missed Alarm",
+    "prompt": "You overslept and are behind for the day. What do you do?",
+    "step_tags": [
+      "needs",
+      "time",
+      "food"
+    ],
+    "choices": [
+      {
+        "id": "rush_out",
+        "label": "Rush out and buy breakfast later",
+        "immediate_effects": {
+          "checking": -5,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "low_energy_risk"
+        ],
+        "reflection_tag": "rush_cost",
+        "ledger_note": "Rushed out and bought breakfast"
+      },
+      {
+        "id": "pack_snack",
+        "label": "Grab a quick snack from home",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "use_home_resources",
+        "ledger_note": "Packed quick snack"
+      },
+      {
+        "id": "skip_breakfast",
+        "label": "Skip breakfast to save time",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -2
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "needs_neglect",
+        "ledger_note": "Skipped breakfast"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "needs",
+      "time",
+      "food"
+    ]
+  },
+  {
+    "id": "rl_group_project_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Group Project Supplies",
+    "prompt": "Your group needs supplies and nobody planned ahead. What do you do?",
+    "step_tags": [
+      "school",
+      "supplies",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "buy_supplies",
+        "label": "Buy the supplies yourself",
+        "immediate_effects": {
+          "checking": -9
+        },
+        "delayed_hooks": [
+          "small_bill_pressure"
+        ],
+        "reflection_tag": "helpful_but_costly",
+        "ledger_note": "Bought project supplies"
+      },
+      {
+        "id": "split_cost",
+        "label": "Ask everyone to split the cost",
+        "immediate_effects": {
+          "checking": -3,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fair_share",
+        "ledger_note": "Split project supply cost"
+      },
+      {
+        "id": "use_home_items",
+        "label": "Use what is already available",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "resourceful",
+        "ledger_note": "Used supplies from home"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "school",
+      "supplies",
+      "budget"
+    ]
+  },
+  {
+    "id": "rl_family_cookout_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Family Cookout Plate",
+    "prompt": "A family event asks everyone to bring something. What do you do?",
+    "step_tags": [
+      "family",
+      "social",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "buy_big_item",
+        "label": "Buy a larger item to bring",
+        "immediate_effects": {
+          "checking": -14
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "social_spending",
+        "ledger_note": "Bought large cookout item"
+      },
+      {
+        "id": "bring_small_item",
+        "label": "Bring something small and useful",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_choice",
+        "ledger_note": "Brought small cookout item"
+      },
+      {
+        "id": "offer_help",
+        "label": "Offer setup help instead of buying food",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "time_over_money",
+        "ledger_note": "Helped instead of buying item"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "family",
+      "social",
+      "budget"
+    ]
+  },
+  {
+    "id": "rl_lost_headphones_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Lost Headphones",
+    "prompt": "You lost your headphones and replacing them would hit your budget. What do you do?",
+    "step_tags": [
+      "technology",
+      "wants",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "replace_now",
+        "label": "Replace them now",
+        "immediate_effects": {
+          "checking": -15
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "replace_quick",
+        "ledger_note": "Replaced headphones"
+      },
+      {
+        "id": "use_old_pair",
+        "label": "Use an older backup pair",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "use_backup",
+        "ledger_note": "Used backup headphones"
+      },
+      {
+        "id": "go_without",
+        "label": "Go without for now",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "small_bill_pressure"
+        ],
+        "reflection_tag": "delay_replace",
+        "ledger_note": "Went without headphones"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "technology",
+      "wants",
+      "budget"
+    ]
+  },
+  {
+    "id": "rl_team_snack_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Team Snack Request",
+    "prompt": "Your team wants to order snacks after practice. What do you do?",
+    "step_tags": [
+      "social",
+      "food",
+      "wants"
+    ],
+    "choices": [
+      {
+        "id": "join_order",
+        "label": "Join the snack order",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "social_spending",
+        "ledger_note": "Joined team snack order"
+      },
+      {
+        "id": "bring_home_snack",
+        "label": "Bring something from home",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "planned_needs",
+        "ledger_note": "Brought snack from home"
+      },
+      {
+        "id": "skip_snack",
+        "label": "Skip the snack order",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "save_money",
+        "ledger_note": "Skipped team snack order"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "social",
+      "food",
+      "wants"
+    ]
+  },
+  {
+    "id": "rl_library_fee_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Library Fee Notice",
+    "prompt": "A late library fee pops up unexpectedly. What do you do?",
+    "step_tags": [
+      "bills",
+      "school",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "pay_now",
+        "label": "Pay it now",
+        "immediate_effects": {
+          "checking": -4,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "clear_small_bill",
+        "ledger_note": "Paid library fee"
+      },
+      {
+        "id": "delay_payment",
+        "label": "Delay it to next month",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_problem",
+        "ledger_note": "Delayed library fee"
+      },
+      {
+        "id": "cut_snack",
+        "label": "Cut a small want and pay the fee",
+        "immediate_effects": {
+          "checking": -4,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "prioritize_bills",
+        "ledger_note": "Cut snack spending to pay fee"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "bills",
+      "school",
+      "budget"
+    ]
+  },
+  {
+    "id": "rl_birthday_invite_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Birthday Invite",
+    "prompt": "You are invited to a birthday outing that costs money. What do you do?",
+    "step_tags": [
+      "social",
+      "wants",
+      "friendship"
+    ],
+    "choices": [
+      {
+        "id": "go_full",
+        "label": "Go and spend the full amount",
+        "immediate_effects": {
+          "checking": -16
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "social_spending",
+        "ledger_note": "Spent on birthday outing"
+      },
+      {
+        "id": "go_limit",
+        "label": "Go with a smaller budget",
+        "immediate_effects": {
+          "checking": -7,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_choice",
+        "ledger_note": "Went out with budget limit"
+      },
+      {
+        "id": "send_message",
+        "label": "Skip the outing and send a kind message",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "save_with_respect",
+        "ledger_note": "Skipped outing but reached out"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "social",
+      "wants",
+      "friendship"
+    ]
+  },
+  {
+    "id": "rl_missing_uniform_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Missing Uniform Piece",
+    "prompt": "You need a small uniform item before tomorrow. What do you do?",
+    "step_tags": [
+      "school",
+      "needs",
+      "planning"
+    ],
+    "choices": [
+      {
+        "id": "buy_item",
+        "label": "Buy the item now",
+        "immediate_effects": {
+          "checking": -10
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "cover_need",
+        "ledger_note": "Bought uniform item"
+      },
+      {
+        "id": "borrow_item",
+        "label": "Borrow one for the day",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "temporary_fix",
+        "ledger_note": "Borrowed uniform item"
+      },
+      {
+        "id": "delay_and_risk",
+        "label": "Wait and risk being unprepared",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "missed_opportunity_minor"
+        ],
+        "reflection_tag": "delay_problem",
+        "ledger_note": "Delayed getting uniform item"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "school",
+      "needs",
+      "planning"
+    ]
+  },
+  {
+    "id": "rl_water_bottle_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Forgot Water Bottle",
+    "prompt": "You forgot your water bottle and the day is long. What do you do?",
+    "step_tags": [
+      "needs",
+      "health",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "buy_drink",
+        "label": "Buy a drink",
+        "immediate_effects": {
+          "checking": -3,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "quick_need",
+        "ledger_note": "Bought drink"
+      },
+      {
+        "id": "use_fountain",
+        "label": "Use free water options",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "resourceful",
+        "ledger_note": "Used free water option"
+      },
+      {
+        "id": "wait_it_out",
+        "label": "Wait it out without drinking",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -2
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "needs_neglect",
+        "ledger_note": "Went without water"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "needs",
+      "health",
+      "budget"
+    ]
+  },
+  {
+    "id": "rl_community_event_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Community Event Booth",
+    "prompt": "A community event has a booth fee if you want to sell something small. What do you do?",
+    "step_tags": [
+      "community",
+      "entrepreneurship",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "pay_booth",
+        "label": "Pay the booth fee and try it",
+        "immediate_effects": {
+          "checking": -10,
+          "career_progress": 1
+        },
+        "delayed_hooks": [
+          "profit_if_used_well"
+        ],
+        "reflection_tag": "entrepreneurial_risk",
+        "ledger_note": "Paid booth fee"
+      },
+      {
+        "id": "partner_share",
+        "label": "Partner with someone and split the fee",
+        "immediate_effects": {
+          "checking": -5,
+          "career_progress": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "shared_risk",
+        "ledger_note": "Split booth fee"
+      },
+      {
+        "id": "watch_learn",
+        "label": "Skip this one and watch how others do it",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "observe_first",
+        "ledger_note": "Skipped booth and observed"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "community",
+      "entrepreneurship",
+      "budget"
+    ]
+  },
+  {
+    "id": "rl_forgot_charger_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Forgot Charger",
+    "prompt": "Your battery is low and you forgot your charger. What do you do?",
+    "step_tags": [
+      "technology",
+      "budget",
+      "planning"
+    ],
+    "choices": [
+      {
+        "id": "buy_cheap",
+        "label": "Buy a cheap charger now",
+        "immediate_effects": {
+          "checking": -8
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "quick_fix",
+        "ledger_note": "Bought cheap charger"
+      },
+      {
+        "id": "borrow_charge",
+        "label": "Borrow a charger for the day",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "borrow_help",
+        "ledger_note": "Borrowed charger"
+      },
+      {
+        "id": "power_save",
+        "label": "Use power-save mode and wait",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "resourceful",
+        "ledger_note": "Used power-save mode"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "technology",
+      "budget",
+      "planning"
+    ]
+  },
+  {
+    "id": "rl_late_return_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Late Return Promise",
+    "prompt": "You promised to return something today and forgot. What do you do?",
+    "step_tags": [
+      "integrity",
+      "social",
+      "responsibility"
+    ],
+    "choices": [
+      {
+        "id": "return_now",
+        "label": "Return it now even if it costs you time",
+        "immediate_effects": {
+          "health_score": 1,
+          "career_progress": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "integrity",
+        "ledger_note": "Returned item today"
+      },
+      {
+        "id": "message_owner",
+        "label": "Send a message and return it tomorrow",
+        "immediate_effects": {
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "communicate_delay",
+        "ledger_note": "Messaged owner about delay"
+      },
+      {
+        "id": "ignore_issue",
+        "label": "Ignore it for now",
+        "immediate_effects": {
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "avoidance",
+        "ledger_note": "Ignored late return promise"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "integrity",
+      "social",
+      "responsibility"
+    ]
+  },
+  {
+    "id": "rl_movie_night_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Movie Night Vote",
+    "prompt": "Friends want to rent a movie and order snacks. What do you do?",
+    "step_tags": [
+      "social",
+      "wants",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "split_all",
+        "label": "Split the cost and join",
+        "immediate_effects": {
+          "checking": -9
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "social_spending",
+        "ledger_note": "Joined movie night spending"
+      },
+      {
+        "id": "join_snacks_only",
+        "label": "Join but limit what you spend",
+        "immediate_effects": {
+          "checking": -4,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_choice",
+        "ledger_note": "Limited movie night spending"
+      },
+      {
+        "id": "skip_and_save",
+        "label": "Skip and save the money",
+        "immediate_effects": {
+          "savings": 4
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_over_fun",
+        "ledger_note": "Skipped movie night to save"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "social",
+      "wants",
+      "budget"
+    ]
+  }
+]

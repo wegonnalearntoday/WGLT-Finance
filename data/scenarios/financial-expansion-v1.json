@@ -1,0 +1,1658 @@
+[
+  {
+    "id": "fin_hysa_bonus_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "HYSA Bonus Offer",
+    "prompt": "Your bank offers a small HYSA bonus if you keep saving steadily. What do you do?",
+    "step_tags": [
+      "savings",
+      "hysa",
+      "planning"
+    ],
+    "choices": [
+      {
+        "id": "add_10",
+        "label": "Add $10 to savings",
+        "immediate_effects": {
+          "checking": -10,
+          "savings": 10
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "steady_saver",
+        "ledger_note": "Added $10 to HYSA"
+      },
+      {
+        "id": "wait_month",
+        "label": "Wait until next month",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "delay_saving",
+        "ledger_note": "Delayed HYSA deposit"
+      },
+      {
+        "id": "move_want_money",
+        "label": "Cut a want and move $10 to savings",
+        "immediate_effects": {
+          "savings": 10,
+          "health_score": 1
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "prioritize_saving",
+        "ledger_note": "Moved want money to HYSA"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "savings",
+      "hysa",
+      "planning"
+    ]
+  },
+  {
+    "id": "fin_streaming_bill_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Streaming Bill Hits",
+    "prompt": "A subscription renewal posts sooner than you expected. What do you do?",
+    "step_tags": [
+      "bills",
+      "subscriptions",
+      "wants"
+    ],
+    "choices": [
+      {
+        "id": "keep_service",
+        "label": "Keep it and cover the bill",
+        "immediate_effects": {
+          "checking": -11
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "keep_want",
+        "ledger_note": "Paid streaming renewal"
+      },
+      {
+        "id": "cancel_service",
+        "label": "Cancel and protect your budget",
+        "immediate_effects": {
+          "credit_score": 1,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "cut_want",
+        "ledger_note": "Canceled streaming renewal"
+      },
+      {
+        "id": "use_savings",
+        "label": "Pull from savings to cover it",
+        "immediate_effects": {
+          "checking": 11,
+          "savings": -11
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "use_savings",
+        "ledger_note": "Moved savings to cover streaming"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "control_wants",
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "bills",
+      "subscriptions",
+      "wants"
+    ]
+  },
+  {
+    "id": "fin_textbook_fee_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Textbook Fee",
+    "prompt": "A class fee or textbook cost comes up. What do you do?",
+    "step_tags": [
+      "school",
+      "bills",
+      "needs"
+    ],
+    "choices": [
+      {
+        "id": "pay_now",
+        "label": "Pay it now",
+        "immediate_effects": {
+          "checking": -14,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "cover_need",
+        "ledger_note": "Paid class fee"
+      },
+      {
+        "id": "payment_plan",
+        "label": "Ask about a simple payment plan",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "small_bill_pressure"
+        ],
+        "reflection_tag": "split_cost",
+        "ledger_note": "Started class fee payment plan"
+      },
+      {
+        "id": "delay_it",
+        "label": "Delay it and hope nothing happens",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_problem",
+        "ledger_note": "Delayed class fee"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "school",
+      "bills",
+      "needs"
+    ]
+  },
+  {
+    "id": "fin_bank_fee_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Bank Fee Notice",
+    "prompt": "Your bank posts a small service fee. What do you do?",
+    "step_tags": [
+      "banking",
+      "fees",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "cover_fee",
+        "label": "Cover it and adjust your budget",
+        "immediate_effects": {
+          "checking": -5,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "handle_fee",
+        "ledger_note": "Covered bank fee"
+      },
+      {
+        "id": "ignore_fee",
+        "label": "Ignore it and move on",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_problem",
+        "ledger_note": "Ignored bank fee"
+      },
+      {
+        "id": "call_bank",
+        "label": "Call to ask if the fee can be waived",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "advocate",
+        "ledger_note": "Called bank about fee"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "banking",
+      "fees",
+      "budget"
+    ]
+  },
+  {
+    "id": "fin_cash_envelope_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Cash Envelope Challenge",
+    "prompt": "You want better control over your wants this month. What do you do?",
+    "step_tags": [
+      "wants",
+      "budgeting",
+      "control"
+    ],
+    "choices": [
+      {
+        "id": "start_envelope",
+        "label": "Set a small cash limit for wants",
+        "immediate_effects": {
+          "health_score": 1,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "self_control",
+        "ledger_note": "Started wants cash envelope"
+      },
+      {
+        "id": "keep_swiping",
+        "label": "Keep spending the usual way",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "no_guardrails",
+        "ledger_note": "Kept same wants habits"
+      },
+      {
+        "id": "half_limit",
+        "label": "Set a smaller partial limit",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "light_structure",
+        "ledger_note": "Set partial wants limit"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "control_wants"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "wants",
+      "budgeting",
+      "control"
+    ]
+  },
+  {
+    "id": "fin_reinvest_choice_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Reinvest Decision",
+    "prompt": "A small amount is available to reinvest. Where should the money come from?",
+    "step_tags": [
+      "investing",
+      "source",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "from_checking",
+        "label": "Take it from checking and invest it",
+        "immediate_effects": {
+          "checking": -10,
+          "savings": 0
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "invest_from_checking",
+        "ledger_note": "Reinvested from checking"
+      },
+      {
+        "id": "from_wants_cut",
+        "label": "Cut wants and invest the difference",
+        "immediate_effects": {
+          "checking": 0,
+          "savings": 10,
+          "health_score": 1
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "cut_and_invest",
+        "ledger_note": "Cut wants to reinvest"
+      },
+      {
+        "id": "not_now",
+        "label": "Skip reinvesting this time",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "pause_investing",
+        "ledger_note": "Skipped reinvest decision"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "investing",
+      "source",
+      "budget"
+    ]
+  },
+  {
+    "id": "fin_cd_lock_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "CD Lock-In",
+    "prompt": "A CD option offers stronger growth if you can leave the money alone. What do you do?",
+    "step_tags": [
+      "cd",
+      "hysa",
+      "investing"
+    ],
+    "choices": [
+      {
+        "id": "open_cd",
+        "label": "Open the CD with $20",
+        "immediate_effects": {
+          "checking": -20,
+          "cd_balance": 20
+        },
+        "delayed_hooks": [
+          "locked_growth"
+        ],
+        "reflection_tag": "locked_saving",
+        "ledger_note": "Opened CD"
+      },
+      {
+        "id": "keep_hysa",
+        "label": "Keep the money in flexible savings",
+        "immediate_effects": {
+          "checking": -20,
+          "savings": 20
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "flexible_saving",
+        "ledger_note": "Kept money in HYSA"
+      },
+      {
+        "id": "hold_cash",
+        "label": "Keep the money in checking for now",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "wait_choice",
+        "ledger_note": "Held cash in checking"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "cd",
+      "hysa",
+      "investing"
+    ]
+  },
+  {
+    "id": "fin_bill_reminder_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Bill Reminder Alert",
+    "prompt": "You get an alert that a payment is due tomorrow. What do you do?",
+    "step_tags": [
+      "bills",
+      "alerts",
+      "credit"
+    ],
+    "choices": [
+      {
+        "id": "pay_now",
+        "label": "Pay it today",
+        "immediate_effects": {
+          "checking": -12,
+          "credit_score": 2
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "timely_payment",
+        "ledger_note": "Paid bill on time"
+      },
+      {
+        "id": "move_money",
+        "label": "Move money from savings and pay it",
+        "immediate_effects": {
+          "checking": 0,
+          "savings": -12,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_credit",
+        "ledger_note": "Moved savings to pay bill"
+      },
+      {
+        "id": "risk_it",
+        "label": "Wait and risk the due date",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_problem",
+        "ledger_note": "Waited on bill reminder"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "bills",
+      "alerts",
+      "credit"
+    ]
+  },
+  {
+    "id": "fin_split_gift_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Cash Gift Split",
+    "prompt": "You get a small cash gift. What do you do?",
+    "step_tags": [
+      "gift",
+      "saving",
+      "wants"
+    ],
+    "choices": [
+      {
+        "id": "all_save",
+        "label": "Save all of it",
+        "immediate_effects": {
+          "savings": 15
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "all_saving",
+        "ledger_note": "Saved cash gift"
+      },
+      {
+        "id": "split_three",
+        "label": "Split it between checking, savings, and fun",
+        "immediate_effects": {
+          "checking": 5,
+          "savings": 5
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_split",
+        "ledger_note": "Split cash gift"
+      },
+      {
+        "id": "all_spend",
+        "label": "Spend it all now",
+        "immediate_effects": {
+          "checking": 15
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "bonus_spending",
+        "ledger_note": "Spent cash gift"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings",
+        "control_wants"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "gift",
+      "saving",
+      "wants"
+    ]
+  },
+  {
+    "id": "fin_overdraft_buffer_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Build an Overdraft Buffer",
+    "prompt": "Your checking is getting thin. What do you do?",
+    "step_tags": [
+      "checking",
+      "buffer",
+      "credit"
+    ],
+    "choices": [
+      {
+        "id": "build_buffer",
+        "label": "Move $15 into checking as a buffer",
+        "immediate_effects": {
+          "checking": 15,
+          "savings": -15,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_bills",
+        "ledger_note": "Built checking buffer"
+      },
+      {
+        "id": "leave_it",
+        "label": "Leave it as is",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "risk_buffer",
+        "ledger_note": "Left checking without buffer"
+      },
+      {
+        "id": "cut_wants_buffer",
+        "label": "Cut wants and leave the money in checking",
+        "immediate_effects": {
+          "health_score": 1,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "adjust_plan",
+        "ledger_note": "Cut wants to protect checking"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "checking",
+      "buffer",
+      "credit"
+    ]
+  },
+  {
+    "id": "fin_card_purchase_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Card Purchase Decision",
+    "prompt": "A purchase would be easier on your card, but your balance matters. What do you do?",
+    "step_tags": [
+      "credit",
+      "cards",
+      "planning"
+    ],
+    "choices": [
+      {
+        "id": "use_card_plan",
+        "label": "Use the card only if you can cover it",
+        "immediate_effects": {
+          "credit_score": 1
+        },
+        "delayed_hooks": [
+          "small_bill_pressure"
+        ],
+        "reflection_tag": "planned_credit_use",
+        "ledger_note": "Used card with plan"
+      },
+      {
+        "id": "use_card_impulse",
+        "label": "Use the card because it is convenient",
+        "immediate_effects": {
+          "credit_score": -2
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "impulse_credit",
+        "ledger_note": "Used card impulsively"
+      },
+      {
+        "id": "wait_cash",
+        "label": "Wait until you have cash ready",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "delay_for_plan",
+        "ledger_note": "Waited for cash"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit",
+        "control_wants"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "credit",
+      "cards",
+      "planning"
+    ]
+  },
+  {
+    "id": "fin_auto_save_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Auto-Save Toggle",
+    "prompt": "Your bank offers automatic saving each month. What do you do?",
+    "step_tags": [
+      "automation",
+      "savings",
+      "banking"
+    ],
+    "choices": [
+      {
+        "id": "turn_on",
+        "label": "Turn it on",
+        "immediate_effects": {
+          "health_score": 1,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "automation",
+        "ledger_note": "Enabled auto-save"
+      },
+      {
+        "id": "small_auto",
+        "label": "Turn on a smaller amount",
+        "immediate_effects": {
+          "savings": 2
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "light_automation",
+        "ledger_note": "Enabled small auto-save"
+      },
+      {
+        "id": "leave_off",
+        "label": "Leave it off for now",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "manual_only",
+        "ledger_note": "Skipped auto-save"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "automation",
+      "savings",
+      "banking"
+    ]
+  },
+  {
+    "id": "fin_school_lunch_plan_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Lunch Budget Plan",
+    "prompt": "You want to avoid random lunch spending this month. What do you do?",
+    "step_tags": [
+      "food",
+      "planning",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "pack_plan",
+        "label": "Make a simple lunch plan",
+        "immediate_effects": {
+          "health_score": 1,
+          "savings": 4
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "planned_needs",
+        "ledger_note": "Started lunch plan"
+      },
+      {
+        "id": "wing_it",
+        "label": "Wing it day by day",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "no_plan",
+        "ledger_note": "Left lunch spending unplanned"
+      },
+      {
+        "id": "snack_budget",
+        "label": "Set a tiny snack budget only",
+        "immediate_effects": {
+          "health_score": 0,
+          "checking": -2
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "mini_plan",
+        "ledger_note": "Set tiny snack budget"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "control_wants",
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "food",
+      "planning",
+      "budget"
+    ]
+  },
+  {
+    "id": "fin_emergency_jar_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Emergency Jar",
+    "prompt": "You want a little backup for surprises. What do you do?",
+    "step_tags": [
+      "emergency",
+      "savings",
+      "buffer"
+    ],
+    "choices": [
+      {
+        "id": "start_jar",
+        "label": "Start an emergency jar with $10",
+        "immediate_effects": {
+          "savings": 10,
+          "checking": -10
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "build_buffer",
+        "ledger_note": "Started emergency jar"
+      },
+      {
+        "id": "wait_longer",
+        "label": "Wait until you have more money",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "delay_buffer",
+        "ledger_note": "Delayed emergency jar"
+      },
+      {
+        "id": "use_gift_money",
+        "label": "Use gift or bonus money to start it",
+        "immediate_effects": {
+          "savings": 10
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "smart_bonus_use",
+        "ledger_note": "Started emergency jar with bonus money"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "emergency",
+      "savings",
+      "buffer"
+    ]
+  },
+  {
+    "id": "fin_loan_due_01",
+    "category": "financial",
+    "mode": [
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Loan Payment Due",
+    "prompt": "A payment is due on something you financed. What do you do?",
+    "step_tags": [
+      "loan",
+      "credit",
+      "bills"
+    ],
+    "choices": [
+      {
+        "id": "pay_on_time",
+        "label": "Pay it on time",
+        "immediate_effects": {
+          "checking": -20,
+          "credit_score": 2
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "timely_payment",
+        "ledger_note": "Made loan payment"
+      },
+      {
+        "id": "partial_pay",
+        "label": "Pay part now and plan the rest",
+        "immediate_effects": {
+          "checking": -10
+        },
+        "delayed_hooks": [
+          "small_bill_pressure"
+        ],
+        "reflection_tag": "partial_solution",
+        "ledger_note": "Made partial loan payment"
+      },
+      {
+        "id": "miss_payment",
+        "label": "Miss the payment",
+        "immediate_effects": {
+          "checking": 0,
+          "credit_score": -5
+        },
+        "delayed_hooks": [
+          "loan_payment_cycle"
+        ],
+        "reflection_tag": "late_credit",
+        "ledger_note": "Missed loan payment"
+      }
+    ],
+    "triggers": {
+      "min_step": 8,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "loan",
+      "credit",
+      "bills"
+    ]
+  },
+  {
+    "id": "fin_car_cost_01",
+    "category": "financial",
+    "mode": [
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Unexpected Car Cost",
+    "prompt": "Transportation or car-related costs rise this month. What do you do?",
+    "step_tags": [
+      "transport",
+      "bills",
+      "budget"
+    ],
+    "choices": [
+      {
+        "id": "adjust_budget",
+        "label": "Adjust your budget to cover it",
+        "immediate_effects": {
+          "checking": -12,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "budget_adjustment",
+        "ledger_note": "Adjusted budget for transportation cost"
+      },
+      {
+        "id": "use_savings",
+        "label": "Use savings to protect the month",
+        "immediate_effects": {
+          "savings": -12,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "use_savings",
+        "ledger_note": "Used savings for transportation cost"
+      },
+      {
+        "id": "delay_other_bill",
+        "label": "Delay another bill to cover it",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "swap_problem",
+        "ledger_note": "Delayed another bill to cover transport"
+      }
+    ],
+    "triggers": {
+      "min_step": 8,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "transport",
+      "bills",
+      "budget"
+    ]
+  },
+  {
+    "id": "fin_apartment_deposit_01",
+    "category": "financial",
+    "mode": [
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Apartment Deposit Target",
+    "prompt": "You want to be ready for a housing deposit later. What do you do?",
+    "step_tags": [
+      "housing",
+      "goals",
+      "savings"
+    ],
+    "choices": [
+      {
+        "id": "save_target",
+        "label": "Save toward the target now",
+        "immediate_effects": {
+          "savings": 15,
+          "checking": -15
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "housing_goal",
+        "ledger_note": "Saved toward deposit"
+      },
+      {
+        "id": "small_target",
+        "label": "Save a smaller amount",
+        "immediate_effects": {
+          "savings": 5,
+          "checking": -5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "small_housing_goal",
+        "ledger_note": "Saved small amount toward deposit"
+      },
+      {
+        "id": "skip_target",
+        "label": "Skip it this month",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "delay_goal",
+        "ledger_note": "Skipped deposit saving"
+      }
+    ],
+    "triggers": {
+      "min_step": 12,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "housing",
+      "goals",
+      "savings"
+    ]
+  },
+  {
+    "id": "fin_investment_mix_01",
+    "category": "financial",
+    "mode": [
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Investment Mix Choice",
+    "prompt": "You have a little money set aside. What do you do with it?",
+    "step_tags": [
+      "investing",
+      "risk",
+      "growth"
+    ],
+    "choices": [
+      {
+        "id": "safe_mix",
+        "label": "Choose a safer mix",
+        "immediate_effects": {
+          "savings": -10
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "safe_growth",
+        "ledger_note": "Chose safer investment mix"
+      },
+      {
+        "id": "balanced_mix",
+        "label": "Choose a balanced mix",
+        "immediate_effects": {
+          "savings": -10
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Chose balanced mix"
+      },
+      {
+        "id": "risky_mix",
+        "label": "Choose a riskier mix",
+        "immediate_effects": {
+          "savings": -10
+        },
+        "delayed_hooks": [
+          "market_swing_risk"
+        ],
+        "reflection_tag": "higher_risk",
+        "ledger_note": "Chose riskier investment mix"
+      }
+    ],
+    "triggers": {
+      "min_step": 10,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "investing",
+      "risk",
+      "growth"
+    ]
+  },
+  {
+    "id": "fin_fee_reversal_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Fee Reversal Chance",
+    "prompt": "You may be able to get a fee reversed if you ask. What do you do?",
+    "step_tags": [
+      "fees",
+      "advocacy",
+      "banking"
+    ],
+    "choices": [
+      {
+        "id": "ask_reversal",
+        "label": "Ask respectfully for a reversal",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "advocate",
+        "ledger_note": "Asked for fee reversal"
+      },
+      {
+        "id": "pay_and_move",
+        "label": "Just pay it and move on",
+        "immediate_effects": {
+          "checking": -6
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "move_on",
+        "ledger_note": "Paid fee and moved on"
+      },
+      {
+        "id": "ignore_notice",
+        "label": "Ignore the notice for now",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_problem",
+        "ledger_note": "Ignored fee notice"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "fees",
+      "advocacy",
+      "banking"
+    ]
+  },
+  {
+    "id": "fin_micro_budget_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Micro-Budget Week",
+    "prompt": "Money is tight this week. What do you do?",
+    "step_tags": [
+      "budget",
+      "tight_week",
+      "planning"
+    ],
+    "choices": [
+      {
+        "id": "tight_plan",
+        "label": "Make a tight spending plan",
+        "immediate_effects": {
+          "health_score": 1,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "discipline",
+        "ledger_note": "Made micro-budget plan"
+      },
+      {
+        "id": "guess_week",
+        "label": "Just guess your way through the week",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "no_plan",
+        "ledger_note": "Guessed through tight week"
+      },
+      {
+        "id": "pause_fun",
+        "label": "Pause fun spending until next check",
+        "immediate_effects": {
+          "savings": 3
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "pause_wants",
+        "ledger_note": "Paused fun spending"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "control_wants",
+        "protect_credit"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "budget",
+      "tight_week",
+      "planning"
+    ]
+  },
+  {
+    "id": "fin_goal_tracker_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Savings Goal Tracker",
+    "prompt": "You can update your savings goal tracker today. What do you do?",
+    "step_tags": [
+      "goals",
+      "savings",
+      "tracking"
+    ],
+    "choices": [
+      {
+        "id": "update_goal",
+        "label": "Update it and stay focused",
+        "immediate_effects": {
+          "health_score": 1,
+          "savings": 2
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "goal_tracking",
+        "ledger_note": "Updated savings tracker"
+      },
+      {
+        "id": "ignore_goal",
+        "label": "Ignore it this month",
+        "immediate_effects": {
+          "checking": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "no_tracking",
+        "ledger_note": "Ignored savings tracker"
+      },
+      {
+        "id": "raise_goal",
+        "label": "Raise the goal and challenge yourself",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "stretch_goal",
+        "ledger_note": "Raised savings goal"
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 10,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "goals",
+      "savings",
+      "tracking"
+    ]
+  }
+]

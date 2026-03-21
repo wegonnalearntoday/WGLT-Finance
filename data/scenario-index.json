@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "generated_at": "2026-03-21T02:59:08.617606Z",
+  "version": "1.2.0",
+  "generated_at": "2026-03-21T03:56:32.059544+00:00",
   "packs": [
     {
       "id": "real_life",
@@ -18,9 +18,24 @@
       "category": "opportunity"
     },
     {
+      "id": "opportunity_job_expansion_v1",
+      "file": "data/scenarios/opportunity-job-expansion-v1.json",
+      "category": "opportunity"
+    },
+    {
       "id": "elite_credit",
       "file": "data/scenarios/elite-credit-foundation.json",
       "category": "elite_credit"
+    },
+    {
+      "id": "real_life_expansion_v1",
+      "file": "data/scenarios/real-life-expansion-v1.json",
+      "category": "real_life"
+    },
+    {
+      "id": "financial_expansion_v1",
+      "file": "data/scenarios/financial-expansion-v1.json",
+      "category": "financial"
     }
   ],
   "consequence_map": "data/consequences/consequence-map-foundation.json",
