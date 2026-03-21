@@ -862,6 +862,7 @@ function inferDecisionReflectionType(meta={}){
 
 function shouldAskDecisionReflection(meta={}){
   ensureReflectionState();
+  if(state.ui && state.ui.suppressDecisionReflections) return false;
   const week = Number((state.weekEngine && state.weekEngine.week) || state.day || 1);
   const type = inferDecisionReflectionType(meta);
   const key = `${week}_${type}`;
@@ -3201,7 +3202,7 @@ const state = {
   jobLocked: false,
 
   playlist: { active:false, paused:false, loop:false, index:0, items:["inheritance","dispute","gen_local_tax","contract_pick"] },
-  ui: { pendingBudgetSheetReview:false, realLifeSelections:{}, randomEventPendingType:null, randomEventCycling:false },
+  ui: { pendingBudgetSheetReview:false, suppressDecisionReflections:false, realLifeSelections:{}, randomEventPendingType:null, randomEventCycling:false },
   elite: {
     investments: { stocks:0, costBasis:0, lastChange:0, history:[] },
     career: { level:1, title:'Starter Worker', promotions:0, payBonus:0, history:[] },
@@ -3459,13 +3460,17 @@ function openTab(name, opts={}){
       state.ui.pendingBudgetSheetReview = false;
       applyLockRules();
       setTimeout(()=>{
-        if(state.weekEngine && state.mission.active){
-          runWeeklyScenarios(state.weekEngine.week, ()=>{
-            renderAll();
-            renderSheet();
-            notifyAction("next_week");
-          });
-        }
+        const finishMonthReviewFlow = ()=>{
+          if(state.ui) state.ui.suppressDecisionReflections = false;
+          if(state.weekEngine && state.mission.active){
+            runWeeklyScenarios(state.weekEngine.week, ()=>{
+              renderAll();
+              renderSheet();
+              notifyAction("next_week");
+            });
+          }
+        };
+        promptWeeklyGoalIfNeeded(finishMonthReviewFlow);
       }, 220);
     } else {
       const currentStep = state.mission.active ? state.mission.steps[state.mission.index] : null;
@@ -5814,8 +5819,12 @@ Action Plan: ${getMonthlyActionPlan({})}`,
           buttons:[{id:"ok", label:`Get ${newMonthName} Paycheck 💵`, kind:"primary"}],
           onPick:()=>{
             // Step 3: Paycheck investment prompt
+            if(state.ui) state.ui.suppressDecisionReflections = true;
             promptPaycheckInvestmentSimple(takeHome, tax, ()=>{
-              const continueToReview = ()=> promptWeeklyGoalIfNeeded(()=>{ renderSheet(); promptMonthlyBudgetSheetReview(); });
+              const continueToReview = ()=>{
+                renderSheet();
+                promptMonthlyBudgetSheetReview();
+              };
               const continueAfterElite = ()=> isEliteExperience() ? promptEliteCreditOpportunity(continueToReview) : continueToReview();
               if(state.plan.wantsSelections && state.plan.wantsSelections.length > 0){
                 triggerMonthlyWantsChoice(()=>{
