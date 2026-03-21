@@ -8347,3 +8347,306 @@ document.addEventListener('DOMContentLoaded', ()=>{ updateModeBadge(); bindRoleD
 function openReflectionPrompt(){
   openTeacherReflectionModal();
 }
+
+
+
+/* ============================================================
+   PHASE 3 JSON SCENARIO ENGINE BRIDGE
+   Added onto the last working month-flow build so budget sheet flow stays intact.
+   Reads scenario-index + packs, filters by mode/job/step/focus,
+   picks weighted random scenarios, and queues delayed hooks.
+   ============================================================ */
+
+const SCENARIO_INDEX = APP_DATA.scenarioIndex || null;
+const FOUNDATION_CONSEQUENCE_MAP = APP_DATA.consequenceMapFoundation || { hooks:[] };
+const SCENARIO_PACKS_BY_CATEGORY = {
+  real_life: []
+    .concat(Array.isArray(APP_DATA.scenarioRealLifeFoundation) ? APP_DATA.scenarioRealLifeFoundation : [])
+    .concat(Array.isArray(APP_DATA.scenarioRealLifeExpansionV1) ? APP_DATA.scenarioRealLifeExpansionV1 : []),
+  financial: []
+    .concat(Array.isArray(APP_DATA.scenarioFinancialFoundation) ? APP_DATA.scenarioFinancialFoundation : [])
+    .concat(Array.isArray(APP_DATA.scenarioFinancialExpansionV1) ? APP_DATA.scenarioFinancialExpansionV1 : []),
+  opportunity: []
+    .concat(Array.isArray(APP_DATA.scenarioOpportunityFoundation) ? APP_DATA.scenarioOpportunityFoundation : [])
+    .concat(Array.isArray(APP_DATA.scenarioOpportunityJobExpansionV1) ? APP_DATA.scenarioOpportunityJobExpansionV1 : []),
+  elite_credit: []
+    .concat(Array.isArray(APP_DATA.scenarioEliteCreditFoundation) ? APP_DATA.scenarioEliteCreditFoundation : [])
+};
+
+function ensureScenarioFoundationState(){
+  if(!state.scenarioFoundation){
+    state.scenarioFoundation = {
+      playedById: {},
+      lastPlayedStep: {},
+      categoryHistory: {},
+      hookHistory: {},
+      runCount: 0,
+      activeContracts: 0
+    };
+  }
+  if(!state.scenarioFoundation.playedById) state.scenarioFoundation.playedById = {};
+  if(!state.scenarioFoundation.lastPlayedStep) state.scenarioFoundation.lastPlayedStep = {};
+  if(!state.scenarioFoundation.categoryHistory) state.scenarioFoundation.categoryHistory = {};
+  if(!state.scenarioFoundation.hookHistory) state.scenarioFoundation.hookHistory = {};
+  return state.scenarioFoundation;
+}
+function getScenarioFoundationModeTags(){
+  const tags = [];
+  tags.push(isEliteExperience() ? 'elite' : 'standard');
+  if(isTeacherRole()) tags.push(isEliteExperience() ? 'teacher_elite' : 'teacher_standard');
+  return tags;
+}
+function getScenarioFoundationFocusIds(){
+  const goal = (typeof getCurrentWeeklyGoal === 'function') ? getCurrentWeeklyGoal() : null;
+  const map = { save:'build_savings', credit:'protect_credit', income:'grow_job_income', wants:'control_wants' };
+  const out = [];
+  if(goal && goal.id && map[goal.id]) out.push(map[goal.id]);
+  if(goal && goal.id) out.push(goal.id);
+  return out;
+}
+function getScenarioFoundationCurrentStep(){
+  return Number((state.weekEngine && state.weekEngine.week) || 1);
+}
+function getScenarioFoundationCurrentJobIds(){
+  const ids = ['all'];
+  try{
+    const job = (state.jobs && state.jobs[state.jobIndex]) || (JOBS && JOBS[state.jobIndex]) || null;
+    if(job && job.id) ids.push(String(job.id));
+  }catch(err){}
+  return ids;
+}
+function getScenarioFoundationPacksByCategory(category){
+  const pack = SCENARIO_PACKS_BY_CATEGORY[category];
+  return Array.isArray(pack) ? pack.slice() : [];
+}
+function scenarioFoundationBlockedByRepeat(scenario, step){
+  const sf = ensureScenarioFoundationState();
+  const rule = scenario.repeat_rule || {};
+  const cooldown = Number(rule.cooldown_steps || 0);
+  const maxUses = Number(rule.max_uses_per_year || 999);
+  const count = Number(sf.playedById[scenario.id] || 0);
+  const last = Number(sf.lastPlayedStep[scenario.id] || 0);
+  if(count >= maxUses) return true;
+  if(last && cooldown > 0 && (step - last) < cooldown) return true;
+  return false;
+}
+function scenarioFoundationMatches(scenario, category){
+  const step = getScenarioFoundationCurrentStep();
+  const modeTags = getScenarioFoundationModeTags();
+  const jobIds = getScenarioFoundationCurrentJobIds();
+  if(category && String(scenario.category || '') !== String(category)) return false;
+  if(Array.isArray(scenario.mode) && scenario.mode.length && !scenario.mode.some(m => modeTags.includes(m))) return false;
+  if(Array.isArray(scenario.jobs) && scenario.jobs.length && !scenario.jobs.some(j => jobIds.includes(j))) return false;
+  const tr = scenario.triggers || {};
+  if(Number(tr.min_step || 1) > step) return false;
+  if(Number(tr.max_step || 48) < step) return false;
+  if(Array.isArray(tr.requires) && tr.requires.length){
+    for(const req of tr.requires){
+      if(req === 'elite_mode' && !isEliteExperience()) return false;
+      if(req === 'teacher_role' && !isTeacherRole()) return false;
+    }
+  }
+  if(Array.isArray(tr.blocks_if) && tr.blocks_if.length){
+    if(tr.blocks_if.includes('contract_already_active') && Array.isArray(state.activeContracts) && state.activeContracts.length) return false;
+    if(tr.blocks_if.includes('loan_already_active') && Array.isArray(state.elite?.obligations) && state.elite.obligations.some(o => /loan/i.test(String(o.type || '')))) return false;
+    if(tr.blocks_if.includes('already_used_recently') && scenarioFoundationBlockedByRepeat(scenario, step)) return false;
+  }
+  if(scenarioFoundationBlockedByRepeat(scenario, step)) return false;
+  return true;
+}
+function getScenarioFoundationWeight(scenario){
+  let weight = Math.max(1, Number(scenario.weight || 1));
+  const tr = scenario.triggers || {};
+  const focusIds = getScenarioFoundationFocusIds();
+  if(Array.isArray(tr.monthly_focus_bonus) && tr.monthly_focus_bonus.some(f => focusIds.includes(f))){
+    weight += 3;
+  }
+  const sf = ensureScenarioFoundationState();
+  const category = String(scenario.category || 'misc');
+  const recent = sf.categoryHistory[category] || [];
+  if(recent.length){
+    weight = Math.max(1, weight - Math.min(2, recent.length));
+  }
+  return weight;
+}
+function pickWeightedScenarioFoundation(candidates){
+  if(!candidates.length) return null;
+  const weighted = candidates.map(sc => ({ scenario: sc, weight: getScenarioFoundationWeight(sc) }));
+  const total = weighted.reduce((sum, item) => sum + item.weight, 0);
+  let roll = Math.random() * total;
+  for(const item of weighted){
+    if(roll < item.weight) return item.scenario;
+    roll -= item.weight;
+  }
+  return weighted[0].scenario;
+}
+function markScenarioFoundationPlayed(scenario){
+  const sf = ensureScenarioFoundationState();
+  const step = getScenarioFoundationCurrentStep();
+  sf.playedById[scenario.id] = Number(sf.playedById[scenario.id] || 0) + 1;
+  sf.lastPlayedStep[scenario.id] = step;
+  const category = String(scenario.category || 'misc');
+  if(!Array.isArray(sf.categoryHistory[category])) sf.categoryHistory[category] = [];
+  sf.categoryHistory[category].push(step);
+  sf.categoryHistory[category] = sf.categoryHistory[category].slice(-3);
+  sf.runCount = Number(sf.runCount || 0) + 1;
+}
+function getConsequenceHookDefinition(hookId){
+  const hooks = Array.isArray(FOUNDATION_CONSEQUENCE_MAP.hooks) ? FOUNDATION_CONSEQUENCE_MAP.hooks : [];
+  return hooks.find(h => h.hook === hookId) || null;
+}
+function getScenarioHookDelay(hookId){
+  const map = {
+    fatigue_chain: 2,
+    low_energy_risk: 1,
+    late_fee_chain: 1,
+    monthly_contract_charge: 4,
+    loan_payment_cycle: 4,
+    steady_growth: 4,
+    locked_growth: 8,
+    budget_squeeze: 1,
+    social_tension_minor: 1,
+    apartment_approval_path: 2,
+    fatigue_risk_minor: 1,
+    late_to_shift_warning: 1,
+    job_trust_drop: 1
+  };
+  return Number(map[hookId] || 2);
+}
+function applyScenarioFoundationEffects(effects){
+  if(!effects || typeof effects !== 'object') return;
+  ensureStandardV1State();
+  if(typeof ensureEliteState === 'function') ensureEliteState();
+  for(const [key, rawVal] of Object.entries(effects)){
+    const val = Number(rawVal || 0);
+    if(!Number.isFinite(val)) continue;
+    if(key === 'checking'){
+      state.bank.checking = Math.max(0, Number(state.bank.checking || 0) + val);
+      if(val < 0) state.ledger.weekExpenses = Number(state.ledger.weekExpenses || 0) + Math.abs(val);
+      if(val > 0) state.ledger.weekIncome = Number(state.ledger.weekIncome || 0) + val;
+    } else if(key === 'savings'){
+      state.bank.savings = Math.max(0, Number(state.bank.savings || 0) + val);
+    } else if(key === 'cd_balance'){
+      if(typeof addCdFromScenarioFoundation === 'function') addCdFromScenarioFoundation(val);
+      else state.bank.savings = Math.max(0, Number(state.bank.savings || 0) + val);
+    } else if(key === 'loan_balance'){
+      if(!state.elite) state.elite = {};
+      state.elite.loanBalance = Math.max(0, Number(state.elite.loanBalance || 0) + val);
+    } else if(key === 'credit_score' || key === 'credit'){
+      state.credit = Math.max(300, Math.min(850, Number(state.credit || 650) + val));
+    } else if(key === 'health_score'){
+      state.standardV1.healthScore = Math.max(0, Math.min(100, Number(state.standardV1.healthScore || computeFinancialHealth().score || 50) + val));
+    } else if(key === 'active_contracts'){
+      state.scenarioFoundation.activeContracts = Math.max(0, Number(state.scenarioFoundation.activeContracts || 0) + val);
+    } else if(key === 'career_progress'){
+      if(!state.elite) state.elite = {};
+      state.elite.careerProgress = Number(state.elite.careerProgress || 0) + val;
+    } else {
+      if(state.scenarioFoundation == null) state.scenarioFoundation = {};
+      state.scenarioFoundation[key] = Number(state.scenarioFoundation[key] || 0) + val;
+    }
+  }
+}
+function addCdFromScenarioFoundation(amount){
+  const principal = Math.max(0, Math.round(Number(amount || 0)));
+  if(principal <= 0) return;
+  if(!Array.isArray(state.bank.cds)) state.bank.cds = [];
+  state.bank.cds.push({
+    id: 'scenario_cd_' + Date.now(),
+    name: 'Scenario CD',
+    principal,
+    accrued: 0,
+    apr: 4,
+    monthsLeft: 6
+  });
+}
+function queueScenarioFoundationHooks(hookIds, sourceLabel){
+  if(!Array.isArray(hookIds) || !hookIds.length) return;
+  if(!state.weekEngine) initWeekEngine();
+  const currentWeek = Number(state.weekEngine.week || 1);
+  hookIds.forEach(hookId => {
+    const def = getConsequenceHookDefinition(hookId);
+    const delay = getScenarioHookDelay(hookId);
+    const triggerWeek = Math.min(48, currentWeek + delay);
+    const entry = {
+      triggerWeek,
+      id: hookId,
+      label: def ? def.title : hookId,
+      major: !!(def && def.popup_text),
+      apply: (st)=>{
+        if(def && def.effects){
+          if(def.effects.checking) st.bank.checking = Math.max(0, Number(st.bank.checking || 0) + Number(def.effects.checking || 0));
+          if(def.effects.savings) st.bank.savings = Math.max(0, Number(st.bank.savings || 0) + Number(def.effects.savings || 0));
+          if(def.effects.cd_balance && Array.isArray(st.bank.cds) && st.bank.cds.length){
+            st.bank.cds[0].principal = Math.max(0, Number(st.bank.cds[0].principal || 0) + Number(def.effects.cd_balance || 0));
+          }
+          if(def.effects.health_score){
+            ensureStandardV1State();
+            st.standardV1.healthScore = Math.max(0, Math.min(100, Number(st.standardV1.healthScore || 50) + Number(def.effects.health_score || 0)));
+          }
+        }
+        if(def && Number(def.credit_effect || 0)){
+          st.credit = Math.max(300, Math.min(850, Number(st.credit || 650) + Number(def.credit_effect || 0)));
+        }
+        if(def && def.ledger_note) addLedgerLine(def.ledger_note);
+        return def && def.popup_text ? def.popup_text : ((def && def.title) || 'A delayed consequence landed.');
+      }
+    };
+    queueConsequenceObject(entry, sourceLabel || hookId);
+  });
+}
+function runScenarioFoundationCategory(category, fallbackFn){
+  const pack = getScenarioFoundationPacksByCategory(category);
+  if(!pack.length) return fallbackFn ? fallbackFn() : showBanner('No scenario pack loaded.');
+  const candidates = pack.filter(sc => scenarioFoundationMatches(sc, category));
+  const picked = pickWeightedScenarioFoundation(candidates);
+  if(!picked) return fallbackFn ? fallbackFn() : showBanner('No matching scenario this step.');
+  markScenarioFoundationPlayed(picked);
+  const buttons = (picked.choices || []).map((choice, idx) => ({
+    id: 'choice_' + idx,
+    label: choice.label,
+    kind: idx === 0 ? 'primary' : 'secondary'
+  }));
+  const meta = `Step ${getScenarioFoundationCurrentStep()} • ${picked.title}`;
+  openModal({
+    title: `${category === 'real_life' ? '👥 Life Scenario' : category === 'financial' ? '⚠️ Financial Decision' : category === 'opportunity' ? '💼 Job Opportunity' : '💳 Elite Credit Scenario'}`,
+    meta,
+    body: picked.prompt,
+    buttons,
+    onPick: (id)=>{
+      const idx = Number(String(id).replace('choice_',''));
+      const choice = (picked.choices || [])[idx];
+      if(!choice) return;
+      applyScenarioFoundationEffects(choice.immediate_effects || {});
+      queueScenarioFoundationHooks(choice.delayed_hooks || [], `${picked.title} → ${choice.label}`);
+      if(choice.ledger_note) addLedgerLine(choice.ledger_note);
+      renderAll();
+      const follow = `${choice.ledger_note ? choice.ledger_note + '\n\n' : ''}${choice.reflection_tag ? 'Focus tag: ' + choice.reflection_tag : 'Decision recorded.'}`;
+      openModal({
+        title: 'Decision recorded',
+        meta: picked.title,
+        body: follow,
+        buttons:[{id:'ok',label:'Continue',kind:'primary'}],
+        onPick: ()=> {
+          renderAll();
+          if(typeof notifyAction === 'function') notifyAction(category === 'opportunity' ? 'job_event' : 'weekly');
+        }
+      });
+    }
+  });
+}
+
+const __legacyRunLifeScenarioDecision = runLifeScenarioDecision;
+const __legacyRunFinancialDecision = runFinancialDecision;
+const __legacyRunJobRealLifeEvent = runJobRealLifeEvent;
+
+runLifeScenarioDecision = function(){
+  return runScenarioFoundationCategory('real_life', __legacyRunLifeScenarioDecision);
+};
+runFinancialDecision = function(){
+  const useEliteCredit = isEliteExperience() && Math.random() < 0.25;
+  return runScenarioFoundationCategory(useEliteCredit ? 'elite_credit' : 'financial', __legacyRunFinancialDecision);
+};
+runJobRealLifeEvent = function(){
+  return runScenarioFoundationCategory('opportunity', __legacyRunJobRealLifeEvent);
+};

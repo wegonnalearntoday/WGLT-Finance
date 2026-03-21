@@ -20,7 +20,18 @@
     realLifeEvents: './data/real-life-events.json',
     financialEvents: './data/financial-events.json',
     opportunityEvents: './data/opportunity-events.json',
-    advancedDelayedConsequences: './data/advanced-delayed-consequences.json'
+    advancedDelayedConsequences: './data/advanced-delayed-consequences.json',
+    scenarioIndex: './data/scenario-index.json',
+    scenarioSchema: './data/scenarios/scenario.schema.json',
+    consequenceSchema: './data/consequences/consequence.schema.json',
+    scenarioRealLifeFoundation: './data/scenarios/real-life-foundation.json',
+    scenarioFinancialFoundation: './data/scenarios/financial-foundation.json',
+    scenarioOpportunityFoundation: './data/scenarios/opportunity-foundation.json',
+    scenarioEliteCreditFoundation: './data/scenarios/elite-credit-foundation.json',
+    scenarioOpportunityJobExpansionV1: './data/scenarios/opportunity-job-expansion-v1.json',
+    scenarioRealLifeExpansionV1: './data/scenarios/real-life-expansion-v1.json',
+    scenarioFinancialExpansionV1: './data/scenarios/financial-expansion-v1.json',
+    consequenceMapFoundation: './data/consequences/consequence-map-foundation.json'
   };
   const entries = await Promise.all(Object.entries(files).map(async ([key, path]) => {
     const res = await fetch(path, {cache:'no-store'});
