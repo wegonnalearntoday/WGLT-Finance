@@ -3642,8 +3642,29 @@ function applyRandomEventButtonState(){
     return;
   }
 
-  if(waiting === "job_event" && randomBtn){
-    randomBtn.classList.add("glow-next");
+  if(waiting === "job_event"){
+    if(randomBtn){
+      randomBtn.classList.add("glow-next");
+      randomBtn.disabled = false;
+      randomBtn.style.filter = "";
+      randomBtn.style.opacity = "1";
+    }
+    choiceIds.forEach(id=>{
+      const el = $(id);
+      if(!el) return;
+      el.disabled = true;
+      el.style.filter = "grayscale(1)";
+      el.style.opacity = ".6";
+    });
+    return;
+  }
+
+  choiceIds.forEach(id=>{
+    const el = $(id);
+    if(!el) return;
+    el.disabled = false;
+  });
+  if(randomBtn){
     randomBtn.disabled = false;
   }
 }
@@ -6710,7 +6731,8 @@ function runRandomEvent(){
   const finalType = pickWeightedRandomEventType();
   const ids = ["btnSchoolEvent","btnJobEvent","btnSocialEvent"];
   let step = 0;
-  const totalSteps = 10 + Math.floor(Math.random()*4);
+  const cycleCount = 2 + Math.floor(Math.random()*2); // 2 to 3 visible rolls
+  const totalSteps = ids.length * cycleCount;
 
   clearRandomEventPending();
   state.ui.randomEventCycling = true;
