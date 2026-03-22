@@ -3137,6 +3137,16 @@ function rerouteGenericMoneyEffects(effects, mode, targetKey){
   }
   return fx;
 }
+function stripGenericMoneyEffects(effects, mode){
+  const fx = Object.assign({}, effects || {});
+  const moneyKeys = ['cash','checking','savings'];
+  moneyKeys.forEach(key=>{
+    const val = Number(fx[key] || 0);
+    if(mode === 'payment' && val < 0) fx[key] = 0;
+    if(mode === 'reward' && val > 0) fx[key] = 0;
+  });
+  return fx;
+}
 function buildGenericEventPrompt(ev, job){
   const typeMap = {life:'real-life situation', job:'job-based situation', financial:'money decision'};
   const t = ev.typeKey || 'life';
@@ -3260,8 +3270,12 @@ function applyGenericChoice(choice, ev, week, onDone){
 
   const finish = (paymentSource='', rewardDest='')=>{
     const parts = [];
-    if(choice.reward) parts.push(applyGenericEffects(rerouteGenericMoneyEffects(choice.reward || {}, 'reward', rewardDest)));
-    parts.push(applyGenericEffects(rerouteGenericMoneyEffects(choice.effects || {}, 'payment', paymentSource ? paymentSource : '')));
+    if(choice.reward){
+      const rewardFx = rewardDest ? rerouteGenericMoneyEffects(choice.reward || {}, 'reward', rewardDest) : (choice.reward || {});
+      parts.push(applyGenericEffects(rewardFx));
+    }
+    const paymentFx = paymentSource ? stripGenericMoneyEffects(choice.effects || {}, 'payment') : rerouteGenericMoneyEffects(choice.effects || {}, 'payment', '');
+    parts.push(applyGenericEffects(paymentFx));
     const summary = parts.filter(Boolean).join(' • ');
     queueGenericDelayedConsequence(choice, week, ev.title);
     if(ev.id){
