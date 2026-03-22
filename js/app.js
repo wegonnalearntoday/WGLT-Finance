@@ -1496,8 +1496,7 @@ You are receiving ${money(inferredReward.amount)}.`, (dest)=>{
     grid.appendChild(btn);
   });
 
-  $("mFoot").innerHTML = '<button class="btn secondary" id="mCancel">Skip</button>';
-  $("mCancel").onclick = () => { beep("warn"); closeModal(); if(onDone) onDone(); };
+  $("mFoot").innerHTML = '<div class="muted" style="font-weight:900">Choose one of the options above to continue.</div>';
   $("overlay").classList.add("show");
   $("overlay").setAttribute("aria-hidden","false");
 }
@@ -3321,6 +3320,9 @@ function runEventEngineV1(week, onAllDone){
   const main = pickUniqueEventFromPool(pickedType, week) || pickUniqueEventFromPool('life', week) || pickUniqueEventFromPool('job', week) || pickUniqueEventFromPool('financial', week);
   const queue = [];
   if(main) queue.push(main);
+  if(Math.random() < 0.55){
+    queue.push(createSocialWantEvent(week));
+  }
   if(Math.random() < 0.28){
     const alt = ['life','job','financial'].filter(x => x !== pickedType);
     const bonusType = alt[Math.floor(Math.random() * alt.length)] || 'life';
@@ -3336,6 +3338,10 @@ function runEventEngineV1(week, onAllDone){
   function runNext(){
     if(idx >= queue.length){ if(onAllDone) onAllDone(); return; }
     const ev = queue[idx++];
+    if(ev && typeof ev.customRunner === 'function'){
+      ev.customRunner(runNext);
+      return;
+    }
     openGeneratedEventModal(ev, week, runNext);
   }
   runNext();
@@ -3413,7 +3419,7 @@ function closeModal(){
   $("overlay").classList.remove("show");
   $("overlay").setAttribute("aria-hidden","true");
 }
-$("overlay").addEventListener("click",(e)=>{ if(e.target===$("overlay")) closeModal(); });
+$("overlay").addEventListener("click",(e)=>{ if(e.target===$("overlay")) { beep("warn"); } });
 
 /* Banner */
 let bannerTimer=null;
@@ -6537,30 +6543,33 @@ function getBudgetedWantEntry(deckItem){
 
 function buildWantAwareSocialScenario(deckItem){
   const budgeted = getBudgetedWantEntry(deckItem);
-  const alreadyText = budgeted
-    ? `You already budgeted for ${deckItem.short} this month, so this can come out of your wants plan instead of checking or cash.`
-    : `${deckItem.short[0].toUpperCase() + deckItem.short.slice(1)} is not in your wants plan this month, so going will cost extra money.`;
+  const prettyShort = deckItem.short[0].toUpperCase() + deckItem.short.slice(1);
+  const budgetedBody = `You budgeted for ${prettyShort} this month. That means it is already part of your wants plan, so you can enjoy it without spending extra money outside your budget.`;
+  const unbudgetedBody = `You did not budget for ${prettyShort} this month. Going now means spending extra money outside your plan, which can crowd your budget or force you to move money from somewhere else.`;
 
   return {
     id:"manual_social_" + Date.now(),
     week: state.weekEngine ? state.weekEngine.week : 1,
     title: ()=> deckItem.title,
-    body: ()=> `${deckItem.body}\n\n${alreadyText}`,
+    body: ()=> `${deckItem.body}
+
+${budgeted ? budgetedBody : unbudgetedBody}`,
     options: ()=> {
       if(budgeted){
         return [
           {
-            label:"Go for it — already budgeted",
-            hint:"Use Wants budget • no extra charge",
+            label:`Go — it's already in my budget!`,
+            hint:`No extra cost • budgeted ${money(deckItem.cost)}`,
             apply:(st)=>{
               useWantFromInventory(deckItem.keyword);
-              return `${deckItem.short[0].toUpperCase() + deckItem.short.slice(1)} was already budgeted, so no extra money was spent.`;
+              addLedgerLine(`Want used from budget: ${prettyShort} (${money(deckItem.cost)})`);
+              return `${prettyShort} was already in your wants plan, so no extra money had to leave checking, savings, or cash.`;
             }
           },
           {
-            label:"Skip it and save the slot for later",
-            hint:"Keep this want available",
-            apply:(st)=>`You kept your ${deckItem.short} slot for later.`
+            label:"Skip tonight — save the slot for later",
+            hint:"Keep this want available for another time",
+            apply:(st)=>`You kept your ${deckItem.short} budget available for later.`
           }
         ];
       }
@@ -6571,20 +6580,31 @@ function buildWantAwareSocialScenario(deckItem){
           cost:deckItem.cost,
           applyAfterFunding:(st, job, src)=>{
             st.ledger.weekExpenses += deckItem.cost;
-            markUnplannedWantUsed(deckItem.title.replace(/^🎉\s*/, ""));
-            return `You went, but it was not budgeted. ${money(deckItem.cost)} came from ${formatSourceLabel(src)}.`;
+            markUnplannedWantUsed(deckItem.keyword);
+            addLedgerLine(`Unplanned want: ${prettyShort} -${money(deckItem.cost)} from ${formatSourceLabel(src)}`);
+            return `You went, but it was not budgeted. ${money(deckItem.cost)} came from ${formatSourceLabel(src)}, so this was extra spending outside your wants plan.`;
           }
         },
         {
           label:"Skip it and stay on budget",
-          hint:"No extra cost",
+          hint:"No extra cost • protect the plan",
           apply:(st)=>{
-            const bonus = Math.max(1, Math.round(deckItem.cost * 0.2));
-            st.bank.savings += bonus;
-            return `You skipped it and protected your budget. Savings +$${bonus}.`;
+            return `You skipped it and protected your budget. No extra money had to move.`;
           }
         }
       ];
+    }
+  };
+}
+
+function createSocialWantEvent(week){
+  return {
+    id:`social_want_${week}_${Date.now()}`,
+    typeKey:'life',
+    customRunner:(done)=>{
+      const deckItem = pickSocialWantDeckItem();
+      const scenario = buildWantAwareSocialScenario(deckItem);
+      openScenarioModal(scenario, done);
     }
   };
 }

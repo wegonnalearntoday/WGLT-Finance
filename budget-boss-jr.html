@@ -3055,11 +3055,11 @@ async function resetGame() {
   clearSavedGame();
   try{
     await clearAllBudgetBossSiteData();
-    localStorage.setItem('wglt_app_version', '2026.03.21.anti-cache-r2');
+    localStorage.setItem('wglt_app_version', '2026.03.22.wants-modal-r3');
   }catch(err){}
   showScreen('screen-welcome');
   const url = new URL(window.location.href);
-  url.searchParams.set('v', '2026.03.21.anti-cache-r2');
+  url.searchParams.set('v', '2026.03.22.wants-modal-r3');
   window.location.replace(url.toString());
 }
 
@@ -3079,7 +3079,7 @@ function clearProfileAndReset(){
 
 
 (async function(){
-  const APP_VERSION = '2026.03.21.anti-cache-r2';
+  const APP_VERSION = '2026.03.22.wants-modal-r3';
   try{
     const seenVersion = localStorage.getItem('wglt_app_version');
     if(seenVersion !== APP_VERSION){

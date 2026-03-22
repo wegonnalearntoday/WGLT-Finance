@@ -1272,11 +1272,11 @@ syncEarnedIncomeLabel();
   clearSavedGame();
   try{
     await clearAllBudgetBossSiteData();
-    localStorage.setItem('wglt_app_version', '2026.03.21.anti-cache-r1');
+    localStorage.setItem('wglt_app_version', '2026.03.22.wants-modal-r3');
   }catch(err){}
   showScreen('screen-welcome');
   const url = new URL(window.location.href);
-  url.searchParams.set('v', '2026.03.21.anti-cache-r1');
+  url.searchParams.set('v', '2026.03.22.wants-modal-r3');
   window.location.replace(url.toString());
 }
 
