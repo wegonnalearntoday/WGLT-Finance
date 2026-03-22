@@ -85,7 +85,7 @@ function scheduleAutoSave(delay=500){
   autoSaveTimer = setTimeout(()=>saveTeacherLocal(true), delay);
 }
 function getRandomEventWeights(){
-  return getModeConfig().eventWeights || {life:40,job:30,financial:30};
+  return getModeConfig().eventWeights || {life:40,job:40,financial:20};
 }
 function getTeacherToolConfig(themeKey=''){
   const themes = TEACHER_TOOLS.themes || [];
@@ -301,7 +301,7 @@ function getMonthlyGoalStatusText(){
   return progress.label;
 }
 function getDynamicRandomEventWeights(){
-  const base = Object.assign({life:40,job:30,financial:30}, getRandomEventWeights());
+  const base = Object.assign({life:40,job:40,financial:20}, getRandomEventWeights());
   const goal = getCurrentWeeklyGoal();
   const shift = goal ? ((MONTHLY_FOCUS_BANK.find(g => g.id === goal.id) || {}).weights || {}) : {};
   const out = {
@@ -884,7 +884,7 @@ function shouldAskDecisionReflection(meta={}){
 }
 
 function queueDecisionReflection(meta={}){
-  if(!isTeacherRole()) return;
+  if(!state.teacherMode) return;
   if(state.ui && state.ui.suppressDecisionReflections) return;
   if(!shouldAskDecisionReflection(meta)) return;
   const type = inferDecisionReflectionType(meta);
@@ -902,7 +902,6 @@ function queueDecisionReflection(meta={}){
 }
 
 function openDecisionReflectionPrompt(meta={}){
-  if(!isTeacherRole()) return;
   const type = normalizeDecisionReflectionType(meta.type);
   const titleMap = {
     spending: "💸 Quick Money Check",
@@ -1112,6 +1111,10 @@ ${item.body}`,
 
 function runLifeScenarioDecision(){
   const week = state.weekEngine ? state.weekEngine.week : 1;
+  if(SOCIAL_WANTS_DECK.length && Math.random() < 0.5){
+    runSocialDecision();
+    return;
+  }
   const wk = getMasterWeekData(week);
   const picked = getMasterRandomScenarioForWeek(week);
   if(!wk || !picked){
@@ -1265,74 +1268,6 @@ function inferScenarioFunding(opt, job){
   return null;
 }
 
-
-function inferScenarioReward(opt, job){
-  if(!opt || !opt.apply) return null;
-  try{
-    const src = opt.apply.toString();
-    const patterns = [
-      { kind:'cash', re:/st\.cash\s*\+=\s*(\d+)/ },
-      { kind:'checking', re:/st\.bank\.checking\s*\+=\s*(\d+)/ },
-      { kind:'savings', re:/st\.bank\.savings\s*\+=\s*(\d+)/ }
-    ];
-    for(const p of patterns){
-      const m = src.match(p.re);
-      if(m) return { amount:Number(m[1]), originalDest:p.kind, inferred:true };
-    }
-    const constAmt = src.match(/const\s+\w+\s*=\s*(\d+)\s*;/);
-    if(constAmt){
-      const amt = Number(constAmt[1]);
-      if(/st\.cash\s*\+=\s*\w+/.test(src)) return { amount:amt, originalDest:'cash', inferred:true };
-      if(/st\.bank\.checking\s*\+=\s*\w+/.test(src)) return { amount:amt, originalDest:'checking', inferred:true };
-      if(/st\.bank\.savings\s*\+=\s*\w+/.test(src)) return { amount:amt, originalDest:'savings', inferred:true };
-    }
-  }catch(err){}
-  return null;
-}
-
-function runApplyWithRewardOverride(applyFn, rewardInfo, job){
-  if(!rewardInfo || !rewardInfo.amount || !rewardInfo.originalDest) return applyFn(state, job);
-  let skipped = false;
-  const targetDest = rewardInfo.originalDest;
-  const targetAmount = Number(rewardInfo.amount);
-  const bankProxy = new Proxy(state.bank, {
-    get(target, prop){ return target[prop]; },
-    set(target, prop, value){
-      if(!skipped && prop === targetDest){
-        const current = Number(target[prop] || 0);
-        const numericValue = Number(value);
-        const expected = current + targetAmount;
-        if(Number.isFinite(numericValue) && numericValue === expected){
-          skipped = true;
-          return true;
-        }
-      }
-      target[prop] = value;
-      return true;
-    }
-  });
-  const stateProxy = new Proxy(state, {
-    get(target, prop){
-      if(prop === 'bank') return bankProxy;
-      return target[prop];
-    },
-    set(target, prop, value){
-      if(!skipped && prop === targetDest){
-        const current = Number(target[prop] || 0);
-        const numericValue = Number(value);
-        const expected = current + targetAmount;
-        if(Number.isFinite(numericValue) && numericValue === expected){
-          skipped = true;
-          return true;
-        }
-      }
-      target[prop] = value;
-      return true;
-    }
-  });
-  return applyFn(stateProxy, job);
-}
-
 function runApplyWithFundingOverride(applyFn, paymentInfo, job){
   if(!paymentInfo || !paymentInfo.amount || !paymentInfo.originalSource) return applyFn(state, job);
   if(paymentInfo.originalSource === 'invest_only') return applyFn(state, job);
@@ -1458,7 +1393,6 @@ function openScenarioModal(scenario, onDone){
 
       const resolvedCost = typeof opt.cost === "function" ? opt.cost(job) : opt.cost;
       const inferredFunding = (!resolvedCost || resolvedCost <= 0) ? inferScenarioFunding(opt, job) : null;
-      const inferredReward = (!resolvedCost || resolvedCost <= 0) ? inferScenarioReward(opt, job) : null;
       const paymentAmount = (resolvedCost && resolvedCost > 0) ? resolvedCost : (inferredFunding ? inferredFunding.amount : 0);
 
       if(paymentAmount && paymentAmount > 0){
@@ -1479,16 +1413,6 @@ Choose which account to pay from:`, (src)=>{
             finalizeChoice(opt, i, summary, {source:src, amount:paymentAmount});
           });
         }, 50);
-      } else if(inferredReward && inferredReward.amount > 0){
-        closeModal();
-        setTimeout(()=>{
-          chooseMoneyDestination(inferredReward.amount, `${opt.label}
-
-You are receiving ${money(inferredReward.amount)}.`, (dest)=>{
-            const summary = runApplyWithRewardOverride(opt.apply, inferredReward, job);
-            finalizeChoice(opt, i, summary, {source:dest, amount:inferredReward.amount});
-          });
-        }, 50);
       } else {
         closeModal();
         const summary = opt.apply(state, job);
@@ -1498,7 +1422,7 @@ You are receiving ${money(inferredReward.amount)}.`, (dest)=>{
     grid.appendChild(btn);
   });
 
-  $("mFoot").innerHTML = '<div class="muted" style="font-weight:900">Choose one of the options above to continue.</div>';
+  $("mFoot").innerHTML = '';
   $("overlay").classList.add("show");
   $("overlay").setAttribute("aria-hidden","false");
 }
@@ -3115,40 +3039,6 @@ function inferChoiceCost(choice){
   const fx = choice?.effects || {};
   return Math.abs(Number(fx.cash || 0)) + Math.abs(Number(fx.checking || 0)) + Math.abs(Number(fx.savings || 0));
 }
-function inferChoiceRewardAmount(choice){
-  const buckets = [choice?.reward || {}, choice?.effects || {}];
-  return buckets.reduce((sum, fx)=> sum + Math.max(0, Number(fx.cash || 0)) + Math.max(0, Number(fx.checking || 0)) + Math.max(0, Number(fx.savings || 0)), 0);
-}
-function rerouteGenericMoneyEffects(effects, mode, targetKey){
-  const fx = Object.assign({}, effects || {});
-  const moneyKeys = ['cash','checking','savings'];
-  const total = moneyKeys.reduce((sum, key)=>{
-    const val = Number(fx[key] || 0);
-    if(mode === 'payment' && val < 0){
-      fx[key] = 0;
-      return sum + Math.abs(val);
-    }
-    if(mode === 'reward' && val > 0){
-      fx[key] = 0;
-      return sum + val;
-    }
-    return sum;
-  }, 0);
-  if(total > 0 && targetKey && moneyKeys.includes(targetKey)){
-    fx[targetKey] = Number(fx[targetKey] || 0) + (mode === 'payment' ? -total : total);
-  }
-  return fx;
-}
-function stripGenericMoneyEffects(effects, mode){
-  const fx = Object.assign({}, effects || {});
-  const moneyKeys = ['cash','checking','savings'];
-  moneyKeys.forEach(key=>{
-    const val = Number(fx[key] || 0);
-    if(mode === 'payment' && val < 0) fx[key] = 0;
-    if(mode === 'reward' && val > 0) fx[key] = 0;
-  });
-  return fx;
-}
 function buildGenericEventPrompt(ev, job){
   const typeMap = {life:'real-life situation', job:'job-based situation', financial:'money decision'};
   const t = ev.typeKey || 'life';
@@ -3200,34 +3090,14 @@ function buildUnifiedEventPool(week){
     return Number(week) >= Number(range[0] || 1) && Number(week) <= Number(range[1] || 48);
   };
   const diffOk = (ev) => !Array.isArray(ev.difficulty) || !ev.difficulty.length || ev.difficulty.includes(exp) || (exp === 'elite' && ev.difficulty.includes('standard'));
-  const genericLife = REAL_LIFE_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => {
-    const enriched = Object.assign({typeKey:'life', prompt:ev.description || ''}, ev);
-    const socialCue = `${ev.title || ''} ${ev.description || ''} ${ev.teacherPromptId || ''} ${ev.focusTag || ''}`.toLowerCase();
-    if(/social_spending|prompt_social_spending|pizza|movie|arcade|shopping|mall|nail|beauty|spa/.test(socialCue)){
-      enriched.customRunner = (done)=>{
-        const deckItem = inferWantDeckItemFromEvent(ev);
-        const scenario = buildWantAwareSocialScenario(deckItem);
-        openScenarioModal(scenario, done);
-      };
-    }
-    return enriched;
-  });
+  const genericLife = REAL_LIFE_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'life', prompt:ev.description || ''}, ev));
   const genericFin = FINANCIAL_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'financial', prompt:ev.description || ''}, ev));
   const genericOpp = OPPORTUNITY_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'job', prompt:ev.description || ''}, ev));
   const elitePool = isEliteExperience() ? ELITE_SCENARIOS.filter(ev => inWeek(ev)).map(ev => ({
     id:ev.id, title:ev.title, prompt:ev.description || '', typeKey:'financial', choices:(ev.choices || []).map((c, i)=>({ id:`elite_${i+1}`, label:c.label, effects:c.effects || {}, tag:c.tag || '' }))
   })) : [];
   const jobPool = createJobTemplatePool(job);
-  const inventoryJobEvent = {
-    id:`job_inventory_${job.id || 'job'}_${week}`,
-    title:`${job.name}: Supply Decision`,
-    typeKey:'job',
-    customRunner:(done)=>{
-      runJobRealLifeEvent();
-      if(typeof done === 'function') setTimeout(done, 0);
-    }
-  };
-  return { life: genericLife, financial: genericFin.concat(elitePool), job: [inventoryJobEvent].concat(jobPool, genericOpp) };
+  return { life: genericLife, financial: genericFin.concat(elitePool), job: jobPool.concat(genericOpp) };
 }
 function pickUniqueEventFromPool(type, week){
   ensureEventEngineState();
@@ -3286,18 +3156,10 @@ function queueGenericDelayedConsequence(choice, week, title){
   }, title || def.title || 'Event Engine v1');
 }
 function applyGenericChoice(choice, ev, week, onDone){
-  const payment = choice.paymentRequired || (inferChoiceCost(choice) > 0 && ((choice.effects && (Number(choice.effects.cash || 0) < 0 || Number(choice.effects.checking || 0) < 0 || Number(choice.effects.savings || 0) < 0)) || choice.cost));
-  const amt = inferChoiceCost(choice);
-  const rewardAmt = inferChoiceRewardAmount(choice);
-
-  const finish = (paymentSource='', rewardDest='')=>{
+  const finish = (sourceLabel='')=>{
     const parts = [];
-    if(choice.reward){
-      const rewardFx = rewardDest ? rerouteGenericMoneyEffects(choice.reward || {}, 'reward', rewardDest) : (choice.reward || {});
-      parts.push(applyGenericEffects(rewardFx));
-    }
-    const paymentFx = paymentSource ? stripGenericMoneyEffects(choice.effects || {}, 'payment') : rerouteGenericMoneyEffects(choice.effects || {}, 'payment', '');
-    parts.push(applyGenericEffects(paymentFx));
+    if(choice.reward) parts.push(applyGenericEffects(choice.reward || {}));
+    parts.push(applyGenericEffects(choice.effects || {}));
     const summary = parts.filter(Boolean).join(' • ');
     queueGenericDelayedConsequence(choice, week, ev.title);
     if(ev.id){
@@ -3307,34 +3169,18 @@ function applyGenericChoice(choice, ev, week, onDone){
       state.eventEngine.weekHistory.unshift({ week, id:ev.id, title:ev.title, type:ev.typeKey || 'life' });
       state.eventEngine.weekHistory = state.eventEngine.weekHistory.slice(0, 80);
     }
-    const detailBits = [];
-    if(paymentSource) detailBits.push(`from ${paymentSource}`);
-    if(rewardDest) detailBits.push(`to ${rewardDest}`);
-    addLedgerLine(`Step ${week}: ${ev.title} → ${choice.label}${detailBits.length ? ` (${detailBits.join(', ')})` : ''} • ${summary}`);
+    addLedgerLine(`Step ${week}: ${ev.title} → ${choice.label}${sourceLabel ? ` (${sourceLabel})` : ''} • ${summary}`);
     queueDecisionReflection({ title: ev.title, label: choice.label, summary, amount: inferChoiceCost(choice) || 0 });
     renderAll();
     if(onDone) onDone();
   };
-
-  const promptForReward = (paymentSource='')=>{
-    if(rewardAmt > 0){
-      chooseMoneyDestination(rewardAmt, `${ev.title}
-
-You are receiving ${money(rewardAmt)}.`, (dest)=> finish(paymentSource, dest));
-    } else {
-      finish(paymentSource, '');
-    }
-  };
-
+  const payment = choice.paymentRequired || (inferChoiceCost(choice) > 0 && ((choice.effects && (Number(choice.effects.cash || 0) < 0 || Number(choice.effects.checking || 0) < 0 || Number(choice.effects.savings || 0) < 0)) || choice.cost));
+  const amt = inferChoiceCost(choice);
   if(payment && amt > 0){
     chooseFundingSource(amt, `${ev.title}
 
-Choose where to take ${money(amt)} from.`, (src)=> promptForReward(src));
-  } else if(rewardAmt > 0){
-    promptForReward('');
-  } else {
-    finish('', '');
-  }
+Choose where to take ${money(amt)} from.`, (src)=> finish(`from ${src}`), {silentLedger:true});
+  } else finish('');
 }
 function openGeneratedEventModal(ev, week, onDone){
   const job = getCurrentJob();
@@ -3356,9 +3202,6 @@ function runEventEngineV1(week, onAllDone){
   const main = pickUniqueEventFromPool(pickedType, week) || pickUniqueEventFromPool('life', week) || pickUniqueEventFromPool('job', week) || pickUniqueEventFromPool('financial', week);
   const queue = [];
   if(main) queue.push(main);
-  if(Math.random() < 0.55){
-    queue.push(createSocialWantEvent(week));
-  }
   if(Math.random() < 0.28){
     const alt = ['life','job','financial'].filter(x => x !== pickedType);
     const bonusType = alt[Math.floor(Math.random() * alt.length)] || 'life';
@@ -3374,10 +3217,6 @@ function runEventEngineV1(week, onAllDone){
   function runNext(){
     if(idx >= queue.length){ if(onAllDone) onAllDone(); return; }
     const ev = queue[idx++];
-    if(ev && typeof ev.customRunner === 'function'){
-      ev.customRunner(runNext);
-      return;
-    }
     openGeneratedEventModal(ev, week, runNext);
   }
   runNext();
@@ -3410,13 +3249,6 @@ function renderWeekHeader(){
 const $ = (id)=>document.getElementById(id);
 const money = (n)=>"$" + Math.max(0, Math.round(n)).toLocaleString();
 const clamp = (n,min,max)=>Math.max(min,Math.min(max,n));
-
-function getSavingsGoalProgress(){
-  const goal = Number(state && state.savingsGoal || 0);
-  const saved = Number(state && state.bank ? state.bank.savings || 0 : 0);
-  const pct = goal > 0 ? Math.max(0, Math.min(100, Math.round((saved / Math.max(1, goal)) * 100))) : 0;
-  return { goal, saved, pct };
-}
 
 /* Sound FX */
 let audioCtx=null;
@@ -3462,7 +3294,7 @@ function closeModal(){
   $("overlay").classList.remove("show");
   $("overlay").setAttribute("aria-hidden","true");
 }
-$("overlay").addEventListener("click",(e)=>{ if(e.target===$("overlay")) { beep("warn"); } });
+$("overlay").addEventListener("click",(e)=>{ if(e.target===$("overlay")){ beep("warn"); } });
 
 /* Banner */
 let bannerTimer=null;
@@ -3639,8 +3471,6 @@ function applyRandomEventButtonState(){
     el.classList.remove("glow-next");
     el.style.filter = "";
     el.style.opacity = "";
-    el.style.pointerEvents = "";
-    el.style.cursor = "";
   });
 
   const waiting = state.mission && state.mission.active ? state.mission.waitingAction : null;
@@ -3657,8 +3487,6 @@ function applyRandomEventButtonState(){
         el.disabled = true;
         el.style.filter = "grayscale(1)";
         el.style.opacity = ".6";
-        el.style.pointerEvents = "none";
-        el.style.cursor = "not-allowed";
       }
     });
     return;
@@ -3671,8 +3499,6 @@ function applyRandomEventButtonState(){
       randomBtn.disabled = true;
       randomBtn.style.filter = "grayscale(1)";
       randomBtn.style.opacity = ".6";
-      randomBtn.style.pointerEvents = "none";
-      randomBtn.style.cursor = "not-allowed";
     }
     choiceIds.forEach(id=>{
       const el = $(id);
@@ -3682,42 +3508,17 @@ function applyRandomEventButtonState(){
         el.classList.add("glow-next");
         el.style.filter = "";
         el.style.opacity = "1";
-        el.style.pointerEvents = "auto";
-        el.style.cursor = "pointer";
       } else {
         el.disabled = true;
         el.style.filter = "grayscale(1)";
         el.style.opacity = ".6";
-        el.style.pointerEvents = "none";
-        el.style.cursor = "not-allowed";
       }
     });
     return;
   }
 
-  if(waiting === "job_event"){
-    if(randomBtn){
-      randomBtn.classList.add("glow-next");
-      randomBtn.disabled = false;
-      randomBtn.style.filter = "";
-      randomBtn.style.opacity = "1";
-    }
-    choiceIds.forEach(id=>{
-      const el = $(id);
-      if(!el) return;
-      el.disabled = true;
-      el.style.filter = "grayscale(1)";
-      el.style.opacity = ".6";
-    });
-    return;
-  }
-
-  choiceIds.forEach(id=>{
-    const el = $(id);
-    if(!el) return;
-    el.disabled = false;
-  });
-  if(randomBtn){
+  if(waiting === "job_event" && randomBtn){
+    randomBtn.classList.add("glow-next");
     randomBtn.disabled = false;
   }
 }
@@ -3886,10 +3687,7 @@ function renderHeader(){
   $("credit").textContent = state.credit;
   if ($("creditInlineVal")) $("creditInlineVal").textContent = state.credit;
   $("goalBadge").textContent = money(state.savingsGoal);
-  if ($("goalStatusInline")) {
-    const gp = getSavingsGoalProgress();
-    $("goalStatusInline").textContent = gp.goal ? `${money(gp.goal)} by Month 12 • ${gp.pct}% there` : "Not set";
-  }
+  if ($("goalStatusInline")) $("goalStatusInline").textContent = state.savingsGoal ? `${money(state.savingsGoal)} by Month 12` : "Not set";
   if ($("budgetModelLabel")) $("budgetModelLabel").textContent = getBudgetModelName();
   if ($("planLockLabel")) $("planLockLabel").textContent = state.plan.lockedForYear ? "Locked" : "Unlocked";
   $("checkingVal").textContent = money(state.bank.checking);
@@ -3970,20 +3768,18 @@ function renderBankJars(){
   ];
   map.forEach(([fillId, amtId, amount]) => {
     const pct = Math.max(0, Math.min(100, Math.round((amount / scale) * 100)));
+    $(fillId).style.transition = 'height .7s cubic-bezier(.2,.8,.2,1), transform .35s ease';
     $(fillId).style.height = pct + "%";
     $(amtId).textContent = money(amount);
     $(fillId).title = `${money(amount)} of ${money(scale)}`;
   });
-  const goalProgress = getSavingsGoalProgress();
-  if($("jarSavingsGoalText")) {
-    $("jarSavingsGoalText").textContent = goalProgress.goal ? `${goalProgress.pct}% of ${money(goalProgress.goal)}` : 'Set a goal';
+
+  const jar = $('jarSavingsFill');
+  if(jar && state.savingsGoal > 0){
+    const savedNow = Number(state.bank.savings || 0) + Number(state.bank.hysaPrincipal || 0);
+    const goalPct = Math.max(0, Math.min(100, Math.round((savedNow / Math.max(1, Number(state.savingsGoal || 1))) * 100)));
+    jar.title = `${money(savedNow)} of ${money(state.savingsGoal)} • ${goalPct}%`;
   }
-  [["jarSavingsMark25",25],["jarSavingsMark50",50],["jarSavingsMark75",75],["jarSavingsMark100",100]].forEach(([id,p])=>{
-    if($(id)){
-      $(id).title = `${p}% milestone`;
-      $(id).classList.toggle('hit', goalProgress.goal > 0 && goalProgress.pct >= p);
-    }
-  });
 }
 
 function renderBucketTracker(){
@@ -4328,8 +4124,9 @@ function spendFromSource(source, amount){
   return {ok:false, message:'Unknown funding source'};
 }
 
-function chooseFundingSource(amount, reason, onPaid){
+function chooseFundingSource(amount, reason, onPaid, options={}){
   const choices = getFundingChoices(true);
+  const silentLedger = !!options.silentLedger;
   const body = `${reason}\n\nChoose where to take ${money(amount)} from:`;
   openModal({
     title:'💳 Choose Payment Source',
@@ -4366,6 +4163,7 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
             if(pick !== 'confirm') return;
             const cdResult = spendFromSource('cd', amount);
             if(!cdResult.ok){ beep('warn'); showBanner(cdResult.message || 'CD withdrawal failed'); return; }
+            if(!silentLedger) addLedgerLine(cdResult.summary);
             showDecisionBadge(`Paid from ${formatSourceLabel('cd')}: ${money(amount)}`);
             if(onPaid) setTimeout(()=> onPaid('cd', cdResult), 50);
           }
@@ -4407,7 +4205,7 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
               else if(id === 'savings') state.bank.savings = 0;
               state.bank.checking = Math.max(0, state.bank.checking - overdraftFee);
               state.credit = Math.max(300, state.credit - 12);
-              addLedgerLine(`Overdraft: paid ${money(amount)} (fee: ${money(overdraftFee)}, credit -12)`);
+              if(!silentLedger) addLedgerLine(`Overdraft: paid ${money(amount)} (fee: ${money(overdraftFee)}, credit -12)`);
               showDecisionBadge(`Paid from ${srcLabel} with overdraft fee`);
               renderHeader(); renderLedger();
               setTimeout(()=> onPaid && onPaid(id, {ok:true, summary:`Overdraft from ${srcLabel} — fee ${money(overdraftFee)}`}), 50);
@@ -4425,6 +4223,7 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
               const finalResult = spendFromSource(id, amount);
               if(!finalResult.ok){ beep('warn'); showBanner('Payment failed after transfer'); return; }
               addLedgerLine(`Transfer: ${money(shortfall)} from ${fromSrc} → ${id} to cover ${money(amount)}`);
+              if(!silentLedger) addLedgerLine(finalResult.summary);
               showDecisionBadge(`Paid from ${formatSourceLabel(id)} after transfer`);
               renderHeader(); renderLedger();
               setTimeout(()=> onPaid && onPaid(id, finalResult), 50);
@@ -4434,47 +4233,10 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
         });
         return;
       }
+      addLedgerLine(result.summary);
       showDecisionBadge(`Paid from ${formatSourceLabel(id)}: ${money(amount)}`);
       // Let onPaid handle rendering after it updates state
       if(onPaid) setTimeout(()=> onPaid(id, result), 50);
-    }
-  });
-}
-
-
-function chooseMoneyDestination(amount, reason, onPlaced){
-  amount = Math.max(0, Math.round(amount || 0));
-  openModal({
-    title:'📥 Choose Where Money Goes',
-    meta:'Pick where to put this money',
-    body:`${reason}
-
-Where do you want to put ${money(amount)}?`,
-    buttons:[
-      {id:'cash', label:'Keep as Cash', kind:'secondary'},
-      {id:'checking', label:'Put in Checking', kind:'primary'},
-      {id:'savings', label:'Put in Savings', kind:'secondary'},
-      {id:'invest', label:'Invest It', kind:'success'},
-      {id:'cancel', label:'Cancel', kind:'secondary'}
-    ],
-    onPick:(id)=>{
-      if(id === 'cancel') return;
-      if(id === 'invest'){
-        openInvestmentChoiceModal(amount, reason, (summary)=>{
-          if(summary) addLedgerLine(summary);
-          showDecisionBadge(`Money routed to investment: ${money(amount)}`);
-          if(onPlaced) onPlaced('invest', {ok:true, summary:summary || `Invested ${money(amount)}`});
-        });
-        return;
-      }
-      if(id === 'cash') state.cash += amount;
-      else if(id === 'checking') state.bank.checking += amount;
-      else if(id === 'savings') state.bank.savings += amount;
-      addLedgerLine(`Money received: +${money(amount)} to ${formatSourceLabel(id)}`);
-      showDecisionBadge(`Sent to ${formatSourceLabel(id)}: ${money(amount)}`);
-      renderHeader();
-      renderSheet();
-      if(onPlaced) onPlaced(id, {ok:true, summary:`Placed ${money(amount)} into ${formatSourceLabel(id)}`});
     }
   });
 }
@@ -4950,11 +4712,7 @@ function pauseMission(){
   setLog(state.mission.paused ? "Mission paused." : "Mission resumed.");
 }
 
-async function resetMission(){
-  try{
-    if(window.clearWGLTSiteData) await window.clearWGLTSiteData();
-    if(window.WGLT_APP_VERSION) localStorage.setItem('wglt_app_version', window.WGLT_APP_VERSION);
-  }catch(err){}
+function resetMission(){
   const currentJob = state.jobs[state.jobIndex];
   state.cash = 200;
   state.day = 1;
@@ -5720,9 +5478,9 @@ Rewards
 function checkSavingsMilestones(){
   if(state.savingsGoal<=0) return;
 
-  const saved = Number(state.bank.savings || 0);
-  const goal = Number(state.savingsGoal || 0);
-  const pct = goal > 0 ? (saved / goal) : 0;
+  const saved = Number(state.bank.savings || 0) + Number(state.bank.hysaPrincipal || 0);
+  const goal = Math.max(1, Number(state.savingsGoal || 0));
+  const pct = saved / goal;
 
   const hits = [
     {k:"25", thr:0.25, bonus:5},
@@ -5731,57 +5489,53 @@ function checkSavingsMilestones(){
     {k:"100", thr:1.00, bonus:25}
   ];
 
-  const newlyHit = hits.filter(h => pct >= h.thr && !state.savingsMilestones.has(h.k));
-  if(!newlyHit.length) return;
+  hits.forEach(h=>{
+    if(pct>=h.thr && !state.savingsMilestones.has(h.k)){
+      state.savingsMilestones.add(h.k);
+      animateSavingsJarMilestone();
+      openModal({
+        title:`🎉 Savings Goal ${h.k}% Reached`,
+        meta:`Reward unlocked: ${money(h.bonus)}`,
+        body:`You reached ${h.k}% of your savings goal. You earned a ${money(h.bonus)} bonus.
 
-  const queue = newlyHit.slice().sort((a,b)=>a.thr-b.thr);
-
-  function showNextMilestoneReward(){
-    const hit = queue.shift();
-    if(!hit) return;
-    state.savingsMilestones.add(hit.k);
-    openModal({
-      title:`🏦 Savings Goal ${hit.k}% Reached!`,
-      meta:`Bonus unlocked: ${money(hit.bonus)}`,
-      body:`Your savings jar just hit ${hit.k}% of the goal.
-
-Reward unlocked: ${money(hit.bonus)}
-
-Where do you want to put the bonus money?`,
-      buttons:[
-        {id:'cash', label:'Keep as Cash', kind:'secondary'},
-        {id:'checking', label:'Put in Checking', kind:'primary'},
-        {id:'savings', label:'Put in Savings', kind:'secondary'},
-        {id:'invest', label:'Invest It', kind:'success'}
-      ],
-      onPick:(id)=>{
-        const label = `${hit.k}% savings goal bonus`;
-        if(id === 'invest'){
-          openInvestmentChoiceModal(hit.bonus, label, (summary)=>{
-            if(summary) addLedgerLine(summary);
-            addLedgerLine(`Savings milestone ${hit.k}% reward ${money(hit.bonus)} routed to investment`);
-            showBanner(`Savings milestone ${hit.k}%! Bonus ${money(hit.bonus)}`);
+Where do you want to put that money?`,
+        buttons:[
+          {id:'cash',label:'Put in Cash',kind:'secondary'},
+          {id:'checking',label:'Put in Checking',kind:'primary'},
+          {id:'savings',label:'Put in Savings',kind:'success'},
+          {id:'invest',label:'Invest It',kind:'warn'}
+        ],
+        onPick:(dest)=>{
+          if(dest==='cash'){
+            state.cash += h.bonus;
+            addLedgerLine(`Savings goal ${h.k}% bonus: +${money(h.bonus)} to cash`);
             addCoverage(12);
-            renderHeader();
-            renderSheet();
-            if(queue.length) setTimeout(showNextMilestoneReward, 120);
+            renderAll();
+            return;
+          }
+          if(dest==='checking'){
+            state.bank.checking += h.bonus;
+            addLedgerLine(`Savings goal ${h.k}% bonus: +${money(h.bonus)} to checking`);
+            addCoverage(12);
+            renderAll();
+            return;
+          }
+          if(dest==='savings'){
+            state.bank.savings += h.bonus;
+            addLedgerLine(`Savings goal ${h.k}% bonus: +${money(h.bonus)} to savings`);
+            addCoverage(12);
+            renderAll();
+            return;
+          }
+          openInvestmentChoiceModal(h.bonus, `Savings Goal ${h.k}% Bonus`, (summary)=>{
+            addLedgerLine(summary);
+            addCoverage(12);
+            renderAll();
           });
-          return;
         }
-        if(id === 'cash') state.cash += hit.bonus;
-        else if(id === 'checking') state.bank.checking += hit.bonus;
-        else state.bank.savings += hit.bonus;
-        addLedgerLine(`Savings milestone ${hit.k}% reward ${money(hit.bonus)} to ${formatSourceLabel(id)}`);
-        showBanner(`Savings milestone ${hit.k}%! Bonus ${money(hit.bonus)}`);
-        addCoverage(12);
-        renderHeader();
-        renderSheet();
-        if(queue.length) setTimeout(showNextMilestoneReward, 120);
-      }
-    });
-  }
-
-  showNextMilestoneReward();
+      });
+    }
+  });
 }
 
 /* Suggested plan */
@@ -6613,24 +6367,22 @@ function triggerInheritance(){
     buttons:[{id:"save",label:"Save it",kind:"success"},{id:"spend",label:"Spend it",kind:"warn"},{id:"invest",label:"Invest it",kind:"primary"}],
     onPick:(id)=>{
       if(id==="save"){
-        chooseMoneyDestination(200, 'Inheritance received.', (dest)=>{
-          state.credit = clamp(state.credit+3,300,850);
-          addLedgerLine(`Inheritance routed to ${formatSourceLabel(dest)}: +${money(200)}`);
-          renderHeader();
-          renderSheet();
-          notifyAction("inheritance");
-        });
+        state.bank.savings += 200;
+        state.credit = clamp(state.credit+3,300,850);
+        addLedgerLine("Inheritance saved: +$200 to savings");
+        renderHeader();
+        renderSheet();
+        notifyAction("inheritance");
         return;
       }
       if(id==="spend"){
-        chooseMoneyDestination(120, 'You are keeping part of the inheritance available after spending $80 on wants.', (dest)=>{
-          state.plan.wants += 20;
-          state.credit = clamp(state.credit-2,300,850);
-          addLedgerLine(`Inheritance used for wants: $80 spent, ${money(120)} moved to ${formatSourceLabel(dest)}`);
-          renderHeader();
-          renderSheet();
-          notifyAction("inheritance");
-        });
+        state.cash = clamp(state.cash + 120, 0, 999999);
+        state.plan.wants += 20;
+        state.credit = clamp(state.credit-2,300,850);
+        addLedgerLine("Inheritance spent: +$200 received, $80 used for wants");
+        renderHeader();
+        renderSheet();
+        notifyAction("inheritance");
         return;
       }
       openInvestmentChoiceModal(200, "Inheritance", (summary)=>{
@@ -6667,37 +6419,64 @@ function getBudgetedWantEntry(deckItem){
   return state.plan.wantsInventoryActive.find(x => x.label.toLowerCase().includes(deckItem.keyword.toLowerCase()) && x.available) || null;
 }
 
-function inferWantDeckItemFromEvent(ev){
-  const blob = `${ev?.title || ''} ${ev?.description || ''} ${ev?.prompt || ''}`.toLowerCase();
-  const directMap = [
-    {needle:'pizza', keyword:'Pizza Night'},
-    {needle:'movie', keyword:'Movie Ticket'},
-    {needle:'arcade', keyword:'Arcade Day'},
-    {needle:'snack', keyword:'Snacks'},
-    {needle:'candy', keyword:'Candy'},
-    {needle:'music', keyword:'Music Streaming'},
-    {needle:'shopping', keyword:'Mall Shopping'},
-    {needle:'mall', keyword:'Mall Shopping'},
-    {needle:'nail', keyword:'Nail Salon'},
-    {needle:'beauty', keyword:'Hair Accessories / Beauty Supply'},
-    {needle:'spa', keyword:'Spa / Self-Care Day'},
-    {needle:'self-care', keyword:'Spa / Self-Care Day'},
-    {needle:'game skin', keyword:'New Game Skin'},
-    {needle:'style', keyword:'Shoes/Style Item'}
-  ];
-  const picked = directMap.find(x => blob.includes(x.needle));
-  if(picked){
-    const exact = SOCIAL_WANTS_DECK.find(item => String(item.keyword || '').toLowerCase() === picked.keyword.toLowerCase());
-    if(exact) return exact;
-  }
-  return pickSocialWantDeckItem();
+function chooseMoneyDestination(amount, reason, onPlaced){
+  amount = Math.max(0, Math.round(Number(amount||0)));
+  openModal({
+    title:'💰 Choose Where Money Goes',
+    meta:'Pick where to place the money',
+    body:`${reason}
+
+Where do you want to put ${money(amount)}?`,
+    buttons:[
+      {id:'cash',label:'Put in Cash',kind:'secondary'},
+      {id:'checking',label:'Put in Checking',kind:'primary'},
+      {id:'savings',label:'Put in Savings',kind:'success'},
+      {id:'invest',label:'Invest It',kind:'warn'}
+    ],
+    onPick:(dest)=>{
+      if(dest==='cash'){
+        state.cash += amount;
+        addLedgerLine(`Bonus deposited: +${money(amount)} to cash`);
+        renderAll();
+        onPlaced && onPlaced('cash', `+${money(amount)} to cash`);
+        return;
+      }
+      if(dest==='checking'){
+        state.bank.checking += amount;
+        addLedgerLine(`Bonus deposited: +${money(amount)} to checking`);
+        renderAll();
+        onPlaced && onPlaced('checking', `+${money(amount)} to checking`);
+        return;
+      }
+      if(dest==='savings'){
+        state.bank.savings += amount;
+        addLedgerLine(`Bonus deposited: +${money(amount)} to savings`);
+        renderAll();
+        onPlaced && onPlaced('savings', `+${money(amount)} to savings`);
+        return;
+      }
+      openInvestmentChoiceModal(amount, 'Bonus Reward', (summary)=>{
+        addLedgerLine(summary);
+        renderAll();
+        onPlaced && onPlaced('invest', summary);
+      });
+    }
+  });
+}
+
+function animateSavingsJarMilestone(){
+  const jar = $('jarSavingsFill');
+  if(!jar) return;
+  jar.style.transition = 'height .7s cubic-bezier(.2,.8,.2,1), transform .22s ease';
+  jar.style.transform = 'scaleY(1.08)';
+  setTimeout(()=>{ jar.style.transform = 'scaleY(1)'; }, 240);
 }
 
 function buildWantAwareSocialScenario(deckItem){
   const budgeted = getBudgetedWantEntry(deckItem);
-  const prettyShort = deckItem.short[0].toUpperCase() + deckItem.short.slice(1);
-  const budgetedBody = `You budgeted for ${prettyShort} this month. That means it is already part of your wants plan, so you can enjoy it without spending extra money outside your budget.`;
-  const unbudgetedBody = `You did not budget for ${prettyShort} this month. Going now means spending extra money outside your plan, which can crowd your budget or force you to move money from somewhere else.`;
+  const budgetedLine = budgeted
+    ? `You budgeted for ${deckItem.short} this month, so it is already in your wants plan.`
+    : `${deckItem.short[0].toUpperCase() + deckItem.short.slice(1)} is not in your wants plan this month, so it will cost extra money.`;
 
   return {
     id:"manual_social_" + Date.now(),
@@ -6705,58 +6484,48 @@ function buildWantAwareSocialScenario(deckItem){
     title: ()=> deckItem.title,
     body: ()=> `${deckItem.body}
 
-${budgeted ? budgetedBody : unbudgetedBody}`,
+${budgetedLine}`,
     options: ()=> {
       if(budgeted){
         return [
           {
             label:`Go — it's already in my budget!`,
-            hint:`No extra cost • budgeted ${money(deckItem.cost)}`,
+            hint:"No extra cost — budgeted!",
             apply:(st)=>{
               useWantFromInventory(deckItem.keyword);
-              addLedgerLine(`Want used from budget: ${prettyShort} (${money(deckItem.cost)})`);
-              return `${prettyShort} was already in your wants plan, so no extra money had to leave checking, savings, or cash.`;
+              addCoverage(12);
+              return `${deckItem.short[0].toUpperCase() + deckItem.short.slice(1)} was already in the budget, so no extra money was spent.`;
             }
           },
           {
             label:"Skip tonight — save the slot for later",
-            hint:"Keep this want available for another time",
-            apply:(st)=>`You kept your ${deckItem.short} budget available for later.`
+            hint:`Keep your ${deckItem.short} budget for another time`,
+            apply:(st)=>`You skipped ${deckItem.short} and kept that want available for later.`
           }
         ];
       }
       return [
         {
-          label:"Go anyway",
-          hint:`Choose payment source • ${money(deckItem.cost)} unplanned`,
+          label:`Go — pay ${money(deckItem.cost)} from a money choice`,
+          hint:`Unbudgeted want • choose payment source`,
           cost:deckItem.cost,
           applyAfterFunding:(st, job, src)=>{
             st.ledger.weekExpenses += deckItem.cost;
-            markUnplannedWantUsed(deckItem.keyword);
-            addLedgerLine(`Unplanned want: ${prettyShort} -${money(deckItem.cost)} from ${formatSourceLabel(src)}`);
-            return `You went, but it was not budgeted. ${money(deckItem.cost)} came from ${formatSourceLabel(src)}, so this was extra spending outside your wants plan.`;
+            markUnplannedWantUsed(deckItem.title.replace(/^\S+\s*/, ""));
+            addCoverage(12);
+            return `${deckItem.short[0].toUpperCase() + deckItem.short.slice(1)} was not budgeted, so you paid ${money(deckItem.cost)} from ${src}.`;
           }
         },
         {
           label:"Skip it and stay on budget",
-          hint:"No extra cost • protect the plan",
+          hint:"No extra cost",
           apply:(st)=>{
-            return `You skipped it and protected your budget. No extra money had to move.`;
+            const bonus = Math.max(1, Math.round(deckItem.cost * 0.2));
+            st.bank.savings += bonus;
+            return `You skipped it and protected your budget. Savings +${money(bonus)}.`;
           }
         }
       ];
-    }
-  };
-}
-
-function createSocialWantEvent(week){
-  return {
-    id:`social_want_${week}_${Date.now()}`,
-    typeKey:'life',
-    customRunner:(done)=>{
-      const deckItem = pickSocialWantDeckItem();
-      const scenario = buildWantAwareSocialScenario(deckItem);
-      openScenarioModal(scenario, done);
     }
   };
 }
@@ -6801,16 +6570,8 @@ function runSchoolDecision(){
   openScenarioModal(scenario, ()=> notifyAction("job_event"));
 }
 
-function pickSocialWantDeckItem(){
-  const activeWants = (state.plan.wantsInventoryActive || []).filter(w => w.available);
-  const normalized = activeWants.map(w => String(w.label || '').toLowerCase());
-  const matches = SOCIAL_WANTS_DECK.filter(item => normalized.some(label => label.includes(String(item.keyword || '').toLowerCase()) || label.includes(String(item.short || '').toLowerCase())));
-  if(matches.length) return matches[Math.floor(Math.random() * matches.length)];
-  return SOCIAL_WANTS_DECK[Math.floor(Math.random()*SOCIAL_WANTS_DECK.length)];
-}
-
 function runSocialDecision(){
-  const deckItem = pickSocialWantDeckItem();
+  const deckItem = SOCIAL_WANTS_DECK[Math.floor(Math.random()*SOCIAL_WANTS_DECK.length)];
   const scenario = buildWantAwareSocialScenario(deckItem);
   openScenarioModal(scenario, ()=> notifyAction("job_event"));
 }
@@ -6862,8 +6623,7 @@ function runRandomEvent(){
   const finalType = pickWeightedRandomEventType();
   const ids = ["btnSchoolEvent","btnJobEvent","btnSocialEvent"];
   let step = 0;
-  const cycleCount = 2 + Math.floor(Math.random()*2); // 2 to 3 visible rolls
-  const totalSteps = ids.length * cycleCount;
+  const totalSteps = 2 + Math.floor(Math.random()*2);
 
   clearRandomEventPending();
   state.ui.randomEventCycling = true;
@@ -7248,8 +7008,9 @@ function runJobRealLifeEvent(){
   const itemName=pair[0], itemId=pair[1], rushCost=pair[2];
   const haveIt = invQty(itemId) > 0;
   const bonus = month>=3;
+  const preferSupplyDecision = !bonus || Math.random() < 0.5;
 
-  if(!bonus){
+  if(preferSupplyDecision){
     // Split-panel: left = decision, right = inventory
     const leftHTML = `
       <div style="margin-bottom:10px;padding:10px;background:var(--card-bg,#f8f9fa);border-radius:8px">
@@ -8405,7 +8166,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
   if($("btnJobEvent")) $("btnJobEvent").textContent = "Run Job Event";
   if($("btnSchoolEvent")) $("btnSchoolEvent").textContent = "Run Life Scenario";
   if($("btnSocialEvent")) $("btnSocialEvent").textContent = "Run Financial Decision";
-  if($("btnRandomEvent")) { const w=getDynamicRandomEventWeights(); $("btnRandomEvent").textContent = `Run Random Event (${w.life||40}/${w.job||30}/${w.financial||30})`; }
+  if($("btnRandomEvent")) { const w=getDynamicRandomEventWeights(); $("btnRandomEvent").textContent = `Run Random Event (${w.life||40}/${w.job||40}/${w.financial||20})`; }
   $("btnJobEvent").onclick=()=>{
     if(state.ui?.randomEventPendingType && state.ui.randomEventPendingType !== "job") return;
     const hadPending = state.ui?.randomEventPendingType === "job";

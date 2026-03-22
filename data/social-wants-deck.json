@@ -85,30 +85,30 @@
   },
   {
     "keyword": "Nail Salon",
-    "short": "nail salon",
+    "short": "nail salon visit",
     "cost": 22,
-    "title": "\ud83d\udc85 Nail Appointment",
-    "body": "Your friends are heading to get their nails done after school."
+    "title": "\ud83d\udc85 Nail Salon Stop",
+    "body": "A nail appointment opened up and your friends want to go today."
   },
   {
     "keyword": "Mall Shopping",
     "short": "mall shopping",
     "cost": 28,
-    "title": "\ud83d\udecd\ufe0f Mall Shopping Trip",
-    "body": "A last-minute mall trip popped up and everybody wants to go shopping."
+    "title": "\ud83d\udecd\ufe0f Mall Trip",
+    "body": "A group trip to the mall popped up after school."
   },
   {
-    "keyword": "Hair Accessories / Beauty Supply",
-    "short": "beauty supply stop",
-    "cost": 24,
-    "title": "\u2728 Beauty Supply Stop",
-    "body": "You spotted hair accessories and beauty items you really want this week."
+    "keyword": "Beauty Supply",
+    "short": "beauty supply run",
+    "cost": 18,
+    "title": "\u2728 Beauty Supply Run",
+    "body": "You want to stop at the beauty supply store for a few extras."
   },
   {
     "keyword": "Spa / Self-Care Day",
     "short": "self-care day",
     "cost": 35,
     "title": "\ud83e\uddd6 Self-Care Day",
-    "body": "A self-care day with friends sounds fun, but it costs real money."
+    "body": "A self-care day sounds fun, but it costs real money this week."
   }
 ]

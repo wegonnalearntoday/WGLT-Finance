@@ -3,9 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
   <title>WGLT Budget Boss Simulator (Year Mission + Ledger)</title>
 
   <style>
@@ -384,12 +381,6 @@ main::before{
     .bank-jar-hysa .bank-jar-fill{background:linear-gradient(180deg,rgba(142,68,173,.45),rgba(142,68,173,.9));}
     .bank-jar-cd .bank-jar{border-color:#00a8a8;}
     .bank-jar-cd .bank-jar-fill{background:linear-gradient(180deg,rgba(0,168,168,.42),rgba(0,168,168,.9));}
-.bank-jar-savings .bank-jar{position:relative;}
-    .jar-goal-mark{position:absolute;left:4px;right:4px;height:0;border-top:2px dashed rgba(36,65,108,.32);z-index:2;pointer-events:none;}
-    .jar-goal-mark span{position:absolute;right:-30px;top:-8px;font-size:9px;font-weight:1000;color:#4c5d78;background:rgba(255,255,255,.92);padding:0 3px;border-radius:8px;}
-    .jar-goal-mark.hit{border-top-color:#2e7d32;}
-    .jar-goal-mark.hit span{color:#2e7d32;}
-    .jar-goal-progress{font-size:11px;font-weight:900;color:#2e7d32;min-height:14px;}
     .meter{
       margin-top:10px;
       border:1px solid var(--line);
@@ -744,11 +735,11 @@ main::before{
                     <label class="wants-option"><input type="checkbox" value="18" data-label="Pizza Night ($18)"> <span>Pizza Night ($18)</span></label>
                     <label class="wants-option"><input type="checkbox" value="20" data-label="Video Game Rental ($20)"> <span>Video Game Rental ($20)</span></label>
                     <label class="wants-option"><input type="checkbox" value="25" data-label="Arcade Day ($25)"> <span>Arcade Day ($25)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="30" data-label="Shoes/Style Item ($30)"> <span>Shoes/Style Item ($30)</span></label>
                     <label class="wants-option"><input type="checkbox" value="22" data-label="Nail Salon ($22)"> <span>Nail Salon ($22)</span></label>
                     <label class="wants-option"><input type="checkbox" value="28" data-label="Mall Shopping ($28)"> <span>Mall Shopping ($28)</span></label>
-                    <label class="wants-option"><input type="checkbox" value="24" data-label="Hair Accessories / Beauty Supply ($24)"> <span>Hair Accessories / Beauty Supply ($24)</span></label>
+                    <label class="wants-option"><input type="checkbox" value="18" data-label="Beauty Supply ($18)"> <span>Beauty Supply ($18)</span></label>
                     <label class="wants-option"><input type="checkbox" value="35" data-label="Spa / Self-Care Day ($35)"> <span>Spa / Self-Care Day ($35)</span></label>
-                    <label class="wants-option"><input type="checkbox" value="30" data-label="Shoes/Style Item ($30)"> <span>Shoes/Style Item ($30)</span></label>
                     <label class="wants-option"><input type="checkbox" value="40" data-label="Game Purchase ($40)"> <span>Game Purchase ($40)</span></label>
                     <label class="wants-option"><input type="checkbox" value="50" data-label="Weekend Fun Pack ($50)"> <span>Weekend Fun Pack ($50)</span></label>
                     <label class="wants-option"><input type="checkbox" value="75" data-label="Concert/Big Trip ($75)"> <span>Concert/Big Trip ($75)</span></label>
@@ -826,15 +817,8 @@ main::before{
                     </div>
                     <div class="bank-jar-wrap bank-jar-savings">
                       <div class="bank-jar-label">Savings</div>
-                      <div class="bank-jar">
-                        <div class="jar-goal-mark" id="jarSavingsMark25" style="bottom:25%"><span>25%</span></div>
-                        <div class="jar-goal-mark" id="jarSavingsMark50" style="bottom:50%"><span>50%</span></div>
-                        <div class="jar-goal-mark" id="jarSavingsMark75" style="bottom:75%"><span>75%</span></div>
-                        <div class="jar-goal-mark" id="jarSavingsMark100" style="bottom:calc(100% - 2px)"><span>100%</span></div>
-                        <div class="bank-jar-fill" id="jarSavingsFill"></div>
-                      </div>
+                      <div class="bank-jar"><div class="bank-jar-fill" id="jarSavingsFill"></div></div>
                       <div class="bank-jar-amt" id="jarSavingsAmt">$0</div>
-                      <div class="jar-goal-progress" id="jarSavingsGoalText">Set a goal</div>
                     </div>
                     <div class="bank-jar-wrap bank-jar-cash">
                       <div class="bank-jar-label">Cash</div>

@@ -1,41 +1,5 @@
 
 (async function(){
-  const APP_VERSION = '2026.03.22.wantfix-r7';
-
-  async function clearWGLTSiteData(){
-    try{ localStorage.clear(); }catch(err){}
-    try{ sessionStorage.clear(); }catch(err){}
-    try{
-      if('caches' in window){
-        const names = await caches.keys();
-        await Promise.all(names.map(name => caches.delete(name)));
-      }
-    }catch(err){}
-    try{
-      if('serviceWorker' in navigator){
-        const regs = await navigator.serviceWorker.getRegistrations();
-        await Promise.all(regs.map(reg => reg.unregister()));
-      }
-    }catch(err){}
-  }
-
-  try{
-    const seenVersion = localStorage.getItem('wglt_app_version');
-    if(seenVersion !== APP_VERSION){
-      await clearWGLTSiteData();
-      try{ localStorage.setItem('wglt_app_version', APP_VERSION); }catch(err){}
-      const url = new URL(window.location.href);
-      url.searchParams.set('v', APP_VERSION);
-      window.location.replace(url.toString());
-      return;
-    }
-  }catch(err){
-    console.warn('Version guard skipped', err);
-  }
-
-  window.WGLT_APP_VERSION = APP_VERSION;
-  window.clearWGLTSiteData = clearWGLTSiteData;
-
   const files = {
     bench: './data/bench.json',
     flBuckets: './data/fl-buckets.json',
@@ -70,13 +34,13 @@
     consequenceMapFoundation: './data/consequences/consequence-map-foundation.json'
   };
   const entries = await Promise.all(Object.entries(files).map(async ([key, path]) => {
-    const res = await fetch(path + '?v=' + encodeURIComponent(APP_VERSION), {cache:'no-store'});
+    const res = await fetch(path, {cache:'no-store'});
     if(!res.ok) throw new Error(`Failed to load ${path}`);
     return [key, await res.json()];
   }));
   window.WGLT_DATA = Object.fromEntries(entries);
   const s = document.createElement('script');
-  s.src = './js/app.js?v=' + encodeURIComponent(APP_VERSION);
+  s.src = './js/app.js';
   document.body.appendChild(s);
 })().catch(err => {
   console.error(err);

@@ -1230,25 +1230,7 @@ function fmt(n) {
   return (Math.round(n * 10)/10).toFixed(0);
 }
 
-
-async function clearAllBudgetBossSiteData(){
-  try{ localStorage.clear(); }catch(err){}
-  try{ sessionStorage.clear(); }catch(err){}
-  try{
-    if('caches' in window){
-      const names = await caches.keys();
-      await Promise.all(names.map(name => caches.delete(name)));
-    }
-  }catch(err){}
-  try{
-    if('serviceWorker' in navigator){
-      const regs = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map(reg => reg.unregister()));
-    }
-  }catch(err){}
-}
-
-async function resetGame() {
+function resetGame() {
   state = {
     playerName:'', avatar:'', avatarName:'',
     job:null, cause:null, causeName:'', goal:20,
@@ -1270,14 +1252,7 @@ async function resetGame() {
 updateResumeButton();
 syncEarnedIncomeLabel();
   clearSavedGame();
-  try{
-    await clearAllBudgetBossSiteData();
-    localStorage.setItem('wglt_app_version', '2026.03.22.wants-modal-r3');
-  }catch(err){}
   showScreen('screen-welcome');
-  const url = new URL(window.location.href);
-  url.searchParams.set('v', '2026.03.22.wants-modal-r3');
-  window.location.replace(url.toString());
 }
 
 function confirmResetGame(){
