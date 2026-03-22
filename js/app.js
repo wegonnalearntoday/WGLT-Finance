@@ -3389,6 +3389,13 @@ const $ = (id)=>document.getElementById(id);
 const money = (n)=>"$" + Math.max(0, Math.round(n)).toLocaleString();
 const clamp = (n,min,max)=>Math.max(min,Math.min(max,n));
 
+function getSavingsGoalProgress(){
+  const goal = Number(state && state.savingsGoal || 0);
+  const saved = Number(state && state.bank ? state.bank.savings || 0 : 0);
+  const pct = goal > 0 ? Math.max(0, Math.min(100, Math.round((saved / Math.max(1, goal)) * 100))) : 0;
+  return { goal, saved, pct };
+}
+
 /* Sound FX */
 let audioCtx=null;
 function beep(type="success"){
@@ -3847,7 +3854,10 @@ function renderHeader(){
   $("credit").textContent = state.credit;
   if ($("creditInlineVal")) $("creditInlineVal").textContent = state.credit;
   $("goalBadge").textContent = money(state.savingsGoal);
-  if ($("goalStatusInline")) $("goalStatusInline").textContent = state.savingsGoal ? `${money(state.savingsGoal)} by Month 12` : "Not set";
+  if ($("goalStatusInline")) {
+    const gp = getSavingsGoalProgress();
+    $("goalStatusInline").textContent = gp.goal ? `${money(gp.goal)} by Month 12 • ${gp.pct}% there` : "Not set";
+  }
   if ($("budgetModelLabel")) $("budgetModelLabel").textContent = getBudgetModelName();
   if ($("planLockLabel")) $("planLockLabel").textContent = state.plan.lockedForYear ? "Locked" : "Unlocked";
   $("checkingVal").textContent = money(state.bank.checking);
@@ -3931,6 +3941,16 @@ function renderBankJars(){
     $(fillId).style.height = pct + "%";
     $(amtId).textContent = money(amount);
     $(fillId).title = `${money(amount)} of ${money(scale)}`;
+  });
+  const goalProgress = getSavingsGoalProgress();
+  if($("jarSavingsGoalText")) {
+    $("jarSavingsGoalText").textContent = goalProgress.goal ? `${goalProgress.pct}% of ${money(goalProgress.goal)}` : 'Set a goal';
+  }
+  [["jarSavingsMark25",25],["jarSavingsMark50",50],["jarSavingsMark75",75],["jarSavingsMark100",100]].forEach(([id,p])=>{
+    if($(id)){
+      $(id).title = `${p}% milestone`;
+      $(id).classList.toggle('hit', goalProgress.goal > 0 && goalProgress.pct >= p);
+    }
   });
 }
 
@@ -4314,7 +4334,6 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
             if(pick !== 'confirm') return;
             const cdResult = spendFromSource('cd', amount);
             if(!cdResult.ok){ beep('warn'); showBanner(cdResult.message || 'CD withdrawal failed'); return; }
-            addLedgerLine(cdResult.summary);
             showDecisionBadge(`Paid from ${formatSourceLabel('cd')}: ${money(amount)}`);
             if(onPaid) setTimeout(()=> onPaid('cd', cdResult), 50);
           }
@@ -4374,7 +4393,6 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
               const finalResult = spendFromSource(id, amount);
               if(!finalResult.ok){ beep('warn'); showBanner('Payment failed after transfer'); return; }
               addLedgerLine(`Transfer: ${money(shortfall)} from ${fromSrc} → ${id} to cover ${money(amount)}`);
-              addLedgerLine(finalResult.summary);
               showDecisionBadge(`Paid from ${formatSourceLabel(id)} after transfer`);
               renderHeader(); renderLedger();
               setTimeout(()=> onPaid && onPaid(id, finalResult), 50);
@@ -4384,7 +4402,6 @@ Do you still want to take money from the CD, or decline and keep it invested?`,
         });
         return;
       }
-      addLedgerLine(result.summary);
       showDecisionBadge(`Paid from ${formatSourceLabel(id)}: ${money(amount)}`);
       // Let onPaid handle rendering after it updates state
       if(onPaid) setTimeout(()=> onPaid(id, result), 50);
@@ -5671,9 +5688,9 @@ Rewards
 function checkSavingsMilestones(){
   if(state.savingsGoal<=0) return;
 
-  const saved = state.bank.savings;
-  const goal = state.savingsGoal;
-  const pct = saved / goal;
+  const saved = Number(state.bank.savings || 0);
+  const goal = Number(state.savingsGoal || 0);
+  const pct = goal > 0 ? (saved / goal) : 0;
 
   const hits = [
     {k:"25", thr:0.25, bonus:5},
@@ -5682,15 +5699,57 @@ function checkSavingsMilestones(){
     {k:"100", thr:1.00, bonus:25}
   ];
 
-  hits.forEach(h=>{
-    if(pct>=h.thr && !state.savingsMilestones.has(h.k)){
-      state.savingsMilestones.add(h.k);
-      state.bank.savings += h.bonus;
-      showBanner(`Savings milestone ${h.k}%! +${money(h.bonus)} reward`);
-      addLedgerLine(`Savings milestone ${h.k}% reward +${money(h.bonus)} (to savings)`);
-      addCoverage(12);
-    }
-  });
+  const newlyHit = hits.filter(h => pct >= h.thr && !state.savingsMilestones.has(h.k));
+  if(!newlyHit.length) return;
+
+  const queue = newlyHit.slice().sort((a,b)=>a.thr-b.thr);
+
+  function showNextMilestoneReward(){
+    const hit = queue.shift();
+    if(!hit) return;
+    state.savingsMilestones.add(hit.k);
+    openModal({
+      title:`🏦 Savings Goal ${hit.k}% Reached!`,
+      meta:`Bonus unlocked: ${money(hit.bonus)}`,
+      body:`Your savings jar just hit ${hit.k}% of the goal.
+
+Reward unlocked: ${money(hit.bonus)}
+
+Where do you want to put the bonus money?`,
+      buttons:[
+        {id:'cash', label:'Keep as Cash', kind:'secondary'},
+        {id:'checking', label:'Put in Checking', kind:'primary'},
+        {id:'savings', label:'Put in Savings', kind:'secondary'},
+        {id:'invest', label:'Invest It', kind:'success'}
+      ],
+      onPick:(id)=>{
+        const label = `${hit.k}% savings goal bonus`;
+        if(id === 'invest'){
+          openInvestmentChoiceModal(hit.bonus, label, (summary)=>{
+            if(summary) addLedgerLine(summary);
+            addLedgerLine(`Savings milestone ${hit.k}% reward ${money(hit.bonus)} routed to investment`);
+            showBanner(`Savings milestone ${hit.k}%! Bonus ${money(hit.bonus)}`);
+            addCoverage(12);
+            renderHeader();
+            renderSheet();
+            if(queue.length) setTimeout(showNextMilestoneReward, 120);
+          });
+          return;
+        }
+        if(id === 'cash') state.cash += hit.bonus;
+        else if(id === 'checking') state.bank.checking += hit.bonus;
+        else state.bank.savings += hit.bonus;
+        addLedgerLine(`Savings milestone ${hit.k}% reward ${money(hit.bonus)} to ${formatSourceLabel(id)}`);
+        showBanner(`Savings milestone ${hit.k}%! Bonus ${money(hit.bonus)}`);
+        addCoverage(12);
+        renderHeader();
+        renderSheet();
+        if(queue.length) setTimeout(showNextMilestoneReward, 120);
+      }
+    });
+  }
+
+  showNextMilestoneReward();
 }
 
 /* Suggested plan */
