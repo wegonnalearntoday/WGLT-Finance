@@ -884,6 +884,7 @@ function shouldAskDecisionReflection(meta={}){
 }
 
 function queueDecisionReflection(meta={}){
+  if(!isTeacherRole()) return;
   if(state.ui && state.ui.suppressDecisionReflections) return;
   if(!shouldAskDecisionReflection(meta)) return;
   const type = inferDecisionReflectionType(meta);
@@ -901,6 +902,7 @@ function queueDecisionReflection(meta={}){
 }
 
 function openDecisionReflectionPrompt(meta={}){
+  if(!isTeacherRole()) return;
   const type = normalizeDecisionReflectionType(meta.type);
   const titleMap = {
     spending: "💸 Quick Money Check",
@@ -3198,14 +3200,34 @@ function buildUnifiedEventPool(week){
     return Number(week) >= Number(range[0] || 1) && Number(week) <= Number(range[1] || 48);
   };
   const diffOk = (ev) => !Array.isArray(ev.difficulty) || !ev.difficulty.length || ev.difficulty.includes(exp) || (exp === 'elite' && ev.difficulty.includes('standard'));
-  const genericLife = REAL_LIFE_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'life', prompt:ev.description || ''}, ev));
+  const genericLife = REAL_LIFE_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => {
+    const enriched = Object.assign({typeKey:'life', prompt:ev.description || ''}, ev);
+    const socialCue = `${ev.title || ''} ${ev.description || ''} ${ev.teacherPromptId || ''} ${ev.focusTag || ''}`.toLowerCase();
+    if(/social_spending|prompt_social_spending|pizza|movie|arcade|shopping|mall|nail|beauty|spa/.test(socialCue)){
+      enriched.customRunner = (done)=>{
+        const deckItem = inferWantDeckItemFromEvent(ev);
+        const scenario = buildWantAwareSocialScenario(deckItem);
+        openScenarioModal(scenario, done);
+      };
+    }
+    return enriched;
+  });
   const genericFin = FINANCIAL_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'financial', prompt:ev.description || ''}, ev));
   const genericOpp = OPPORTUNITY_EVENTS.filter(ev => inWeek(ev) && diffOk(ev)).map(ev => Object.assign({typeKey:'job', prompt:ev.description || ''}, ev));
   const elitePool = isEliteExperience() ? ELITE_SCENARIOS.filter(ev => inWeek(ev)).map(ev => ({
     id:ev.id, title:ev.title, prompt:ev.description || '', typeKey:'financial', choices:(ev.choices || []).map((c, i)=>({ id:`elite_${i+1}`, label:c.label, effects:c.effects || {}, tag:c.tag || '' }))
   })) : [];
   const jobPool = createJobTemplatePool(job);
-  return { life: genericLife, financial: genericFin.concat(elitePool), job: jobPool.concat(genericOpp) };
+  const inventoryJobEvent = {
+    id:`job_inventory_${job.id || 'job'}_${week}`,
+    title:`${job.name}: Supply Decision`,
+    typeKey:'job',
+    customRunner:(done)=>{
+      runJobRealLifeEvent();
+      if(typeof done === 'function') setTimeout(done, 0);
+    }
+  };
+  return { life: genericLife, financial: genericFin.concat(elitePool), job: [inventoryJobEvent].concat(jobPool, genericOpp) };
 }
 function pickUniqueEventFromPool(type, week){
   ensureEventEngineState();
@@ -3617,6 +3639,8 @@ function applyRandomEventButtonState(){
     el.classList.remove("glow-next");
     el.style.filter = "";
     el.style.opacity = "";
+    el.style.pointerEvents = "";
+    el.style.cursor = "";
   });
 
   const waiting = state.mission && state.mission.active ? state.mission.waitingAction : null;
@@ -3633,6 +3657,8 @@ function applyRandomEventButtonState(){
         el.disabled = true;
         el.style.filter = "grayscale(1)";
         el.style.opacity = ".6";
+        el.style.pointerEvents = "none";
+        el.style.cursor = "not-allowed";
       }
     });
     return;
@@ -3645,6 +3671,8 @@ function applyRandomEventButtonState(){
       randomBtn.disabled = true;
       randomBtn.style.filter = "grayscale(1)";
       randomBtn.style.opacity = ".6";
+      randomBtn.style.pointerEvents = "none";
+      randomBtn.style.cursor = "not-allowed";
     }
     choiceIds.forEach(id=>{
       const el = $(id);
@@ -3654,10 +3682,14 @@ function applyRandomEventButtonState(){
         el.classList.add("glow-next");
         el.style.filter = "";
         el.style.opacity = "1";
+        el.style.pointerEvents = "auto";
+        el.style.cursor = "pointer";
       } else {
         el.disabled = true;
         el.style.filter = "grayscale(1)";
         el.style.opacity = ".6";
+        el.style.pointerEvents = "none";
+        el.style.cursor = "not-allowed";
       }
     });
     return;
@@ -6633,6 +6665,32 @@ function startDispute(){
 function getBudgetedWantEntry(deckItem){
   if(!state.plan.wantsInventoryActive) return null;
   return state.plan.wantsInventoryActive.find(x => x.label.toLowerCase().includes(deckItem.keyword.toLowerCase()) && x.available) || null;
+}
+
+function inferWantDeckItemFromEvent(ev){
+  const blob = `${ev?.title || ''} ${ev?.description || ''} ${ev?.prompt || ''}`.toLowerCase();
+  const directMap = [
+    {needle:'pizza', keyword:'Pizza Night'},
+    {needle:'movie', keyword:'Movie Ticket'},
+    {needle:'arcade', keyword:'Arcade Day'},
+    {needle:'snack', keyword:'Snacks'},
+    {needle:'candy', keyword:'Candy'},
+    {needle:'music', keyword:'Music Streaming'},
+    {needle:'shopping', keyword:'Mall Shopping'},
+    {needle:'mall', keyword:'Mall Shopping'},
+    {needle:'nail', keyword:'Nail Salon'},
+    {needle:'beauty', keyword:'Hair Accessories / Beauty Supply'},
+    {needle:'spa', keyword:'Spa / Self-Care Day'},
+    {needle:'self-care', keyword:'Spa / Self-Care Day'},
+    {needle:'game skin', keyword:'New Game Skin'},
+    {needle:'style', keyword:'Shoes/Style Item'}
+  ];
+  const picked = directMap.find(x => blob.includes(x.needle));
+  if(picked){
+    const exact = SOCIAL_WANTS_DECK.find(item => String(item.keyword || '').toLowerCase() === picked.keyword.toLowerCase());
+    if(exact) return exact;
+  }
+  return pickSocialWantDeckItem();
 }
 
 function buildWantAwareSocialScenario(deckItem){

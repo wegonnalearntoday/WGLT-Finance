@@ -1,6 +1,6 @@
 
 (async function(){
-  const APP_VERSION = '2026.03.22.savings-tracker-r6';
+  const APP_VERSION = '2026.03.22.wantfix-r7';
 
   async function clearWGLTSiteData(){
     try{ localStorage.clear(); }catch(err){}
