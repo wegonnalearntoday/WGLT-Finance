@@ -221,26 +221,10 @@ function getWeeklyGoalForWeek(week){
   return state.standardV1.weeklyGoals[String(month)] || null;
 }
 function getCurrentWeeklyGoal(){
-  const month = getCurrentFocusMonth();
-  return state.standardV1.weeklyGoals[String(month)] || null;
+  return null;
 }
 function setWeeklyGoalForWeek(week, goalId){
-  ensureStandardV1State();
-  const month = Number(weekToMonth ? weekToMonth(Number(week || (state.weekEngine && state.weekEngine.week) || 1)) : week || 1);
-  const goal = MONTHLY_FOCUS_BANK.find(g => g.id === goalId) || MONTHLY_FOCUS_BANK[0];
-  const saved = Number(state.bank?.savings || 0) + Number(state.bank?.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0) + Number(totalStockFunds ? totalStockFunds() : 0);
-  state.standardV1.weeklyGoals[String(month)] = { month, id:goal.id, name:goal.name, emoji:goal.emoji, desc:goal.desc, selectedAt:new Date().toISOString() };
-  state.standardV1.focusBaselines[String(month)] = {
-    savings:saved,
-    credit:Number(state.credit || 650),
-    checking:Number(state.bank?.checking || 0),
-    careerLevel:Number(state.elite?.career?.level || 1),
-    income:Number(state.plan?.income || 0),
-    unplanned:Boolean(state.plan && state.plan.unplannedWantUsedThisMonth)
-  };
-  state.standardV1.goalHistory.push({ month, id:goal.id, name:goal.name });
-  showBanner(`${goal.emoji} Monthly Focus: ${goal.name}`);
-  scheduleAutoSave(150);
+  return;
 }
 function getCurrentMonthFocusProgress(){
   ensureStandardV1State();
@@ -301,19 +285,13 @@ function getMonthlyGoalStatusText(){
   return progress.label;
 }
 function getDynamicRandomEventWeights(){
-  const base = Object.assign({life:40,job:30,financial:30}, getRandomEventWeights());
-  const goal = getCurrentWeeklyGoal();
-  const shift = goal ? ((MONTHLY_FOCUS_BANK.find(g => g.id === goal.id) || {}).weights || {}) : {};
-  const out = {
-    life: Math.max(10, Number(base.life || 0) + Number(shift.life || 0)),
-    job: Math.max(10, Number(base.job || 0) + Number(shift.job || 0)),
-    financial: Math.max(10, Number(base.financial || 0) + Number(shift.financial || 0))
+  // Lock Standard mode to exact weights so weekly goals do not quietly bend the odds.
+  const modeWeights = Object.assign({life:40,job:40,financial:20}, getRandomEventWeights());
+  return {
+    life: Number(modeWeights.life || 40),
+    financial: Number(modeWeights.financial || 20),
+    job: Number(modeWeights.job || 40)
   };
-  const total = out.life + out.job + out.financial || 100;
-  out.life = Math.round((out.life / total) * 100);
-  out.job = Math.round((out.job / total) * 100);
-  out.financial = Math.max(0, 100 - out.life - out.job);
-  return out;
 }
 function ensureEliteState(){
   ensureStandardV1State();
@@ -709,45 +687,9 @@ function renderStandardV1HUD(){
   renderEliteOverview();
 }
 function promptWeeklyGoalIfNeeded(onDone, opts={}){
-  ensureStandardV1State();
-  if(!isStandardV1Experience() || !(state.mission && state.mission.active)){
-    if(onDone) onDone();
-    return;
-  }
-  const week = Number((state.weekEngine && state.weekEngine.week) || 1);
-  const month = getCurrentFocusMonth();
-  if(getCurrentWeeklyGoal()){
-    if(onDone) onDone();
-    return;
-  }
-  openHtmlModal({
-    title:`🎯 ${weekToMonthName ? weekToMonthName(week) : `Month ${month}`} Focus`,
-    meta:`Choose one focus for this month`,
-    html:`<div style="font-weight:900;margin-bottom:10px">Choose a focus for this month. Your random events, coaching, and focus progress tracker will react to this choice.</div>
-      <div class="choice-grid">${MONTHLY_FOCUS_BANK.map(g=>`<button class="choice-btn" data-weekly-goal="${g.id}">${g.emoji} ${g.name}<small>${g.desc}</small></button>`).join('')}</div>`,
-    buttons:[],
-    onRender:()=>{
-      document.querySelectorAll('[data-weekly-goal]').forEach(btn=>{
-        btn.onclick=()=>{
-          beep('click');
-          setWeeklyGoalForWeek(week, btn.dataset.weeklyGoal);
-          closeHtmlModal();
-          renderAll();
-          if(onDone) onDone();
-          if(opts && opts.jumpToBankAfterPick){
-            setTimeout(()=>{
-              openTab('bank', {auto:true});
-              const bankPanel = $('panel-bank');
-              if(bankPanel) bankPanel.scrollIntoView({behavior:'smooth', block:'start'});
-              const startupBtn = $('btnChooseStartup');
-              if(startupBtn) startupBtn.scrollIntoView({behavior:'smooth', block:'center'});
-            }, 140);
-          }
-        };
-      });
-    }
-  });
+  if(onDone) onDone();
 }
+
 function queueConsequenceObject(item, sourceLabel=''){
   ensureStandardV1State();
   if(!state.weekEngine) initWeekEngine();
@@ -4941,6 +4883,7 @@ function startMission(){
   state.mission.waitingAction=null;
   initWeekEngine();
   renderWeekHeader();
+  hideStudentFocusUi();
 
   state.savingsGoal = 0;
   state.savingsMilestones = new Set();
@@ -4965,7 +4908,7 @@ function startMission(){
   state.standardV1.chainHistory = [];
   state.standardV1.chainWindowsFired = {};
 
-  setLog("Year mission started! June Week 1 — follow the glowing actions. Monthly focus, health, and choice echoes are now live.");
+  setLog("Year mission started! June Week 1 — follow the glowing actions. Health and choice echoes are now live.");
   setTimeout(()=>promptWeeklyGoalIfNeeded(null, {jumpToBankAfterPick:true}), 200);
   renderAll();
   runCurrentMissionStep();
@@ -6411,7 +6354,7 @@ function promptMonthlyBudgetSheetReview(onDone){
   openModal({
     title:"📊 Budget Sheet Check-In",
     meta:"Monthly snapshot",
-    body:"Let\'s take a look at our Budget Sheet to see how we\'re doing.\n\nTap the button below to jump to the Budget Sheet, then tap the glowing Budget Sheet tab once more after you review it to continue to your monthly focus and next random event.",
+    body:"Let\'s take a look at our Budget Sheet to see how we\'re doing.\n\nTap the button below to jump to the Budget Sheet, then tap the glowing Budget Sheet tab once more after you review it to continue to your next random event.",
     buttons:[{id:"go", label:"Go View Budget Sheet →", kind:"primary"}],
     onPick:()=>{
       openTab("sheet", {auto:true});
@@ -8648,8 +8591,26 @@ function renderTeacherToolkit(){
     </div>`;
 }
 
+
+function hideStudentFocusUi(){
+  ['weeklyGoalBadge','impactGoalStatus','impactFocusProgress','focusProgressDetail'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = 'Not used in Student mode';
+  });
+  const fill = document.getElementById('focusProgressFill');
+  if(fill) fill.style.width = '0%';
+  const nodes = [
+    document.getElementById('weeklyGoalBadge')?.closest('.pill'),
+    document.getElementById('impactGoalStatus')?.closest('.pill'),
+    document.getElementById('impactFocusProgress')?.closest('.pill'),
+    document.getElementById('focusProgressDetail')?.closest('.impact-box')
+  ];
+  nodes.forEach(node=>{ if(node) node.style.display = 'none'; });
+}
+
 /* Render all */
 function renderAll(){
+  hideStudentFocusUi();
   renderHeader();
   renderJob();
   renderLedger();
@@ -8763,13 +8724,9 @@ function getScenarioFoundationModeTags(){
   return tags;
 }
 function getScenarioFoundationFocusIds(){
-  const goal = (typeof getCurrentWeeklyGoal === 'function') ? getCurrentWeeklyGoal() : null;
-  const map = { save:'build_savings', credit:'protect_credit', income:'grow_job_income', wants:'control_wants' };
-  const out = [];
-  if(goal && goal.id && map[goal.id]) out.push(map[goal.id]);
-  if(goal && goal.id) out.push(goal.id);
-  return out;
+  return [];
 }
+
 function getScenarioFoundationCurrentStep(){
   return Number((state.weekEngine && state.weekEngine.week) || 1);
 }
@@ -8987,7 +8944,7 @@ function runScenarioFoundationCategory(category, fallbackFn){
       queueScenarioFoundationHooks(choice.delayed_hooks || [], `${picked.title} → ${choice.label}`);
       if(choice.ledger_note) addLedgerLine(choice.ledger_note);
       renderAll();
-      const follow = `${choice.ledger_note ? choice.ledger_note + '\n\n' : ''}${choice.reflection_tag ? 'Focus tag: ' + choice.reflection_tag : 'Decision recorded.'}`;
+      const follow = `${choice.ledger_note ? choice.ledger_note + '\n\n' : ''}${choice.reflection_tag ? 'Tag: ' + choice.reflection_tag : 'Decision recorded.'}`;
       openModal({
         title: 'Decision recorded',
         meta: picked.title,
