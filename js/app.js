@@ -4816,7 +4816,11 @@ function pauseMission(){
   setLog(state.mission.paused ? "Mission paused." : "Mission resumed.");
 }
 
-function resetMission(){
+async function resetMission(){
+  try{
+    if(window.clearWGLTSiteData) await window.clearWGLTSiteData();
+    if(window.WGLT_APP_VERSION) localStorage.setItem('wglt_app_version', window.WGLT_APP_VERSION);
+  }catch(err){}
   const currentJob = state.jobs[state.jobIndex];
   state.cash = 200;
   state.day = 1;
