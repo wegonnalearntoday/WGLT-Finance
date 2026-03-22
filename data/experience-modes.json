@@ -5,9 +5,9 @@
       "name": "Beginner",
       "description": "Softer pressure, extra guidance, and forgiving event flow.",
       "eventWeights": {
-        "life": 40,
-        "job": 40,
-        "financial": 20
+        "life": 50,
+        "job": 25,
+        "financial": 25
       },
       "requireMonthlyReflection": false,
       "eliteFeatures": false,
@@ -20,8 +20,8 @@
       "description": "Balanced 48-week flow with normal pressure and mixed event pacing.",
       "eventWeights": {
         "life": 40,
-        "job": 40,
-        "financial": 20
+        "financial": 20,
+        "job": 40
       },
       "requireMonthlyReflection": false,
       "eliteFeatures": false,
@@ -33,9 +33,9 @@
       "name": "Elite",
       "description": "Advanced pressure, consequence chains, stronger tradeoffs, and required monthly reflection.",
       "eventWeights": {
-        "life": 40,
-        "job": 40,
-        "financial": 20
+        "life": 35,
+        "job": 35,
+        "financial": 30
       },
       "requireMonthlyReflection": true,
       "eliteFeatures": true,
