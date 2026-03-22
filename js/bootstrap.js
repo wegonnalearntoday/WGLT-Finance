@@ -1,6 +1,6 @@
 
 (async function(){
-  const APP_VERSION = '2026.03.21.anti-cache-r1';
+  const APP_VERSION = '2026.03.21.anti-cache-r2';
 
   async function clearWGLTSiteData(){
     try{ localStorage.clear(); }catch(err){}

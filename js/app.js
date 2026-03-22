@@ -3114,6 +3114,30 @@ function inferChoiceCost(choice){
   const fx = choice?.effects || {};
   return Math.abs(Number(fx.cash || 0)) + Math.abs(Number(fx.checking || 0)) + Math.abs(Number(fx.savings || 0));
 }
+function inferChoiceRewardAmount(choice){
+  const buckets = [choice?.reward || {}, choice?.effects || {}];
+  return buckets.reduce((sum, fx)=> sum + Math.max(0, Number(fx.cash || 0)) + Math.max(0, Number(fx.checking || 0)) + Math.max(0, Number(fx.savings || 0)), 0);
+}
+function rerouteGenericMoneyEffects(effects, mode, targetKey){
+  const fx = Object.assign({}, effects || {});
+  const moneyKeys = ['cash','checking','savings'];
+  const total = moneyKeys.reduce((sum, key)=>{
+    const val = Number(fx[key] || 0);
+    if(mode === 'payment' && val < 0){
+      fx[key] = 0;
+      return sum + Math.abs(val);
+    }
+    if(mode === 'reward' && val > 0){
+      fx[key] = 0;
+      return sum + val;
+    }
+    return sum;
+  }, 0);
+  if(total > 0 && targetKey && moneyKeys.includes(targetKey)){
+    fx[targetKey] = Number(fx[targetKey] || 0) + (mode === 'payment' ? -total : total);
+  }
+  return fx;
+}
 function buildGenericEventPrompt(ev, job){
   const typeMap = {life:'real-life situation', job:'job-based situation', financial:'money decision'};
   const t = ev.typeKey || 'life';
@@ -3231,10 +3255,14 @@ function queueGenericDelayedConsequence(choice, week, title){
   }, title || def.title || 'Event Engine v1');
 }
 function applyGenericChoice(choice, ev, week, onDone){
-  const finish = (sourceLabel='')=>{
+  const payment = choice.paymentRequired || (inferChoiceCost(choice) > 0 && ((choice.effects && (Number(choice.effects.cash || 0) < 0 || Number(choice.effects.checking || 0) < 0 || Number(choice.effects.savings || 0) < 0)) || choice.cost));
+  const amt = inferChoiceCost(choice);
+  const rewardAmt = inferChoiceRewardAmount(choice);
+
+  const finish = (paymentSource='', rewardDest='')=>{
     const parts = [];
-    if(choice.reward) parts.push(applyGenericEffects(choice.reward || {}));
-    parts.push(applyGenericEffects(choice.effects || {}));
+    if(choice.reward) parts.push(applyGenericEffects(rerouteGenericMoneyEffects(choice.reward || {}, 'reward', rewardDest)));
+    parts.push(applyGenericEffects(rerouteGenericMoneyEffects(choice.effects || {}, 'payment', paymentSource ? paymentSource : '')));
     const summary = parts.filter(Boolean).join(' • ');
     queueGenericDelayedConsequence(choice, week, ev.title);
     if(ev.id){
@@ -3244,18 +3272,34 @@ function applyGenericChoice(choice, ev, week, onDone){
       state.eventEngine.weekHistory.unshift({ week, id:ev.id, title:ev.title, type:ev.typeKey || 'life' });
       state.eventEngine.weekHistory = state.eventEngine.weekHistory.slice(0, 80);
     }
-    addLedgerLine(`Step ${week}: ${ev.title} → ${choice.label}${sourceLabel ? ` (${sourceLabel})` : ''} • ${summary}`);
+    const detailBits = [];
+    if(paymentSource) detailBits.push(`from ${paymentSource}`);
+    if(rewardDest) detailBits.push(`to ${rewardDest}`);
+    addLedgerLine(`Step ${week}: ${ev.title} → ${choice.label}${detailBits.length ? ` (${detailBits.join(', ')})` : ''} • ${summary}`);
     queueDecisionReflection({ title: ev.title, label: choice.label, summary, amount: inferChoiceCost(choice) || 0 });
     renderAll();
     if(onDone) onDone();
   };
-  const payment = choice.paymentRequired || (inferChoiceCost(choice) > 0 && ((choice.effects && (Number(choice.effects.cash || 0) < 0 || Number(choice.effects.checking || 0) < 0 || Number(choice.effects.savings || 0) < 0)) || choice.cost));
-  const amt = inferChoiceCost(choice);
+
+  const promptForReward = (paymentSource='')=>{
+    if(rewardAmt > 0){
+      chooseMoneyDestination(rewardAmt, `${ev.title}
+
+You are receiving ${money(rewardAmt)}.`, (dest)=> finish(paymentSource, dest));
+    } else {
+      finish(paymentSource, '');
+    }
+  };
+
   if(payment && amt > 0){
     chooseFundingSource(amt, `${ev.title}
 
-Choose where to take ${money(amt)} from.`, (src)=> finish(`from ${src}`));
-  } else finish('');
+Choose where to take ${money(amt)} from.`, (src)=> promptForReward(src));
+  } else if(rewardAmt > 0){
+    promptForReward('');
+  } else {
+    finish('', '');
+  }
 }
 function openGeneratedEventModal(ev, week, onDone){
   const job = getCurrentJob();
