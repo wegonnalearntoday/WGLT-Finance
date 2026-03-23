@@ -37,6 +37,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "You handled transportation and made it to your lawn jobs on time."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You handled transportation and made it to your lawn jobs on time."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No babysitting pay change this time, but the choice still matters."
+          }
         }
       },
       {
@@ -56,6 +72,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "You still made it, but now you owe a favor. No pay change this time."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You still made it, but now you owe a favor. No pay change this time."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a babysitting pay change."
+          }
         }
       },
       {
@@ -76,6 +108,24 @@
           "client_delta": -1,
           "note": "Missing the trip meant missing your mowing route. One client moved on.",
           "replacement_needed": true
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "loss",
+            "pay_delta_pct": -0.08,
+            "client_delta": -1,
+            "note": "Missing the trip meant missing your mowing route. One client moved on.",
+            "replacement_needed": true
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "loss",
+            "pay_delta_pct": -0.08,
+            "client_delta": -1,
+            "note": "The family noticed the issue and chose another sitter. Your babysitting pay stays lower until you book a new family.",
+            "replacement_needed": true
+          }
         }
       }
     ],
@@ -140,6 +190,22 @@
           "pay_delta_pct": -0.04,
           "client_delta": 0,
           "note": "The fun was real, but your budget got tight and you had to pass on mower gas and supplies this week."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.04,
+            "client_delta": 0,
+            "note": "The fun was real, but your budget got tight and you had to pass on mower gas and supplies this week."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.04,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -160,6 +226,22 @@
           "pay_delta_pct": 0.02,
           "client_delta": 0,
           "note": "Planning ahead kept your money steady and your lawn work uninterrupted."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Planning ahead kept your money steady and your lawn work uninterrupted."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -179,6 +261,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "You found support and kept your lawn income stable."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You found support and kept your lawn income stable."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No babysitting pay change this time, but the choice still matters."
+          }
         }
       }
     ],
@@ -241,6 +339,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "Fixing your phone helped you stay reachable for clients and schedule changes."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "Fixing your phone helped you stay reachable for clients and schedule changes."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No babysitting pay change this time, but the choice still matters."
+          }
         }
       },
       {
@@ -260,6 +374,22 @@
           "pay_delta_pct": -0.05,
           "client_delta": 0,
           "note": "A missed text from a client caused confusion, so one payment came in lower this week."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "A missed text from a client caused confusion, so one payment came in lower this week."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -279,6 +409,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "You patched it together and got lucky this time. No lawn care change."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You patched it together and got lucky this time. No lawn care change."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a babysitting pay change."
+          }
         }
       }
     ],
@@ -339,6 +485,22 @@
           "pay_delta_pct": 0.01,
           "client_delta": 0,
           "note": "Handling the fine quickly kept your week organized and your route on track."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Handling the fine quickly kept your week organized and your route on track."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -358,6 +520,22 @@
           "pay_delta_pct": -0.03,
           "client_delta": 0,
           "note": "The unpaid fine kept nagging at you and distracted you during jobs."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "The unpaid fine kept nagging at you and distracted you during jobs."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -376,6 +554,22 @@
           "pay_delta_pct": 0.02,
           "client_delta": 0,
           "note": "Choosing responsibility first helped you stay focused for clients."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Choosing responsibility first helped you stay focused for clients."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       }
     ],
@@ -439,6 +633,22 @@
           "pay_delta_pct": -0.05,
           "client_delta": 0,
           "note": "Impulse spending and late gaming left you tired during lawn work."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Impulse spending and late gaming left you tired during lawn work."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -456,6 +666,22 @@
           "pay_delta_pct": 0.02,
           "client_delta": 0,
           "note": "Patience kept your budget clean and your work steady."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Patience kept your budget clean and your work steady."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -476,6 +702,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "You still had fun without hitting your route money."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You still had fun without hitting your route money."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No babysitting pay change this time, but the choice still matters."
+          }
         }
       }
     ],
@@ -539,6 +781,22 @@
           "pay_delta_pct": -0.02,
           "client_delta": 0,
           "note": "You enjoyed spirit day, but had a little less room in the budget for lawn supplies."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "You enjoyed spirit day, but had a little less room in the budget for lawn supplies."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -558,6 +816,22 @@
           "pay_delta_pct": 0.02,
           "client_delta": 0,
           "note": "Keeping to your plan helped your lawn business stay funded."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Keeping to your plan helped your lawn business stay funded."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -576,6 +850,22 @@
           "pay_delta_pct": 0.01,
           "client_delta": 0,
           "note": "Using what you already had was smart and kept your work week stable."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Using what you already had was smart and kept your work week stable."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       }
     ],
@@ -638,6 +928,22 @@
           "pay_delta_pct": -0.08,
           "client_delta": 0,
           "note": "The rushed start carried into your mowing route and one client cut your pay for sloppy edges."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": 0,
+            "note": "The rushed start carried into your mowing route and one client cut your pay for sloppy edges."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -656,6 +962,22 @@
           "pay_delta_pct": 0.02,
           "client_delta": 0,
           "note": "You recovered well and still had enough energy to do quality work."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You recovered well and still had enough energy to do quality work."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -677,6 +999,24 @@
           "client_delta": -1,
           "note": "Running on empty caught up with you during lawn care, and one client did not rebook.",
           "replacement_needed": true
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "loss",
+            "pay_delta_pct": -0.05,
+            "client_delta": -1,
+            "note": "Running on empty caught up with you during lawn care, and one client did not rebook.",
+            "replacement_needed": true
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "loss",
+            "pay_delta_pct": -0.05,
+            "client_delta": -1,
+            "note": "The family noticed the issue and chose another sitter. Your babysitting pay stays lower until you book a new family.",
+            "replacement_needed": true
+          }
         }
       }
     ],
@@ -738,6 +1078,22 @@
           "pay_delta_pct": -0.02,
           "client_delta": 0,
           "note": "Covering the group helped the project, but your lawn budget felt tighter."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "Covering the group helped the project, but your lawn budget felt tighter."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -756,6 +1112,22 @@
           "pay_delta_pct": 0.02,
           "client_delta": 0,
           "note": "Sharing the cost showed leadership without hurting your route money."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Sharing the cost showed leadership without hurting your route money."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -773,6 +1145,22 @@
           "pay_delta_pct": 0.01,
           "client_delta": 0,
           "note": "You solved the problem creatively and kept your lawn income stable."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "You solved the problem creatively and kept your lawn income stable."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       }
     ],
@@ -834,6 +1222,22 @@
           "pay_delta_pct": -0.03,
           "client_delta": 0,
           "note": "Generous move, but it squeezed your mowing money this week."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Generous move, but it squeezed your mowing money this week."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -852,6 +1256,22 @@
           "pay_delta_pct": 0.01,
           "client_delta": 0,
           "note": "You contributed without throwing off your client route."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "You contributed without throwing off your client route."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -870,6 +1290,22 @@
           "pay_delta_pct": 0.03,
           "client_delta": 0,
           "note": "Helping with your time instead of extra spending kept your lawn business strong."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "Helping with your time instead of extra spending kept your lawn business strong."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       }
     ],
@@ -931,6 +1367,22 @@
           "pay_delta_pct": -0.03,
           "client_delta": 0,
           "note": "Replacing them solved the problem, but your lawn budget took a hit."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Replacing them solved the problem, but your lawn budget took a hit."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -949,6 +1401,22 @@
           "pay_delta_pct": 0.01,
           "client_delta": 0,
           "note": "Using a backup kept your schedule and budget under control."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Using a backup kept your schedule and budget under control."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -968,6 +1436,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "No big job effect this time. You lucked up."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No big job effect this time. You lucked up."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a babysitting pay change."
+          }
         }
       }
     ],
@@ -1029,6 +1513,22 @@
           "pay_delta_pct": -0.03,
           "client_delta": 0,
           "note": "Extra snack spending tightened your week and made it harder to prep for your route."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Extra snack spending tightened your week and made it harder to prep for your route."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -1047,6 +1547,22 @@
           "pay_delta_pct": 0.02,
           "client_delta": 0,
           "note": "You met the moment without hurting your mowing money."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You met the moment without hurting your mowing money."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -1066,6 +1582,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "A little awkward socially, but your lawn work stayed steady."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "A little awkward socially, but your lawn work stayed steady."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No babysitting pay change this time, but the choice still matters."
+          }
         }
       }
     ],
@@ -1126,6 +1658,22 @@
           "pay_delta_pct": 0.01,
           "client_delta": 0,
           "note": "Taking care of the fee early helped you stay responsible and focused on clients."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Taking care of the fee early helped you stay responsible and focused on clients."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -1145,6 +1693,22 @@
           "pay_delta_pct": -0.03,
           "client_delta": 0,
           "note": "Late fees stacked up and cut into your lawn earnings."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Late fees stacked up and cut into your lawn earnings."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -1163,6 +1727,22 @@
           "pay_delta_pct": 0.02,
           "client_delta": 0,
           "note": "Choosing the fee over a want helped you protect your route money."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Choosing the fee over a want helped you protect your route money."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       }
     ],
@@ -1226,6 +1806,22 @@
           "pay_delta_pct": -0.04,
           "client_delta": 0,
           "note": "The outing was fun, but the spending left your lawn care week tighter than planned."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.04,
+            "client_delta": 0,
+            "note": "The outing was fun, but the spending left your lawn care week tighter than planned."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.04,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -1244,6 +1840,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "You enjoyed the event and still kept your work week balanced."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You enjoyed the event and still kept your work week balanced."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No babysitting pay change this time, but the choice still matters."
+          }
         }
       },
       {
@@ -1264,6 +1876,22 @@
           "pay_delta_pct": 0.02,
           "client_delta": 0,
           "note": "You saved money and stayed ready for clients."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You saved money and stayed ready for clients."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       }
     ],
@@ -1323,6 +1951,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "Buying the item kept your school day smooth and your lawn route on schedule."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "Buying the item kept your school day smooth and your lawn route on schedule."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No babysitting pay change this time, but the choice still matters."
+          }
         }
       },
       {
@@ -1342,6 +1986,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "You handled it with help and got lucky this time."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You handled it with help and got lucky this time."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a babysitting pay change."
+          }
         }
       },
       {
@@ -1362,6 +2022,22 @@
           "pay_delta_pct": -0.05,
           "client_delta": 0,
           "note": "Being unprepared spilled into the rest of your day and hurt your mowing focus."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Being unprepared spilled into the rest of your day and hurt your mowing focus."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       }
     ],
@@ -1422,6 +2098,22 @@
           "pay_delta_pct": 0.01,
           "client_delta": 0,
           "note": "Staying hydrated helped you keep up your pace on the mower."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Staying hydrated helped you keep up your pace on the mower."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -1440,6 +2132,22 @@
           "pay_delta_pct": 0.02,
           "client_delta": 0,
           "note": "You solved the problem for free and still worked strong."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You solved the problem for free and still worked strong."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -1460,6 +2168,22 @@
           "pay_delta_pct": -0.05,
           "client_delta": 0,
           "note": "Dehydration slowed you down on your lawn route and cost you part of your pay."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Dehydration slowed you down on your lawn route and cost you part of your pay."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       }
     ],
@@ -1522,6 +2246,22 @@
           "pay_delta_pct": 0.05,
           "client_delta": 1,
           "note": "The booth helped people see your work. One new lawn client came from the event."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 1,
+            "note": "The booth helped people see your work. One new lawn client came from the event."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 1,
+            "note": "Because you stayed dependable and prepared, another family asked you to babysit again."
+          }
         }
       },
       {
@@ -1540,6 +2280,22 @@
           "pay_delta_pct": 0.03,
           "client_delta": 0,
           "note": "Sharing the fee lowered the risk and still boosted your reputation."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "Sharing the fee lowered the risk and still boosted your reputation."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -1558,6 +2314,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "No change this week, but you learned something useful for later."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No change this week, but you learned something useful for later."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No babysitting pay change this time, but the choice still matters."
+          }
         }
       }
     ],
@@ -1621,6 +2393,22 @@
           "pay_delta_pct": -0.02,
           "client_delta": 0,
           "note": "You solved the battery problem, but spent money you could have used on the route."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "You solved the battery problem, but spent money you could have used on the route."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -1640,6 +2428,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "You borrowed what you needed and lucked up this time."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You borrowed what you needed and lucked up this time."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a babysitting pay change."
+          }
         }
       },
       {
@@ -1658,6 +2462,22 @@
           "pay_delta_pct": 0.01,
           "client_delta": 0,
           "note": "Managing with what you had kept your client communication alive."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Managing with what you had kept your client communication alive."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       }
     ],
@@ -1718,6 +2538,22 @@
           "pay_delta_pct": 0.03,
           "client_delta": 0,
           "note": "Keeping your word strengthened your reputation. Clients trust workers who follow through."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "Keeping your word strengthened your reputation. Clients trust workers who follow through."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       },
       {
@@ -1737,6 +2573,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "You communicated well enough to avoid damage this time."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You communicated well enough to avoid damage this time."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No babysitting pay change this time, but the choice still matters."
+          }
         }
       },
       {
@@ -1757,6 +2609,24 @@
           "client_delta": -1,
           "note": "Ignoring the problem hurt your reputation, and one lawn client stopped booking.",
           "replacement_needed": true
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "loss",
+            "pay_delta_pct": -0.05,
+            "client_delta": -1,
+            "note": "Ignoring the problem hurt your reputation, and one lawn client stopped booking.",
+            "replacement_needed": true
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "loss",
+            "pay_delta_pct": -0.05,
+            "client_delta": -1,
+            "note": "The family noticed the issue and chose another sitter. Your babysitting pay stays lower until you book a new family.",
+            "replacement_needed": true
+          }
         }
       }
     ],
@@ -1818,6 +2688,22 @@
           "pay_delta_pct": -0.03,
           "client_delta": 0,
           "note": "The movie night was fun, but the extra spending squeezed your lawn money."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "The movie night was fun, but the extra spending squeezed your lawn money."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -1836,6 +2722,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "You joined without overdoing it and stayed balanced for work."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You joined without overdoing it and stayed balanced for work."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No babysitting pay change this time, but the choice still matters."
+          }
         }
       },
       {
@@ -1855,6 +2757,22 @@
           "pay_delta_pct": 0.02,
           "client_delta": 0,
           "note": "Saving the money helped you stay ready for mower gas, blades, and client needs."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Saving the money helped you stay ready for mower gas, blades, and client needs."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       }
     ],

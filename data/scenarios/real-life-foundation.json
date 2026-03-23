@@ -37,6 +37,22 @@
           "pay_delta_pct": 0.05,
           "client_delta": 1,
           "note": "You stayed fueled, finished strong, and a neighbor asked you to add their yard next week."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 1,
+            "note": "You stayed fueled, finished strong, and a neighbor asked you to add their yard next week."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 1,
+            "note": "Because you stayed dependable and prepared, another family asked you to babysit again."
+          }
         }
       },
       {
@@ -59,6 +75,26 @@
           "note": "You ran low on energy and only finished part of one yard. That client paid half this week.",
           "repeat_threshold": 2,
           "repeat_note": "If this happens again before you recover, that client drops you and your weekly pay shrinks until you replace them."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": 0,
+            "note": "You ran low on energy and only finished part of one yard. That client paid half this week.",
+            "repeat_threshold": 2,
+            "repeat_note": "If this happens again before you recover, that client drops you and your weekly pay shrinks until you replace them."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week.",
+            "repeat_threshold": 2,
+            "repeat_note": "If this kind of problem keeps happening, a family may stop booking you."
+          }
         }
       },
       {
@@ -80,6 +116,24 @@
           "client_delta": -1,
           "note": "You had no energy for the full route and lost a client for the week.",
           "replacement_needed": true
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "loss",
+            "pay_delta_pct": -0.05,
+            "client_delta": -1,
+            "note": "You had no energy for the full route and lost a client for the week.",
+            "replacement_needed": true
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "loss",
+            "pay_delta_pct": -0.05,
+            "client_delta": -1,
+            "note": "The family noticed the issue and chose another sitter. Your babysitting pay stays lower until you book a new family.",
+            "replacement_needed": true
+          }
         }
       }
     ],
@@ -161,6 +215,22 @@
           "pay_delta_pct": -0.05,
           "client_delta": 0,
           "note": "Late night spending and low rest left you dragging on the mower route. You finished, but slower."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Late night spending and low rest left you dragging on the mower route. You finished, but slower."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          }
         }
       },
       {
@@ -179,6 +249,22 @@
           "pay_delta_pct": 0.0,
           "client_delta": 0,
           "note": "You had fun and still kept enough control to show up ready for your clients."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You had fun and still kept enough control to show up ready for your clients."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No babysitting pay change this time, but the choice still matters."
+          }
         }
       },
       {
@@ -199,6 +285,22 @@
           "pay_delta_pct": 0.03,
           "client_delta": 0,
           "note": "You protected your budget and your rest. Clients noticed the steady work."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "You protected your budget and your rest. Clients noticed the steady work."
+          },
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          }
         }
       }
     ],

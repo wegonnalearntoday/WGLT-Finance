@@ -446,7 +446,7 @@ function promptEliteCreditOpportunity(onDone){
   openHtmlModal({
     title:`🏁 Elite Credit Paths • ${weekToMonthName(state.weekEngine ? state.weekEngine.week : 1)}`,
     meta:`Credit can unlock real monthly obligations now`,
-    html:`<div style="font-weight:900;margin-bottom:10px">Your credit opened new doors. Pick one path, or skip and stay flexible this month.</div><div class="choice-grid">${offers.map(o=>`<button class="choice-btn" data-credit-offer="${o.id}">${o.label}<small>${o.hint}</small></button>`).join('')}<button class="choice-btn" data-credit-offer="skip">Skip for now<small>No new monthly payment this month</small></button></div>`,
+    html:`<div style="font-weight:900;margin-bottom:10px">Your credit opened new doors. Pick one path, or skip and stay flexible this month.</div><div class="choice-grid">${offers.map(o=>`<button class="choice-btn" data-credit-offer="${o.id}">${o.label}<small>${o.hint}</small></button>`).join('\n')}<button class="choice-btn" data-credit-offer="skip">Skip for now<small>No new monthly payment this month</small></button></div>`,
     buttons:[],
     onRender:()=>{
       document.querySelectorAll('[data-credit-offer]').forEach(btn=>{
@@ -4010,7 +4010,7 @@ function renderBucketTracker(){
     return `<button class="tracker-item ${done ? 'done' : ''}" style="${border};text-align:left;width:100%;cursor:pointer" onclick="showBucketInfo(${k})" type="button" aria-label="Open Benchmark ${k} definition">
       ${done ? '✅' : '⬜'} Benchmark #${k}<br><small>${name}</small><div style="margin-top:6px;color:var(--primary2);font-size:11px;text-decoration:underline">Tap for definition</div>
     </button>`;
-  }).join('');
+  }).join('\n');
   $("bucketTracker").innerHTML = html;
 }
 
@@ -4546,7 +4546,7 @@ function buildInventoryPanel(){
     return `<div style="${style}">${qty > 0 ? qty+'×' : '0 '} ${it.name} <small>(${money(it.cost)})</small></div>`;
   });
   const total = calcInventoryValue();
-  return `${rows.join('')}<div style="margin-top:8px;border-top:1px solid var(--border);padding-top:6px;font-weight:bold">Total: ${money(total)}</div>`;
+  return `${rows.join('\n')}<div style="margin-top:8px;border-top:1px solid var(--border);padding-top:6px;font-weight:bold">Total: ${money(total)}</div>`;
 }
 
 function openSplitShopModal({title, leftTitle, leftHTML, rightTitle, rightHTML, buttons}){
@@ -4651,7 +4651,7 @@ function ledgerBuy(){
     `<button class="choice-btn" style="margin-bottom:6px;text-align:left" onclick="closeModal();setTimeout(()=>ledgerBuyItem('${it.id}'),50)">
       ${it.name}<small>${money(it.cost)}${invQty(it.id)>0 ? ` • have ${invQty(it.id)}` : ''}</small>
     </button>`
-  ).join('') + `<button class="choice-btn" style="margin-bottom:6px" onclick="closeModal();notifyAction('ledger_buy');renderAll()">Done Shopping ✓<small>Finished buying</small></button>`;
+  ).join('\n') + `<button class="choice-btn" style="margin-bottom:6px" onclick="closeModal();notifyAction('ledger_buy');renderAll()">Done Shopping ✓<small>Finished buying</small></button>`;
 
   setTimeout(()=>{
     openSplitShopModal({
@@ -5498,7 +5498,7 @@ function renderSheet(){
                  <span>${w.used ? '✅' : '⬜'} ${w.label}</span>
                  <span>${money(w.value)}</span>
                </div>
-             `).join('')}
+             `).join('\n')}
              ${(snap.wantsSummary || []).some(w => w.used) ? `<div style="margin-top:6px;font-size:12px;color:#1fa971;font-weight:1000">Budgeting pays off when a social choice was already planned.</div>` : ``}
              ${snap.unplannedWantUsed ? `<div style="margin-top:6px;font-size:12px;color:#b45309;font-weight:1000">Sometimes it's ok to treat your self but lets try to plan for that next time or skip it.</div>` : ``}
              ${snap.unplannedWantUsed && (snap.unplannedWantLabels || []).length ? `<div style="margin-top:4px;font-size:12px;color:#92400e;font-weight:1000">${(snap.unplannedWantLabels || []).map(label => `⚠️ ${label}`).join('<br>')}</div>` : ``}
@@ -5541,8 +5541,8 @@ You begin with ${money(state.cash)} in cash.
 
       <div style="margin-top:12px;font-weight:1100">Starter Funding</div>
       <div class="choice-grid">
-        ${[0,25,50,100].map(val => choiceCard(`Checking Deposit ${money(val)}`, 'Move cash into checking', state.bank.startCheckingDeposit===val, `d_check_${val}`)).join('')}
-        ${[0,5,10,25,30,50].map(val => choiceCard(`Savings Deposit ${money(val)}`, 'Move cash into savings', state.bank.startSavingsDeposit===val, `d_save_${val}`)).join('')}
+        ${[0,25,50,100].map(val => choiceCard(`Checking Deposit ${money(val)}`, 'Move cash into checking', state.bank.startCheckingDeposit===val, `d_check_${val}`)).join('\n')}
+        ${[0,5,10,25,30,50].map(val => choiceCard(`Savings Deposit ${money(val)}`, 'Move cash into savings', state.bank.startSavingsDeposit===val, `d_save_${val}`)).join('\n')}
       </div>
 
       <div style="margin-top:12px;font-weight:1100">1) Checking Account</div>
@@ -5678,7 +5678,7 @@ function openSavingsChallenge(){
     $("mBody").innerHTML = `
       <div style="font-weight:1000">Pick a year-end savings goal. Your choice stays highlighted when you come back.</div>
       <div class="choice-grid" style="margin-top:12px">
-        ${options.map(goal => `<button class="choice-btn ${state.savingsGoal===goal ? 'selected' : ''}" data-goal="${goal}">Goal: ${money(goal)}<small>Track progress all year long</small></button>`).join('')}
+        ${options.map(goal => `<button class="choice-btn ${state.savingsGoal===goal ? 'selected' : ''}" data-goal="${goal}">Goal: ${money(goal)}<small>Track progress all year long</small></button>`).join('\n')}
       </div>
       <div class="impact-box" style="margin-top:12px">Current Goal
 ${state.savingsGoal ? `${money(state.savingsGoal)} by Month 12` : 'Not set yet'}
@@ -5850,7 +5850,7 @@ function suggestedPlan(){
             <div style="font-weight:1100">${val.name}</div>
             <small style="display:block;margin-top:4px">${val.note}</small>
             ${planChartHTML(val.chart)}
-          </button>`).join('')}
+          </button>`).join('\n')}
       </div>
       <div class="impact-box" style="margin-top:12px">${m.name}
 Income: ${money(income)}
@@ -7826,7 +7826,7 @@ function generateReport(){
     const style = done ? "color:var(--success);font-weight:bold" : "color:var(--muted)";
     const relevantMark = jobBuckets.has(b) ? "" : " <small>(event)</small>";
     return `<div style="${style};padding:3px 0">${check} Benchmark #${b}: ${name}${relevantMark}</div>`;
-  }).join('');
+  }).join('\n');
 
   const pct = Math.round((covered.length / relevant.length) * 100);
   $("reportBox").innerHTML = `
@@ -8589,7 +8589,7 @@ function renderConsequenceTimeline(){
       <div class="timeline-week">${escapeHtml(row.weekLabel)}</div>
       <div class="timeline-title">${escapeHtml(row.title)}</div>
       <div class="timeline-why">${escapeHtml(row.why)}</div>
-    </div>`).join('');
+    </div>`).join('\n');
 }
 
 function renderTeacherToolkit(){
@@ -8608,23 +8608,23 @@ function renderTeacherToolkit(){
   const pending = (state.weekEngine && Array.isArray(state.weekEngine.pending)) ? state.weekEngine.pending : [];
   const masterTracks = (state.masterScenario && state.masterScenario.trackCounts) ? state.masterScenario.trackCounts : {};
   const trackRows = Object.keys(masterTracks).length
-    ? Object.entries(masterTracks).map(([k,v])=>`<li><b>${escapeHtml(k)}</b>: ${escapeHtml(String(v))}</li>`).join('')
+    ? Object.entries(masterTracks).map(([k,v])=>`<li><b>${escapeHtml(k)}</b>: ${escapeHtml(String(v))}</li>`).join('\n')
     : '<li>No master consequence tracks have built up yet.</li>';
   const pendingRows = pending.length
-    ? pending.slice(0,6).map(item=>`<li><b>Week ${escapeHtml(String(item.triggerWeek || '?'))}</b>: ${escapeHtml(item.label || 'Pending consequence')}</li>`).join('')
+    ? pending.slice(0,6).map(item=>`<li><b>Week ${escapeHtml(String(item.triggerWeek || '?'))}</b>: ${escapeHtml(item.label || 'Pending consequence')}</li>`).join('\n')
     : '<li>No pending delayed consequences yet.</li>';
-  const vocab = (tool.vocabulary || []).map(v=>`<span class="teacher-badge">${escapeHtml(v)}</span>`).join(' ');
-  const rubric = (tool.rubricNotes || []).map(r=>`<li>${escapeHtml(r)}</li>`).join('');
+  const vocab = (tool.vocabulary || []).map(v=>`<span class="teacher-badge">${escapeHtml(v)}</span>`).join('\n');
+  const rubric = (tool.rubricNotes || []).map(r=>`<li>${escapeHtml(r)}</li>`).join('\n');
   const eliteList = isEliteExperience()
     ? `<div class="impact-box" style="margin-top:10px"><b>Elite Layer Active</b><br>Advanced contracts available: ${escapeHtml(String(getAvailableContracts().length))}. Bonus elite scenarios loaded: ${escapeHtml(String(ELITE_SCENARIOS.length))}. Advanced delayed chains loaded: ${escapeHtml(String(ADVANCED_DELAYED.length))}.</div>`
     : '';
   const reflectionBankHtml = Object.entries(AUTO_REFLECTION_BANK).map(([key,pool])=>{
     const labelMap = {spending:'Spend Reflection Bank', save:'Save Reflection Bank', share:'Share Reflection Bank', general:'General Reflection Bank'};
-    const items = (pool || []).map(item=>`<li>${escapeHtml(item.question || '')}</li>`).join('');
+    const items = (pool || []).map(item=>`<li>${escapeHtml(item.question || '')}</li>`).join('\n');
     return `<div class="impact-box"><b>${escapeHtml(labelMap[key] || key)}</b><ul>${items || '<li>No reflections loaded.</li>'}</ul></div>`;
-  }).join('');
+  }).join('\n');
   const recentReflections = teacherReflections.length
-    ? teacherReflections.slice(0,5).map(r=>`<li><b>Week ${escapeHtml(String(r.week || 1))}</b> • ${escapeHtml(r.decisionType || 'general')}<br><span class="muted">${escapeHtml(r.q1 || 'No question recorded')}</span><br>Student: ${escapeHtml(r.q2 || '—')}<br>Teacher: ${escapeHtml(r.q3 || '—')}</li>`).join('')
+    ? teacherReflections.slice(0,5).map(r=>`<li><b>Week ${escapeHtml(String(r.week || 1))}</b> • ${escapeHtml(r.decisionType || 'general')}<br><span class="muted">${escapeHtml(r.q1 || 'No question recorded')}</span><br>Student: ${escapeHtml(r.q2 || '—')}<br>Teacher: ${escapeHtml(r.q3 || '—')}</li>`).join('\n')
     : '<li>No reflection responses saved yet this session.</li>';
   const dash = getTeacherDashboardSummary();
   box.innerHTML = `
@@ -8979,16 +8979,35 @@ function queueScenarioFoundationHooks(hookIds, sourceLabel){
   });
 }
 function formatScenarioFoundationJobPreview(choice){
-  const jp = choice && choice.job_preview;
+  const previewMap = choice && choice.job_previews;
+  let jp = choice && choice.job_preview;
+  let label = 'Job';
+  try{
+    const job = (state && state.jobs && state.jobs[state.jobIndex]) || null;
+    if(job && previewMap && typeof previewMap === 'object'){
+      if(String(job.id || '') === 'lawn' && previewMap.lawn_care){
+        jp = previewMap.lawn_care;
+        label = 'Lawn Care';
+      } else if(String(job.id || '') === 'babysitting' && previewMap.babysitting){
+        jp = previewMap.babysitting;
+        label = 'Babysitting';
+      }
+    }
+    if(label === 'Job' && jp && typeof jp === 'object'){
+      if(String(jp.job || '') === 'lawn_care') label = 'Lawn Care';
+      else if(String(jp.job || '') === 'babysitting') label = 'Babysitting';
+    }
+  }catch(err){}
   if(!jp || typeof jp !== 'object') return '';
   const pay = Number(jp.pay_delta_pct || 0);
   const client = Number(jp.client_delta || 0);
   const payLabel = pay === 0 ? '0%' : `${pay > 0 ? '+' : ''}${Math.round(pay * 100)}%`;
   const clientLabel = client === 0 ? '0' : `${client > 0 ? '+' : ''}${client}`;
-  const lines = [`Lawn Care preview: Pay ${payLabel} • Clients ${clientLabel}`];
+  const unitLabel = label === 'Babysitting' ? 'Families' : 'Clients';
+  const lines = [`${label} preview: Pay ${payLabel} • ${unitLabel} ${clientLabel}`];
   if(jp.note) lines.push(String(jp.note));
   if(jp.repeat_note) lines.push(`Repeat rule: ${jp.repeat_note}`);
-  if(jp.replacement_needed) lines.push('You will need to replace that client to restore full pay.');
+  if(jp.replacement_needed) lines.push(`You will need to replace that ${label === 'Babysitting' ? 'family' : 'client'} to restore full pay.`);
   return lines.join('\n');
 }
 function playScenarioFoundationScenario(picked, category){
@@ -9095,24 +9114,54 @@ runJobRealLifeEvent = function(afterDone){
 };
 
 
-/* === WGLT Lawn Care Job Engine v1 === */
+/* === WGLT Multi-Job Engine v2 (Lawn Care + Babysitting) === */
 (function(){
+  const JOB_SYSTEM_CONFIGS = {
+    lawn: {
+      systemKey: 'lawn',
+      previewJob: 'lawn_care',
+      engineLabel: 'Lawn Care',
+      relationshipPlural: 'clients',
+      relationshipSingular: 'client',
+      modifierLabel: 'Route Mod',
+      baselineCount: 4,
+      debugInspectName: 'inspectLawnCare',
+      debugForceName: 'forceLawnClient'
+    },
+    babysitting: {
+      systemKey: 'babysitting',
+      previewJob: 'babysitting',
+      engineLabel: 'Babysitting',
+      relationshipPlural: 'families',
+      relationshipSingular: 'family',
+      modifierLabel: 'Family Mod',
+      baselineCount: 3,
+      debugInspectName: 'inspectBabysitting',
+      debugForceName: 'forceBabysittingFamily'
+    }
+  };
+
   function currentJobObj(){
     try{ return (state.jobs && state.jobs[state.jobIndex]) || null; }catch(err){ return null; }
   }
-  function isCurrentJobLawnCare(){
+  function getCurrentJobSystemConfig(){
     const job = currentJobObj();
-    return !!(job && String(job.id) === 'lawn');
+    return job ? JOB_SYSTEM_CONFIGS[String(job.id || '')] || null : null;
   }
-  function ensureLawnCareJobState(){
+  function isCurrentJobSupported(){
+    return !!getCurrentJobSystemConfig();
+  }
+  function ensureCurrentJobSystemState(){
+    const cfg = getCurrentJobSystemConfig();
+    if(!cfg) return null;
     if(!state.jobSystems) state.jobSystems = {};
-    if(!state.jobSystems.lawn){
-      const job = currentJobObj() || { pay:80, name:'Lawn Care' };
-      state.jobSystems.lawn = {
+    if(!state.jobSystems[cfg.systemKey]){
+      const job = currentJobObj() || { pay:80, name:cfg.engineLabel };
+      state.jobSystems[cfg.systemKey] = {
         active: true,
         baseWeeklyPay: Number(job.pay || 80),
-        baselineClients: 4,
-        clientCount: 4,
+        baselineClients: Number(cfg.baselineCount || 3),
+        clientCount: Number(cfg.baselineCount || 3),
         persistentPayPct: 0,
         pendingPaycheckAdjustments: [],
         repeatCounters: {},
@@ -9121,61 +9170,72 @@ runJobRealLifeEvent = function(afterDone){
         history: []
       };
     }
-    const lawn = state.jobSystems.lawn;
+    const sys = state.jobSystems[cfg.systemKey];
     const job = currentJobObj();
-    if(job && Number(job.pay || 0) > 0) lawn.baseWeeklyPay = Number(job.pay || 80);
-    if(typeof lawn.baselineClients !== 'number') lawn.baselineClients = 4;
-    if(typeof lawn.clientCount !== 'number') lawn.clientCount = lawn.baselineClients;
-    if(typeof lawn.persistentPayPct !== 'number') lawn.persistentPayPct = 0;
-    if(!Array.isArray(lawn.pendingPaycheckAdjustments)) lawn.pendingPaycheckAdjustments = [];
-    if(!lawn.repeatCounters || typeof lawn.repeatCounters !== 'object') lawn.repeatCounters = {};
-    if(!Array.isArray(lawn.history)) lawn.history = [];
-    if(typeof lawn.clientsLostToReplace !== 'number') lawn.clientsLostToReplace = 0;
-    return lawn;
+    if(job && Number(job.pay || 0) > 0) sys.baseWeeklyPay = Number(job.pay || 80);
+    if(typeof sys.baselineClients !== 'number') sys.baselineClients = Number(cfg.baselineCount || 3);
+    if(typeof sys.clientCount !== 'number') sys.clientCount = sys.baselineClients;
+    if(typeof sys.persistentPayPct !== 'number') sys.persistentPayPct = 0;
+    if(!Array.isArray(sys.pendingPaycheckAdjustments)) sys.pendingPaycheckAdjustments = [];
+    if(!sys.repeatCounters || typeof sys.repeatCounters !== 'object') sys.repeatCounters = {};
+    if(!Array.isArray(sys.history)) sys.history = [];
+    if(typeof sys.clientsLostToReplace !== 'number') sys.clientsLostToReplace = 0;
+    return sys;
   }
   function roundMoney(n){ return Math.round(Number(n || 0)); }
-  function syncLawnCarePlanIncome(){
-    if(!isCurrentJobLawnCare()) return;
-    const lawn = ensureLawnCareJobState();
-    const monthly = Math.max(0, roundMoney(lawn.baseWeeklyPay * 4 * (1 + Number(lawn.persistentPayPct || 0))));
+  function syncCurrentJobPlanIncome(){
+    const cfg = getCurrentJobSystemConfig();
+    if(!cfg) return;
+    const sys = ensureCurrentJobSystemState();
+    const monthly = Math.max(0, roundMoney(sys.baseWeeklyPay * 4 * (1 + Number(sys.persistentPayPct || 0))));
     state.plan.income = monthly;
   }
-  function getLawnPendingPayAdjustmentTotal(){
-    const lawn = ensureLawnCareJobState();
-    return roundMoney((lawn.pendingPaycheckAdjustments || []).reduce((sum, item) => sum + Number(item.amount || 0), 0));
+  function getPendingPayAdjustmentTotal(){
+    const sys = ensureCurrentJobSystemState();
+    return sys ? roundMoney((sys.pendingPaycheckAdjustments || []).reduce((sum, item) => sum + Number(item.amount || 0), 0)) : 0;
   }
-  function consumeLawnPendingPayAdjustments(){
-    const lawn = ensureLawnCareJobState();
-    const rows = Array.isArray(lawn.pendingPaycheckAdjustments) ? lawn.pendingPaycheckAdjustments.slice() : [];
-    lawn.pendingPaycheckAdjustments = [];
+  function consumePendingPayAdjustments(){
+    const sys = ensureCurrentJobSystemState();
+    const rows = sys && Array.isArray(sys.pendingPaycheckAdjustments) ? sys.pendingPaycheckAdjustments.slice() : [];
+    if(sys) sys.pendingPaycheckAdjustments = [];
     return rows;
   }
-  function lawnPctLabel(pct){
+  function pctLabel(pct){
     const n = Number(pct || 0);
     return n === 0 ? '0%' : `${n > 0 ? '+' : ''}${Math.round(n * 100)}%`;
   }
-  function buildLawnStatusText(){
-    if(!isCurrentJobLawnCare()) return '';
-    const lawn = ensureLawnCareJobState();
-    const pending = getLawnPendingPayAdjustmentTotal();
-    const projectedWeekly = Math.max(0, roundMoney(lawn.baseWeeklyPay * (1 + Number(lawn.persistentPayPct || 0))));
+  function buildStatusText(){
+    const cfg = getCurrentJobSystemConfig();
+    if(!cfg) return '';
+    const sys = ensureCurrentJobSystemState();
+    const pending = getPendingPayAdjustmentTotal();
+    const projectedWeekly = Math.max(0, roundMoney(sys.baseWeeklyPay * (1 + Number(sys.persistentPayPct || 0))));
     const pendingLabel = pending === 0 ? 'No one-time paycheck changes waiting' : `Next paycheck adjustment: ${pending > 0 ? '+' : '-'}${money(Math.abs(pending))}`;
-    return `Route clients: ${lawn.clientCount} • Route pay modifier: ${lawnPctLabel(lawn.persistentPayPct)} • Projected weekly pay: ${money(projectedWeekly)} • ${pendingLabel}`;
+    return `${cfg.engineLabel} ${cfg.relationshipPlural}: ${sys.clientCount} • ${cfg.modifierLabel}: ${pctLabel(sys.persistentPayPct)} • Projected weekly pay: ${money(projectedWeekly)} • ${pendingLabel}`;
   }
-  function resetLawnRepeatCounters(){
-    const lawn = ensureLawnCareJobState();
-    lawn.repeatCounters = {};
+  function resetRepeatCounters(){
+    const sys = ensureCurrentJobSystemState();
+    if(sys) sys.repeatCounters = {};
   }
-  function pushLawnHistory(entry){
-    const lawn = ensureLawnCareJobState();
-    lawn.history.push(Object.assign({ week: Number((state.weekEngine && state.weekEngine.week) || state.day || 1) }, entry || {}));
-    lawn.history = lawn.history.slice(-24);
+  function pushHistory(entry){
+    const sys = ensureCurrentJobSystemState();
+    if(!sys) return;
+    sys.history.push(Object.assign({ week: Number((state.weekEngine && state.weekEngine.week) || state.day || 1) }, entry || {}));
+    sys.history = sys.history.slice(-24);
   }
-  function applyLawnCareJobPreview(picked, choice){
-    if(!isCurrentJobLawnCare()) return '';
-    const jp = choice && choice.job_preview;
-    if(!jp || typeof jp !== 'object' || String(jp.job || '') !== 'lawn_care') return '';
-    const lawn = ensureLawnCareJobState();
+  function getChoicePreviewForCurrentJob(choice){
+    const cfg = getCurrentJobSystemConfig();
+    if(!cfg || !choice) return null;
+    if(choice.job_previews && typeof choice.job_previews === 'object' && choice.job_previews[cfg.previewJob]) return choice.job_previews[cfg.previewJob];
+    if(choice.job_preview && String(choice.job_preview.job || '') === cfg.previewJob) return choice.job_preview;
+    return null;
+  }
+  function applyCurrentJobPreview(picked, choice){
+    const cfg = getCurrentJobSystemConfig();
+    if(!cfg) return '';
+    const jp = getChoicePreviewForCurrentJob(choice);
+    if(!jp || typeof jp !== 'object') return '';
+    const sys = ensureCurrentJobSystemState();
     const title = picked && picked.title ? picked.title : 'Life event';
     const choiceId = String(choice && choice.id || 'choice');
     const payPct = Number(jp.pay_delta_pct || 0);
@@ -9184,49 +9244,45 @@ runJobRealLifeEvent = function(afterDone){
     const notes = [];
 
     if(clientDelta !== 0){
-      lawn.clientCount = Math.max(0, Number(lawn.clientCount || 0) + clientDelta);
-      if(payPct !== 0) lawn.persistentPayPct = Number(lawn.persistentPayPct || 0) + payPct;
-      if(clientDelta < 0 || jp.replacement_needed) lawn.clientsLostToReplace = Math.max(0, Number(lawn.clientsLostToReplace || 0) + Math.abs(clientDelta || 1));
-      if(clientDelta > 0) lawn.clientsLostToReplace = Math.max(0, Number(lawn.clientsLostToReplace || 0) - clientDelta);
-      notes.push(`Route clients ${clientDelta > 0 ? 'increased' : 'decreased'} by ${Math.abs(clientDelta)}.`);
-      if(payPct !== 0) notes.push(`Weekly lawn route pay is now ${lawnPctLabel(lawn.persistentPayPct)} from your base route.`);
+      sys.clientCount = Math.max(0, Number(sys.clientCount || 0) + clientDelta);
+      if(payPct !== 0) sys.persistentPayPct = Number(sys.persistentPayPct || 0) + payPct;
+      if(clientDelta < 0 || jp.replacement_needed) sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) + Math.abs(clientDelta || 1));
+      if(clientDelta > 0) sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) - clientDelta);
+      notes.push(`${cfg.relationshipPlural.charAt(0).toUpperCase() + cfg.relationshipPlural.slice(1)} ${clientDelta > 0 ? 'increased' : 'decreased'} by ${Math.abs(clientDelta)}.`);
+      if(payPct !== 0) notes.push(`${cfg.engineLabel} weekly pay is now ${pctLabel(sys.persistentPayPct)} from your base job pay.`);
     } else if(payPct !== 0){
-      const amount = roundMoney(lawn.baseWeeklyPay * payPct);
-      lawn.pendingPaycheckAdjustments.push({
+      const amount = roundMoney(sys.baseWeeklyPay * payPct);
+      sys.pendingPaycheckAdjustments.push({
         amount,
         pct: payPct,
         title,
         choiceId,
         note: jp.note || ''
       });
-      notes.push(`Your next paycheck will ${amount >= 0 ? 'increase' : 'drop'} by ${money(Math.abs(amount))} from this week's lawn route result.`);
+      notes.push(`Your next paycheck will ${amount >= 0 ? 'increase' : 'drop'} by ${money(Math.abs(amount))} from this week's ${cfg.engineLabel.toLowerCase()} result.`);
     }
 
     if(Number(jp.repeat_threshold || 0) > 0){
-      lawn.repeatCounters[choiceId] = Number(lawn.repeatCounters[choiceId] || 0) + 1;
-      if(lawn.repeatCounters[choiceId] >= Number(jp.repeat_threshold)){
-        lawn.repeatCounters[choiceId] = 0;
-        lawn.clientCount = Math.max(0, Number(lawn.clientCount || 0) - 1);
-        lawn.persistentPayPct = Number(lawn.persistentPayPct || 0) - 0.05;
-        lawn.clientsLostToReplace = Math.max(0, Number(lawn.clientsLostToReplace || 0) + 1);
-        notes.push('Repeat low performance cost you another client. Your lawn care pay route dropped an extra 5% until you replace them.');
+      sys.repeatCounters[choiceId] = Number(sys.repeatCounters[choiceId] || 0) + 1;
+      if(sys.repeatCounters[choiceId] >= Number(jp.repeat_threshold)){
+        sys.repeatCounters[choiceId] = 0;
+        sys.clientCount = Math.max(0, Number(sys.clientCount || 0) - 1);
+        sys.persistentPayPct = Number(sys.persistentPayPct || 0) - 0.05;
+        sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) + 1);
+        notes.push(`Repeat low performance cost you another ${cfg.relationshipSingular}. Your ${cfg.engineLabel.toLowerCase()} pay dropped an extra 5% until you replace them.`);
       } else if(jp.repeat_note) {
         notes.push(String(jp.repeat_note));
       }
-    } else if(outcome === 'growth'){
-      resetLawnRepeatCounters();
+    } else if(outcome === 'growth') {
+      resetRepeatCounters();
     }
 
-    syncLawnCarePlanIncome();
-    pushLawnHistory({ title, choiceId, outcome, payPct, clientDelta, note: jp.note || '' });
-    if(jp.note) notes.unshift(String(jp.note));
-    if(jp.replacement_needed && Number(lawn.clientsLostToReplace || 0) > 0){
-      notes.push(`You need ${lawn.clientsLostToReplace} new client${Number(lawn.clientsLostToReplace || 0) === 1 ? '' : 's'} to rebuild your full lawn route.`);
-    }
-    return notes.filter(Boolean).join('\n');
+    if(jp.note) notes.push(String(jp.note));
+    pushHistory({ title, choiceId, previewJob: cfg.previewJob, payPct, clientDelta, outcome, note: jp.note || '' });
+    syncCurrentJobPlanIncome();
+    return notes.join('\n');
   }
 
-  const __legacyPlayScenarioFoundationScenario_Lawn = playScenarioFoundationScenario;
   playScenarioFoundationScenario = function(picked, category){
     if(!picked) return showBanner('Scenario missing.');
     markScenarioFoundationPlayed(picked);
@@ -9248,15 +9304,15 @@ runJobRealLifeEvent = function(afterDone){
         applyScenarioFoundationEffects(choice.immediate_effects || {});
         queueScenarioFoundationHooks(choice.delayed_hooks || [], `${picked.title} → ${choice.label}`);
         if(choice.ledger_note) addLedgerLine(choice.ledger_note);
-        const lawnOutcomeText = applyLawnCareJobPreview(picked, choice);
+        const jobOutcomeText = applyCurrentJobPreview(picked, choice);
         renderAll();
         const jobPreviewText = formatScenarioFoundationJobPreview(choice);
         const pieces = [];
         if(choice.ledger_note) pieces.push(choice.ledger_note);
-        if(lawnOutcomeText) pieces.push('Lawn Care engine:\n' + lawnOutcomeText);
+        if(jobOutcomeText) pieces.push(`${(getCurrentJobSystemConfig() || {}).engineLabel || 'Job'} engine:\n` + jobOutcomeText);
         else if(jobPreviewText) pieces.push(jobPreviewText);
         if(choice.reflection_tag) pieces.push('Tag: ' + choice.reflection_tag);
-        const follow = pieces.join('\n\n') || 'Decision recorded.';
+        const follow = pieces.join('\n') || 'Decision recorded.';
         openModal({
           title: 'Decision recorded',
           meta: picked.title,
@@ -9271,66 +9327,69 @@ runJobRealLifeEvent = function(afterDone){
     });
   };
 
-  const __legacyStartMission_Lawn = startMission;
+  const __legacyStartMission_MultiJob = startMission;
   startMission = function(){
-    const out = __legacyStartMission_Lawn.apply(this, arguments);
-    if(isCurrentJobLawnCare()){
-      ensureLawnCareJobState();
-      syncLawnCarePlanIncome();
+    const out = __legacyStartMission_MultiJob.apply(this, arguments);
+    if(isCurrentJobSupported()){
+      ensureCurrentJobSystemState();
+      syncCurrentJobPlanIncome();
       renderAll();
     }
     return out;
   };
 
-  const __legacyResetMission_Lawn = resetMission;
+  const __legacyResetMission_MultiJob = resetMission;
   resetMission = async function(){
-    if(state.jobSystems && state.jobSystems.lawn) delete state.jobSystems.lawn;
-    return await __legacyResetMission_Lawn.apply(this, arguments);
+    if(state.jobSystems){
+      Object.values(JOB_SYSTEM_CONFIGS).forEach(cfg => { if(state.jobSystems[cfg.systemKey]) delete state.jobSystems[cfg.systemKey]; });
+    }
+    return await __legacyResetMission_MultiJob.apply(this, arguments);
   };
 
-  const __legacyRenderJob_Lawn = renderJob;
+  const __legacyRenderJob_MultiJob = renderJob;
   renderJob = function(){
-    const out = __legacyRenderJob_Lawn.apply(this, arguments);
-    if(isCurrentJobLawnCare()){
-      ensureLawnCareJobState();
+    const out = __legacyRenderJob_MultiJob.apply(this, arguments);
+    const cfg = getCurrentJobSystemConfig();
+    if(cfg){
       const el = $('jobPay');
       if(el){
-        const lawn = ensureLawnCareJobState();
-        const projectedWeekly = Math.max(0, roundMoney(lawn.baseWeeklyPay * (1 + Number(lawn.persistentPayPct || 0))));
-        el.textContent = `Weekly Pay: ${money(projectedWeekly)} • Clients: ${lawn.clientCount} • Route Mod: ${lawnPctLabel(lawn.persistentPayPct)}`;
-        el.title = buildLawnStatusText();
+        const sys = ensureCurrentJobSystemState();
+        const projectedWeekly = Math.max(0, roundMoney(sys.baseWeeklyPay * (1 + Number(sys.persistentPayPct || 0))));
+        el.textContent = `Weekly Pay: ${money(projectedWeekly)} • ${cfg.relationshipPlural.charAt(0).toUpperCase() + cfg.relationshipPlural.slice(1)}: ${sys.clientCount} • ${cfg.modifierLabel}: ${pctLabel(sys.persistentPayPct)}`;
+        el.title = buildStatusText();
       }
     }
     return out;
   };
 
-  const __legacyNextWeek_Lawn = nextWeek;
+  const __legacyNextWeek_MultiJob = nextWeek;
   nextWeek = function(){
     let restoreIncome = null;
     try{
-      if(state && state.plan && state.plan.lockedForYear && state.weekEngine && state.mission && state.mission.active && isCurrentJobLawnCare()){
-        ensureLawnCareJobState();
-        syncLawnCarePlanIncome();
+      const cfg = getCurrentJobSystemConfig();
+      if(state && state.plan && state.plan.lockedForYear && state.weekEngine && state.mission && state.mission.active && cfg){
+        ensureCurrentJobSystemState();
+        syncCurrentJobPlanIncome();
         const currentW = Number(state.weekEngine.week || 1);
         const isMonthEnd = weekToMonth(currentW + 1) !== weekToMonth(currentW);
         if(isMonthEnd){
-          const lawn = ensureLawnCareJobState();
-          const pendingAmount = getLawnPendingPayAdjustmentTotal();
+          const sys = ensureCurrentJobSystemState();
+          const pendingAmount = getPendingPayAdjustmentTotal();
           const baseMonthly = Number(state.plan.income || 0);
-          const rows = consumeLawnPendingPayAdjustments();
+          const rows = consumePendingPayAdjustments();
           state.plan.income = Math.max(0, roundMoney(baseMonthly + pendingAmount));
           restoreIncome = function(){
-            state.plan.income = Math.max(0, roundMoney(lawn.baseWeeklyPay * 4 * (1 + Number(lawn.persistentPayPct || 0))));
+            state.plan.income = Math.max(0, roundMoney(sys.baseWeeklyPay * 4 * (1 + Number(sys.persistentPayPct || 0))));
             rows.forEach(row => {
               if(Number(row.amount || 0) !== 0){
-                addLedgerLine(`Lawn Care paycheck effect: ${row.title} ${Number(row.amount || 0) > 0 ? '+' : '-'}${money(Math.abs(Number(row.amount || 0)))}${row.note ? ' • ' + row.note : ''}`);
+                addLedgerLine(`${cfg.engineLabel} paycheck effect: ${row.title} ${Number(row.amount || 0) > 0 ? '+' : '-'}${money(Math.abs(Number(row.amount || 0)))}${row.note ? ' • ' + row.note : ''}`);
               }
             });
           };
         }
       }
     }catch(err){}
-    const result = __legacyNextWeek_Lawn.apply(this, arguments);
+    const result = __legacyNextWeek_MultiJob.apply(this, arguments);
     if(typeof restoreIncome === 'function'){
       try{ restoreIncome(); renderAll(); }catch(err){}
     }
@@ -9340,19 +9399,39 @@ runJobRealLifeEvent = function(afterDone){
   try{
     if(typeof window !== 'undefined'){
       window.WGLT_DEBUG = window.WGLT_DEBUG || {};
+      window.WGLT_DEBUG.inspectJobSystem = function(){
+        const cfg = getCurrentJobSystemConfig();
+        if(!cfg || !state || !state.jobSystems || !state.jobSystems[cfg.systemKey]) return null;
+        return JSON.parse(JSON.stringify(state.jobSystems[cfg.systemKey]));
+      };
+      window.WGLT_DEBUG.forceCurrentJobClient = function(delta){
+        const cfg = getCurrentJobSystemConfig();
+        if(!cfg) return 'Select Lawn Care or Babysitting first.';
+        const sys = ensureCurrentJobSystemState();
+        const d = Number(delta || 0);
+        sys.clientCount = Math.max(0, sys.clientCount + d);
+        sys.persistentPayPct += d * 0.05;
+        syncCurrentJobPlanIncome();
+        renderAll();
+        return buildStatusText();
+      };
       window.WGLT_DEBUG.inspectLawnCare = function(){
         if(!state || !state.jobSystems || !state.jobSystems.lawn) return null;
         return JSON.parse(JSON.stringify(state.jobSystems.lawn));
       };
       window.WGLT_DEBUG.forceLawnClient = function(delta){
-        if(!isCurrentJobLawnCare()) return 'Select Lawn Care first.';
-        const lawn = ensureLawnCareJobState();
-        const d = Number(delta || 0);
-        lawn.clientCount = Math.max(0, lawn.clientCount + d);
-        lawn.persistentPayPct += d * 0.05;
-        syncLawnCarePlanIncome();
-        renderAll();
-        return buildLawnStatusText();
+        const job = currentJobObj();
+        if(!job || String(job.id || '') !== 'lawn') return 'Select Lawn Care first.';
+        return window.WGLT_DEBUG.forceCurrentJobClient(delta);
+      };
+      window.WGLT_DEBUG.inspectBabysitting = function(){
+        if(!state || !state.jobSystems || !state.jobSystems.babysitting) return null;
+        return JSON.parse(JSON.stringify(state.jobSystems.babysitting));
+      };
+      window.WGLT_DEBUG.forceBabysittingFamily = function(delta){
+        const job = currentJobObj();
+        if(!job || String(job.id || '') !== 'babysitting') return 'Select Babysitting first.';
+        return window.WGLT_DEBUG.forceCurrentJobClient(delta);
       };
     }
   }catch(err){}
