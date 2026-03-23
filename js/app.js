@@ -3715,6 +3715,22 @@ function requiredControlForAction(action){
   return map[action] || null;
 }
 
+function applyCheckToolAvailability(){
+  const waiting = state && state.mission && state.mission.active ? state.mission.waitingAction : null;
+  const canWrite = waiting === "write_check";
+  const canDeposit = waiting === "deposit_check";
+  const writeBtn = $("btnWriteCheck");
+  const depositBtn = $("btnDepositCheck");
+  if(writeBtn){
+    writeBtn.disabled = !canWrite;
+    writeBtn.title = canWrite ? "" : "This tool unlocks only when a step or event asks for a check.";
+  }
+  if(depositBtn){
+    depositBtn.disabled = !canDeposit;
+    depositBtn.title = canDeposit ? "" : "This tool unlocks only when a step or event asks for a deposit.";
+  }
+}
+
 function applyLockRules(){
   const waiting = state.mission.active ? state.mission.waitingAction : null;
   const step = state.mission.active ? state.mission.steps[state.mission.index] : null;
@@ -3766,6 +3782,7 @@ function applyLockRules(){
 document.querySelectorAll(".tab").forEach(t=>{ t.style.opacity="1"; t.style.cursor="pointer"; });
     document.querySelectorAll("button").forEach(b=> b.disabled=false);
     applyRandomEventButtonState();
+    applyCheckToolAvailability();
     return;
   }
 
@@ -3801,6 +3818,7 @@ document.querySelectorAll(".tab").forEach(t=>{ t.style.opacity="1"; t.style.curs
   const activeTab = activeTabEl ? activeTabEl.dataset.tab : null;
   if(req?.tab && !isNonBlocking && req.tab !== "sheet" && activeTab !== "sheet") openTab(req.tab, {auto:true});
   applyRandomEventButtonState();
+  applyCheckToolAvailability();
 }
 
 /* Tabs */
@@ -7033,6 +7051,13 @@ function cancelContract(){
 
 /* Banking: checks */
 function writeCheck(){
+  const waiting = state && state.mission && state.mission.active ? state.mission.waitingAction : null;
+  if(waiting !== "write_check") {
+    beep("warn");
+    showBanner("Write Check unlocks only when a step or event asks for it.");
+    applyCheckToolAvailability();
+    return;
+  }
   const amt = 15 + Math.floor(Math.random()*56);
   state.checkAmount = amt;
   openModal({
@@ -7100,6 +7125,13 @@ function writeCheck(){
   });
 }
 function depositCheck(){
+  const waiting = state && state.mission && state.mission.active ? state.mission.waitingAction : null;
+  if(waiting !== "deposit_check") {
+    beep("warn");
+    showBanner("Deposit Check unlocks only when a step or event asks for it.");
+    applyCheckToolAvailability();
+    return;
+  }
   const amt = 10 + Math.floor(Math.random()*66);
   state.checkAmount = amt;
   openModal({
@@ -8345,6 +8377,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
   document.querySelectorAll("[data-check]").forEach(ch=>ch.addEventListener("click",()=>{ beep("warn"); showBanner("Check amounts are set by the game now."); }));
   $("btnWriteCheck").onclick=()=> writeCheck();
   $("btnDepositCheck").onclick=()=> depositCheck();
+  applyCheckToolAvailability();
 
   $("btnChooseStartup").onclick=()=> startupChoose();
   $("btnCompareBanks").onclick=()=> compareBanks();
