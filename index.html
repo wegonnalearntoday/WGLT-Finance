@@ -208,6 +208,8 @@ main::before{
       user-select:none;
     }
     .chip:active{ transform:translateY(1px); }
+    .chip.selected{ background:#111827; color:#fff; border-color:#111827; }
+    .chip.disabled, .chip[aria-disabled="true"]{ opacity:.45; cursor:not-allowed; pointer-events:none; }
     .minirow{ display:flex; gap:8px; align-items:center; margin-top:8px; flex-wrap:wrap; }
     .minirow .btn{ padding:8px 10px; border-radius:12px; font-size:12px; }
 
@@ -856,16 +858,9 @@ main::before{
               </div>
 
               <div class="field">
-                <div class="name">Write Check Amount (tap-variable)</div>
-                <div class="value" id="checkAmt">$10</div>
-                <div class="def">No typing. Tap +/- chips to set the amount.</div>
-                <div class="chips">
-                  <div class="chip" data-check="-10">-10</div>
-                  <div class="chip" data-check="-5">-5</div>
-                  <div class="chip" data-check="+5">+5</div>
-                  <div class="chip" data-check="+10">+10</div>
-                  <div class="chip" data-check="+25">+25</div>
-                </div>
+                <div class="name">Checks</div>
+                <div class="value" id="checkAmt">Scenario amount</div>
+                <div class="def">Check amounts are provided by the game when a bill or refund appears.</div>
                 <div class="minirow">
                   <button class="btn" id="btnWriteCheck">Write Check</button>
                   <button class="btn secondary" id="btnDepositCheck">Deposit Check</button>

@@ -3849,6 +3849,27 @@ function openTab(name, opts={}){
 }
 
 /* UI render */
+
+function updateTaxChipUI(){
+  document.querySelectorAll("[data-tax]").forEach(ch=>{
+    const val = parseInt(ch.dataset.tax,10);
+    const selected = val === Number(state.plan.taxPct || 10);
+    ch.classList.toggle("selected", selected);
+    const disabled = !!state.plan.lockedForYear;
+    ch.classList.toggle("disabled", disabled && !selected);
+    ch.setAttribute("aria-disabled", disabled ? "true" : "false");
+    ch.title = state.plan.lockedForYear
+      ? (selected ? "Assigned for this year" : "Unavailable this year")
+      : "Randomly assigned when the year plan is locked";
+  });
+  const def = $("taxDef");
+  if(def){
+    def.textContent = state.plan.lockedForYear
+      ? `Locked for this year at ${state.plan.taxPct}%.`
+      : "Randomly assigned when you lock the year plan. It stays the same for the whole year.";
+  }
+}
+
 function renderHeader(){
   $("cash").textContent = money(state.cash);
   if($("day")) $("day").textContent = state.day;
@@ -3878,13 +3899,14 @@ function renderHeader(){
 
   $("incomeVal").textContent = money(state.plan.income);
   $("taxVal").textContent = `${state.plan.taxPct}%`;
+  updateTaxChipUI();
   $("needsVal").textContent = money(state.plan.needs);
   $("wantsVal").textContent = money(state.plan.wants + state.plan.wantsExtras);
   updateWantsUI();
   $("saveVal").textContent = money(state.plan.save + state.plan.debtPay);
   $("debtVal").textContent = `S ${money(state.plan.save)} • D ${money(state.plan.debtPay)}`;
 
-  $("checkAmt").textContent = money(state.checkAmount);
+  $("checkAmt").textContent = state.checkAmount ? money(state.checkAmount) : "Scenario amount";
 
   $("contractState").textContent = state.contractActive ? "Active" : "None";
 
@@ -5869,6 +5891,8 @@ function applyPlan(){
   state.plan.lockedForYear = true;
   state.plan.chosenForYear = true;
   state.plan.appliedMonths = new Set();
+  const taxOptions = [10,15,20];
+  state.plan.taxPct = taxOptions[Math.floor(Math.random()*taxOptions.length)];
 
   // Reconnect the budgeting benchmark when the year plan is locked.
   // This keeps Benchmark #7 checked even before the mission starts.
@@ -5881,8 +5905,8 @@ function applyPlan(){
     notifyAction("apply_plan");
   } else {
     state.plan.wantsCommitted = false;
-    setLog(`${getBudgetModelName()} locked. Benchmark #7 checked off. Step 2: choose a student job, then build wants and start the year mission.`);
-    showBanner("Year plan locked. Budgeting benchmark checked.");
+    setLog(`${getBudgetModelName()} locked with payroll tax set at ${state.plan.taxPct}%. Benchmark #7 checked off. Step 2: choose a student job, then build wants and start the year mission.`);
+    showBanner(`Year plan locked. Payroll tax set to ${state.plan.taxPct}% for the year.`);
   }
   beep("success");
   renderHeader();
@@ -7390,7 +7414,7 @@ This money goes to the government to fund:
 • Medicare (health coverage for seniors)
 • Federal and state income tax
 
-In this game, tax is shown as a percentage (10%, 15%, 20%). Higher tax = less take-home pay.
+In this game, tax is shown as a percentage (10%, 15%, 20%). When you lock your year plan, one of those rates is assigned for the whole year. Higher tax = less take-home pay.
 
 Example: If you earn $320/month and tax is 10%, you take home $288.
 
@@ -8303,7 +8327,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
   $("btnPlaylistNext").onclick=()=>{ beep("click"); runNextPlaylistStep(); };
   $("btnPlaylistProgress").onclick=()=>{ beep("click"); playlistProgress(); };
 
-  document.querySelectorAll("[data-tax]").forEach(ch=>ch.addEventListener("click",()=>{ state.plan.taxPct=parseInt(ch.dataset.tax,10); renderHeader(); beep("click"); }));
+  document.querySelectorAll("[data-tax]").forEach(ch=>ch.addEventListener("click",()=>{ if(state.plan.lockedForYear){ beep("warn"); showBanner(`Payroll tax is locked at ${state.plan.taxPct}% for this year.`); return; } beep("warn"); showBanner("Payroll tax is assigned randomly when you lock the year plan."); }));
   document.querySelectorAll("[data-wants]").forEach(ch=>ch.addEventListener("click",()=>{ state.plan.wants=clamp(state.plan.wants+parseInt(ch.dataset.wants,10),0,500); renderHeader(); beep("click"); }));
   document.querySelectorAll("[data-ins]").forEach(ch=>ch.addEventListener("click",()=>{ state.plan.insurance=ch.dataset.ins; renderHeader(); beep("click"); }));
 
@@ -8318,7 +8342,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     cb.onchange=()=>{ state.plan.wantsCommitted = false; syncWantsChecklistStyles(); updateWantsUI(); };
   });
 
-  document.querySelectorAll("[data-check]").forEach(ch=>ch.addEventListener("click",()=>{ state.checkAmount=clamp(state.checkAmount+parseInt(ch.dataset.check,10),0,500); renderHeader(); beep("click"); }));
+  document.querySelectorAll("[data-check]").forEach(ch=>ch.addEventListener("click",()=>{ beep("warn"); showBanner("Check amounts are set by the game now."); }));
   $("btnWriteCheck").onclick=()=> writeCheck();
   $("btnDepositCheck").onclick=()=> depositCheck();
 
