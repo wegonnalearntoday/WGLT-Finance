@@ -5711,6 +5711,8 @@ function checkSavingsMilestones(){
     const hit = queue.shift();
     if(!hit) return;
     state.savingsMilestones.add(hit.k);
+    state.bank.savings = Number(state.bank.savings || 0) + Number(hit.bonus || 0);
+    addLedgerLine(`Savings milestone ${hit.k}% reward ${money(hit.bonus)} automatically added to savings`);
     openModal({
       title:`🏦 Savings Goal ${hit.k}% Reached!`,
       meta:`Bonus unlocked: ${money(hit.bonus)}`,
@@ -5718,32 +5720,12 @@ function checkSavingsMilestones(){
 
 Reward unlocked: ${money(hit.bonus)}
 
-Where do you want to put the bonus money?`,
+The bonus was automatically added to Savings.`,
       buttons:[
-        {id:'cash', label:'Keep as Cash', kind:'secondary'},
-        {id:'checking', label:'Put in Checking', kind:'primary'},
-        {id:'savings', label:'Put in Savings', kind:'secondary'},
-        {id:'invest', label:'Invest It', kind:'success'}
+        {id:'ok', label:'Awesome!', kind:'success'}
       ],
-      onPick:(id)=>{
-        const label = `${hit.k}% savings goal bonus`;
-        if(id === 'invest'){
-          openInvestmentChoiceModal(hit.bonus, label, (summary)=>{
-            if(summary) addLedgerLine(summary);
-            addLedgerLine(`Savings milestone ${hit.k}% reward ${money(hit.bonus)} routed to investment`);
-            showBanner(`Savings milestone ${hit.k}%! Bonus ${money(hit.bonus)}`);
-            addCoverage(12);
-            renderHeader();
-            renderSheet();
-            if(queue.length) setTimeout(showNextMilestoneReward, 120);
-          });
-          return;
-        }
-        if(id === 'cash') state.cash += hit.bonus;
-        else if(id === 'checking') state.bank.checking += hit.bonus;
-        else state.bank.savings += hit.bonus;
-        addLedgerLine(`Savings milestone ${hit.k}% reward ${money(hit.bonus)} to ${formatSourceLabel(id)}`);
-        showBanner(`Savings milestone ${hit.k}%! Bonus ${money(hit.bonus)}`);
+      onPick:()=>{
+        showBanner(`Savings milestone ${hit.k}%! Bonus ${money(hit.bonus)} added to savings`);
         addCoverage(12);
         renderHeader();
         renderSheet();
