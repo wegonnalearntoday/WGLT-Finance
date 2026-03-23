@@ -9093,3 +9093,267 @@ runJobRealLifeEvent = function(afterDone){
   }
   return runScenarioFoundationCategory('opportunity', __legacyRunJobRealLifeEvent, afterDone);
 };
+
+
+/* === WGLT Lawn Care Job Engine v1 === */
+(function(){
+  function currentJobObj(){
+    try{ return (state.jobs && state.jobs[state.jobIndex]) || null; }catch(err){ return null; }
+  }
+  function isCurrentJobLawnCare(){
+    const job = currentJobObj();
+    return !!(job && String(job.id) === 'lawn');
+  }
+  function ensureLawnCareJobState(){
+    if(!state.jobSystems) state.jobSystems = {};
+    if(!state.jobSystems.lawn){
+      const job = currentJobObj() || { pay:80, name:'Lawn Care' };
+      state.jobSystems.lawn = {
+        active: true,
+        baseWeeklyPay: Number(job.pay || 80),
+        baselineClients: 4,
+        clientCount: 4,
+        persistentPayPct: 0,
+        pendingPaycheckAdjustments: [],
+        repeatCounters: {},
+        clientsLostToReplace: 0,
+        lastAppliedWeek: 0,
+        history: []
+      };
+    }
+    const lawn = state.jobSystems.lawn;
+    const job = currentJobObj();
+    if(job && Number(job.pay || 0) > 0) lawn.baseWeeklyPay = Number(job.pay || 80);
+    if(typeof lawn.baselineClients !== 'number') lawn.baselineClients = 4;
+    if(typeof lawn.clientCount !== 'number') lawn.clientCount = lawn.baselineClients;
+    if(typeof lawn.persistentPayPct !== 'number') lawn.persistentPayPct = 0;
+    if(!Array.isArray(lawn.pendingPaycheckAdjustments)) lawn.pendingPaycheckAdjustments = [];
+    if(!lawn.repeatCounters || typeof lawn.repeatCounters !== 'object') lawn.repeatCounters = {};
+    if(!Array.isArray(lawn.history)) lawn.history = [];
+    if(typeof lawn.clientsLostToReplace !== 'number') lawn.clientsLostToReplace = 0;
+    return lawn;
+  }
+  function roundMoney(n){ return Math.round(Number(n || 0)); }
+  function syncLawnCarePlanIncome(){
+    if(!isCurrentJobLawnCare()) return;
+    const lawn = ensureLawnCareJobState();
+    const monthly = Math.max(0, roundMoney(lawn.baseWeeklyPay * 4 * (1 + Number(lawn.persistentPayPct || 0))));
+    state.plan.income = monthly;
+  }
+  function getLawnPendingPayAdjustmentTotal(){
+    const lawn = ensureLawnCareJobState();
+    return roundMoney((lawn.pendingPaycheckAdjustments || []).reduce((sum, item) => sum + Number(item.amount || 0), 0));
+  }
+  function consumeLawnPendingPayAdjustments(){
+    const lawn = ensureLawnCareJobState();
+    const rows = Array.isArray(lawn.pendingPaycheckAdjustments) ? lawn.pendingPaycheckAdjustments.slice() : [];
+    lawn.pendingPaycheckAdjustments = [];
+    return rows;
+  }
+  function lawnPctLabel(pct){
+    const n = Number(pct || 0);
+    return n === 0 ? '0%' : `${n > 0 ? '+' : ''}${Math.round(n * 100)}%`;
+  }
+  function buildLawnStatusText(){
+    if(!isCurrentJobLawnCare()) return '';
+    const lawn = ensureLawnCareJobState();
+    const pending = getLawnPendingPayAdjustmentTotal();
+    const projectedWeekly = Math.max(0, roundMoney(lawn.baseWeeklyPay * (1 + Number(lawn.persistentPayPct || 0))));
+    const pendingLabel = pending === 0 ? 'No one-time paycheck changes waiting' : `Next paycheck adjustment: ${pending > 0 ? '+' : '-'}${money(Math.abs(pending))}`;
+    return `Route clients: ${lawn.clientCount} • Route pay modifier: ${lawnPctLabel(lawn.persistentPayPct)} • Projected weekly pay: ${money(projectedWeekly)} • ${pendingLabel}`;
+  }
+  function resetLawnRepeatCounters(){
+    const lawn = ensureLawnCareJobState();
+    lawn.repeatCounters = {};
+  }
+  function pushLawnHistory(entry){
+    const lawn = ensureLawnCareJobState();
+    lawn.history.push(Object.assign({ week: Number((state.weekEngine && state.weekEngine.week) || state.day || 1) }, entry || {}));
+    lawn.history = lawn.history.slice(-24);
+  }
+  function applyLawnCareJobPreview(picked, choice){
+    if(!isCurrentJobLawnCare()) return '';
+    const jp = choice && choice.job_preview;
+    if(!jp || typeof jp !== 'object' || String(jp.job || '') !== 'lawn_care') return '';
+    const lawn = ensureLawnCareJobState();
+    const title = picked && picked.title ? picked.title : 'Life event';
+    const choiceId = String(choice && choice.id || 'choice');
+    const payPct = Number(jp.pay_delta_pct || 0);
+    const clientDelta = Number(jp.client_delta || 0);
+    const outcome = String(jp.outcome || 'neutral');
+    const notes = [];
+
+    if(clientDelta !== 0){
+      lawn.clientCount = Math.max(0, Number(lawn.clientCount || 0) + clientDelta);
+      if(payPct !== 0) lawn.persistentPayPct = Number(lawn.persistentPayPct || 0) + payPct;
+      if(clientDelta < 0 || jp.replacement_needed) lawn.clientsLostToReplace = Math.max(0, Number(lawn.clientsLostToReplace || 0) + Math.abs(clientDelta || 1));
+      if(clientDelta > 0) lawn.clientsLostToReplace = Math.max(0, Number(lawn.clientsLostToReplace || 0) - clientDelta);
+      notes.push(`Route clients ${clientDelta > 0 ? 'increased' : 'decreased'} by ${Math.abs(clientDelta)}.`);
+      if(payPct !== 0) notes.push(`Weekly lawn route pay is now ${lawnPctLabel(lawn.persistentPayPct)} from your base route.`);
+    } else if(payPct !== 0){
+      const amount = roundMoney(lawn.baseWeeklyPay * payPct);
+      lawn.pendingPaycheckAdjustments.push({
+        amount,
+        pct: payPct,
+        title,
+        choiceId,
+        note: jp.note || ''
+      });
+      notes.push(`Your next paycheck will ${amount >= 0 ? 'increase' : 'drop'} by ${money(Math.abs(amount))} from this week's lawn route result.`);
+    }
+
+    if(Number(jp.repeat_threshold || 0) > 0){
+      lawn.repeatCounters[choiceId] = Number(lawn.repeatCounters[choiceId] || 0) + 1;
+      if(lawn.repeatCounters[choiceId] >= Number(jp.repeat_threshold)){
+        lawn.repeatCounters[choiceId] = 0;
+        lawn.clientCount = Math.max(0, Number(lawn.clientCount || 0) - 1);
+        lawn.persistentPayPct = Number(lawn.persistentPayPct || 0) - 0.05;
+        lawn.clientsLostToReplace = Math.max(0, Number(lawn.clientsLostToReplace || 0) + 1);
+        notes.push('Repeat low performance cost you another client. Your lawn care pay route dropped an extra 5% until you replace them.');
+      } else if(jp.repeat_note) {
+        notes.push(String(jp.repeat_note));
+      }
+    } else if(outcome === 'growth'){
+      resetLawnRepeatCounters();
+    }
+
+    syncLawnCarePlanIncome();
+    pushLawnHistory({ title, choiceId, outcome, payPct, clientDelta, note: jp.note || '' });
+    if(jp.note) notes.unshift(String(jp.note));
+    if(jp.replacement_needed && Number(lawn.clientsLostToReplace || 0) > 0){
+      notes.push(`You need ${lawn.clientsLostToReplace} new client${Number(lawn.clientsLostToReplace || 0) === 1 ? '' : 's'} to rebuild your full lawn route.`);
+    }
+    return notes.filter(Boolean).join('\n');
+  }
+
+  const __legacyPlayScenarioFoundationScenario_Lawn = playScenarioFoundationScenario;
+  playScenarioFoundationScenario = function(picked, category){
+    if(!picked) return showBanner('Scenario missing.');
+    markScenarioFoundationPlayed(picked);
+    const buttons = (picked.choices || []).map((choice, idx) => ({
+      id: 'choice_' + idx,
+      label: choice.label,
+      kind: idx === 0 ? 'primary' : 'secondary'
+    }));
+    const meta = `Step ${getScenarioFoundationCurrentStep()} • ${picked.title}`;
+    openModal({
+      title: `${category === 'real_life' ? '👥 Life Scenario' : category === 'financial' ? '⚠️ Financial Decision' : category === 'opportunity' ? '💼 Job Opportunity' : '💳 Elite Credit Scenario'}`,
+      meta,
+      body: picked.prompt,
+      buttons,
+      onPick: (id)=>{
+        const idx = Number(String(id).replace('choice_',''));
+        const choice = (picked.choices || [])[idx];
+        if(!choice) return;
+        applyScenarioFoundationEffects(choice.immediate_effects || {});
+        queueScenarioFoundationHooks(choice.delayed_hooks || [], `${picked.title} → ${choice.label}`);
+        if(choice.ledger_note) addLedgerLine(choice.ledger_note);
+        const lawnOutcomeText = applyLawnCareJobPreview(picked, choice);
+        renderAll();
+        const jobPreviewText = formatScenarioFoundationJobPreview(choice);
+        const pieces = [];
+        if(choice.ledger_note) pieces.push(choice.ledger_note);
+        if(lawnOutcomeText) pieces.push('Lawn Care engine:\n' + lawnOutcomeText);
+        else if(jobPreviewText) pieces.push(jobPreviewText);
+        if(choice.reflection_tag) pieces.push('Tag: ' + choice.reflection_tag);
+        const follow = pieces.join('\n\n') || 'Decision recorded.';
+        openModal({
+          title: 'Decision recorded',
+          meta: picked.title,
+          body: follow,
+          buttons:[{id:'ok',label:'Continue',kind:'primary'}],
+          onPick: ()=> {
+            renderAll();
+            if(typeof notifyAction === 'function') notifyAction(category === 'opportunity' ? 'job_event' : 'weekly');
+          }
+        });
+      }
+    });
+  };
+
+  const __legacyStartMission_Lawn = startMission;
+  startMission = function(){
+    const out = __legacyStartMission_Lawn.apply(this, arguments);
+    if(isCurrentJobLawnCare()){
+      ensureLawnCareJobState();
+      syncLawnCarePlanIncome();
+      renderAll();
+    }
+    return out;
+  };
+
+  const __legacyResetMission_Lawn = resetMission;
+  resetMission = async function(){
+    if(state.jobSystems && state.jobSystems.lawn) delete state.jobSystems.lawn;
+    return await __legacyResetMission_Lawn.apply(this, arguments);
+  };
+
+  const __legacyRenderJob_Lawn = renderJob;
+  renderJob = function(){
+    const out = __legacyRenderJob_Lawn.apply(this, arguments);
+    if(isCurrentJobLawnCare()){
+      ensureLawnCareJobState();
+      const el = $('jobPay');
+      if(el){
+        const lawn = ensureLawnCareJobState();
+        const projectedWeekly = Math.max(0, roundMoney(lawn.baseWeeklyPay * (1 + Number(lawn.persistentPayPct || 0))));
+        el.textContent = `Weekly Pay: ${money(projectedWeekly)} • Clients: ${lawn.clientCount} • Route Mod: ${lawnPctLabel(lawn.persistentPayPct)}`;
+        el.title = buildLawnStatusText();
+      }
+    }
+    return out;
+  };
+
+  const __legacyNextWeek_Lawn = nextWeek;
+  nextWeek = function(){
+    let restoreIncome = null;
+    try{
+      if(state && state.plan && state.plan.lockedForYear && state.weekEngine && state.mission && state.mission.active && isCurrentJobLawnCare()){
+        ensureLawnCareJobState();
+        syncLawnCarePlanIncome();
+        const currentW = Number(state.weekEngine.week || 1);
+        const isMonthEnd = weekToMonth(currentW + 1) !== weekToMonth(currentW);
+        if(isMonthEnd){
+          const lawn = ensureLawnCareJobState();
+          const pendingAmount = getLawnPendingPayAdjustmentTotal();
+          const baseMonthly = Number(state.plan.income || 0);
+          const rows = consumeLawnPendingPayAdjustments();
+          state.plan.income = Math.max(0, roundMoney(baseMonthly + pendingAmount));
+          restoreIncome = function(){
+            state.plan.income = Math.max(0, roundMoney(lawn.baseWeeklyPay * 4 * (1 + Number(lawn.persistentPayPct || 0))));
+            rows.forEach(row => {
+              if(Number(row.amount || 0) !== 0){
+                addLedgerLine(`Lawn Care paycheck effect: ${row.title} ${Number(row.amount || 0) > 0 ? '+' : '-'}${money(Math.abs(Number(row.amount || 0)))}${row.note ? ' • ' + row.note : ''}`);
+              }
+            });
+          };
+        }
+      }
+    }catch(err){}
+    const result = __legacyNextWeek_Lawn.apply(this, arguments);
+    if(typeof restoreIncome === 'function'){
+      try{ restoreIncome(); renderAll(); }catch(err){}
+    }
+    return result;
+  };
+
+  try{
+    if(typeof window !== 'undefined'){
+      window.WGLT_DEBUG = window.WGLT_DEBUG || {};
+      window.WGLT_DEBUG.inspectLawnCare = function(){
+        if(!state || !state.jobSystems || !state.jobSystems.lawn) return null;
+        return JSON.parse(JSON.stringify(state.jobSystems.lawn));
+      };
+      window.WGLT_DEBUG.forceLawnClient = function(delta){
+        if(!isCurrentJobLawnCare()) return 'Select Lawn Care first.';
+        const lawn = ensureLawnCareJobState();
+        const d = Number(delta || 0);
+        lawn.clientCount = Math.max(0, lawn.clientCount + d);
+        lawn.persistentPayPct += d * 0.05;
+        syncLawnCarePlanIncome();
+        renderAll();
+        return buildLawnStatusText();
+      };
+    }
+  }catch(err){}
+})();
