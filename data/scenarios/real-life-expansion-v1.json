@@ -30,7 +30,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "needs_first",
-        "ledger_note": "Paid bus fare"
+        "ledger_note": "Paid bus fare \u2022 Lawn Care: You handled transportation and made it to your lawn jobs on time.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You handled transportation and made it to your lawn jobs on time."
+        }
       },
       {
         "id": "call_friend",
@@ -42,7 +49,14 @@
           "social_tension_minor"
         ],
         "reflection_tag": "use_support",
-        "ledger_note": "Asked friend for ride help"
+        "ledger_note": "Asked friend for ride help \u2022 Lawn Care: You still made it, but now you owe a favor. No pay change this time.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "luck",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You still made it, but now you owe a favor. No pay change this time."
+        }
       },
       {
         "id": "skip_trip",
@@ -54,7 +68,15 @@
           "missed_opportunity_minor"
         ],
         "reflection_tag": "save_now_pay_later",
-        "ledger_note": "Skipped the trip"
+        "ledger_note": "Skipped the trip \u2022 Lawn Care: Missing the trip meant missing your mowing route. One client moved on.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "loss",
+          "pay_delta_pct": -0.08,
+          "client_delta": -1,
+          "note": "Missing the trip meant missing your mowing route. One client moved on.",
+          "replacement_needed": true
+        }
       }
     ],
     "triggers": {
@@ -111,7 +133,14 @@
           "budget_squeeze"
         ],
         "reflection_tag": "fun_choice",
-        "ledger_note": "Paid school trip fee"
+        "ledger_note": "Paid school trip fee \u2022 Lawn Care: The fun was real, but your budget got tight and you had to pass on mower gas and supplies this week.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.04,
+          "client_delta": 0,
+          "note": "The fun was real, but your budget got tight and you had to pass on mower gas and supplies this week."
+        }
       },
       {
         "id": "save_for_next",
@@ -124,7 +153,14 @@
           "steady_growth"
         ],
         "reflection_tag": "delay_for_plan",
-        "ledger_note": "Skipped trip to save"
+        "ledger_note": "Skipped trip to save \u2022 Lawn Care: Planning ahead kept your money steady and your lawn work uninterrupted.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "Planning ahead kept your money steady and your lawn work uninterrupted."
+        }
       },
       {
         "id": "ask_family",
@@ -136,7 +172,14 @@
           "social_tension_minor"
         ],
         "reflection_tag": "seek_help",
-        "ledger_note": "Asked family for partial help"
+        "ledger_note": "Asked family for partial help \u2022 Lawn Care: You found support and kept your lawn income stable.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You found support and kept your lawn income stable."
+        }
       }
     ],
     "triggers": {
@@ -191,7 +234,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "protect_tool",
-        "ledger_note": "Paid for phone repair"
+        "ledger_note": "Paid for phone repair \u2022 Lawn Care: Fixing your phone helped you stay reachable for clients and schedule changes.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "Fixing your phone helped you stay reachable for clients and schedule changes."
+        }
       },
       {
         "id": "use_as_is",
@@ -203,7 +253,14 @@
           "small_bill_pressure"
         ],
         "reflection_tag": "delay_fix",
-        "ledger_note": "Delayed phone repair"
+        "ledger_note": "Delayed phone repair \u2022 Lawn Care: A missed text from a client caused confusion, so one payment came in lower this week.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.05,
+          "client_delta": 0,
+          "note": "A missed text from a client caused confusion, so one payment came in lower this week."
+        }
       },
       {
         "id": "borrow_device",
@@ -215,7 +272,14 @@
           "social_tension_minor"
         ],
         "reflection_tag": "workaround",
-        "ledger_note": "Borrowed device instead"
+        "ledger_note": "Borrowed device instead \u2022 Lawn Care: You patched it together and got lucky this time. No lawn care change.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "luck",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You patched it together and got lucky this time. No lawn care change."
+        }
       }
     ],
     "triggers": {
@@ -268,7 +332,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "clear_it_fast",
-        "ledger_note": "Paid school fine"
+        "ledger_note": "Paid school fine \u2022 Lawn Care: Handling the fine quickly kept your week organized and your route on track.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.01,
+          "client_delta": 0,
+          "note": "Handling the fine quickly kept your week organized and your route on track."
+        }
       },
       {
         "id": "delay_fine",
@@ -280,7 +351,14 @@
           "late_fee_chain"
         ],
         "reflection_tag": "delay_problem",
-        "ledger_note": "Delayed school fine"
+        "ledger_note": "Delayed school fine \u2022 Lawn Care: The unpaid fine kept nagging at you and distracted you during jobs.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.03,
+          "client_delta": 0,
+          "note": "The unpaid fine kept nagging at you and distracted you during jobs."
+        }
       },
       {
         "id": "cut_wants",
@@ -291,7 +369,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "prioritize_bills",
-        "ledger_note": "Cut wants to pay fine"
+        "ledger_note": "Cut wants to pay fine \u2022 Lawn Care: Choosing responsibility first helped you stay focused for clients.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "Choosing responsibility first helped you stay focused for clients."
+        }
       }
     ],
     "triggers": {
@@ -347,7 +432,14 @@
           "budget_squeeze"
         ],
         "reflection_tag": "impulse_buy",
-        "ledger_note": "Bought new game"
+        "ledger_note": "Bought new game \u2022 Lawn Care: Impulse spending and late gaming left you tired during lawn work.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.05,
+          "client_delta": 0,
+          "note": "Impulse spending and late gaming left you tired during lawn work."
+        }
       },
       {
         "id": "wait_sale",
@@ -357,7 +449,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "delay_for_value",
-        "ledger_note": "Waited for sale"
+        "ledger_note": "Waited for sale \u2022 Lawn Care: Patience kept your budget clean and your work steady.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "Patience kept your budget clean and your work steady."
+        }
       },
       {
         "id": "borrow_play",
@@ -370,7 +469,14 @@
           "social_tension_minor"
         ],
         "reflection_tag": "share_resource",
-        "ledger_note": "Borrowed game access"
+        "ledger_note": "Borrowed game access \u2022 Lawn Care: You still had fun without hitting your route money.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You still had fun without hitting your route money."
+        }
       }
     ],
     "triggers": {
@@ -426,7 +532,14 @@
           "budget_squeeze"
         ],
         "reflection_tag": "social_spending",
-        "ledger_note": "Bought spirit shirt"
+        "ledger_note": "Bought spirit shirt \u2022 Lawn Care: You enjoyed spirit day, but had a little less room in the budget for lawn supplies.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.02,
+          "client_delta": 0,
+          "note": "You enjoyed spirit day, but had a little less room in the budget for lawn supplies."
+        }
       },
       {
         "id": "skip_shirt",
@@ -438,7 +551,14 @@
           "steady_growth"
         ],
         "reflection_tag": "keep_plan",
-        "ledger_note": "Skipped spirit shirt"
+        "ledger_note": "Skipped spirit shirt \u2022 Lawn Care: Keeping to your plan helped your lawn business stay funded.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "Keeping to your plan helped your lawn business stay funded."
+        }
       },
       {
         "id": "wear_old_colors",
@@ -449,7 +569,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "creative_choice",
-        "ledger_note": "Used clothes already owned"
+        "ledger_note": "Used clothes already owned \u2022 Lawn Care: Using what you already had was smart and kept your work week stable.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.01,
+          "client_delta": 0,
+          "note": "Using what you already had was smart and kept your work week stable."
+        }
       }
     ],
     "triggers": {
@@ -504,7 +631,14 @@
           "low_energy_risk"
         ],
         "reflection_tag": "rush_cost",
-        "ledger_note": "Rushed out and bought breakfast"
+        "ledger_note": "Rushed out and bought breakfast \u2022 Lawn Care: The rushed start carried into your mowing route and one client cut your pay for sloppy edges.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.08,
+          "client_delta": 0,
+          "note": "The rushed start carried into your mowing route and one client cut your pay for sloppy edges."
+        }
       },
       {
         "id": "pack_snack",
@@ -515,7 +649,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "use_home_resources",
-        "ledger_note": "Packed quick snack"
+        "ledger_note": "Packed quick snack \u2022 Lawn Care: You recovered well and still had enough energy to do quality work.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "You recovered well and still had enough energy to do quality work."
+        }
       },
       {
         "id": "skip_breakfast",
@@ -528,7 +669,15 @@
           "fatigue_chain"
         ],
         "reflection_tag": "needs_neglect",
-        "ledger_note": "Skipped breakfast"
+        "ledger_note": "Skipped breakfast \u2022 Lawn Care: Running on empty caught up with you during lawn care, and one client did not rebook.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "loss",
+          "pay_delta_pct": -0.05,
+          "client_delta": -1,
+          "note": "Running on empty caught up with you during lawn care, and one client did not rebook.",
+          "replacement_needed": true
+        }
       }
     ],
     "triggers": {
@@ -582,7 +731,14 @@
           "small_bill_pressure"
         ],
         "reflection_tag": "helpful_but_costly",
-        "ledger_note": "Bought project supplies"
+        "ledger_note": "Bought project supplies \u2022 Lawn Care: Covering the group helped the project, but your lawn budget felt tighter.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.02,
+          "client_delta": 0,
+          "note": "Covering the group helped the project, but your lawn budget felt tighter."
+        }
       },
       {
         "id": "split_cost",
@@ -593,7 +749,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "fair_share",
-        "ledger_note": "Split project supply cost"
+        "ledger_note": "Split project supply cost \u2022 Lawn Care: Sharing the cost showed leadership without hurting your route money.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "Sharing the cost showed leadership without hurting your route money."
+        }
       },
       {
         "id": "use_home_items",
@@ -603,7 +766,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "resourceful",
-        "ledger_note": "Used supplies from home"
+        "ledger_note": "Used supplies from home \u2022 Lawn Care: You solved the problem creatively and kept your lawn income stable.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.01,
+          "client_delta": 0,
+          "note": "You solved the problem creatively and kept your lawn income stable."
+        }
       }
     ],
     "triggers": {
@@ -657,7 +827,14 @@
           "budget_squeeze"
         ],
         "reflection_tag": "social_spending",
-        "ledger_note": "Bought large cookout item"
+        "ledger_note": "Bought large cookout item \u2022 Lawn Care: Generous move, but it squeezed your mowing money this week.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.03,
+          "client_delta": 0,
+          "note": "Generous move, but it squeezed your mowing money this week."
+        }
       },
       {
         "id": "bring_small_item",
@@ -668,7 +845,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "balanced_choice",
-        "ledger_note": "Brought small cookout item"
+        "ledger_note": "Brought small cookout item \u2022 Lawn Care: You contributed without throwing off your client route.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.01,
+          "client_delta": 0,
+          "note": "You contributed without throwing off your client route."
+        }
       },
       {
         "id": "offer_help",
@@ -679,7 +863,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "time_over_money",
-        "ledger_note": "Helped instead of buying item"
+        "ledger_note": "Helped instead of buying item \u2022 Lawn Care: Helping with your time instead of extra spending kept your lawn business strong.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.03,
+          "client_delta": 0,
+          "note": "Helping with your time instead of extra spending kept your lawn business strong."
+        }
       }
     ],
     "triggers": {
@@ -733,7 +924,14 @@
           "budget_squeeze"
         ],
         "reflection_tag": "replace_quick",
-        "ledger_note": "Replaced headphones"
+        "ledger_note": "Replaced headphones \u2022 Lawn Care: Replacing them solved the problem, but your lawn budget took a hit.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.03,
+          "client_delta": 0,
+          "note": "Replacing them solved the problem, but your lawn budget took a hit."
+        }
       },
       {
         "id": "use_old_pair",
@@ -744,7 +942,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "use_backup",
-        "ledger_note": "Used backup headphones"
+        "ledger_note": "Used backup headphones \u2022 Lawn Care: Using a backup kept your schedule and budget under control.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.01,
+          "client_delta": 0,
+          "note": "Using a backup kept your schedule and budget under control."
+        }
       },
       {
         "id": "go_without",
@@ -756,7 +961,14 @@
           "small_bill_pressure"
         ],
         "reflection_tag": "delay_replace",
-        "ledger_note": "Went without headphones"
+        "ledger_note": "Went without headphones \u2022 Lawn Care: No big job effect this time. You lucked up.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "luck",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "No big job effect this time. You lucked up."
+        }
       }
     ],
     "triggers": {
@@ -810,7 +1022,14 @@
           "budget_squeeze"
         ],
         "reflection_tag": "social_spending",
-        "ledger_note": "Joined team snack order"
+        "ledger_note": "Joined team snack order \u2022 Lawn Care: Extra snack spending tightened your week and made it harder to prep for your route.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.03,
+          "client_delta": 0,
+          "note": "Extra snack spending tightened your week and made it harder to prep for your route."
+        }
       },
       {
         "id": "bring_home_snack",
@@ -821,7 +1040,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "planned_needs",
-        "ledger_note": "Brought snack from home"
+        "ledger_note": "Brought snack from home \u2022 Lawn Care: You met the moment without hurting your mowing money.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "You met the moment without hurting your mowing money."
+        }
       },
       {
         "id": "skip_snack",
@@ -833,7 +1059,14 @@
           "social_tension_minor"
         ],
         "reflection_tag": "save_money",
-        "ledger_note": "Skipped team snack order"
+        "ledger_note": "Skipped team snack order \u2022 Lawn Care: A little awkward socially, but your lawn work stayed steady.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "A little awkward socially, but your lawn work stayed steady."
+        }
       }
     ],
     "triggers": {
@@ -886,7 +1119,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "clear_small_bill",
-        "ledger_note": "Paid library fee"
+        "ledger_note": "Paid library fee \u2022 Lawn Care: Taking care of the fee early helped you stay responsible and focused on clients.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.01,
+          "client_delta": 0,
+          "note": "Taking care of the fee early helped you stay responsible and focused on clients."
+        }
       },
       {
         "id": "delay_payment",
@@ -898,7 +1138,14 @@
           "late_fee_chain"
         ],
         "reflection_tag": "delay_problem",
-        "ledger_note": "Delayed library fee"
+        "ledger_note": "Delayed library fee \u2022 Lawn Care: Late fees stacked up and cut into your lawn earnings.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.03,
+          "client_delta": 0,
+          "note": "Late fees stacked up and cut into your lawn earnings."
+        }
       },
       {
         "id": "cut_snack",
@@ -909,7 +1156,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "prioritize_bills",
-        "ledger_note": "Cut snack spending to pay fee"
+        "ledger_note": "Cut snack spending to pay fee \u2022 Lawn Care: Choosing the fee over a want helped you protect your route money.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "Choosing the fee over a want helped you protect your route money."
+        }
       }
     ],
     "triggers": {
@@ -965,7 +1219,14 @@
           "budget_squeeze"
         ],
         "reflection_tag": "social_spending",
-        "ledger_note": "Spent on birthday outing"
+        "ledger_note": "Spent on birthday outing \u2022 Lawn Care: The outing was fun, but the spending left your lawn care week tighter than planned.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.04,
+          "client_delta": 0,
+          "note": "The outing was fun, but the spending left your lawn care week tighter than planned."
+        }
       },
       {
         "id": "go_limit",
@@ -976,7 +1237,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "balanced_choice",
-        "ledger_note": "Went out with budget limit"
+        "ledger_note": "Went out with budget limit \u2022 Lawn Care: You enjoyed the event and still kept your work week balanced.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You enjoyed the event and still kept your work week balanced."
+        }
       },
       {
         "id": "send_message",
@@ -989,7 +1257,14 @@
           "social_tension_minor"
         ],
         "reflection_tag": "save_with_respect",
-        "ledger_note": "Skipped outing but reached out"
+        "ledger_note": "Skipped outing but reached out \u2022 Lawn Care: You saved money and stayed ready for clients.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "You saved money and stayed ready for clients."
+        }
       }
     ],
     "triggers": {
@@ -1041,7 +1316,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "cover_need",
-        "ledger_note": "Bought uniform item"
+        "ledger_note": "Bought uniform item \u2022 Lawn Care: Buying the item kept your school day smooth and your lawn route on schedule.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "Buying the item kept your school day smooth and your lawn route on schedule."
+        }
       },
       {
         "id": "borrow_item",
@@ -1053,7 +1335,14 @@
           "social_tension_minor"
         ],
         "reflection_tag": "temporary_fix",
-        "ledger_note": "Borrowed uniform item"
+        "ledger_note": "Borrowed uniform item \u2022 Lawn Care: You handled it with help and got lucky this time.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "luck",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You handled it with help and got lucky this time."
+        }
       },
       {
         "id": "delay_and_risk",
@@ -1066,7 +1355,14 @@
           "missed_opportunity_minor"
         ],
         "reflection_tag": "delay_problem",
-        "ledger_note": "Delayed getting uniform item"
+        "ledger_note": "Delayed getting uniform item \u2022 Lawn Care: Being unprepared spilled into the rest of your day and hurt your mowing focus.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.05,
+          "client_delta": 0,
+          "note": "Being unprepared spilled into the rest of your day and hurt your mowing focus."
+        }
       }
     ],
     "triggers": {
@@ -1119,7 +1415,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "quick_need",
-        "ledger_note": "Bought drink"
+        "ledger_note": "Bought drink \u2022 Lawn Care: Staying hydrated helped you keep up your pace on the mower.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.01,
+          "client_delta": 0,
+          "note": "Staying hydrated helped you keep up your pace on the mower."
+        }
       },
       {
         "id": "use_fountain",
@@ -1130,7 +1433,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "resourceful",
-        "ledger_note": "Used free water option"
+        "ledger_note": "Used free water option \u2022 Lawn Care: You solved the problem for free and still worked strong.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "You solved the problem for free and still worked strong."
+        }
       },
       {
         "id": "wait_it_out",
@@ -1143,7 +1453,14 @@
           "fatigue_chain"
         ],
         "reflection_tag": "needs_neglect",
-        "ledger_note": "Went without water"
+        "ledger_note": "Went without water \u2022 Lawn Care: Dehydration slowed you down on your lawn route and cost you part of your pay.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.05,
+          "client_delta": 0,
+          "note": "Dehydration slowed you down on your lawn route and cost you part of your pay."
+        }
       }
     ],
     "triggers": {
@@ -1198,7 +1515,14 @@
           "profit_if_used_well"
         ],
         "reflection_tag": "entrepreneurial_risk",
-        "ledger_note": "Paid booth fee"
+        "ledger_note": "Paid booth fee \u2022 Lawn Care: The booth helped people see your work. One new lawn client came from the event.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 1,
+          "note": "The booth helped people see your work. One new lawn client came from the event."
+        }
       },
       {
         "id": "partner_share",
@@ -1209,7 +1533,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "shared_risk",
-        "ledger_note": "Split booth fee"
+        "ledger_note": "Split booth fee \u2022 Lawn Care: Sharing the fee lowered the risk and still boosted your reputation.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.03,
+          "client_delta": 0,
+          "note": "Sharing the fee lowered the risk and still boosted your reputation."
+        }
       },
       {
         "id": "watch_learn",
@@ -1220,7 +1551,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "observe_first",
-        "ledger_note": "Skipped booth and observed"
+        "ledger_note": "Skipped booth and observed \u2022 Lawn Care: No change this week, but you learned something useful for later.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "No change this week, but you learned something useful for later."
+        }
       }
     ],
     "triggers": {
@@ -1276,7 +1614,14 @@
           "budget_squeeze"
         ],
         "reflection_tag": "quick_fix",
-        "ledger_note": "Bought cheap charger"
+        "ledger_note": "Bought cheap charger \u2022 Lawn Care: You solved the battery problem, but spent money you could have used on the route.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.02,
+          "client_delta": 0,
+          "note": "You solved the battery problem, but spent money you could have used on the route."
+        }
       },
       {
         "id": "borrow_charge",
@@ -1288,7 +1633,14 @@
           "social_tension_minor"
         ],
         "reflection_tag": "borrow_help",
-        "ledger_note": "Borrowed charger"
+        "ledger_note": "Borrowed charger \u2022 Lawn Care: You borrowed what you needed and lucked up this time.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "luck",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You borrowed what you needed and lucked up this time."
+        }
       },
       {
         "id": "power_save",
@@ -1299,7 +1651,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "resourceful",
-        "ledger_note": "Used power-save mode"
+        "ledger_note": "Used power-save mode \u2022 Lawn Care: Managing with what you had kept your client communication alive.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.01,
+          "client_delta": 0,
+          "note": "Managing with what you had kept your client communication alive."
+        }
       }
     ],
     "triggers": {
@@ -1352,7 +1711,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "integrity",
-        "ledger_note": "Returned item today"
+        "ledger_note": "Returned item today \u2022 Lawn Care: Keeping your word strengthened your reputation. Clients trust workers who follow through.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.03,
+          "client_delta": 0,
+          "note": "Keeping your word strengthened your reputation. Clients trust workers who follow through."
+        }
       },
       {
         "id": "message_owner",
@@ -1364,7 +1730,14 @@
           "social_tension_minor"
         ],
         "reflection_tag": "communicate_delay",
-        "ledger_note": "Messaged owner about delay"
+        "ledger_note": "Messaged owner about delay \u2022 Lawn Care: You communicated well enough to avoid damage this time.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You communicated well enough to avoid damage this time."
+        }
       },
       {
         "id": "ignore_issue",
@@ -1376,7 +1749,15 @@
           "job_trust_drop"
         ],
         "reflection_tag": "avoidance",
-        "ledger_note": "Ignored late return promise"
+        "ledger_note": "Ignored late return promise \u2022 Lawn Care: Ignoring the problem hurt your reputation, and one lawn client stopped booking.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "loss",
+          "pay_delta_pct": -0.05,
+          "client_delta": -1,
+          "note": "Ignoring the problem hurt your reputation, and one lawn client stopped booking.",
+          "replacement_needed": true
+        }
       }
     ],
     "triggers": {
@@ -1430,7 +1811,14 @@
           "budget_squeeze"
         ],
         "reflection_tag": "social_spending",
-        "ledger_note": "Joined movie night spending"
+        "ledger_note": "Joined movie night spending \u2022 Lawn Care: The movie night was fun, but the extra spending squeezed your lawn money.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.03,
+          "client_delta": 0,
+          "note": "The movie night was fun, but the extra spending squeezed your lawn money."
+        }
       },
       {
         "id": "join_snacks_only",
@@ -1441,7 +1829,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "balanced_choice",
-        "ledger_note": "Limited movie night spending"
+        "ledger_note": "Limited movie night spending \u2022 Lawn Care: You joined without overdoing it and stayed balanced for work.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You joined without overdoing it and stayed balanced for work."
+        }
       },
       {
         "id": "skip_and_save",
@@ -1453,7 +1848,14 @@
           "steady_growth"
         ],
         "reflection_tag": "save_over_fun",
-        "ledger_note": "Skipped movie night to save"
+        "ledger_note": "Skipped movie night to save \u2022 Lawn Care: Saving the money helped you stay ready for mower gas, blades, and client needs.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "Saving the money helped you stay ready for mower gas, blades, and client needs."
+        }
       }
     ],
     "triggers": {

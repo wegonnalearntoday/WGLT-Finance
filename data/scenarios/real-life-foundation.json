@@ -30,7 +30,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "needs_first",
-        "ledger_note": "Bought lunch"
+        "ledger_note": "Bought lunch \u2022 Lawn Care: You stayed fueled, finished strong, and a neighbor asked you to add their yard next week.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 1,
+          "note": "You stayed fueled, finished strong, and a neighbor asked you to add their yard next week."
+        }
       },
       {
         "id": "buy_snack",
@@ -43,7 +50,16 @@
           "low_energy_risk"
         ],
         "reflection_tag": "short_term_tradeoff",
-        "ledger_note": "Bought snack instead of lunch"
+        "ledger_note": "Bought snack instead of lunch \u2022 Lawn Care: You ran low on energy and only finished part of one yard. That client paid half this week.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": 0,
+          "note": "You ran low on energy and only finished part of one yard. That client paid half this week.",
+          "repeat_threshold": 2,
+          "repeat_note": "If this happens again before you recover, that client drops you and your weekly pay shrinks until you replace them."
+        }
       },
       {
         "id": "skip_food",
@@ -56,7 +72,15 @@
           "fatigue_chain"
         ],
         "reflection_tag": "needs_neglect",
-        "ledger_note": "Skipped lunch"
+        "ledger_note": "Skipped lunch \u2022 Lawn Care: You had no energy for the full route and lost a client for the week.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "loss",
+          "pay_delta_pct": -0.05,
+          "client_delta": -1,
+          "note": "You had no energy for the full route and lost a client for the week.",
+          "replacement_needed": true
+        }
       }
     ],
     "triggers": {
@@ -130,7 +154,14 @@
           "budget_squeeze"
         ],
         "reflection_tag": "social_spending",
-        "ledger_note": "Pizza night with friends"
+        "ledger_note": "Pizza night with friends \u2022 Lawn Care: Late night spending and low rest left you dragging on the mower route. You finished, but slower.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.05,
+          "client_delta": 0,
+          "note": "Late night spending and low rest left you dragging on the mower route. You finished, but slower."
+        }
       },
       {
         "id": "set_limit",
@@ -141,7 +172,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "balanced_choice",
-        "ledger_note": "Limited social spending"
+        "ledger_note": "Limited social spending \u2022 Lawn Care: You had fun and still kept enough control to show up ready for your clients.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You had fun and still kept enough control to show up ready for your clients."
+        }
       },
       {
         "id": "skip_event",
@@ -154,7 +192,14 @@
           "social_tension_minor"
         ],
         "reflection_tag": "saving_over_fun",
-        "ledger_note": "Skipped pizza outing"
+        "ledger_note": "Skipped pizza outing \u2022 Lawn Care: You protected your budget and your rest. Clients noticed the steady work.",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.03,
+          "client_delta": 0,
+          "note": "You protected your budget and your rest. Clients noticed the steady work."
+        }
       }
     ],
     "triggers": {

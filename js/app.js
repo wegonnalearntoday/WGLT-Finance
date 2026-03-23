@@ -8978,12 +8978,21 @@ function queueScenarioFoundationHooks(hookIds, sourceLabel){
     queueConsequenceObject(entry, sourceLabel || hookId);
   });
 }
-function runScenarioFoundationCategory(category, fallbackFn){
-  const pack = getScenarioFoundationPacksByCategory(category);
-  if(!pack.length) return fallbackFn ? fallbackFn() : showBanner('No scenario pack loaded.');
-  const candidates = pack.filter(sc => scenarioFoundationMatches(sc, category));
-  const picked = pickWeightedScenarioFoundation(candidates);
-  if(!picked) return fallbackFn ? fallbackFn() : showBanner('No matching scenario this step.');
+function formatScenarioFoundationJobPreview(choice){
+  const jp = choice && choice.job_preview;
+  if(!jp || typeof jp !== 'object') return '';
+  const pay = Number(jp.pay_delta_pct || 0);
+  const client = Number(jp.client_delta || 0);
+  const payLabel = pay === 0 ? '0%' : `${pay > 0 ? '+' : ''}${Math.round(pay * 100)}%`;
+  const clientLabel = client === 0 ? '0' : `${client > 0 ? '+' : ''}${client}`;
+  const lines = [`Lawn Care preview: Pay ${payLabel} • Clients ${clientLabel}`];
+  if(jp.note) lines.push(String(jp.note));
+  if(jp.repeat_note) lines.push(`Repeat rule: ${jp.repeat_note}`);
+  if(jp.replacement_needed) lines.push('You will need to replace that client to restore full pay.');
+  return lines.join('\n');
+}
+function playScenarioFoundationScenario(picked, category){
+  if(!picked) return showBanner('Scenario missing.');
   markScenarioFoundationPlayed(picked);
   const buttons = (picked.choices || []).map((choice, idx) => ({
     id: 'choice_' + idx,
@@ -9004,7 +9013,8 @@ function runScenarioFoundationCategory(category, fallbackFn){
       queueScenarioFoundationHooks(choice.delayed_hooks || [], `${picked.title} → ${choice.label}`);
       if(choice.ledger_note) addLedgerLine(choice.ledger_note);
       renderAll();
-      const follow = `${choice.ledger_note ? choice.ledger_note + '\n\n' : ''}${choice.reflection_tag ? 'Tag: ' + choice.reflection_tag : 'Decision recorded.'}`;
+      const jobPreviewText = formatScenarioFoundationJobPreview(choice);
+      const follow = `${choice.ledger_note ? choice.ledger_note + '\n\n' : ''}${jobPreviewText ? jobPreviewText + '\n\n' : ''}${choice.reflection_tag ? 'Tag: ' + choice.reflection_tag : 'Decision recorded.'}`;
       openModal({
         title: 'Decision recorded',
         meta: picked.title,
@@ -9018,6 +9028,53 @@ function runScenarioFoundationCategory(category, fallbackFn){
     }
   });
 }
+function runScenarioFoundationCategory(category, fallbackFn){
+  const pack = getScenarioFoundationPacksByCategory(category);
+  if(!pack.length) return fallbackFn ? fallbackFn() : showBanner('No scenario pack loaded.');
+  const candidates = pack.filter(sc => scenarioFoundationMatches(sc, category));
+  const picked = pickWeightedScenarioFoundation(candidates);
+  if(!picked) return fallbackFn ? fallbackFn() : showBanner('No matching scenario this step.');
+  return playScenarioFoundationScenario(picked, category);
+}
+function openScenarioFoundationDebugPicker(category){
+  const pack = getScenarioFoundationPacksByCategory(category);
+  if(!pack.length) return showBanner('No scenario pack loaded.');
+  const buttons = pack.slice(0, 24).map((sc, idx) => ({
+    id: `debug_${idx}`,
+    label: sc.title,
+    kind: 'secondary'
+  }));
+  buttons.push({ id: 'cancel', label: 'Close', kind: 'primary' });
+  openModal({
+    title: 'Debug scenario picker',
+    meta: category,
+    body: 'Choose a scenario to test directly. This ignores random selection and repeat cooldowns.',
+    buttons,
+    onPick: (id)=>{
+      if(id === 'cancel') return;
+      const idx = Number(String(id).replace('debug_',''));
+      const picked = pack[idx];
+      if(picked) playScenarioFoundationScenario(picked, category);
+    }
+  });
+}
+try{
+  if(typeof window !== 'undefined'){
+    window.WGLT_DEBUG = window.WGLT_DEBUG || {};
+    window.WGLT_DEBUG.runLifeScenarioById = function(id){
+      const pack = getScenarioFoundationPacksByCategory('real_life');
+      const picked = pack.find(sc => String(sc.id) === String(id));
+      if(!picked) return showBanner('Life scenario not found: ' + id);
+      return playScenarioFoundationScenario(picked, 'real_life');
+    };
+    window.WGLT_DEBUG.openLifeScenarioPicker = function(){
+      return openScenarioFoundationDebugPicker('real_life');
+    };
+    window.WGLT_DEBUG.listLifeScenarios = function(){
+      return getScenarioFoundationPacksByCategory('real_life').map(sc => ({ id: sc.id, title: sc.title }));
+    };
+  }
+}catch(err){}
 
 const __legacyRunLifeScenarioDecision = runLifeScenarioDecision;
 const __legacyRunFinancialDecision = runFinancialDecision;
