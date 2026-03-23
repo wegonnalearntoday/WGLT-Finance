@@ -6083,6 +6083,25 @@ function applyWeeklyBankEffects(){
 }
 
 /* Next week (48-week engine) */
+function startWeeklyStudentFlow(onAllDone){
+  const launchRandomPhase = ()=>{
+    if(typeof runWeeklyScenarios === 'function'){
+      runWeeklyScenarios(state.weekEngine ? state.weekEngine.week : currentWeekIndex(), ()=>{
+        if(typeof onAllDone === 'function') onAllDone();
+      });
+    } else if(typeof onAllDone === 'function'){
+      onAllDone();
+    }
+  };
+
+  // In the student version, the weekly job supply/inventory decision appears first every week.
+  setTimeout(()=>{
+    runJobRealLifeEvent(()=>{
+      setTimeout(launchRandomPhase, 150);
+    });
+  }, 180);
+}
+
 function nextWeek(){
   // Block advancement until the student actually reviews the Budget Sheet snapshot
   if(state.ui && state.ui.pendingBudgetSheetReview){
@@ -6280,14 +6299,10 @@ Action Plan: ${getMonthlyActionPlan({})}`,
             promptPaycheckInvestmentSimple(takeHome, tax, ()=>{
               const continueAfterBudgetSheet = ()=>{
                 if(state.ui) state.ui.suppressDecisionReflections = false;
-                promptWeeklyGoalIfNeeded(()=>{
-                  if(state.weekEngine && state.mission.active){
-                    runWeeklyScenarios(state.weekEngine.week, ()=>{
-                      renderAll();
-                      renderSheet();
-                      notifyAction("next_week");
-                    });
-                  }
+                startWeeklyStudentFlow(()=>{
+                  renderAll();
+                  renderSheet();
+                  notifyAction("next_week");
                 });
               };
               const continueToReview = ()=>{
@@ -6321,10 +6336,8 @@ Action Plan: ${getMonthlyActionPlan({})}`,
     renderWeekHeader();
     fireDueConsequences(state.weekEngine.week);
     maybeFireMasterDelayedConsequences(state.weekEngine.week);
-    promptWeeklyGoalIfNeeded(()=>{
-      runWeeklyScenarios(state.weekEngine.week, ()=>{
-        renderAll(); renderSheet(); notifyAction("next_week");
-      });
+    startWeeklyStudentFlow(()=>{
+      renderAll(); renderSheet(); notifyAction("next_week");
     });
     return;
   }
@@ -6794,8 +6807,8 @@ function pickWeightedRandomEventType(){
   const weights = getDynamicRandomEventWeights();
   let pool = [
     {type:"life", weight:Number(weights.life || 40)},
-    {type:"job", weight:Number(weights.job || 30)},
-    {type:"financial", weight:Number(weights.financial || 30)}
+    {type:"job", weight:Number(weights.job || 40)},
+    {type:"financial", weight:Number(weights.financial || 20)}
   ];
 
   if(last && prev && last === prev){
@@ -6831,7 +6844,7 @@ function runRandomEvent(){
 
   showBanner('🎲 Rolling your week...');
   const finalType = pickWeightedRandomEventType();
-  const ids = ["btnSchoolEvent","btnJobEvent","btnSocialEvent"];
+  const ids = ["btnSchoolEvent","btnJobEvent","btnSocialEvent"]; // life, job, financial order
   let step = 0;
   const cycleCount = 2 + Math.floor(Math.random()*2); // 2 to 3 visible rolls
   const totalSteps = ids.length * cycleCount;
@@ -7154,7 +7167,7 @@ function clearWantsExtras(){
 }
 
 /* Real-life events */
-function runJobRealLifeEvent(){
+function runJobRealLifeEvent(afterDone){
   const job = state.jobs[state.jobIndex];
   const month = currentWeekIndex();
 
@@ -7168,6 +7181,7 @@ function runJobRealLifeEvent(){
       onDone && onDone(true);
       recalcProfit();
       notifyAction("job_event");
+      if(typeof afterDone === "function") setTimeout(afterDone, 120);
       return;
     }
     // Rush buy — pay and add to inventory (then immediately used)
@@ -7182,6 +7196,7 @@ function runJobRealLifeEvent(){
       onDone && onDone(false);
       recalcProfit();
       notifyAction("job_event");
+      if(typeof afterDone === "function") setTimeout(afterDone, 120);
     });
   }
 
@@ -7263,6 +7278,7 @@ function runJobRealLifeEvent(){
               renderHeader();
               renderLedger();
               notifyAction('job_event');
+              if(typeof afterDone === "function") setTimeout(afterDone, 120);
             });
           }
         }
@@ -7290,7 +7306,7 @@ function runJobRealLifeEvent(){
           state.bank.checking += 12; state.ledger.weekIncome += 12;
           state.plan.save += 4; state.plan.needs += 1;
           addLedgerLine(`${job.name} bonus earned: +$12 and stronger saving habit.`);
-          renderAll(); notifyAction('job_event');
+          renderAll(); notifyAction('job_event'); if(typeof afterDone === "function") setTimeout(afterDone, 120);
         }
       },
       { label:"Option B — Take It Easy (+$6)", kind:"secondary",
@@ -7298,7 +7314,7 @@ function runJobRealLifeEvent(){
           state.bank.checking += 6; state.ledger.weekIncome += 6;
           state.plan.wants += 4;
           addLedgerLine(`${job.name} money choice leaned toward wants.`);
-          renderAll(); notifyAction('job_event');
+          renderAll(); notifyAction('job_event'); if(typeof afterDone === "function") setTimeout(afterDone, 120);
         }
       }
     ]
@@ -8376,7 +8392,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
   if($("btnJobEvent")) $("btnJobEvent").textContent = "Run Job Event";
   if($("btnSchoolEvent")) $("btnSchoolEvent").textContent = "Run Life Scenario";
   if($("btnSocialEvent")) $("btnSocialEvent").textContent = "Run Financial Decision";
-  if($("btnRandomEvent")) { const w=getDynamicRandomEventWeights(); $("btnRandomEvent").textContent = `Run Random Event (${w.life||40}/${w.financial||20}/${w.job||40})`; }
+  if($("btnRandomEvent")) { const w=getDynamicRandomEventWeights(); $("btnRandomEvent").textContent = `Run Random Event (${w.life||40}/${w.job||40}/${w.financial||20})`; }
   $("btnJobEvent").onclick=()=>{
     if(state.ui?.randomEventPendingType && state.ui.randomEventPendingType !== "job") return;
     const hadPending = state.ui?.randomEventPendingType === "job";
