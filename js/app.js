@@ -6094,9 +6094,13 @@ function startWeeklyStudentFlow(onAllDone){
     }
   };
 
-  // In the student version, the weekly job supply/inventory decision appears first every week.
+  // Student flow: always show the weekly job supply/inventory decision first,
+  // then continue into the normal random-event steps.
   setTimeout(()=>{
+    if(!state.ui) state.ui = {};
+    state.ui.forceWeeklySupplyDecision = true;
     runJobRealLifeEvent(()=>{
+      state.ui.forceWeeklySupplyDecision = false;
       setTimeout(launchRandomPhase, 150);
     });
   }, 180);
@@ -7233,7 +7237,7 @@ function runJobRealLifeEvent(afterDone){
   state.ui.recentRealLifeItemsByJob[job.id] = state.ui.recentRealLifeItemsByJob[job.id].slice(-3);
   const itemName=pair[0], itemId=pair[1], rushCost=pair[2];
   const haveIt = invQty(itemId) > 0;
-  const bonus = month>=3;
+  const bonus = !((state.ui && state.ui.forceWeeklySupplyDecision) === true) && month>=3;
 
   if(!bonus){
     // Split-panel: left = decision, right = inventory
@@ -8986,6 +8990,9 @@ runFinancialDecision = function(){
   const useEliteCredit = isEliteExperience() && Math.random() < 0.25;
   return runScenarioFoundationCategory(useEliteCredit ? 'elite_credit' : 'financial', __legacyRunFinancialDecision);
 };
-runJobRealLifeEvent = function(){
-  return runScenarioFoundationCategory('opportunity', __legacyRunJobRealLifeEvent);
+runJobRealLifeEvent = function(afterDone){
+  if(state && state.ui && state.ui.forceWeeklySupplyDecision){
+    return __legacyRunJobRealLifeEvent(afterDone);
+  }
+  return runScenarioFoundationCategory('opportunity', __legacyRunJobRealLifeEvent, afterDone);
 };
