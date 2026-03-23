@@ -3411,6 +3411,7 @@ function openModal({title,meta="",body="",buttons=[{id:"close",label:"Close",kin
     if(b.kind==="success") btn.className="btn success";
     if(b.kind==="warn") btn.className="btn warn";
     if(b.kind==="danger") btn.className="btn danger";
+    if(b.pulse) btn.classList.add('glow-next');
     btn.textContent=b.label;
     btn.onclick=()=>{ beep("click"); closeModal(); onPick && onPick(b.id); };
     foot.appendChild(btn);
@@ -5668,6 +5669,9 @@ Rewards
       closeModal();
       setLog(`Savings challenge set: ${money(state.savingsGoal)} by Month 12.`);
       renderHeader();
+      setTimeout(()=>{
+        checkSavingsMilestones();
+      }, 80);
       notifyAction("savings_goal");
     };
     foot.appendChild(closeBtn);
@@ -5691,7 +5695,7 @@ function checkSavingsMilestones(){
   if(state.savingsGoal<=0) return;
   if(!(state.savingsMilestones instanceof Set)) state.savingsMilestones = new Set(Array.isArray(state.savingsMilestones) ? state.savingsMilestones : []);
 
-  const saved = Number(state.bank.savings || 0) + Number(state.bank.hysaPrincipal || 0) + Number(totalCdFunds ? totalCdFunds() : 0) + Number(totalStockFunds ? totalStockFunds() : 0);
+  const saved = Number(state.bank?.savings || 0);
   const goal = Number(state.savingsGoal || 0);
   const pct = goal > 0 ? (saved / goal) : 0;
 
@@ -5705,36 +5709,33 @@ function checkSavingsMilestones(){
   const newlyHit = hits.filter(h => pct >= h.thr && !state.savingsMilestones.has(h.k));
   if(!newlyHit.length) return;
 
-  const queue = newlyHit.slice().sort((a,b)=>a.thr-b.thr);
+  newlyHit.forEach(hit => state.savingsMilestones.add(hit.k));
 
-  function showNextMilestoneReward(){
-    const hit = queue.shift();
-    if(!hit) return;
-    state.savingsMilestones.add(hit.k);
-    state.bank.savings = Number(state.bank.savings || 0) + Number(hit.bonus || 0);
-    addLedgerLine(`Savings milestone ${hit.k}% reward ${money(hit.bonus)} automatically added to savings`);
-    openModal({
-      title:`🏦 Savings Goal ${hit.k}% Reached!`,
-      meta:`Bonus unlocked: ${money(hit.bonus)}`,
-      body:`Your savings jar just hit ${hit.k}% of the goal.
+  const totalBonus = newlyHit.reduce((sum, hit) => sum + Number(hit.bonus || 0), 0);
+  const milestoneList = newlyHit.map(hit => `${hit.k}%`).join(', ');
+  state.bank.savings = Number(state.bank.savings || 0) + totalBonus;
+  addLedgerLine(`Savings challenge bonus: reached ${milestoneList} of goal • +${money(totalBonus)} automatically added to savings`);
+  showBanner(`Savings milestone bonus +${money(totalBonus)}`);
+  addCoverage(12);
+  renderHeader();
+  renderSheet();
 
-Reward unlocked: ${money(hit.bonus)}
+  openModal({
+    title:`🏦 Savings Bonus Unlocked!`,
+    meta:`${milestoneList} reached`,
+    body:`Congrats! You already reached ${milestoneList} of your savings goal.
 
-The bonus was automatically added to Savings.`,
-      buttons:[
-        {id:'ok', label:'Awesome!', kind:'success'}
-      ],
-      onPick:()=>{
-        showBanner(`Savings milestone ${hit.k}%! Bonus ${money(hit.bonus)} added to savings`);
-        addCoverage(12);
-        renderHeader();
-        renderSheet();
-        if(queue.length) setTimeout(showNextMilestoneReward, 120);
-      }
-    });
-  }
+Bonus added to Savings: ${money(totalBonus)}
 
-  showNextMilestoneReward();
+Your reward has been automatically placed in Savings and documented in the ledger.`,
+    buttons:[
+      {id:'ok', label:'OK', kind:'success', pulse:true}
+    ],
+    onPick:()=>{
+      renderHeader();
+      renderSheet();
+    }
+  });
 }
 
 /* Suggested plan */
