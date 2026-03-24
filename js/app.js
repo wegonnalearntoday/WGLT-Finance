@@ -3540,6 +3540,9 @@ const state = {
     endings: { final:null, track:'⚖️ Survivor' }
   }
 };
+if(!state.unlockedJobs) state.unlockedJobs = new Set();
+['babysitting','pet','dogwalk','lawn','cars','tutor','chores','errands','crafts','lemonade','grocery','cashier','restaurant'].forEach(id => state.unlockedJobs.add(id));
+if(!state.careerProgress) state.careerProgress = {};
 
 /* Coverage tracking */
 function addCoverage(b){ state.coverage.add(b); }
@@ -8324,7 +8327,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     if(!state.plan.lockedForYear){ beep("warn"); showBanner("Lock the year plan first"); openTab("plan"); guidePreStart(); return; }
     if(state.jobLocked || state.mission.active){ beep("warn"); showBanner("Reset to change jobs"); return; }
     beep("click");
-    state.jobIndex=(state.jobIndex-1+state.jobs.length)%state.jobs.length;
+    state.jobIndex=findNearestUnlockedJobIndex(state.jobIndex, -1);
     state.plan.income=state.jobs[state.jobIndex].pay*4;
     applyBudgetModel(state.plan.model || "rule702010");
     renderJob(); renderHeader(); renderSheet();
@@ -8333,7 +8336,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     if(!state.plan.lockedForYear){ beep("warn"); showBanner("Lock the year plan first"); openTab("plan"); guidePreStart(); return; }
     if(state.jobLocked || state.mission.active){ beep("warn"); showBanner("Reset to change jobs"); return; }
     beep("click");
-    state.jobIndex=(state.jobIndex+1)%state.jobs.length;
+    state.jobIndex=findNearestUnlockedJobIndex(state.jobIndex, 1);
     state.plan.income=state.jobs[state.jobIndex].pay*4;
     applyBudgetModel(state.plan.model || "rule702010");
     renderJob(); renderHeader(); renderSheet();
@@ -8344,6 +8347,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     if(!state.plan.lockedForYear){ beep("warn"); showBanner("Lock the year plan first"); openTab("plan"); guidePreStart(); return; }
     if(state.jobLocked || state.mission.active){ beep("warn"); showBanner("Job already locked — reset to change"); return; }
     const job = state.jobs[state.jobIndex];
+    if(job && !isJobUnlocked(job.id)){ beep("warn"); showBanner(job.name + " is locked. " + getUnlockRequirementText(job.id)); return; }
     beep("success");
     showBanner(job.name + " selected and locked!");
     setLog("Job locked: " + job.name + ". Now build your wants and tap Start Year Mission.");
@@ -9281,6 +9285,42 @@ const JOB_SYSTEM_CONFIGS = {
     familyType: 'micro_business',
     debugInspectName: 'inspectSellingCrafts',
     debugForceName: 'forceCraftsCustomer'
+  },
+  manager: {
+    systemKey: 'manager',
+    previewJob: 'manager',
+    engineLabel: 'Manager',
+    relationshipPlural: 'team wins',
+    relationshipSingular: 'team win',
+    modifierLabel: 'Leadership Mod',
+    baselineCount: 4,
+    familyType: 'leadership',
+    debugInspectName: 'inspectManager',
+    debugForceName: 'forceManagerWin'
+  },
+  entrepreneur: {
+    systemKey: 'entrepreneur',
+    previewJob: 'entrepreneur',
+    engineLabel: 'Entrepreneur',
+    relationshipPlural: 'customers',
+    relationshipSingular: 'customer',
+    modifierLabel: 'Venture Mod',
+    baselineCount: 5,
+    familyType: 'micro_business',
+    debugInspectName: 'inspectEntrepreneur',
+    debugForceName: 'forceEntrepreneurCustomer'
+  },
+  ceo: {
+    systemKey: 'ceo',
+    previewJob: 'ceo',
+    engineLabel: 'CEO',
+    relationshipPlural: 'divisions',
+    relationshipSingular: 'division',
+    modifierLabel: 'Company Mod',
+    baselineCount: 3,
+    familyType: 'executive',
+    debugInspectName: 'inspectCEO',
+    debugForceName: 'forceCEODivision'
   }
 };
 
@@ -9290,6 +9330,114 @@ const JOB_SYSTEM_CONFIGS = {
   function getCurrentJobSystemConfig(){
     const job = currentJobObj();
     return job ? JOB_SYSTEM_CONFIGS[String(job.id || '')] || null : null;
+  }
+  const TIER_UNLOCK_CONFIGS = {
+    manager: { tier: 2, label: 'Manager', requirementText: 'Save $250 total or grow any Tier 1 job to +10% with one extra client/family/customer/shift.' },
+    entrepreneur: { tier: 3, label: 'Entrepreneur', requirementText: 'Unlock Manager, save $500 total, and raise credit to 680.' },
+    ceo: { tier: 3, label: 'CEO', requirementText: 'Unlock Entrepreneur, save $1000 total, and raise credit to 740.' }
+  };
+  const STARTER_JOB_IDS = Object.keys(JOB_SYSTEM_CONFIGS).filter(id => !TIER_UNLOCK_CONFIGS[id]);
+  function clampNum(n, min, max){ return Math.max(min, Math.min(max, Number(n || 0))); }
+  function totalSavedAmount(){
+    const bank = (state && state.bank) || {};
+    return Math.max(0, Number(bank.savings || 0) + Number(bank.hysaPrincipal || 0) + Number(bank.hysaAccrued || 0));
+  }
+  function ensureCareerUnlockState(){
+    if(!state.unlockedJobs || !(state.unlockedJobs instanceof Set)) state.unlockedJobs = new Set();
+    STARTER_JOB_IDS.forEach(id => state.unlockedJobs.add(id));
+    if(!state.careerProgress || typeof state.careerProgress !== 'object') state.careerProgress = {};
+    return state.unlockedJobs;
+  }
+  function getUnlockRequirementText(jobId){
+    const cfg = TIER_UNLOCK_CONFIGS[String(jobId || '')];
+    return cfg ? cfg.requirementText : '';
+  }
+  function isJobUnlocked(jobId){
+    ensureCareerUnlockState();
+    return state.unlockedJobs.has(String(jobId || ''));
+  }
+  function currentTier1PerformanceMax(){
+    const systems = (state && state.jobSystems) || {};
+    return Object.entries(systems).reduce((best, entry) => {
+      const sys = entry[1] || {};
+      const clientCount = Number(sys.clientCount || 0);
+      const baseline = Number(sys.baselineClients || 0);
+      const payPct = Number(sys.persistentPayPct || 0);
+      if(clientCount >= baseline + 1 && payPct >= 0.10) return Math.max(best, payPct);
+      return best;
+    }, 0);
+  }
+  function evaluateTierUnlocks(){
+    ensureCareerUnlockState();
+    const unlocked = [];
+    const savings = totalSavedAmount();
+    const credit = Number((state && state.credit) || 0);
+    if(!isJobUnlocked('manager') && (savings >= 250 || currentTier1PerformanceMax() >= 0.10)){
+      state.unlockedJobs.add('manager');
+      unlocked.push('Manager');
+    }
+    if(isJobUnlocked('manager') && !isJobUnlocked('entrepreneur') && savings >= 500 && credit >= 680){
+      state.unlockedJobs.add('entrepreneur');
+      unlocked.push('Entrepreneur');
+    }
+    if(isJobUnlocked('entrepreneur') && !isJobUnlocked('ceo') && savings >= 1000 && credit >= 740){
+      state.unlockedJobs.add('ceo');
+      unlocked.push('CEO');
+    }
+    return unlocked;
+  }
+  function announceTierUnlocks(){
+    const unlocked = evaluateTierUnlocks();
+    if(unlocked.length && typeof showBanner === 'function') showBanner('Unlocked: ' + unlocked.join(', '));
+    return unlocked;
+  }
+  function findNearestUnlockedJobIndex(startIndex, step){
+    ensureCareerUnlockState();
+    const jobs = (state && state.jobs) || [];
+    if(!jobs.length) return 0;
+    let idx = Number(startIndex || 0);
+    for(let i=0;i<jobs.length;i++){
+      idx = (idx + step + jobs.length) % jobs.length;
+      const job = jobs[idx];
+      if(job && isJobUnlocked(job.id)) return idx;
+    }
+    return Number(startIndex || 0);
+  }
+  function syncJobIndexToUnlocked(){
+    const jobs = (state && state.jobs) || [];
+    if(!jobs.length) return;
+    const current = jobs[state.jobIndex] || jobs[0];
+    if(current && isJobUnlocked(current.id)) return;
+    const idx = jobs.findIndex(job => job && isJobUnlocked(job.id));
+    if(idx >= 0) state.jobIndex = idx;
+  }
+  function buildHighTierPreview(cfg, choice){
+    const label = String((cfg && cfg.engineLabel) || 'job').toLowerCase();
+    const energyHit = Number(choice && choice.immediate_effects && choice.immediate_effects.energy || 0);
+    const focusHit = Number(choice && choice.immediate_effects && choice.immediate_effects.focus || 0);
+    const risk = energyHit + focusHit;
+    if(cfg && cfg.previewJob === 'manager'){
+      return risk >= 2
+        ? { job:'manager', outcome:'growth', pay_delta_pct:0.05, note:'You stayed sharp, led well, and your team had a strong week.' }
+        : risk <= -3
+          ? { job:'manager', outcome:'warning', pay_delta_pct:-0.05, note:'Low energy hurt your leadership decisions, and team performance slipped.' }
+          : { job:'manager', outcome:'neutral', note:'Your team held steady this time.' };
+    }
+    if(cfg && cfg.previewJob === 'entrepreneur'){
+      return risk >= 2
+        ? { job:'entrepreneur', outcome:'growth', client_delta:1, pay_delta_pct:0.05, note:'Your focus helped you land a new customer.' }
+        : risk <= -3
+          ? { job:'entrepreneur', outcome:'warning', pay_delta_pct:-0.05, note:'You missed a follow-up and your business cash flow dipped.' }
+          : { job:'entrepreneur', outcome:'neutral', note:'No major business swing this time.' };
+    }
+    if(cfg && cfg.previewJob === 'ceo'){
+      return risk >= 2
+        ? { job:'ceo', outcome:'growth', pay_delta_pct:0.05, note:'You made a strong executive call and company results improved.' }
+        : risk <= -3
+          ? { job:'ceo', outcome:'warning', pay_delta_pct:-0.05, note:'Poor focus led to a weak executive decision and revenue pressure.' }
+          : { job:'ceo', outcome:'neutral', note:'The company stayed stable this round.' };
+    }
+    return null;
   }
   function isCurrentJobSupported(){
     return !!getCurrentJobSystemConfig();
@@ -9402,7 +9550,7 @@ function getChoicePreviewForCurrentJob(choice){
   if(choice.job_preview && String(choice.job_preview.job || '') === cfg.previewJob) return choice.job_preview;
   const sourceKey = derivePreviewSourceKey(cfg);
   const source = choice.job_previews && typeof choice.job_previews === 'object' ? choice.job_previews[sourceKey] : null;
-  return buildDerivedJobPreview(cfg, source);
+  return buildDerivedJobPreview(cfg, source) || buildHighTierPreview(cfg, choice);
 }
   function applyCurrentJobPreview(picked, choice){
     const cfg = getCurrentJobSystemConfig();
@@ -9419,13 +9567,13 @@ function getChoicePreviewForCurrentJob(choice){
 
     if(clientDelta !== 0){
       sys.clientCount = Math.max(0, Number(sys.clientCount || 0) + clientDelta);
-      if(payPct !== 0) sys.persistentPayPct = Number(sys.persistentPayPct || 0) + payPct;
+      if(payPct !== 0) sys.persistentPayPct = clampNum(Number(sys.persistentPayPct || 0) + payPct, -0.25, 0.30);
       if(clientDelta < 0 || jp.replacement_needed) sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) + Math.abs(clientDelta || 1));
       if(clientDelta > 0) sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) - clientDelta);
       notes.push(`${cfg.relationshipPlural.charAt(0).toUpperCase() + cfg.relationshipPlural.slice(1)} ${clientDelta > 0 ? 'increased' : 'decreased'} by ${Math.abs(clientDelta)}.`);
       if(payPct !== 0) notes.push(`${cfg.engineLabel} weekly pay is now ${pctLabel(sys.persistentPayPct)} from your base job pay.`);
     } else if(payPct !== 0){
-      const amount = roundMoney(sys.baseWeeklyPay * payPct);
+      const amount = roundMoney(clampNum(sys.baseWeeklyPay * payPct, -sys.baseWeeklyPay * 0.15, sys.baseWeeklyPay * 0.15));
       sys.pendingPaycheckAdjustments.push({
         amount,
         pct: payPct,
@@ -9441,7 +9589,7 @@ function getChoicePreviewForCurrentJob(choice){
       if(sys.repeatCounters[choiceId] >= Number(jp.repeat_threshold)){
         sys.repeatCounters[choiceId] = 0;
         sys.clientCount = Math.max(0, Number(sys.clientCount || 0) - 1);
-        sys.persistentPayPct = Number(sys.persistentPayPct || 0) - 0.05;
+        sys.persistentPayPct = clampNum(Number(sys.persistentPayPct || 0) - 0.05, -0.25, 0.30);
         sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) + 1);
         notes.push(`Repeat low performance cost you another ${cfg.relationshipSingular}. Your ${cfg.engineLabel.toLowerCase()} pay dropped an extra 5% until you replace them.`);
       } else if(jp.repeat_note) {
@@ -9454,6 +9602,7 @@ function getChoicePreviewForCurrentJob(choice){
     if(jp.note) notes.push(String(jp.note));
     pushHistory({ title, choiceId, previewJob: cfg.previewJob, payPct, clientDelta, outcome, note: jp.note || '' });
     syncCurrentJobPlanIncome();
+    announceTierUnlocks();
     return notes.join('\n');
   }
 
@@ -9503,10 +9652,17 @@ function getChoicePreviewForCurrentJob(choice){
 
   const __legacyStartMission_MultiJob = startMission;
   startMission = function(){
+    syncJobIndexToUnlocked();
+    const currentJob = currentJobObj();
+    if(currentJob && !isJobUnlocked(currentJob.id)){
+      showBanner(currentJob.name + ' is locked. ' + getUnlockRequirementText(currentJob.id));
+      return;
+    }
     const out = __legacyStartMission_MultiJob.apply(this, arguments);
     if(isCurrentJobSupported()){
       ensureCurrentJobSystemState();
       syncCurrentJobPlanIncome();
+      announceTierUnlocks();
       renderAll();
     }
     return out;
@@ -9522,16 +9678,36 @@ function getChoicePreviewForCurrentJob(choice){
 
   const __legacyRenderJob_MultiJob = renderJob;
   renderJob = function(){
+    ensureCareerUnlockState();
+    announceTierUnlocks();
     const out = __legacyRenderJob_MultiJob.apply(this, arguments);
+    const job = currentJobObj();
     const cfg = getCurrentJobSystemConfig();
+    const tags = $('jobTags');
+    const locked = job && !isJobUnlocked(job.id);
+    if(job && $('jobName')) $('jobName').textContent = locked ? `🔒 ${job.name}` : job.name;
     if(cfg){
       const el = $('jobPay');
       if(el){
-        const sys = ensureCurrentJobSystemState();
-        const projectedWeekly = Math.max(0, roundMoney(sys.baseWeeklyPay * (1 + Number(sys.persistentPayPct || 0))));
-        el.textContent = `Weekly Pay: ${money(projectedWeekly)} • ${cfg.relationshipPlural.charAt(0).toUpperCase() + cfg.relationshipPlural.slice(1)}: ${sys.clientCount} • ${cfg.modifierLabel}: ${pctLabel(sys.persistentPayPct)}`;
-        el.title = buildStatusText();
+        if(locked){
+          el.textContent = 'Locked Job • ' + getUnlockRequirementText(job.id);
+          el.title = getUnlockRequirementText(job.id);
+        } else {
+          const sys = ensureCurrentJobSystemState();
+          const projectedWeekly = Math.max(0, roundMoney(sys.baseWeeklyPay * (1 + Number(sys.persistentPayPct || 0))));
+          el.textContent = `Weekly Pay: ${money(projectedWeekly)} • ${cfg.relationshipPlural.charAt(0).toUpperCase() + cfg.relationshipPlural.slice(1)}: ${sys.clientCount} • ${cfg.modifierLabel}: ${pctLabel(sys.persistentPayPct)}`;
+          el.title = buildStatusText();
+        }
       }
+    } else if(job && $('jobPay') && locked){
+      $('jobPay').textContent = 'Locked Job • ' + getUnlockRequirementText(job.id);
+      $('jobPay').title = getUnlockRequirementText(job.id);
+    }
+    if(tags && job && TIER_UNLOCK_CONFIGS[job.id]){
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = locked ? `🔒 Tier ${TIER_UNLOCK_CONFIGS[job.id].tier}: ${getUnlockRequirementText(job.id)}` : `✅ Tier ${TIER_UNLOCK_CONFIGS[job.id].tier} unlocked`;
+      tags.appendChild(chip);
     }
     return out;
   };
@@ -9567,6 +9743,7 @@ function getChoicePreviewForCurrentJob(choice){
     if(typeof restoreIncome === 'function'){
       try{ restoreIncome(); renderAll(); }catch(err){}
     }
+    try{ announceTierUnlocks(); }catch(err){}
     return result;
   };
 
@@ -9635,7 +9812,10 @@ const __jobDebugMappings = {
   cashier: ['inspectCashier','forceCashierShift','Select Cashier first.'],
   restaurant: ['inspectRestaurantWorker','forceRestaurantShift','Select Restaurant Worker first.'],
   errands: ['inspectRunningErrands','forceErrandsClient','Select Running Errands first.'],
-  crafts: ['inspectSellingCrafts','forceCraftsCustomer','Select Selling Crafts first.']
+  crafts: ['inspectSellingCrafts','forceCraftsCustomer','Select Selling Crafts first.'],
+  manager: ['inspectManager','forceManagerWin','Select Manager first.'],
+  entrepreneur: ['inspectEntrepreneur','forceEntrepreneurCustomer','Select Entrepreneur first.'],
+  ceo: ['inspectCEO','forceCEODivision','Select CEO first.']
 };
 Object.entries(__jobDebugMappings).forEach(([jobId, names]) => {
   const inspectName = names[0], forceName = names[1], msg = names[2];
@@ -9649,6 +9829,26 @@ Object.entries(__jobDebugMappings).forEach(([jobId, names]) => {
     return window.WGLT_DEBUG.forceCurrentJobClient(delta);
   };
 });
+      window.WGLT_DEBUG.inspectUnlocks = function(){
+        ensureCareerUnlockState();
+        return {
+          unlockedJobs: Array.from(state.unlockedJobs || []),
+          totalSaved: totalSavedAmount(),
+          credit: Number(state.credit || 0)
+        };
+      };
+      window.WGLT_DEBUG.unlockJob = function(jobId){
+        ensureCareerUnlockState();
+        if(jobId) state.unlockedJobs.add(String(jobId));
+        renderAll();
+        return Array.from(state.unlockedJobs || []);
+      };
+      window.WGLT_DEBUG.unlockAllAdvancedJobs = function(){
+        ensureCareerUnlockState();
+        ['manager','entrepreneur','ceo'].forEach(id => state.unlockedJobs.add(id));
+        renderAll();
+        return Array.from(state.unlockedJobs || []);
+      };
     }
   }catch(err){}
 })();

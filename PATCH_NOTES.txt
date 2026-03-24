@@ -15,3 +15,10 @@ Tier 1 Batch v5
 - Added job engines for Washing Cars, Tutoring, House Cleaning, Lemonade Stand, Grocery Bagger, Cashier, and Restaurant Worker.
 - Added job debug helpers for all Tier 1 jobs plus existing errands/crafts entries.
 - Added fallback job-preview mapping so all life events can affect every supported Tier 1 job immediately.
+
+
+Balance + unlock update v6:
+- Added unlockable Manager, Entrepreneur, and CEO jobs.
+- Added balance caps for persistent pay modifiers and one-time paycheck swings.
+- Added automatic unlock checks based on savings, credit, and strong Tier 1 performance.
+- Added debug commands: inspectUnlocks(), unlockJob(id), unlockAllAdvancedJobs().
