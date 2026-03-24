@@ -1,0 +1,45 @@
+WGLT Multi-Job Engine v3
+- Added Dog Walking as the next full job engine with route/client tracking
+- Added dog-walking life-event consequences across all life scenarios
+- Generalized job preview display and debug helpers for Lawn Care + Babysitting + Dog Walking
+- Added debug helpers: inspectDogWalking() and forceDogWalkingClient(delta)
+
+
+v4 Pet Sitting Engine
+- Added Pet Sitting as a full job engine with family tracking, persistent pay changes, and next-paycheck adjustments.
+- Added Pet Sitting previews to all life events.
+- Added debug helpers: WGLT_DEBUG.inspectPetSitting() and WGLT_DEBUG.forcePetSittingFamily(delta).
+
+
+Tier 1 Batch v5
+- Added job engines for Washing Cars, Tutoring, House Cleaning, Lemonade Stand, Grocery Bagger, Cashier, and Restaurant Worker.
+- Added job debug helpers for all Tier 1 jobs plus existing errands/crafts entries.
+- Added fallback job-preview mapping so all life events can affect every supported Tier 1 job immediately.
+
+
+Balance + unlock update v6:
+- Added unlockable Manager, Entrepreneur, and CEO jobs.
+- Added balance caps for persistent pay modifiers and one-time paycheck swings.
+- Added automatic unlock checks based on savings, credit, and strong Tier 1 performance.
+- Added debug commands: inspectUnlocks(), unlockJob(id), unlockAllAdvancedJobs().
+
+v6.1 Career Paths + Tier 2/3 Flavor Polish
+- Added 3 visible career paths:
+  * Business Path -> Manager -> CEO
+  * Hustler Path -> Entrepreneur -> Scale Business
+  * Service Path -> Master Technician -> Own Company
+- Polished Tier 2/3 preview text so Manager, Entrepreneur, and CEO have more distinct leadership/business flavor.
+- Updated advanced unlock text to reference path identity instead of generic tier unlocks.
+- Added career path chips to the job UI so students can see where each role can lead.
+- Entrepreneur is now a separate unlock lane from Manager.
+- Debug inspectUnlocks now shows career path progress and performance.
+
+- Refined job identity system so each job now surfaces its own work style, unit labels, and modifier labels.
+- Added job identity metadata to jobs.json and a WGLT_DEBUG.inspectJobIdentity(jobId) helper.
+
+
+=== v6.3 Job Identity Wording Pass ===
+- Scenario job preview text now changes by job identity instead of defaulting to generic client language.
+- Route jobs use route wording, care jobs use trust wording, shift jobs use schedule wording.
+- Manager, Entrepreneur, and CEO now use custom team, business, and company language in life-event consequences.
+- Live payoff messages now reference modifier labels like Trust Mod, Schedule Mod, Deal Flow Mod, and Company Health Mod.
