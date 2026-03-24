@@ -377,42 +377,12 @@ function getTeacherDashboardSummary(){
   };
 }
 
-const CAREER_PATH_CONFIGS = {
-  business: {
-    key:'business',
-    name:'Business Path',
-    tagline:'Lead people, protect reputation, and grow into executive leadership.',
-    ladder:['Store Team Member','Shift Lead','Assistant Manager','Manager','Regional Director','Vice President','CEO'],
-    bonus:[15,20,25,30,35,45],
-    next:['Manager','CEO']
-  },
-  hustler: {
-    key:'hustler',
-    name:'Hustler Path',
-    tagline:'Turn small wins into customers, cash flow, and a business that can scale.',
-    ladder:['Side Hustle Starter','Weekend Seller','Neighborhood Seller','Entrepreneur','Business Builder','Scale Operator','Own Company'],
-    bonus:[15,20,25,30,35,45],
-    next:['Entrepreneur','Scale Business']
-  },
-  service: {
-    key:'service',
-    name:'Service Path',
-    tagline:'Build trust through quality work, become a master technician, then own the company.',
-    ladder:['Neighborhood Helper','Route Runner','Trusted Pro','Service Lead','Master Technician','Crew Chief','Own Company'],
-    bonus:[15,20,25,30,35,40],
-    next:['Master Technician','Own Company']
-  }
-};
-function getCareerPathForJobId(jobId){
-  const id = String(jobId || '');
-  if(['manager','ceo','grocery','cashier','restaurant'].includes(id)) return CAREER_PATH_CONFIGS.business;
-  if(['entrepreneur','lemonade','crafts'].includes(id)) return CAREER_PATH_CONFIGS.hustler;
-  return CAREER_PATH_CONFIGS.service;
-}
 function getJobCareerBranch(){
   const job = (state.jobs && state.jobs[state.jobIndex]) || {};
-  const path = getCareerPathForJobId(job.id || '');
-  return { key:path.key, name:path.name, titles:path.ladder, bonus:path.bonus, tagline:path.tagline, next:path.next };
+  const id = job.id || '';
+  if(['babysitting','pet','dogwalk'].includes(id)) return { key:'care', name:'Care Services', titles:['Neighborhood Helper','Trusted Care Pro','Senior Care Lead','Family Services Captain','Community Care Director','Youth Care Manager','Care Business Owner'], bonus:[15,20,25,30,35,40] };
+  if(['lawn','cars','chores','errands'].includes(id)) return { key:'ops', name:'Operations', titles:['Starter Worker','Route Runner','Shift Lead','Operations Captain','Service Manager','Field Director','Neighborhood Ops Owner'], bonus:[15,20,25,30,35,40] };
+  return { key:'specialist', name:'Creative & Academic', titles:['Starter Specialist','Skilled Builder','Lead Specialist','Program Captain','Studio Manager','Community Expert','Brand Owner'], bonus:[20,25,30,35,40,45] };
 }
 
 function getEliteObligationSummary(){
@@ -9362,9 +9332,9 @@ const JOB_SYSTEM_CONFIGS = {
     return job ? JOB_SYSTEM_CONFIGS[String(job.id || '')] || null : null;
   }
   const TIER_UNLOCK_CONFIGS = {
-    manager: { tier: 2, label: 'Manager', pathKey:'business', requirementText: 'Business Path: save $250 total or grow any Tier 1 job to +10% with one extra client/family/customer/shift.' },
-    entrepreneur: { tier: 3, label: 'Entrepreneur', pathKey:'hustler', requirementText: 'Hustler Path: save $400 total and prove your side hustle can grow customers, or bank $600 total to self-fund the leap.' },
-    ceo: { tier: 3, label: 'CEO', pathKey:'business', requirementText: 'Business Path capstone: unlock Manager, save $1000 total, and raise credit to 740.' }
+    manager: { tier: 2, label: 'Manager', requirementText: 'Save $250 total or grow any Tier 1 job to +10% with one extra client/family/customer/shift.' },
+    entrepreneur: { tier: 3, label: 'Entrepreneur', requirementText: 'Unlock Manager, save $500 total, and raise credit to 680.' },
+    ceo: { tier: 3, label: 'CEO', requirementText: 'Unlock Entrepreneur, save $1000 total, and raise credit to 740.' }
   };
   const STARTER_JOB_IDS = Object.keys(JOB_SYSTEM_CONFIGS).filter(id => !TIER_UNLOCK_CONFIGS[id]);
   function clampNum(n, min, max){ return Math.max(min, Math.min(max, Number(n || 0))); }
@@ -9397,51 +9367,28 @@ const JOB_SYSTEM_CONFIGS = {
       return best;
     }, 0);
   }
-  function currentPathPerformanceMax(pathKey){
-    const systems = (state && state.jobSystems) || {};
-    return Object.entries(systems).reduce((best, entry) => {
-      const id = String(entry[0] || '');
-      const path = getCareerPathForJobId(id);
-      if(!path || path.key !== String(pathKey || '')) return best;
-      const sys = entry[1] || {};
-      const clientCount = Number(sys.clientCount || 0);
-      const baseline = Number(sys.baselineClients || 0);
-      const payPct = Number(sys.persistentPayPct || 0);
-      if(clientCount >= baseline + 1) return Math.max(best, payPct);
-      return best;
-    }, 0);
-  }
-  function getCareerPathStatus(){
-    return {
-      business: { unlocked: isJobUnlocked ? isJobUnlocked('manager') : false, performance: currentPathPerformanceMax('business') },
-      hustler: { unlocked: isJobUnlocked ? isJobUnlocked('entrepreneur') : false, performance: currentPathPerformanceMax('hustler') },
-      service: { unlocked: false, performance: currentPathPerformanceMax('service') }
-    };
-  }
   function evaluateTierUnlocks(){
     ensureCareerUnlockState();
     const unlocked = [];
     const savings = totalSavedAmount();
     const credit = Number((state && state.credit) || 0);
-    const businessPerf = currentPathPerformanceMax('business');
-    const hustlerPerf = currentPathPerformanceMax('hustler');
-    if(!isJobUnlocked('manager') && (savings >= 250 || currentTier1PerformanceMax() >= 0.10 || businessPerf >= 0.08)){
+    if(!isJobUnlocked('manager') && (savings >= 250 || currentTier1PerformanceMax() >= 0.10)){
       state.unlockedJobs.add('manager');
-      unlocked.push({ id:'manager', label:'Manager', path:'Business Path', message:'You proved you can lead more than a shift. Business Path unlocked: Manager.' });
+      unlocked.push('Manager');
     }
-    if(!isJobUnlocked('entrepreneur') && ((savings >= 400 && hustlerPerf >= 0.05) || savings >= 600)){
+    if(isJobUnlocked('manager') && !isJobUnlocked('entrepreneur') && savings >= 500 && credit >= 680){
       state.unlockedJobs.add('entrepreneur');
-      unlocked.push({ id:'entrepreneur', label:'Entrepreneur', path:'Hustler Path', message:'Your side hustle has real legs now. Hustler Path unlocked: Entrepreneur.' });
+      unlocked.push('Entrepreneur');
     }
-    if(isJobUnlocked('manager') && !isJobUnlocked('ceo') && savings >= 1000 && credit >= 740){
+    if(isJobUnlocked('entrepreneur') && !isJobUnlocked('ceo') && savings >= 1000 && credit >= 740){
       state.unlockedJobs.add('ceo');
-      unlocked.push({ id:'ceo', label:'CEO', path:'Business Path', message:'You built trust, money, and leadership. Business Path unlocked: CEO.' });
+      unlocked.push('CEO');
     }
     return unlocked;
   }
   function announceTierUnlocks(){
     const unlocked = evaluateTierUnlocks();
-    if(unlocked.length && typeof showBanner === 'function') showBanner(unlocked.map(x => x.message || x.label).join(' • '));
+    if(unlocked.length && typeof showBanner === 'function') showBanner('Unlocked: ' + unlocked.join(', '));
     return unlocked;
   }
   function findNearestUnlockedJobIndex(startIndex, step){
@@ -9465,29 +9412,30 @@ const JOB_SYSTEM_CONFIGS = {
     if(idx >= 0) state.jobIndex = idx;
   }
   function buildHighTierPreview(cfg, choice){
+    const label = String((cfg && cfg.engineLabel) || 'job').toLowerCase();
     const energyHit = Number(choice && choice.immediate_effects && choice.immediate_effects.energy || 0);
     const focusHit = Number(choice && choice.immediate_effects && choice.immediate_effects.focus || 0);
     const risk = energyHit + focusHit;
     if(cfg && cfg.previewJob === 'manager'){
       return risk >= 2
-        ? { job:'manager', outcome:'growth', pay_delta_pct:0.05, note:'You coached the crew well, solved a customer issue, and the whole team finished strong.' }
+        ? { job:'manager', outcome:'growth', pay_delta_pct:0.05, note:'You stayed sharp, led well, and your team had a strong week.' }
         : risk <= -3
-          ? { job:'manager', outcome:'warning', pay_delta_pct:-0.05, note:'Your rushed calls caused a schedule mix-up, and your team week slipped.' }
-          : { job:'manager', outcome:'neutral', note:'You kept the floor steady and avoided bigger problems this round.' };
+          ? { job:'manager', outcome:'warning', pay_delta_pct:-0.05, note:'Low energy hurt your leadership decisions, and team performance slipped.' }
+          : { job:'manager', outcome:'neutral', note:'Your team held steady this time.' };
     }
     if(cfg && cfg.previewJob === 'entrepreneur'){
       return risk >= 2
-        ? { job:'entrepreneur', outcome:'growth', client_delta:1, pay_delta_pct:0.05, note:'You followed up fast, landed a new customer, and your hustle grew.' }
+        ? { job:'entrepreneur', outcome:'growth', client_delta:1, pay_delta_pct:0.05, note:'Your focus helped you land a new customer.' }
         : risk <= -3
-          ? { job:'entrepreneur', outcome:'warning', pay_delta_pct:-0.05, note:'You missed a follow-up, and your cash flow took a hit this week.' }
-          : { job:'entrepreneur', outcome:'neutral', note:'No deal closed, but no major damage hit the business either.' };
+          ? { job:'entrepreneur', outcome:'warning', pay_delta_pct:-0.05, note:'You missed a follow-up and your business cash flow dipped.' }
+          : { job:'entrepreneur', outcome:'neutral', note:'No major business swing this time.' };
     }
     if(cfg && cfg.previewJob === 'ceo'){
       return risk >= 2
-        ? { job:'ceo', outcome:'growth', pay_delta_pct:0.05, note:'You made a calm executive call, morale held, and company results improved.' }
+        ? { job:'ceo', outcome:'growth', pay_delta_pct:0.05, note:'You made a strong executive call and company results improved.' }
         : risk <= -3
-          ? { job:'ceo', outcome:'warning', pay_delta_pct:-0.05, note:'Poor focus led to a weak executive call, and revenue pressure followed.' }
-          : { job:'ceo', outcome:'neutral', note:'The company stayed stable. Not flashy, but solid leadership matters too.' };
+          ? { job:'ceo', outcome:'warning', pay_delta_pct:-0.05, note:'Poor focus led to a weak executive decision and revenue pressure.' }
+          : { job:'ceo', outcome:'neutral', note:'The company stayed stable this round.' };
     }
     return null;
   }
@@ -9755,28 +9703,11 @@ function getChoicePreviewForCurrentJob(choice){
       $('jobPay').textContent = 'Locked Job • ' + getUnlockRequirementText(job.id);
       $('jobPay').title = getUnlockRequirementText(job.id);
     }
-    if(tags && job){
-      const path = getCareerPathForJobId(job.id);
-      if(path){
-        const pathChip = document.createElement('div');
-        pathChip.className = 'chip';
-        pathChip.textContent = `${path.name} • ${path.next.join(' → ')}`;
-        pathChip.title = path.tagline || path.name;
-        tags.appendChild(pathChip);
-      }
-      if(TIER_UNLOCK_CONFIGS[job.id]){
-        const cfgTier = TIER_UNLOCK_CONFIGS[job.id];
-        const chip = document.createElement('div');
-        chip.className = 'chip';
-        chip.textContent = locked ? `🔒 Tier ${cfgTier.tier}: ${getUnlockRequirementText(job.id)}` : `✅ Tier ${cfgTier.tier} unlocked • ${cfgTier.pathKey === 'business' ? 'Leadership lane' : 'Owner lane'}`;
-        tags.appendChild(chip);
-      } else if(path && path.key === 'service'){
-        const serviceChip = document.createElement('div');
-        serviceChip.className = 'chip';
-        serviceChip.textContent = `Service Goal • ${path.next.join(' → ')}`;
-        serviceChip.title = path.tagline || '';
-        tags.appendChild(serviceChip);
-      }
+    if(tags && job && TIER_UNLOCK_CONFIGS[job.id]){
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = locked ? `🔒 Tier ${TIER_UNLOCK_CONFIGS[job.id].tier}: ${getUnlockRequirementText(job.id)}` : `✅ Tier ${TIER_UNLOCK_CONFIGS[job.id].tier} unlocked`;
+      tags.appendChild(chip);
     }
     return out;
   };
@@ -9903,9 +9834,7 @@ Object.entries(__jobDebugMappings).forEach(([jobId, names]) => {
         return {
           unlockedJobs: Array.from(state.unlockedJobs || []),
           totalSaved: totalSavedAmount(),
-          credit: Number(state.credit || 0),
-          tier1PerformanceMax: currentTier1PerformanceMax(),
-          careerPaths: getCareerPathStatus()
+          credit: Number(state.credit || 0)
         };
       };
       window.WGLT_DEBUG.unlockJob = function(jobId){
