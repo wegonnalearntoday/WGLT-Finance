@@ -24,3 +24,11 @@ Tier 1 Batch v5
 - Fixed the regression where the job selector could stop letting you browse jobs.
 - Job arrows now browse all jobs again; locked advanced jobs can still be previewed but cannot be started until unlocked.
 - This intentionally leaves out the riskier v6.4 generic financial/job wording patch that caused regressions.
+
+
+=== v6.4 safe financial + job wording rebuild ===
+- Rebuilt the financial/job wording layer on top of the stable merged selector-fix build.
+- Financial events now generate job-aware route/trust/schedule/business/team/company wording when explicit per-job previews are missing.
+- Opportunity/job events now generate job-aware wording using the same safe fallback logic.
+- Result modal titles now distinguish between money results and work results.
+- This patch avoids touching job browsing, unlock cycling, or mission-start selector logic.
