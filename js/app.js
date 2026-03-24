@@ -9012,44 +9012,43 @@ function queueScenarioFoundationHooks(hookIds, sourceLabel){
     queueConsequenceObject(entry, sourceLabel || hookId);
   });
 }
-function formatScenarioFoundationJobPreview(choice){
-  const previewMap = choice && choice.job_previews;
-  let jp = choice && choice.job_preview;
-  let label = 'Job';
-  try{
-    const job = (state && state.jobs && state.jobs[state.jobIndex]) || null;
-    if(job && previewMap && typeof previewMap === 'object'){
-      if(String(job.id || '') === 'lawn' && previewMap.lawn_care){
-        jp = previewMap.lawn_care;
-        label = 'Lawn Care';
-      } else if(String(job.id || '') === 'babysitting' && previewMap.babysitting){
-        jp = previewMap.babysitting;
-        label = 'Babysitting';
-      } else if(String(job.id || '') === 'dogwalk' && previewMap.dog_walking){
-        jp = previewMap.dog_walking;
-        label = 'Dog Walking';
-      } else if(String(job.id || '') === 'pet' && previewMap.pet_sitting){
-        jp = previewMap.pet_sitting;
-        label = 'Pet Sitting';
-      }
-    }
-    if(label === 'Job' && jp && typeof jp === 'object'){
-      if(String(jp.job || '') === 'lawn_care') label = 'Lawn Care';
-      else if(String(jp.job || '') === 'babysitting') label = 'Babysitting';
-      else if(String(jp.job || '') === 'dog_walking') label = 'Dog Walking';
-      else if(String(jp.job || '') === 'pet_sitting') label = 'Pet Sitting';
-    }
-  }catch(err){}
-  if(!jp || typeof jp !== 'object') return '';
+function getPreviewHeadline(cfg, jp){
+  if(!cfg) return 'Job update';
+  const delta = Number((jp && jp.client_delta) || 0);
+  if(cfg.familyType === 'client_route') return delta >= 0 ? `${cfg.engineLabel} route update` : `${cfg.engineLabel} route warning`;
+  if(cfg.familyType === 'family_care') return delta >= 0 ? `${cfg.engineLabel} trust update` : `${cfg.engineLabel} trust warning`;
+  if(cfg.familyType === 'shift_work') return delta >= 0 ? `${cfg.engineLabel} schedule update` : `${cfg.engineLabel} shift warning`;
+  if(cfg.previewJob === 'entrepreneur') return delta >= 0 ? 'Entrepreneur deal flow update' : 'Entrepreneur cash-flow warning';
+  if(cfg.previewJob === 'ceo') return delta >= 0 ? 'CEO company pulse' : 'CEO company pressure';
+  if(cfg.previewJob === 'manager') return delta >= 0 ? 'Manager team update' : 'Manager team warning';
+  return `${cfg.engineLabel} update`;
+}
+function getPreviewCountLabel(cfg){
+  if(!cfg) return 'Count';
+  if(cfg.familyType === 'client_route') return 'Clients';
+  if(cfg.familyType === 'family_care') return 'Families';
+  if(cfg.familyType === 'shift_work') return 'Shifts';
+  if(cfg.previewJob === 'manager') return 'Team Wins';
+  if(cfg.previewJob === 'ceo') return 'Divisions';
+  return 'Customers';
+}
+function formatScenarioFoundationJobPreview(choice, picked){
+  const cfg = typeof getCurrentJobSystemConfig === 'function' ? getCurrentJobSystemConfig() : null;
+  const jp = typeof getChoicePreviewForCurrentJob === 'function' ? getChoicePreviewForCurrentJob(choice, picked) : null;
+  if(!cfg || !jp || typeof jp !== 'object') return '';
   const pay = Number(jp.pay_delta_pct || 0);
-  const client = Number(jp.client_delta || 0);
+  const count = Number(jp.client_delta || 0);
   const payLabel = pay === 0 ? '0%' : `${pay > 0 ? '+' : ''}${Math.round(pay * 100)}%`;
-  const clientLabel = client === 0 ? '0' : `${client > 0 ? '+' : ''}${client}`;
-  const unitLabel = (label === 'Babysitting' || label === 'Pet Sitting') ? 'Families' : 'Clients';
-  const lines = [`${label} preview: Pay ${payLabel} • ${unitLabel} ${clientLabel}`];
+  const countLabel = count === 0 ? '0' : `${count > 0 ? '+' : ''}${count}`;
+  const lines = [
+    `${getPreviewHeadline(cfg, jp)}: ${cfg.modifierLabel} ${payLabel} • ${getPreviewCountLabel(cfg)} ${countLabel}`
+  ];
   if(jp.note) lines.push(String(jp.note));
-  if(jp.repeat_note) lines.push(`Repeat rule: ${jp.repeat_note}`);
-  if(jp.replacement_needed) lines.push(`You will need to replace that ${(label === 'Babysitting' || label === 'Pet Sitting') ? 'family' : 'client'} to restore full pay.`);
+  if(jp.repeat_note) lines.push(`Pattern rule: ${jp.repeat_note}`);
+  if(jp.replacement_needed){
+    const unit = cfg.relationshipSingular || 'client';
+    lines.push(`You will need to replace that ${unit} to fully recover your long-term pay.`);
+  }
   return lines.join('\n');
 }
 function playScenarioFoundationScenario(picked, category){
@@ -9061,6 +9060,11 @@ function playScenarioFoundationScenario(picked, category){
     kind: idx === 0 ? 'primary' : 'secondary'
   }));
   const meta = `Step ${getScenarioFoundationCurrentStep()} • ${picked.title}`;
+  const decisionTitle = category === 'opportunity'
+    ? 'Work result recorded'
+    : category === 'financial'
+      ? 'Money result recorded'
+      : 'Decision recorded';
   openModal({
     title: `${category === 'real_life' ? '👥 Life Scenario' : category === 'financial' ? '⚠️ Financial Decision' : category === 'opportunity' ? '💼 Job Opportunity' : '💳 Elite Credit Scenario'}`,
     meta,
@@ -9073,11 +9077,17 @@ function playScenarioFoundationScenario(picked, category){
       applyScenarioFoundationEffects(choice.immediate_effects || {});
       queueScenarioFoundationHooks(choice.delayed_hooks || [], `${picked.title} → ${choice.label}`);
       if(choice.ledger_note) addLedgerLine(choice.ledger_note);
+      const jobOutcomeText = applyCurrentJobPreview(picked, choice);
       renderAll();
-      const jobPreviewText = formatScenarioFoundationJobPreview(choice);
-      const follow = `${choice.ledger_note ? choice.ledger_note + '\n\n' : ''}${jobPreviewText ? jobPreviewText + '\n\n' : ''}${choice.reflection_tag ? 'Tag: ' + choice.reflection_tag : 'Decision recorded.'}`;
+      const jobPreviewText = formatScenarioFoundationJobPreview(choice, picked);
+      const pieces = [];
+      if(choice.ledger_note) pieces.push(choice.ledger_note);
+      if(jobOutcomeText) pieces.push(`${(getCurrentJobSystemConfig() || {}).engineLabel || 'Job'} engine:\n` + jobOutcomeText);
+      else if(jobPreviewText) pieces.push(jobPreviewText);
+      if(choice.reflection_tag) pieces.push('Tag: ' + choice.reflection_tag);
+      const follow = pieces.join('\n\n') || 'Decision recorded.';
       openModal({
-        title: 'Decision recorded',
+        title: decisionTitle,
         meta: picked.title,
         body: follow,
         buttons:[{id:'ok',label:'Continue',kind:'primary'}],
@@ -9169,6 +9179,9 @@ const JOB_SYSTEM_CONFIGS = {
     modifierLabel: 'Route Mod',
     baselineCount: 4,
     familyType: 'client_route',
+    jobIdentity: 'Route Job',
+    unitLabel: 'yard stop',
+    statusTone: 'A strong route grows one well-cut yard at a time.',
     debugInspectName: 'inspectLawnCare',
     debugForceName: 'forceLawnClient'
   },
@@ -9178,9 +9191,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Babysitting',
     relationshipPlural: 'families',
     relationshipSingular: 'family',
-    modifierLabel: 'Family Mod',
+    modifierLabel: 'Trust Mod',
     baselineCount: 3,
     familyType: 'family_care',
+    jobIdentity: 'Care Job',
+    unitLabel: 'relationship',
+    statusTone: 'Trust is the engine for care work.',
     debugInspectName: 'inspectBabysitting',
     debugForceName: 'forceBabysittingFamily'
   },
@@ -9193,6 +9209,9 @@ const JOB_SYSTEM_CONFIGS = {
     modifierLabel: 'Route Mod',
     baselineCount: 4,
     familyType: 'client_route',
+    jobIdentity: 'Route Job',
+    unitLabel: 'walk stop',
+    statusTone: 'Pets and owners both reward consistency.',
     debugInspectName: 'inspectDogWalking',
     debugForceName: 'forceDogWalkingClient'
   },
@@ -9202,9 +9221,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Pet Sitting',
     relationshipPlural: 'families',
     relationshipSingular: 'family',
-    modifierLabel: 'Family Mod',
+    modifierLabel: 'Trust Mod',
     baselineCount: 3,
     familyType: 'family_care',
+    jobIdentity: 'Care Job',
+    unitLabel: 'relationship',
+    statusTone: 'Trust is the engine for care work.',
     debugInspectName: 'inspectPetSitting',
     debugForceName: 'forcePetSittingFamily'
   },
@@ -9217,6 +9239,9 @@ const JOB_SYSTEM_CONFIGS = {
     modifierLabel: 'Route Mod',
     baselineCount: 4,
     familyType: 'client_route',
+    jobIdentity: 'Route Job',
+    unitLabel: 'driveway stop',
+    statusTone: 'Quality work can turn one shiny car into a whole driveway route.',
     debugInspectName: 'inspectWashingCars',
     debugForceName: 'forceWashingCarsClient'
   },
@@ -9226,9 +9251,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Tutoring',
     relationshipPlural: 'students',
     relationshipSingular: 'student',
-    modifierLabel: 'Tutor Mod',
+    modifierLabel: 'Reputation Mod',
     baselineCount: 3,
     familyType: 'family_care',
+    jobIdentity: 'Skill Job',
+    unitLabel: 'student seat',
+    statusTone: 'Your reputation grows when students improve and families trust your help.',
     debugInspectName: 'inspectTutoring',
     debugForceName: 'forceTutoringStudent'
   },
@@ -9238,9 +9266,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'House Cleaning',
     relationshipPlural: 'clients',
     relationshipSingular: 'client',
-    modifierLabel: 'Route Mod',
+    modifierLabel: 'Trust Mod',
     baselineCount: 4,
     familyType: 'client_route',
+    jobIdentity: 'Service Job',
+    unitLabel: 'cleaning account',
+    statusTone: 'Consistency keeps homes clean and clients loyal.',
     debugInspectName: 'inspectHouseCleaning',
     debugForceName: 'forceHouseCleaningClient'
   },
@@ -9250,9 +9281,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Lemonade Stand',
     relationshipPlural: 'customers',
     relationshipSingular: 'customer',
-    modifierLabel: 'Stand Mod',
+    modifierLabel: 'Demand Mod',
     baselineCount: 6,
     familyType: 'micro_business',
+    jobIdentity: 'Business Job',
+    unitLabel: 'customer lane',
+    statusTone: 'Demand can rise or cool off based on your choices.',
     debugInspectName: 'inspectLemonadeStand',
     debugForceName: 'forceLemonadeCustomer'
   },
@@ -9262,9 +9296,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Grocery Bagger',
     relationshipPlural: 'shifts',
     relationshipSingular: 'shift',
-    modifierLabel: 'Store Mod',
+    modifierLabel: 'Schedule Mod',
     baselineCount: 4,
     familyType: 'shift_work',
+    jobIdentity: 'Shift Job',
+    unitLabel: 'scheduled shift',
+    statusTone: 'Showing up strong helps you keep better shifts.',
     debugInspectName: 'inspectGroceryBagger',
     debugForceName: 'forceGroceryShift'
   },
@@ -9274,9 +9311,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Cashier',
     relationshipPlural: 'shifts',
     relationshipSingular: 'shift',
-    modifierLabel: 'Store Mod',
+    modifierLabel: 'Schedule Mod',
     baselineCount: 4,
     familyType: 'shift_work',
+    jobIdentity: 'Shift Job',
+    unitLabel: 'scheduled shift',
+    statusTone: 'Showing up strong helps you keep better shifts.',
     debugInspectName: 'inspectCashier',
     debugForceName: 'forceCashierShift'
   },
@@ -9286,9 +9326,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Restaurant Worker',
     relationshipPlural: 'shifts',
     relationshipSingular: 'shift',
-    modifierLabel: 'Shift Mod',
+    modifierLabel: 'Schedule Mod',
     baselineCount: 4,
     familyType: 'shift_work',
+    jobIdentity: 'Shift Job',
+    unitLabel: 'scheduled shift',
+    statusTone: 'Showing up strong helps you keep better shifts.',
     debugInspectName: 'inspectRestaurantWorker',
     debugForceName: 'forceRestaurantShift'
   },
@@ -9298,9 +9341,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Running Errands',
     relationshipPlural: 'clients',
     relationshipSingular: 'client',
-    modifierLabel: 'Route Mod',
+    modifierLabel: 'Reliability Mod',
     baselineCount: 4,
     familyType: 'client_route',
+    jobIdentity: 'Service Job',
+    unitLabel: 'delivery stop',
+    statusTone: 'Fast, reliable help keeps neighbors calling you back.',
     debugInspectName: 'inspectRunningErrands',
     debugForceName: 'forceErrandsClient'
   },
@@ -9310,9 +9356,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Selling Crafts',
     relationshipPlural: 'customers',
     relationshipSingular: 'customer',
-    modifierLabel: 'Booth Mod',
+    modifierLabel: 'Market Mod',
     baselineCount: 5,
     familyType: 'micro_business',
+    jobIdentity: 'Business Job',
+    unitLabel: 'customer lane',
+    statusTone: 'Demand can rise or cool off based on your choices.',
     debugInspectName: 'inspectSellingCrafts',
     debugForceName: 'forceCraftsCustomer'
   },
@@ -9322,9 +9371,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Manager',
     relationshipPlural: 'team wins',
     relationshipSingular: 'team win',
-    modifierLabel: 'Leadership Mod',
+    modifierLabel: 'Team Mod',
     baselineCount: 4,
     familyType: 'leadership',
+    jobIdentity: 'Leadership Job',
+    unitLabel: 'team result',
+    statusTone: 'Your decisions ripple through the whole team.',
     debugInspectName: 'inspectManager',
     debugForceName: 'forceManagerWin'
   },
@@ -9334,9 +9386,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Entrepreneur',
     relationshipPlural: 'customers',
     relationshipSingular: 'customer',
-    modifierLabel: 'Venture Mod',
+    modifierLabel: 'Deal Flow Mod',
     baselineCount: 5,
     familyType: 'micro_business',
+    jobIdentity: 'Business Job',
+    unitLabel: 'customer lane',
+    statusTone: 'Demand can rise or cool off based on your choices.',
     debugInspectName: 'inspectEntrepreneur',
     debugForceName: 'forceEntrepreneurCustomer'
   },
@@ -9346,9 +9401,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'CEO',
     relationshipPlural: 'divisions',
     relationshipSingular: 'division',
-    modifierLabel: 'Company Mod',
+    modifierLabel: 'Company Health Mod',
     baselineCount: 3,
     familyType: 'executive',
+    jobIdentity: 'Executive Job',
+    unitLabel: 'division result',
+    statusTone: 'Big-picture choices affect the whole company.',
     debugInspectName: 'inspectCEO',
     debugForceName: 'forceCEODivision'
   }
@@ -9470,24 +9528,24 @@ const JOB_SYSTEM_CONFIGS = {
     const risk = energyHit + focusHit;
     if(cfg && cfg.previewJob === 'manager'){
       return risk >= 2
-        ? { job:'manager', outcome:'growth', pay_delta_pct:0.05, note:'You coached the crew well, solved a customer issue, and the whole team finished strong.' }
+        ? { job:'manager', outcome:'growth', pay_delta_pct:0.05, note:'You read the room well, redirected the team, and your shift turned into a clean team win.' }
         : risk <= -3
-          ? { job:'manager', outcome:'warning', pay_delta_pct:-0.05, note:'Your rushed calls caused a schedule mix-up, and your team week slipped.' }
-          : { job:'manager', outcome:'neutral', note:'You kept the floor steady and avoided bigger problems this round.' };
+          ? { job:'manager', outcome:'warning', pay_delta_pct:-0.05, note:'Your rushed calls caused a scheduling knot, and the team lost momentum for the week.' }
+          : { job:'manager', outcome:'neutral', note:'You kept the floor steady, solved the loudest problem first, and prevented a worse mess.' };
     }
     if(cfg && cfg.previewJob === 'entrepreneur'){
       return risk >= 2
-        ? { job:'entrepreneur', outcome:'growth', client_delta:1, pay_delta_pct:0.05, note:'You followed up fast, landed a new customer, and your hustle grew.' }
+        ? { job:'entrepreneur', outcome:'growth', client_delta:1, pay_delta_pct:0.05, note:'You stayed sharp, followed up on time, and turned one small opening into fresh business.' }
         : risk <= -3
-          ? { job:'entrepreneur', outcome:'warning', pay_delta_pct:-0.05, note:'You missed a follow-up, and your cash flow took a hit this week.' }
-          : { job:'entrepreneur', outcome:'neutral', note:'No deal closed, but no major damage hit the business either.' };
+          ? { job:'entrepreneur', outcome:'warning', pay_delta_pct:-0.05, note:'A missed follow-up chilled the sale, and cash flow felt the draft this week.' }
+          : { job:'entrepreneur', outcome:'neutral', note:'No big deal landed, but the business stayed afloat and ready for the next swing.' };
     }
     if(cfg && cfg.previewJob === 'ceo'){
       return risk >= 2
-        ? { job:'ceo', outcome:'growth', pay_delta_pct:0.05, note:'You made a calm executive call, morale held, and company results improved.' }
+        ? { job:'ceo', outcome:'growth', pay_delta_pct:0.05, note:'You made a composed executive call, protected morale, and nudged company performance upward.' }
         : risk <= -3
-          ? { job:'ceo', outcome:'warning', pay_delta_pct:-0.05, note:'Poor focus led to a weak executive call, and revenue pressure followed.' }
-          : { job:'ceo', outcome:'neutral', note:'The company stayed stable. Not flashy, but solid leadership matters too.' };
+          ? { job:'ceo', outcome:'warning', pay_delta_pct:-0.05, note:'A foggy top-level decision created pressure across the company and squeezed results this week.' }
+          : { job:'ceo', outcome:'neutral', note:'You kept the company stable. It was not flashy, but steady leadership kept the machine from wobbling.' };
     }
     return null;
   }
@@ -9547,6 +9605,17 @@ const JOB_SYSTEM_CONFIGS = {
     const n = Number(pct || 0);
     return n === 0 ? '0%' : `${n > 0 ? '+' : ''}${Math.round(n * 100)}%`;
   }
+
+function getJobUnitLabel(cfg, count){
+  const singular = String((cfg && cfg.unitLabel) || (cfg && cfg.relationshipSingular) || 'unit');
+  const pluralSource = String((cfg && cfg.relationshipPlural) || singular + 's');
+  return Number(count) === 1 ? singular : pluralSource;
+}
+function getJobIdentitySummary(cfg){
+  if(!cfg) return '';
+  return `${cfg.jobIdentity || 'Job'} • ${cfg.statusTone || ''}`.trim();
+}
+
   function buildStatusText(){
     const cfg = getCurrentJobSystemConfig();
     if(!cfg) return '';
@@ -9554,7 +9623,7 @@ const JOB_SYSTEM_CONFIGS = {
     const pending = getPendingPayAdjustmentTotal();
     const projectedWeekly = Math.max(0, roundMoney(sys.baseWeeklyPay * (1 + Number(sys.persistentPayPct || 0))));
     const pendingLabel = pending === 0 ? 'No one-time paycheck changes waiting' : `Next paycheck adjustment: ${pending > 0 ? '+' : '-'}${money(Math.abs(pending))}`;
-    return `${cfg.engineLabel} ${cfg.relationshipPlural}: ${sys.clientCount} • ${cfg.modifierLabel}: ${pctLabel(sys.persistentPayPct)} • Projected weekly pay: ${money(projectedWeekly)} • ${pendingLabel}`;
+    return `${cfg.engineLabel} • ${cfg.jobIdentity || 'Job'} • ${sys.clientCount} ${getJobUnitLabel(cfg, sys.clientCount)} • ${cfg.modifierLabel}: ${pctLabel(sys.persistentPayPct)} • Projected weekly pay: ${money(projectedWeekly)} • ${pendingLabel}`;
   }
   function resetRepeatCounters(){
     const sys = ensureCurrentJobSystemState();
@@ -9575,17 +9644,59 @@ function derivePreviewSourceKey(cfg){
   return 'lawn_care';
 }
 function deriveJobPreviewNote(cfg, base){
-  const label = String((cfg && cfg.engineLabel) || 'job').toLowerCase();
   const rel = String((cfg && cfg.relationshipSingular) || 'client').toLowerCase();
   const clientDelta = Number((base && base.client_delta) || 0);
   const payDelta = Number((base && base.pay_delta_pct) || 0);
   const outcome = String((base && base.outcome) || 'neutral');
-  if(clientDelta > 0) return `Because you stayed prepared, your ${label} reputation grew and you picked up another ${rel}.`;
-  if(clientDelta < 0) return `Your choice hurt your ${label} performance, and you lost a ${rel}.`;
+
+  if(cfg && cfg.previewJob === 'manager'){
+    if(clientDelta > 0 || payDelta > 0) return 'Your leadership stayed sharp, the crew stayed on schedule, and team results moved in the right direction.';
+    if(clientDelta < 0 || payDelta < 0) return 'Your energy slipped, communication got messy, and the team felt it in the numbers.';
+    return 'You held the team together this round, even without a big breakthrough.';
+  }
+  if(cfg && cfg.previewJob === 'entrepreneur'){
+    if(clientDelta > 0) return 'You followed up like a pro, landed another customer, and your business momentum grew.';
+    if(clientDelta < 0) return 'A missed step cooled off demand, and your business lost a customer lane.';
+    if(payDelta > 0) return 'You turned preparation into profit and gave your cash flow a lift this week.';
+    if(payDelta < 0) return 'Your decision pinched cash flow, so the business feels tighter this week.';
+    return 'Nothing exploded and nothing boomed. In business, steady still counts.';
+  }
+  if(cfg && cfg.previewJob === 'ceo'){
+    if(clientDelta > 0 || payDelta > 0) return 'You made a calm executive call, morale held, and one part of the company moved stronger.';
+    if(clientDelta < 0 || payDelta < 0) return 'The decision created pressure at the top, and the company felt it down the chain.';
+    return 'The company stayed steady this round. Quiet leadership is still leadership.';
+  }
+  if(cfg && cfg.familyType === 'client_route'){
+    if(clientDelta > 0) return `Because you stayed prepared, your route grew and you picked up another ${rel}.`;
+    if(clientDelta < 0) return `Your choice hurt route performance, and you lost a ${rel}.`;
+    if(payDelta > 0) return 'Your route ran smoothly, and this week’s work paid off.';
+    if(payDelta < 0) return 'Your route slipped, so this week’s pay took a hit.';
+    return outcome === 'growth' ? 'You stayed ready, and your route work showed it.' : 'No big route change this time, but the choice still matters.';
+  }
+  if(cfg && cfg.familyType === 'family_care'){
+    if(clientDelta > 0) return `Because you showed care and reliability, another ${rel} trusted you.`;
+    if(clientDelta < 0) return `Trust slipped, and you lost a ${rel}.`;
+    if(payDelta > 0) return 'Your reliability showed, and your care work earned a boost this week.';
+    if(payDelta < 0) return 'Your choice shook trust, so this week’s pay took a hit.';
+    return outcome === 'growth' ? 'You showed up with care, and people noticed.' : 'No major trust shift this time, but the lesson still matters.';
+  }
+  if(cfg && cfg.familyType === 'shift_work'){
+    if(clientDelta > 0) return 'Your effort earned you another shift and stronger standing with the manager.';
+    if(clientDelta < 0) return 'Your performance slipped, and your schedule got cut back.';
+    if(payDelta > 0) return 'You handled the shift well, and your next paycheck gets a lift.';
+    if(payDelta < 0) return 'You brought less energy to the shift, so your paycheck feels it.';
+    return outcome === 'growth' ? 'You stayed dependable and kept your schedule strong.' : 'No schedule change this time, but the habit still matters.';
+  }
+  if(cfg && cfg.familyType === 'micro_business'){
+    if(clientDelta > 0) return `Because you were prepared, demand grew and another ${rel} found your business.`;
+    if(clientDelta < 0) return `Demand cooled off, and you lost a ${rel}.`;
+    if(payDelta > 0) return 'Your choice helped sales, and this week’s business numbers improved.';
+    if(payDelta < 0) return 'Your choice hurt sales, so this week’s numbers dipped.';
+    return outcome === 'growth' ? 'You made a smart move, and the business felt it.' : 'No big sales swing this time, but the decision still echoes.';
+  }
+  const label = String((cfg && cfg.engineLabel) || 'job').toLowerCase();
   if(payDelta > 0) return `Your choice paid off and gave your ${label} results a boost this week.`;
   if(payDelta < 0) return `Your choice hurt your ${label} performance, so this week's pay took a hit.`;
-  if(outcome === 'growth') return `You stayed ready, and your ${label} work showed it.`;
-  if(outcome === 'warning') return `No major ${label} change this time, but the choice still matters.`;
   return `No ${label} pay change this time, but the choice still matters.`;
 }
 function buildDerivedJobPreview(cfg, source){
@@ -9595,19 +9706,167 @@ function buildDerivedJobPreview(cfg, source){
     note: deriveJobPreviewNote(cfg, source)
   });
 }
-function getChoicePreviewForCurrentJob(choice){
+function buildCategoryAwareGenericPreview(cfg, choice, picked){
+  if(!cfg || !choice) return null;
+  const fx = (choice && choice.immediate_effects) || {};
+  const category = String((picked && picked.category) || '');
+  const checking = Number(fx.checking || 0);
+  const savings = Number(fx.savings || 0);
+  const credit = Number(fx.credit_score || 0);
+  const health = Number(fx.health_score || 0);
+  const career = Number(fx.career_progress || 0);
+
+  let score = 0;
+  score += checking >= 15 ? 2 : checking >= 5 ? 1 : checking <= -15 ? -2 : checking <= -5 ? -1 : 0;
+  score += savings >= 10 ? 2 : savings > 0 ? 1 : savings <= -15 ? -2 : savings < 0 ? -1 : 0;
+  score += credit >= 10 ? 2 : credit >= 5 ? 1 : credit <= -10 ? -2 : credit <= -5 ? -1 : 0;
+  score += health >= 2 ? 1 : health <= -2 ? -1 : 0;
+  score += career >= 2 ? 2 : career > 0 ? 1 : career <= -2 ? -2 : career < 0 ? -1 : 0;
+
+  let client_delta = 0;
+  let pay_delta_pct = 0;
+  let outcome = 'neutral';
+
+  if(category === 'financial'){
+    if(score >= 3){
+      outcome = 'growth';
+      pay_delta_pct = 0.03;
+      client_delta = (savings > 0 || credit > 0) ? 1 : 0;
+    } else if(score <= -3){
+      outcome = 'warning';
+      pay_delta_pct = -0.03;
+      client_delta = (checking < 0 || credit < 0) ? -1 : 0;
+    }
+  } else if(category === 'opportunity'){
+    if(score >= 2){
+      outcome = 'growth';
+      pay_delta_pct = 0.05;
+      client_delta = (career > 0 || checking > 0 || health > 0) ? 1 : 0;
+    } else if(score <= -2){
+      outcome = 'warning';
+      pay_delta_pct = -0.05;
+      client_delta = (career < 0 || health < 0) ? -1 : 0;
+    }
+  } else {
+    return null;
+  }
+
+  if(outcome === 'neutral' && pay_delta_pct === 0 && client_delta === 0){
+    if(category === 'financial'){
+      return {
+        job: cfg.previewJob,
+        outcome: 'neutral',
+        note: deriveCategoryAwarePreviewNote(cfg, { category, outcome: 'neutral', pay_delta_pct: 0, client_delta: 0 })
+      };
+    }
+    return null;
+  }
+
+  return {
+    job: cfg.previewJob,
+    category,
+    outcome,
+    pay_delta_pct,
+    client_delta,
+    note: deriveCategoryAwarePreviewNote(cfg, {
+      category, outcome, pay_delta_pct, client_delta,
+      checking, savings, credit, health, career
+    })
+  };
+}
+function deriveCategoryAwarePreviewNote(cfg, data){
+  const category = String((data && data.category) || '');
+  const clientDelta = Number((data && data.client_delta) || 0);
+  const payDelta = Number((data && data.pay_delta_pct) || 0);
+  if(category === 'financial'){
+    if(cfg.previewJob === 'manager'){
+      if(clientDelta > 0 || payDelta > 0) return 'Your money choice gave the team room to breathe, and your steady leadership improved results at work.';
+      if(clientDelta < 0 || payDelta < 0) return 'Financial pressure followed you into management, and the team felt the squeeze in this week\'s results.';
+      return 'Your money choice did not move the team this time, but it still shaped your margin for error.';
+    }
+    if(cfg.previewJob === 'entrepreneur'){
+      if(clientDelta > 0 || payDelta > 0) return 'This money decision strengthened your cash cushion, so your business could move with more confidence.';
+      if(clientDelta < 0 || payDelta < 0) return 'This money hit tightened cash flow, and the business lost some breathing room.';
+      return 'No big business swing this time, but your money habits still shape what you can risk next.';
+    }
+    if(cfg.previewJob === 'ceo'){
+      if(clientDelta > 0 || payDelta > 0) return 'A strong money choice kept your executive thinking clear and helped the company stay on stronger footing.';
+      if(clientDelta < 0 || payDelta < 0) return 'Financial strain clouded your top-level decisions, and the company felt extra pressure this week.';
+      return 'The company stayed steady, but money discipline still matters at the top.';
+    }
+    if(cfg.familyType === 'shift_work'){
+      if(clientDelta > 0 || payDelta > 0) return 'Because your money plan stayed stronger, you showed up with less stress and protected your schedule.';
+      if(clientDelta < 0 || payDelta < 0) return 'This money problem followed you to work, and the stress put your schedule under pressure.';
+      return 'No shift change this time, but your money habits still affect how steady you feel at work.';
+    }
+    if(cfg.familyType === 'family_care'){
+      if(clientDelta > 0 || payDelta > 0) return 'A smart money move kept you calm and dependable, and that helped trust grow in your care work.';
+      if(clientDelta < 0 || payDelta < 0) return 'Money stress made it harder to stay fully present, and trust at work took a small hit.';
+      return 'Trust held steady this time, but your money choices still shape how prepared you feel.';
+    }
+    if(cfg.familyType === 'micro_business'){
+      if(clientDelta > 0 || payDelta > 0) return 'This financial choice gave your business more breathing room, and demand responded well.';
+      if(clientDelta < 0 || payDelta < 0) return 'Your money got tighter, so the business felt it through weaker demand and less flexibility.';
+      return 'No big sales wave this time, but strong money habits still protect your business.';
+    }
+    if(cfg.familyType === 'client_route'){
+      if(clientDelta > 0 || payDelta > 0) return 'Your money plan kept you ready, and your route work stayed sharp enough to grow.';
+      if(clientDelta < 0 || payDelta < 0) return 'This financial setback added pressure, and your route performance slipped.';
+      return 'No route change this time, but financial discipline still helps you stay ready for work.';
+    }
+  }
+  if(category === 'opportunity'){
+    if(cfg.previewJob === 'manager'){
+      if(clientDelta > 0 || payDelta > 0) return 'You handled the work opportunity like a leader, and the team benefited from your steady decisions.';
+      if(clientDelta < 0 || payDelta < 0) return 'You missed part of the work opportunity, and the team lost momentum with you.';
+      return 'The opportunity passed without a major team swing, but your choices still mattered.';
+    }
+    if(cfg.previewJob === 'entrepreneur'){
+      if(clientDelta > 0 || payDelta > 0) return 'You turned the work opportunity into stronger business momentum and a better deal flow week.';
+      if(clientDelta < 0 || payDelta < 0) return 'You did not capitalize on the opportunity, and the business missed a growth lane.';
+      return 'No big deal came from it this time, but each opportunity still teaches your business something.';
+    }
+    if(cfg.previewJob === 'ceo'){
+      if(clientDelta > 0 || payDelta > 0) return 'You read the opportunity well, made a clean executive call, and the company moved in the right direction.';
+      if(clientDelta < 0 || payDelta < 0) return 'The opportunity was mishandled, and the company felt the drag in its weekly results.';
+      return 'The company stayed level this time, but opportunity judgment still matters.';
+    }
+    if(cfg.familyType === 'shift_work'){
+      if(clientDelta > 0 || payDelta > 0) return 'You handled the work opportunity well, and your manager rewarded that effort with a stronger schedule.';
+      if(clientDelta < 0 || payDelta < 0) return 'You missed the mark on the work opportunity, and your schedule took the hit.';
+      return 'The opportunity did not change your shifts this time, but your work habits still show.';
+    }
+    if(cfg.familyType === 'family_care'){
+      if(clientDelta > 0 || payDelta > 0) return 'You made the most of the opportunity, and families saw you as more reliable and worth recommending.';
+      if(clientDelta < 0 || payDelta < 0) return 'You struggled to deliver on the opportunity, and trust in your care work dipped.';
+      return 'Trust held this time, but work opportunities still reveal how dependable you are.';
+    }
+    if(cfg.familyType === 'micro_business'){
+      if(clientDelta > 0 || payDelta > 0) return 'You turned the opportunity into extra sales and stronger demand for your business.';
+      if(clientDelta < 0 || payDelta < 0) return 'You let the opportunity slip, and the business lost some momentum.';
+      return 'No big sales jump this time, but missed or made opportunities still shape demand.';
+    }
+    if(cfg.familyType === 'client_route'){
+      if(clientDelta > 0 || payDelta > 0) return 'You handled the extra work well, and your route grew because people noticed.';
+      if(clientDelta < 0 || payDelta < 0) return 'You could not fully capitalize on the work opportunity, and your route lost ground.';
+      return 'No route change this time, but work opportunities still test your consistency.';
+    }
+  }
+  return null;
+}
+function getChoicePreviewForCurrentJob(choice, picked){
   const cfg = getCurrentJobSystemConfig();
   if(!cfg || !choice) return null;
   if(choice.job_previews && typeof choice.job_previews === 'object' && choice.job_previews[cfg.previewJob]) return choice.job_previews[cfg.previewJob];
   if(choice.job_preview && String(choice.job_preview.job || '') === cfg.previewJob) return choice.job_preview;
   const sourceKey = derivePreviewSourceKey(cfg);
   const source = choice.job_previews && typeof choice.job_previews === 'object' ? choice.job_previews[sourceKey] : null;
-  return buildDerivedJobPreview(cfg, source) || buildHighTierPreview(cfg, choice);
+  return buildDerivedJobPreview(cfg, source) || buildHighTierPreview(cfg, choice) || buildCategoryAwareGenericPreview(cfg, choice, picked);
 }
   function applyCurrentJobPreview(picked, choice){
     const cfg = getCurrentJobSystemConfig();
     if(!cfg) return '';
-    const jp = getChoicePreviewForCurrentJob(choice);
+    const jp = getChoicePreviewForCurrentJob(choice, picked);
     if(!jp || typeof jp !== 'object') return '';
     const sys = ensureCurrentJobSystemState();
     const title = picked && picked.title ? picked.title : 'Life event';
@@ -9622,8 +9881,11 @@ function getChoicePreviewForCurrentJob(choice){
       if(payPct !== 0) sys.persistentPayPct = clampNum(Number(sys.persistentPayPct || 0) + payPct, -0.25, 0.30);
       if(clientDelta < 0 || jp.replacement_needed) sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) + Math.abs(clientDelta || 1));
       if(clientDelta > 0) sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) - clientDelta);
-      notes.push(`${cfg.relationshipPlural.charAt(0).toUpperCase() + cfg.relationshipPlural.slice(1)} ${clientDelta > 0 ? 'increased' : 'decreased'} by ${Math.abs(clientDelta)}.`);
-      if(payPct !== 0) notes.push(`${cfg.engineLabel} weekly pay is now ${pctLabel(sys.persistentPayPct)} from your base job pay.`);
+      const unitLabel = getPreviewCountLabel(cfg).toLowerCase();
+      const directionText = clientDelta > 0 ? 'rose' : 'fell';
+      notes.push(`${cfg.engineLabel} ${unitLabel} ${directionText} by ${Math.abs(clientDelta)}.`);
+      if(cfg.statusTone) notes.push(cfg.statusTone);
+      if(payPct !== 0) notes.push(`${cfg.modifierLabel} is now ${pctLabel(sys.persistentPayPct)} from your base ${cfg.engineLabel.toLowerCase()} pay.`);
     } else if(payPct !== 0){
       const amount = roundMoney(clampNum(sys.baseWeeklyPay * payPct, -sys.baseWeeklyPay * 0.15, sys.baseWeeklyPay * 0.15));
       sys.pendingPaycheckAdjustments.push({
@@ -9633,7 +9895,8 @@ function getChoicePreviewForCurrentJob(choice){
         choiceId,
         note: jp.note || ''
       });
-      notes.push(`Your next paycheck will ${amount >= 0 ? 'increase' : 'drop'} by ${money(Math.abs(amount))} from this week's ${cfg.engineLabel.toLowerCase()} result.`);
+      const lane = cfg.familyType === 'shift_work' ? 'shift result' : cfg.familyType === 'family_care' ? 'trust result' : cfg.previewJob === 'ceo' ? 'company result' : cfg.previewJob === 'manager' ? 'team result' : cfg.previewJob === 'entrepreneur' ? 'business result' : 'job result';
+      notes.push(`Your next paycheck will ${amount >= 0 ? 'increase' : 'drop'} by ${money(Math.abs(amount))} from this week's ${lane}.`);
     }
 
     if(Number(jp.repeat_threshold || 0) > 0){
@@ -9643,7 +9906,8 @@ function getChoicePreviewForCurrentJob(choice){
         sys.clientCount = Math.max(0, Number(sys.clientCount || 0) - 1);
         sys.persistentPayPct = clampNum(Number(sys.persistentPayPct || 0) - 0.05, -0.25, 0.30);
         sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) + 1);
-        notes.push(`Repeat low performance cost you another ${cfg.relationshipSingular}. Your ${cfg.engineLabel.toLowerCase()} pay dropped an extra 5% until you replace them.`);
+        const lostUnit = (cfg.previewJob === 'manager') ? 'team win' : (cfg.previewJob === 'ceo' ? 'division' : cfg.relationshipSingular);
+        notes.push(`Repeat low performance cost you another ${lostUnit}. Your ${cfg.engineLabel.toLowerCase()} pay dropped an extra 5% until you rebuild that lane.`);
       } else if(jp.repeat_note) {
         notes.push(String(jp.repeat_note));
       }
@@ -9748,7 +10012,7 @@ function getChoicePreviewForCurrentJob(choice){
           const sys = ensureCurrentJobSystemState();
           const projectedWeekly = Math.max(0, roundMoney(sys.baseWeeklyPay * (1 + Number(sys.persistentPayPct || 0))));
           el.textContent = `Weekly Pay: ${money(projectedWeekly)} • ${cfg.relationshipPlural.charAt(0).toUpperCase() + cfg.relationshipPlural.slice(1)}: ${sys.clientCount} • ${cfg.modifierLabel}: ${pctLabel(sys.persistentPayPct)}`;
-          el.title = buildStatusText();
+          el.title = buildStatusText() + (cfg.statusTone ? `\n${cfg.statusTone}` : '');
         }
       }
     } else if(job && $('jobPay') && locked){
@@ -9757,6 +10021,13 @@ function getChoicePreviewForCurrentJob(choice){
     }
     if(tags && job){
       const path = getCareerPathForJobId(job.id);
+      if(cfg){
+        const identityChip = document.createElement('div');
+        identityChip.className = 'chip';
+        identityChip.textContent = `${cfg.jobIdentity || 'Job'} • ${cfg.modifierLabel}`;
+        identityChip.title = getJobIdentitySummary(cfg);
+        tags.appendChild(identityChip);
+      }
       if(path){
         const pathChip = document.createElement('div');
         pathChip.className = 'chip';
@@ -9898,6 +10169,26 @@ Object.entries(__jobDebugMappings).forEach(([jobId, names]) => {
     return window.WGLT_DEBUG.forceCurrentJobClient(delta);
   };
 });
+
+window.WGLT_DEBUG.inspectJobIdentity = function(jobId){
+  const id = String(jobId || ((currentJobObj() || {}).id || ''));
+  const cfg = JOB_SYSTEM_CONFIGS[id];
+  if(!cfg) return null;
+  const sys = state && state.jobSystems ? state.jobSystems[cfg.systemKey] : null;
+  return {
+    id,
+    engineLabel: cfg.engineLabel,
+    jobIdentity: cfg.jobIdentity,
+    relationshipPlural: cfg.relationshipPlural,
+    relationshipSingular: cfg.relationshipSingular,
+    modifierLabel: cfg.modifierLabel,
+    unitLabel: cfg.unitLabel,
+    statusTone: cfg.statusTone,
+    projectedWeeklyPay: sys ? Math.max(0, roundMoney(sys.baseWeeklyPay * (1 + Number(sys.persistentPayPct || 0)))) : null,
+    activeCount: sys ? Number(sys.clientCount || 0) : null
+  };
+};
+
       window.WGLT_DEBUG.inspectUnlocks = function(){
         ensureCareerUnlockState();
         return {

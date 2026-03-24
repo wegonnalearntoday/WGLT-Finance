@@ -11,7 +11,10 @@
       7,
       12,
       10
-    ]
+    ],
+    "jobType": "family_care",
+    "careerPath": "service",
+    "advancedOnly": false
   },
   {
     "id": "pet",
@@ -25,7 +28,10 @@
       7,
       12,
       10
-    ]
+    ],
+    "jobType": "family_care",
+    "careerPath": "service",
+    "advancedOnly": false
   },
   {
     "id": "dogwalk",
@@ -37,7 +43,10 @@
       3,
       7,
       12
-    ]
+    ],
+    "jobType": "route_work",
+    "careerPath": "service",
+    "advancedOnly": false
   },
   {
     "id": "lawn",
@@ -51,7 +60,10 @@
       8,
       12,
       10
-    ]
+    ],
+    "jobType": "route_work",
+    "careerPath": "service",
+    "advancedOnly": false
   },
   {
     "id": "cars",
@@ -64,7 +76,10 @@
       7,
       12,
       9
-    ]
+    ],
+    "jobType": "route_work",
+    "careerPath": "service",
+    "advancedOnly": false
   },
   {
     "id": "tutor",
@@ -77,7 +92,10 @@
       7,
       12,
       10
-    ]
+    ],
+    "jobType": "skill_work",
+    "careerPath": "service",
+    "advancedOnly": false
   },
   {
     "id": "chores",
@@ -89,7 +107,10 @@
       3,
       7,
       12
-    ]
+    ],
+    "jobType": "client_service",
+    "careerPath": "service",
+    "advancedOnly": false
   },
   {
     "id": "errands",
@@ -102,7 +123,10 @@
       7,
       12,
       10
-    ]
+    ],
+    "jobType": "route_work",
+    "careerPath": "service",
+    "advancedOnly": false
   },
   {
     "id": "crafts",
@@ -117,7 +141,10 @@
       10,
       11,
       13
-    ]
+    ],
+    "jobType": "micro_business",
+    "careerPath": "hustler",
+    "advancedOnly": false
   },
   {
     "id": "lemonade",
@@ -131,7 +158,10 @@
       10,
       11,
       12
-    ]
+    ],
+    "jobType": "micro_business",
+    "careerPath": "hustler",
+    "advancedOnly": false
   },
   {
     "id": "grocery",
@@ -144,7 +174,10 @@
       7,
       10,
       12
-    ]
+    ],
+    "jobType": "shift_work",
+    "careerPath": "service",
+    "advancedOnly": false
   },
   {
     "id": "cashier",
@@ -157,7 +190,10 @@
       7,
       10,
       12
-    ]
+    ],
+    "jobType": "shift_work",
+    "careerPath": "business",
+    "advancedOnly": false
   },
   {
     "id": "restaurant",
@@ -170,7 +206,10 @@
       7,
       10,
       12
-    ]
+    ],
+    "jobType": "shift_work",
+    "careerPath": "service",
+    "advancedOnly": false
   },
   {
     "id": "manager",
@@ -182,7 +221,10 @@
       10,
       11,
       12
-    ]
+    ],
+    "jobType": "leadership",
+    "careerPath": "business",
+    "advancedOnly": true
   },
   {
     "id": "entrepreneur",
@@ -196,7 +238,10 @@
       11,
       12,
       13
-    ]
+    ],
+    "jobType": "venture",
+    "careerPath": "hustler",
+    "advancedOnly": true
   },
   {
     "id": "ceo",
@@ -210,6 +255,9 @@
       11,
       12,
       13
-    ]
+    ],
+    "jobType": "executive",
+    "careerPath": "business",
+    "advancedOnly": true
   }
 ]
