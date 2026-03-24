@@ -9032,9 +9032,9 @@ function getPreviewCountLabel(cfg){
   if(cfg.previewJob === 'ceo') return 'Divisions';
   return 'Customers';
 }
-function formatScenarioFoundationJobPreview(choice){
+function formatScenarioFoundationJobPreview(choice, picked){
   const cfg = typeof getCurrentJobSystemConfig === 'function' ? getCurrentJobSystemConfig() : null;
-  const jp = typeof getChoicePreviewForCurrentJob === 'function' ? getChoicePreviewForCurrentJob(choice) : null;
+  const jp = typeof getChoicePreviewForCurrentJob === 'function' ? getChoicePreviewForCurrentJob(choice, picked) : null;
   if(!cfg || !jp || typeof jp !== 'object') return '';
   const pay = Number(jp.pay_delta_pct || 0);
   const count = Number(jp.client_delta || 0);
@@ -9060,6 +9060,11 @@ function playScenarioFoundationScenario(picked, category){
     kind: idx === 0 ? 'primary' : 'secondary'
   }));
   const meta = `Step ${getScenarioFoundationCurrentStep()} • ${picked.title}`;
+  const decisionTitle = category === 'opportunity'
+    ? 'Work result recorded'
+    : category === 'financial'
+      ? 'Money result recorded'
+      : 'Decision recorded';
   openModal({
     title: `${category === 'real_life' ? '👥 Life Scenario' : category === 'financial' ? '⚠️ Financial Decision' : category === 'opportunity' ? '💼 Job Opportunity' : '💳 Elite Credit Scenario'}`,
     meta,
@@ -9072,11 +9077,17 @@ function playScenarioFoundationScenario(picked, category){
       applyScenarioFoundationEffects(choice.immediate_effects || {});
       queueScenarioFoundationHooks(choice.delayed_hooks || [], `${picked.title} → ${choice.label}`);
       if(choice.ledger_note) addLedgerLine(choice.ledger_note);
+      const jobOutcomeText = applyCurrentJobPreview(picked, choice);
       renderAll();
-      const jobPreviewText = formatScenarioFoundationJobPreview(choice);
-      const follow = `${choice.ledger_note ? choice.ledger_note + '\n\n' : ''}${jobPreviewText ? jobPreviewText + '\n\n' : ''}${choice.reflection_tag ? 'Tag: ' + choice.reflection_tag : 'Decision recorded.'}`;
+      const jobPreviewText = formatScenarioFoundationJobPreview(choice, picked);
+      const pieces = [];
+      if(choice.ledger_note) pieces.push(choice.ledger_note);
+      if(jobOutcomeText) pieces.push(`${(getCurrentJobSystemConfig() || {}).engineLabel || 'Job'} engine:\n` + jobOutcomeText);
+      else if(jobPreviewText) pieces.push(jobPreviewText);
+      if(choice.reflection_tag) pieces.push('Tag: ' + choice.reflection_tag);
+      const follow = pieces.join('\n\n') || 'Decision recorded.';
       openModal({
-        title: 'Decision recorded',
+        title: decisionTitle,
         meta: picked.title,
         body: follow,
         buttons:[{id:'ok',label:'Continue',kind:'primary'}],
@@ -9695,19 +9706,167 @@ function buildDerivedJobPreview(cfg, source){
     note: deriveJobPreviewNote(cfg, source)
   });
 }
-function getChoicePreviewForCurrentJob(choice){
+function buildCategoryAwareGenericPreview(cfg, choice, picked){
+  if(!cfg || !choice) return null;
+  const fx = (choice && choice.immediate_effects) || {};
+  const category = String((picked && picked.category) || '');
+  const checking = Number(fx.checking || 0);
+  const savings = Number(fx.savings || 0);
+  const credit = Number(fx.credit_score || 0);
+  const health = Number(fx.health_score || 0);
+  const career = Number(fx.career_progress || 0);
+
+  let score = 0;
+  score += checking >= 15 ? 2 : checking >= 5 ? 1 : checking <= -15 ? -2 : checking <= -5 ? -1 : 0;
+  score += savings >= 10 ? 2 : savings > 0 ? 1 : savings <= -15 ? -2 : savings < 0 ? -1 : 0;
+  score += credit >= 10 ? 2 : credit >= 5 ? 1 : credit <= -10 ? -2 : credit <= -5 ? -1 : 0;
+  score += health >= 2 ? 1 : health <= -2 ? -1 : 0;
+  score += career >= 2 ? 2 : career > 0 ? 1 : career <= -2 ? -2 : career < 0 ? -1 : 0;
+
+  let client_delta = 0;
+  let pay_delta_pct = 0;
+  let outcome = 'neutral';
+
+  if(category === 'financial'){
+    if(score >= 3){
+      outcome = 'growth';
+      pay_delta_pct = 0.03;
+      client_delta = (savings > 0 || credit > 0) ? 1 : 0;
+    } else if(score <= -3){
+      outcome = 'warning';
+      pay_delta_pct = -0.03;
+      client_delta = (checking < 0 || credit < 0) ? -1 : 0;
+    }
+  } else if(category === 'opportunity'){
+    if(score >= 2){
+      outcome = 'growth';
+      pay_delta_pct = 0.05;
+      client_delta = (career > 0 || checking > 0 || health > 0) ? 1 : 0;
+    } else if(score <= -2){
+      outcome = 'warning';
+      pay_delta_pct = -0.05;
+      client_delta = (career < 0 || health < 0) ? -1 : 0;
+    }
+  } else {
+    return null;
+  }
+
+  if(outcome === 'neutral' && pay_delta_pct === 0 && client_delta === 0){
+    if(category === 'financial'){
+      return {
+        job: cfg.previewJob,
+        outcome: 'neutral',
+        note: deriveCategoryAwarePreviewNote(cfg, { category, outcome: 'neutral', pay_delta_pct: 0, client_delta: 0 })
+      };
+    }
+    return null;
+  }
+
+  return {
+    job: cfg.previewJob,
+    category,
+    outcome,
+    pay_delta_pct,
+    client_delta,
+    note: deriveCategoryAwarePreviewNote(cfg, {
+      category, outcome, pay_delta_pct, client_delta,
+      checking, savings, credit, health, career
+    })
+  };
+}
+function deriveCategoryAwarePreviewNote(cfg, data){
+  const category = String((data && data.category) || '');
+  const clientDelta = Number((data && data.client_delta) || 0);
+  const payDelta = Number((data && data.pay_delta_pct) || 0);
+  if(category === 'financial'){
+    if(cfg.previewJob === 'manager'){
+      if(clientDelta > 0 || payDelta > 0) return 'Your money choice gave the team room to breathe, and your steady leadership improved results at work.';
+      if(clientDelta < 0 || payDelta < 0) return 'Financial pressure followed you into management, and the team felt the squeeze in this week\'s results.';
+      return 'Your money choice did not move the team this time, but it still shaped your margin for error.';
+    }
+    if(cfg.previewJob === 'entrepreneur'){
+      if(clientDelta > 0 || payDelta > 0) return 'This money decision strengthened your cash cushion, so your business could move with more confidence.';
+      if(clientDelta < 0 || payDelta < 0) return 'This money hit tightened cash flow, and the business lost some breathing room.';
+      return 'No big business swing this time, but your money habits still shape what you can risk next.';
+    }
+    if(cfg.previewJob === 'ceo'){
+      if(clientDelta > 0 || payDelta > 0) return 'A strong money choice kept your executive thinking clear and helped the company stay on stronger footing.';
+      if(clientDelta < 0 || payDelta < 0) return 'Financial strain clouded your top-level decisions, and the company felt extra pressure this week.';
+      return 'The company stayed steady, but money discipline still matters at the top.';
+    }
+    if(cfg.familyType === 'shift_work'){
+      if(clientDelta > 0 || payDelta > 0) return 'Because your money plan stayed stronger, you showed up with less stress and protected your schedule.';
+      if(clientDelta < 0 || payDelta < 0) return 'This money problem followed you to work, and the stress put your schedule under pressure.';
+      return 'No shift change this time, but your money habits still affect how steady you feel at work.';
+    }
+    if(cfg.familyType === 'family_care'){
+      if(clientDelta > 0 || payDelta > 0) return 'A smart money move kept you calm and dependable, and that helped trust grow in your care work.';
+      if(clientDelta < 0 || payDelta < 0) return 'Money stress made it harder to stay fully present, and trust at work took a small hit.';
+      return 'Trust held steady this time, but your money choices still shape how prepared you feel.';
+    }
+    if(cfg.familyType === 'micro_business'){
+      if(clientDelta > 0 || payDelta > 0) return 'This financial choice gave your business more breathing room, and demand responded well.';
+      if(clientDelta < 0 || payDelta < 0) return 'Your money got tighter, so the business felt it through weaker demand and less flexibility.';
+      return 'No big sales wave this time, but strong money habits still protect your business.';
+    }
+    if(cfg.familyType === 'client_route'){
+      if(clientDelta > 0 || payDelta > 0) return 'Your money plan kept you ready, and your route work stayed sharp enough to grow.';
+      if(clientDelta < 0 || payDelta < 0) return 'This financial setback added pressure, and your route performance slipped.';
+      return 'No route change this time, but financial discipline still helps you stay ready for work.';
+    }
+  }
+  if(category === 'opportunity'){
+    if(cfg.previewJob === 'manager'){
+      if(clientDelta > 0 || payDelta > 0) return 'You handled the work opportunity like a leader, and the team benefited from your steady decisions.';
+      if(clientDelta < 0 || payDelta < 0) return 'You missed part of the work opportunity, and the team lost momentum with you.';
+      return 'The opportunity passed without a major team swing, but your choices still mattered.';
+    }
+    if(cfg.previewJob === 'entrepreneur'){
+      if(clientDelta > 0 || payDelta > 0) return 'You turned the work opportunity into stronger business momentum and a better deal flow week.';
+      if(clientDelta < 0 || payDelta < 0) return 'You did not capitalize on the opportunity, and the business missed a growth lane.';
+      return 'No big deal came from it this time, but each opportunity still teaches your business something.';
+    }
+    if(cfg.previewJob === 'ceo'){
+      if(clientDelta > 0 || payDelta > 0) return 'You read the opportunity well, made a clean executive call, and the company moved in the right direction.';
+      if(clientDelta < 0 || payDelta < 0) return 'The opportunity was mishandled, and the company felt the drag in its weekly results.';
+      return 'The company stayed level this time, but opportunity judgment still matters.';
+    }
+    if(cfg.familyType === 'shift_work'){
+      if(clientDelta > 0 || payDelta > 0) return 'You handled the work opportunity well, and your manager rewarded that effort with a stronger schedule.';
+      if(clientDelta < 0 || payDelta < 0) return 'You missed the mark on the work opportunity, and your schedule took the hit.';
+      return 'The opportunity did not change your shifts this time, but your work habits still show.';
+    }
+    if(cfg.familyType === 'family_care'){
+      if(clientDelta > 0 || payDelta > 0) return 'You made the most of the opportunity, and families saw you as more reliable and worth recommending.';
+      if(clientDelta < 0 || payDelta < 0) return 'You struggled to deliver on the opportunity, and trust in your care work dipped.';
+      return 'Trust held this time, but work opportunities still reveal how dependable you are.';
+    }
+    if(cfg.familyType === 'micro_business'){
+      if(clientDelta > 0 || payDelta > 0) return 'You turned the opportunity into extra sales and stronger demand for your business.';
+      if(clientDelta < 0 || payDelta < 0) return 'You let the opportunity slip, and the business lost some momentum.';
+      return 'No big sales jump this time, but missed or made opportunities still shape demand.';
+    }
+    if(cfg.familyType === 'client_route'){
+      if(clientDelta > 0 || payDelta > 0) return 'You handled the extra work well, and your route grew because people noticed.';
+      if(clientDelta < 0 || payDelta < 0) return 'You could not fully capitalize on the work opportunity, and your route lost ground.';
+      return 'No route change this time, but work opportunities still test your consistency.';
+    }
+  }
+  return null;
+}
+function getChoicePreviewForCurrentJob(choice, picked){
   const cfg = getCurrentJobSystemConfig();
   if(!cfg || !choice) return null;
   if(choice.job_previews && typeof choice.job_previews === 'object' && choice.job_previews[cfg.previewJob]) return choice.job_previews[cfg.previewJob];
   if(choice.job_preview && String(choice.job_preview.job || '') === cfg.previewJob) return choice.job_preview;
   const sourceKey = derivePreviewSourceKey(cfg);
   const source = choice.job_previews && typeof choice.job_previews === 'object' ? choice.job_previews[sourceKey] : null;
-  return buildDerivedJobPreview(cfg, source) || buildHighTierPreview(cfg, choice);
+  return buildDerivedJobPreview(cfg, source) || buildHighTierPreview(cfg, choice) || buildCategoryAwareGenericPreview(cfg, choice, picked);
 }
   function applyCurrentJobPreview(picked, choice){
     const cfg = getCurrentJobSystemConfig();
     if(!cfg) return '';
-    const jp = getChoicePreviewForCurrentJob(choice);
+    const jp = getChoicePreviewForCurrentJob(choice, picked);
     if(!jp || typeof jp !== 'object') return '';
     const sys = ensureCurrentJobSystemState();
     const title = picked && picked.title ? picked.title : 'Life event';
