@@ -36,10 +36,3 @@ v6.1 Career Paths + Tier 2/3 Flavor Polish
 
 - Refined job identity system so each job now surfaces its own work style, unit labels, and modifier labels.
 - Added job identity metadata to jobs.json and a WGLT_DEBUG.inspectJobIdentity(jobId) helper.
-
-
-=== v6.3 Job Identity Wording Pass ===
-- Scenario job preview text now changes by job identity instead of defaulting to generic client language.
-- Route jobs use route wording, care jobs use trust wording, shift jobs use schedule wording.
-- Manager, Entrepreneur, and CEO now use custom team, business, and company language in life-event consequences.
-- Live payoff messages now reference modifier labels like Trust Mod, Schedule Mod, Deal Flow Mod, and Company Health Mod.
