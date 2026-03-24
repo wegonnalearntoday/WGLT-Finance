@@ -171,5 +171,45 @@
       10,
       12
     ]
+  },
+  {
+    "id": "manager",
+    "name": "Manager",
+    "pay": 120,
+    "buckets": [
+      3,
+      7,
+      10,
+      11,
+      12
+    ]
+  },
+  {
+    "id": "entrepreneur",
+    "name": "Entrepreneur",
+    "pay": 140,
+    "buckets": [
+      1,
+      3,
+      7,
+      8,
+      11,
+      12,
+      13
+    ]
+  },
+  {
+    "id": "ceo",
+    "name": "CEO",
+    "pay": 200,
+    "buckets": [
+      3,
+      5,
+      7,
+      8,
+      11,
+      12,
+      13
+    ]
   }
 ]
