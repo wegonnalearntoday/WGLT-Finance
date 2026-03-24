@@ -81,7 +81,7 @@
   },
   {
     "id": "chores",
-    "name": "Housecleaning/Chores",
+    "name": "House Cleaning",
     "pay": 45,
     "buckets": [
       1,
@@ -116,6 +116,99 @@
       12,
       10,
       11,
+      13
+    ]
+  },
+  {
+    "id": "lemonade",
+    "name": "Lemonade Stand",
+    "pay": 65,
+    "buckets": [
+      1,
+      2,
+      3,
+      7,
+      10,
+      11,
+      12
+    ]
+  },
+  {
+    "id": "grocery",
+    "name": "Grocery Bagger",
+    "pay": 70,
+    "buckets": [
+      1,
+      2,
+      3,
+      7,
+      10,
+      12
+    ]
+  },
+  {
+    "id": "cashier",
+    "name": "Cashier",
+    "pay": 85,
+    "buckets": [
+      1,
+      2,
+      3,
+      7,
+      10,
+      12
+    ]
+  },
+  {
+    "id": "restaurant",
+    "name": "Restaurant Worker",
+    "pay": 80,
+    "buckets": [
+      1,
+      2,
+      3,
+      7,
+      10,
+      12
+    ]
+  },
+  {
+    "id": "manager",
+    "name": "Manager",
+    "pay": 120,
+    "buckets": [
+      3,
+      7,
+      10,
+      11,
+      12
+    ]
+  },
+  {
+    "id": "entrepreneur",
+    "name": "Entrepreneur",
+    "pay": 140,
+    "buckets": [
+      1,
+      3,
+      7,
+      8,
+      11,
+      12,
+      13
+    ]
+  },
+  {
+    "id": "ceo",
+    "name": "CEO",
+    "pay": 200,
+    "buckets": [
+      3,
+      5,
+      7,
+      8,
+      11,
+      12,
       13
     ]
   }

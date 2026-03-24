@@ -52,6 +52,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "No babysitting pay change this time, but the choice still matters."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No dog-walking pay change this time, but the choice still matters."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No pet sitting pay change this time, but the choice still matters."
           }
         }
       },
@@ -87,6 +101,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "You got through this one without a babysitting pay change."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a dog-walking pay change, but it could have gone the other way."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a pet sitting pay change."
           }
         }
       },
@@ -124,6 +152,22 @@
             "pay_delta_pct": -0.08,
             "client_delta": -1,
             "note": "The family noticed the issue and chose another sitter. Your babysitting pay stays lower until you book a new family.",
+            "replacement_needed": true
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "loss",
+            "pay_delta_pct": -0.08,
+            "client_delta": -1,
+            "note": "The walk went poorly and a dog owner took their pet off your route. Your pay stays lower until you replace that client.",
+            "replacement_needed": true
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "loss",
+            "pay_delta_pct": -0.08,
+            "client_delta": -1,
+            "note": "The family noticed the issue and chose another pet sitter. Your pet sitting pay stays lower until you book a new family.",
             "replacement_needed": true
           }
         }
@@ -205,6 +249,20 @@
             "pay_delta_pct": -0.04,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.04,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.04,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -237,6 +295,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.02,
             "client_delta": 0,
@@ -276,6 +348,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "No babysitting pay change this time, but the choice still matters."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No dog-walking pay change this time, but the choice still matters."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No pet sitting pay change this time, but the choice still matters."
           }
         }
       }
@@ -354,6 +440,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "No babysitting pay change this time, but the choice still matters."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No dog-walking pay change this time, but the choice still matters."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No pet sitting pay change this time, but the choice still matters."
           }
         }
       },
@@ -389,6 +489,20 @@
             "pay_delta_pct": -0.05,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -424,6 +538,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "You got through this one without a babysitting pay change."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a dog-walking pay change, but it could have gone the other way."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a pet sitting pay change."
           }
         }
       }
@@ -500,6 +628,20 @@
             "pay_delta_pct": 0.01,
             "client_delta": 0,
             "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
           }
         }
       },
@@ -535,6 +677,20 @@
             "pay_delta_pct": -0.03,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -565,6 +721,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.02,
             "client_delta": 0,
@@ -648,6 +818,20 @@
             "pay_delta_pct": -0.05,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -677,6 +861,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.02,
             "client_delta": 0,
@@ -717,6 +915,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "No babysitting pay change this time, but the choice still matters."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No dog-walking pay change this time, but the choice still matters."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No pet sitting pay change this time, but the choice still matters."
           }
         }
       }
@@ -796,6 +1008,20 @@
             "pay_delta_pct": -0.02,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -831,6 +1057,20 @@
             "pay_delta_pct": 0.02,
             "client_delta": 0,
             "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
           }
         }
       },
@@ -861,6 +1101,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.01,
             "client_delta": 0,
@@ -943,6 +1197,20 @@
             "pay_delta_pct": -0.08,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -973,6 +1241,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.02,
             "client_delta": 0,
@@ -1015,6 +1297,22 @@
             "pay_delta_pct": -0.05,
             "client_delta": -1,
             "note": "The family noticed the issue and chose another sitter. Your babysitting pay stays lower until you book a new family.",
+            "replacement_needed": true
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "loss",
+            "pay_delta_pct": -0.05,
+            "client_delta": -1,
+            "note": "The walk went poorly and a dog owner took their pet off your route. Your pay stays lower until you replace that client.",
+            "replacement_needed": true
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "loss",
+            "pay_delta_pct": -0.05,
+            "client_delta": -1,
+            "note": "The family noticed the issue and chose another pet sitter. Your pet sitting pay stays lower until you book a new family.",
             "replacement_needed": true
           }
         }
@@ -1093,6 +1391,20 @@
             "pay_delta_pct": -0.02,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -1127,6 +1439,20 @@
             "pay_delta_pct": 0.02,
             "client_delta": 0,
             "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
           }
         }
       },
@@ -1156,6 +1482,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.01,
             "client_delta": 0,
@@ -1237,6 +1577,20 @@
             "pay_delta_pct": -0.03,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -1271,6 +1625,20 @@
             "pay_delta_pct": 0.01,
             "client_delta": 0,
             "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
           }
         }
       },
@@ -1301,6 +1669,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.03,
             "client_delta": 0,
@@ -1382,6 +1764,20 @@
             "pay_delta_pct": -0.03,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -1412,6 +1808,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.01,
             "client_delta": 0,
@@ -1451,6 +1861,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "You got through this one without a babysitting pay change."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a dog-walking pay change, but it could have gone the other way."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a pet sitting pay change."
           }
         }
       }
@@ -1528,6 +1952,20 @@
             "pay_delta_pct": -0.03,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -1558,6 +1996,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.02,
             "client_delta": 0,
@@ -1597,6 +2049,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "No babysitting pay change this time, but the choice still matters."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No dog-walking pay change this time, but the choice still matters."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No pet sitting pay change this time, but the choice still matters."
           }
         }
       }
@@ -1673,6 +2139,20 @@
             "pay_delta_pct": 0.01,
             "client_delta": 0,
             "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
           }
         }
       },
@@ -1708,6 +2188,20 @@
             "pay_delta_pct": -0.03,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -1738,6 +2232,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.02,
             "client_delta": 0,
@@ -1821,6 +2329,20 @@
             "pay_delta_pct": -0.04,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.04,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.04,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -1855,6 +2377,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "No babysitting pay change this time, but the choice still matters."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No dog-walking pay change this time, but the choice still matters."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No pet sitting pay change this time, but the choice still matters."
           }
         }
       },
@@ -1887,6 +2423,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.02,
             "client_delta": 0,
@@ -1966,6 +2516,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "No babysitting pay change this time, but the choice still matters."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No dog-walking pay change this time, but the choice still matters."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No pet sitting pay change this time, but the choice still matters."
           }
         }
       },
@@ -2001,6 +2565,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "You got through this one without a babysitting pay change."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a dog-walking pay change, but it could have gone the other way."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a pet sitting pay change."
           }
         }
       },
@@ -2037,6 +2615,20 @@
             "pay_delta_pct": -0.05,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       }
@@ -2113,6 +2705,20 @@
             "pay_delta_pct": 0.01,
             "client_delta": 0,
             "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
           }
         }
       },
@@ -2143,6 +2749,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.02,
             "client_delta": 0,
@@ -2183,6 +2803,20 @@
             "pay_delta_pct": -0.05,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.05,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       }
@@ -2261,6 +2895,20 @@
             "pay_delta_pct": 0.05,
             "client_delta": 1,
             "note": "Because you stayed dependable and prepared, another family asked you to babysit again."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 1,
+            "note": "Your dogs were calm, on time, and well cared for. A pet owner on the block asked you to add their dog to your route."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 1,
+            "note": "Because you stayed dependable and prepared, another family asked you to book another pet-care visit."
           }
         }
       },
@@ -2291,6 +2939,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.03,
             "client_delta": 0,
@@ -2329,6 +2991,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "No babysitting pay change this time, but the choice still matters."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No dog-walking pay change this time, but the choice still matters."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No pet sitting pay change this time, but the choice still matters."
           }
         }
       }
@@ -2408,6 +3084,20 @@
             "pay_delta_pct": -0.02,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.02,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -2443,6 +3133,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "You got through this one without a babysitting pay change."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a dog-walking pay change, but it could have gone the other way."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "luck",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through this one without a pet sitting pay change."
           }
         }
       },
@@ -2473,6 +3177,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.01,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.01,
             "client_delta": 0,
@@ -2553,6 +3271,20 @@
             "pay_delta_pct": 0.03,
             "client_delta": 0,
             "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
           }
         }
       },
@@ -2588,6 +3320,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "No babysitting pay change this time, but the choice still matters."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No dog-walking pay change this time, but the choice still matters."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No pet sitting pay change this time, but the choice still matters."
           }
         }
       },
@@ -2625,6 +3371,22 @@
             "pay_delta_pct": -0.05,
             "client_delta": -1,
             "note": "The family noticed the issue and chose another sitter. Your babysitting pay stays lower until you book a new family.",
+            "replacement_needed": true
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "loss",
+            "pay_delta_pct": -0.05,
+            "client_delta": -1,
+            "note": "The walk went poorly and a dog owner took their pet off your route. Your pay stays lower until you replace that client.",
+            "replacement_needed": true
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "loss",
+            "pay_delta_pct": -0.05,
+            "client_delta": -1,
+            "note": "The family noticed the issue and chose another pet sitter. Your pet sitting pay stays lower until you book a new family.",
             "replacement_needed": true
           }
         }
@@ -2703,6 +3465,20 @@
             "pay_delta_pct": -0.03,
             "client_delta": 0,
             "note": "Your energy and focus slipped during babysitting, so one family paid less this week."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "The walk was rough and your dog-walking pay took a hit this week."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
         }
       },
@@ -2737,6 +3513,20 @@
             "pay_delta_pct": 0.0,
             "client_delta": 0,
             "note": "No babysitting pay change this time, but the choice still matters."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No dog-walking pay change this time, but the choice still matters."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "No pet sitting pay change this time, but the choice still matters."
           }
         }
       },
@@ -2768,6 +3558,20 @@
           },
           "babysitting": {
             "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
+          },
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed sharp and handled your dog-walking route well. One owner added a bonus to this week's pay."
+          },
+          "pet_sitting": {
+            "job": "pet_sitting",
             "outcome": "growth",
             "pay_delta_pct": 0.02,
             "client_delta": 0,
