@@ -15,3 +15,12 @@ Tier 1 Batch v5
 - Added job engines for Washing Cars, Tutoring, House Cleaning, Lemonade Stand, Grocery Bagger, Cashier, and Restaurant Worker.
 - Added job debug helpers for all Tier 1 jobs plus existing errands/crafts entries.
 - Added fallback job-preview mapping so all life events can affect every supported Tier 1 job immediately.
+
+
+=== v6 merged stable selector fix ===
+- Rebased all safe v6-v6.3 updates onto the last working Tier 1 batch v5 file.
+- Added Tier 2/Tier 3 jobs to the job list: Manager, Entrepreneur, CEO.
+- Kept job identity system, life-event job wording, career paths, and unlock logic.
+- Fixed the regression where the job selector could stop letting you browse jobs.
+- Job arrows now browse all jobs again; locked advanced jobs can still be previewed but cannot be started until unlocked.
+- This intentionally leaves out the riskier v6.4 generic financial/job wording patch that caused regressions.

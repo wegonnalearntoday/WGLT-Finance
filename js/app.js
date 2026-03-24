@@ -377,12 +377,42 @@ function getTeacherDashboardSummary(){
   };
 }
 
+const CAREER_PATH_CONFIGS = {
+  business: {
+    key:'business',
+    name:'Business Path',
+    tagline:'Lead people, protect reputation, and grow into executive leadership.',
+    ladder:['Store Team Member','Shift Lead','Assistant Manager','Manager','Regional Director','Vice President','CEO'],
+    bonus:[15,20,25,30,35,45],
+    next:['Manager','CEO']
+  },
+  hustler: {
+    key:'hustler',
+    name:'Hustler Path',
+    tagline:'Turn small wins into customers, cash flow, and a business that can scale.',
+    ladder:['Side Hustle Starter','Weekend Seller','Neighborhood Seller','Entrepreneur','Business Builder','Scale Operator','Own Company'],
+    bonus:[15,20,25,30,35,45],
+    next:['Entrepreneur','Scale Business']
+  },
+  service: {
+    key:'service',
+    name:'Service Path',
+    tagline:'Build trust through quality work, become a master technician, then own the company.',
+    ladder:['Neighborhood Helper','Route Runner','Trusted Pro','Service Lead','Master Technician','Crew Chief','Own Company'],
+    bonus:[15,20,25,30,35,40],
+    next:['Master Technician','Own Company']
+  }
+};
+function getCareerPathForJobId(jobId){
+  const id = String(jobId || '');
+  if(['manager','ceo','grocery','cashier','restaurant'].includes(id)) return CAREER_PATH_CONFIGS.business;
+  if(['entrepreneur','lemonade','crafts'].includes(id)) return CAREER_PATH_CONFIGS.hustler;
+  return CAREER_PATH_CONFIGS.service;
+}
 function getJobCareerBranch(){
   const job = (state.jobs && state.jobs[state.jobIndex]) || {};
-  const id = job.id || '';
-  if(['babysitting','pet','dogwalk'].includes(id)) return { key:'care', name:'Care Services', titles:['Neighborhood Helper','Trusted Care Pro','Senior Care Lead','Family Services Captain','Community Care Director','Youth Care Manager','Care Business Owner'], bonus:[15,20,25,30,35,40] };
-  if(['lawn','cars','chores','errands'].includes(id)) return { key:'ops', name:'Operations', titles:['Starter Worker','Route Runner','Shift Lead','Operations Captain','Service Manager','Field Director','Neighborhood Ops Owner'], bonus:[15,20,25,30,35,40] };
-  return { key:'specialist', name:'Creative & Academic', titles:['Starter Specialist','Skilled Builder','Lead Specialist','Program Captain','Studio Manager','Community Expert','Brand Owner'], bonus:[20,25,30,35,40,45] };
+  const path = getCareerPathForJobId(job.id || '');
+  return { key:path.key, name:path.name, titles:path.ladder, bonus:path.bonus, tagline:path.tagline, next:path.next };
 }
 
 function getEliteObligationSummary(){
@@ -3540,6 +3570,9 @@ const state = {
     endings: { final:null, track:'⚖️ Survivor' }
   }
 };
+if(!state.unlockedJobs) state.unlockedJobs = new Set();
+['babysitting','pet','dogwalk','lawn','cars','tutor','chores','errands','crafts','lemonade','grocery','cashier','restaurant'].forEach(id => state.unlockedJobs.add(id));
+if(!state.careerProgress) state.careerProgress = {};
 
 /* Coverage tracking */
 function addCoverage(b){ state.coverage.add(b); }
@@ -8344,6 +8377,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     if(!state.plan.lockedForYear){ beep("warn"); showBanner("Lock the year plan first"); openTab("plan"); guidePreStart(); return; }
     if(state.jobLocked || state.mission.active){ beep("warn"); showBanner("Job already locked — reset to change"); return; }
     const job = state.jobs[state.jobIndex];
+    if(job && !isJobUnlocked(job.id)){ beep("warn"); showBanner(job.name + " is locked. " + getUnlockRequirementText(job.id)); return; }
     beep("success");
     showBanner(job.name + " selected and locked!");
     setLog("Job locked: " + job.name + ". Now build your wants and tap Start Year Mission.");
@@ -8978,44 +9012,43 @@ function queueScenarioFoundationHooks(hookIds, sourceLabel){
     queueConsequenceObject(entry, sourceLabel || hookId);
   });
 }
+function getPreviewHeadline(cfg, jp){
+  if(!cfg) return 'Job update';
+  const delta = Number((jp && jp.client_delta) || 0);
+  if(cfg.familyType === 'client_route') return delta >= 0 ? `${cfg.engineLabel} route update` : `${cfg.engineLabel} route warning`;
+  if(cfg.familyType === 'family_care') return delta >= 0 ? `${cfg.engineLabel} trust update` : `${cfg.engineLabel} trust warning`;
+  if(cfg.familyType === 'shift_work') return delta >= 0 ? `${cfg.engineLabel} schedule update` : `${cfg.engineLabel} shift warning`;
+  if(cfg.previewJob === 'entrepreneur') return delta >= 0 ? 'Entrepreneur deal flow update' : 'Entrepreneur cash-flow warning';
+  if(cfg.previewJob === 'ceo') return delta >= 0 ? 'CEO company pulse' : 'CEO company pressure';
+  if(cfg.previewJob === 'manager') return delta >= 0 ? 'Manager team update' : 'Manager team warning';
+  return `${cfg.engineLabel} update`;
+}
+function getPreviewCountLabel(cfg){
+  if(!cfg) return 'Count';
+  if(cfg.familyType === 'client_route') return 'Clients';
+  if(cfg.familyType === 'family_care') return 'Families';
+  if(cfg.familyType === 'shift_work') return 'Shifts';
+  if(cfg.previewJob === 'manager') return 'Team Wins';
+  if(cfg.previewJob === 'ceo') return 'Divisions';
+  return 'Customers';
+}
 function formatScenarioFoundationJobPreview(choice){
-  const previewMap = choice && choice.job_previews;
-  let jp = choice && choice.job_preview;
-  let label = 'Job';
-  try{
-    const job = (state && state.jobs && state.jobs[state.jobIndex]) || null;
-    if(job && previewMap && typeof previewMap === 'object'){
-      if(String(job.id || '') === 'lawn' && previewMap.lawn_care){
-        jp = previewMap.lawn_care;
-        label = 'Lawn Care';
-      } else if(String(job.id || '') === 'babysitting' && previewMap.babysitting){
-        jp = previewMap.babysitting;
-        label = 'Babysitting';
-      } else if(String(job.id || '') === 'dogwalk' && previewMap.dog_walking){
-        jp = previewMap.dog_walking;
-        label = 'Dog Walking';
-      } else if(String(job.id || '') === 'pet' && previewMap.pet_sitting){
-        jp = previewMap.pet_sitting;
-        label = 'Pet Sitting';
-      }
-    }
-    if(label === 'Job' && jp && typeof jp === 'object'){
-      if(String(jp.job || '') === 'lawn_care') label = 'Lawn Care';
-      else if(String(jp.job || '') === 'babysitting') label = 'Babysitting';
-      else if(String(jp.job || '') === 'dog_walking') label = 'Dog Walking';
-      else if(String(jp.job || '') === 'pet_sitting') label = 'Pet Sitting';
-    }
-  }catch(err){}
-  if(!jp || typeof jp !== 'object') return '';
+  const cfg = typeof getCurrentJobSystemConfig === 'function' ? getCurrentJobSystemConfig() : null;
+  const jp = typeof getChoicePreviewForCurrentJob === 'function' ? getChoicePreviewForCurrentJob(choice) : null;
+  if(!cfg || !jp || typeof jp !== 'object') return '';
   const pay = Number(jp.pay_delta_pct || 0);
-  const client = Number(jp.client_delta || 0);
+  const count = Number(jp.client_delta || 0);
   const payLabel = pay === 0 ? '0%' : `${pay > 0 ? '+' : ''}${Math.round(pay * 100)}%`;
-  const clientLabel = client === 0 ? '0' : `${client > 0 ? '+' : ''}${client}`;
-  const unitLabel = (label === 'Babysitting' || label === 'Pet Sitting') ? 'Families' : 'Clients';
-  const lines = [`${label} preview: Pay ${payLabel} • ${unitLabel} ${clientLabel}`];
+  const countLabel = count === 0 ? '0' : `${count > 0 ? '+' : ''}${count}`;
+  const lines = [
+    `${getPreviewHeadline(cfg, jp)}: ${cfg.modifierLabel} ${payLabel} • ${getPreviewCountLabel(cfg)} ${countLabel}`
+  ];
   if(jp.note) lines.push(String(jp.note));
-  if(jp.repeat_note) lines.push(`Repeat rule: ${jp.repeat_note}`);
-  if(jp.replacement_needed) lines.push(`You will need to replace that ${(label === 'Babysitting' || label === 'Pet Sitting') ? 'family' : 'client'} to restore full pay.`);
+  if(jp.repeat_note) lines.push(`Pattern rule: ${jp.repeat_note}`);
+  if(jp.replacement_needed){
+    const unit = cfg.relationshipSingular || 'client';
+    lines.push(`You will need to replace that ${unit} to fully recover your long-term pay.`);
+  }
   return lines.join('\n');
 }
 function playScenarioFoundationScenario(picked, category){
@@ -9135,6 +9168,9 @@ const JOB_SYSTEM_CONFIGS = {
     modifierLabel: 'Route Mod',
     baselineCount: 4,
     familyType: 'client_route',
+    jobIdentity: 'Route Job',
+    unitLabel: 'yard stop',
+    statusTone: 'A strong route grows one well-cut yard at a time.',
     debugInspectName: 'inspectLawnCare',
     debugForceName: 'forceLawnClient'
   },
@@ -9144,9 +9180,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Babysitting',
     relationshipPlural: 'families',
     relationshipSingular: 'family',
-    modifierLabel: 'Family Mod',
+    modifierLabel: 'Trust Mod',
     baselineCount: 3,
     familyType: 'family_care',
+    jobIdentity: 'Care Job',
+    unitLabel: 'relationship',
+    statusTone: 'Trust is the engine for care work.',
     debugInspectName: 'inspectBabysitting',
     debugForceName: 'forceBabysittingFamily'
   },
@@ -9159,6 +9198,9 @@ const JOB_SYSTEM_CONFIGS = {
     modifierLabel: 'Route Mod',
     baselineCount: 4,
     familyType: 'client_route',
+    jobIdentity: 'Route Job',
+    unitLabel: 'walk stop',
+    statusTone: 'Pets and owners both reward consistency.',
     debugInspectName: 'inspectDogWalking',
     debugForceName: 'forceDogWalkingClient'
   },
@@ -9168,9 +9210,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Pet Sitting',
     relationshipPlural: 'families',
     relationshipSingular: 'family',
-    modifierLabel: 'Family Mod',
+    modifierLabel: 'Trust Mod',
     baselineCount: 3,
     familyType: 'family_care',
+    jobIdentity: 'Care Job',
+    unitLabel: 'relationship',
+    statusTone: 'Trust is the engine for care work.',
     debugInspectName: 'inspectPetSitting',
     debugForceName: 'forcePetSittingFamily'
   },
@@ -9183,6 +9228,9 @@ const JOB_SYSTEM_CONFIGS = {
     modifierLabel: 'Route Mod',
     baselineCount: 4,
     familyType: 'client_route',
+    jobIdentity: 'Route Job',
+    unitLabel: 'driveway stop',
+    statusTone: 'Quality work can turn one shiny car into a whole driveway route.',
     debugInspectName: 'inspectWashingCars',
     debugForceName: 'forceWashingCarsClient'
   },
@@ -9192,9 +9240,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Tutoring',
     relationshipPlural: 'students',
     relationshipSingular: 'student',
-    modifierLabel: 'Tutor Mod',
+    modifierLabel: 'Reputation Mod',
     baselineCount: 3,
     familyType: 'family_care',
+    jobIdentity: 'Skill Job',
+    unitLabel: 'student seat',
+    statusTone: 'Your reputation grows when students improve and families trust your help.',
     debugInspectName: 'inspectTutoring',
     debugForceName: 'forceTutoringStudent'
   },
@@ -9204,9 +9255,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'House Cleaning',
     relationshipPlural: 'clients',
     relationshipSingular: 'client',
-    modifierLabel: 'Route Mod',
+    modifierLabel: 'Trust Mod',
     baselineCount: 4,
     familyType: 'client_route',
+    jobIdentity: 'Service Job',
+    unitLabel: 'cleaning account',
+    statusTone: 'Consistency keeps homes clean and clients loyal.',
     debugInspectName: 'inspectHouseCleaning',
     debugForceName: 'forceHouseCleaningClient'
   },
@@ -9216,9 +9270,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Lemonade Stand',
     relationshipPlural: 'customers',
     relationshipSingular: 'customer',
-    modifierLabel: 'Stand Mod',
+    modifierLabel: 'Demand Mod',
     baselineCount: 6,
     familyType: 'micro_business',
+    jobIdentity: 'Business Job',
+    unitLabel: 'customer lane',
+    statusTone: 'Demand can rise or cool off based on your choices.',
     debugInspectName: 'inspectLemonadeStand',
     debugForceName: 'forceLemonadeCustomer'
   },
@@ -9228,9 +9285,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Grocery Bagger',
     relationshipPlural: 'shifts',
     relationshipSingular: 'shift',
-    modifierLabel: 'Store Mod',
+    modifierLabel: 'Schedule Mod',
     baselineCount: 4,
     familyType: 'shift_work',
+    jobIdentity: 'Shift Job',
+    unitLabel: 'scheduled shift',
+    statusTone: 'Showing up strong helps you keep better shifts.',
     debugInspectName: 'inspectGroceryBagger',
     debugForceName: 'forceGroceryShift'
   },
@@ -9240,9 +9300,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Cashier',
     relationshipPlural: 'shifts',
     relationshipSingular: 'shift',
-    modifierLabel: 'Store Mod',
+    modifierLabel: 'Schedule Mod',
     baselineCount: 4,
     familyType: 'shift_work',
+    jobIdentity: 'Shift Job',
+    unitLabel: 'scheduled shift',
+    statusTone: 'Showing up strong helps you keep better shifts.',
     debugInspectName: 'inspectCashier',
     debugForceName: 'forceCashierShift'
   },
@@ -9252,9 +9315,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Restaurant Worker',
     relationshipPlural: 'shifts',
     relationshipSingular: 'shift',
-    modifierLabel: 'Shift Mod',
+    modifierLabel: 'Schedule Mod',
     baselineCount: 4,
     familyType: 'shift_work',
+    jobIdentity: 'Shift Job',
+    unitLabel: 'scheduled shift',
+    statusTone: 'Showing up strong helps you keep better shifts.',
     debugInspectName: 'inspectRestaurantWorker',
     debugForceName: 'forceRestaurantShift'
   },
@@ -9264,9 +9330,12 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Running Errands',
     relationshipPlural: 'clients',
     relationshipSingular: 'client',
-    modifierLabel: 'Route Mod',
+    modifierLabel: 'Reliability Mod',
     baselineCount: 4,
     familyType: 'client_route',
+    jobIdentity: 'Service Job',
+    unitLabel: 'delivery stop',
+    statusTone: 'Fast, reliable help keeps neighbors calling you back.',
     debugInspectName: 'inspectRunningErrands',
     debugForceName: 'forceErrandsClient'
   },
@@ -9276,11 +9345,59 @@ const JOB_SYSTEM_CONFIGS = {
     engineLabel: 'Selling Crafts',
     relationshipPlural: 'customers',
     relationshipSingular: 'customer',
-    modifierLabel: 'Booth Mod',
+    modifierLabel: 'Market Mod',
     baselineCount: 5,
     familyType: 'micro_business',
+    jobIdentity: 'Business Job',
+    unitLabel: 'customer lane',
+    statusTone: 'Demand can rise or cool off based on your choices.',
     debugInspectName: 'inspectSellingCrafts',
     debugForceName: 'forceCraftsCustomer'
+  },
+  manager: {
+    systemKey: 'manager',
+    previewJob: 'manager',
+    engineLabel: 'Manager',
+    relationshipPlural: 'team wins',
+    relationshipSingular: 'team win',
+    modifierLabel: 'Team Mod',
+    baselineCount: 4,
+    familyType: 'leadership',
+    jobIdentity: 'Leadership Job',
+    unitLabel: 'team result',
+    statusTone: 'Your decisions ripple through the whole team.',
+    debugInspectName: 'inspectManager',
+    debugForceName: 'forceManagerWin'
+  },
+  entrepreneur: {
+    systemKey: 'entrepreneur',
+    previewJob: 'entrepreneur',
+    engineLabel: 'Entrepreneur',
+    relationshipPlural: 'customers',
+    relationshipSingular: 'customer',
+    modifierLabel: 'Deal Flow Mod',
+    baselineCount: 5,
+    familyType: 'micro_business',
+    jobIdentity: 'Business Job',
+    unitLabel: 'customer lane',
+    statusTone: 'Demand can rise or cool off based on your choices.',
+    debugInspectName: 'inspectEntrepreneur',
+    debugForceName: 'forceEntrepreneurCustomer'
+  },
+  ceo: {
+    systemKey: 'ceo',
+    previewJob: 'ceo',
+    engineLabel: 'CEO',
+    relationshipPlural: 'divisions',
+    relationshipSingular: 'division',
+    modifierLabel: 'Company Health Mod',
+    baselineCount: 3,
+    familyType: 'executive',
+    jobIdentity: 'Executive Job',
+    unitLabel: 'division result',
+    statusTone: 'Big-picture choices affect the whole company.',
+    debugInspectName: 'inspectCEO',
+    debugForceName: 'forceCEODivision'
   }
 };
 
@@ -9290,6 +9407,136 @@ const JOB_SYSTEM_CONFIGS = {
   function getCurrentJobSystemConfig(){
     const job = currentJobObj();
     return job ? JOB_SYSTEM_CONFIGS[String(job.id || '')] || null : null;
+  }
+  const TIER_UNLOCK_CONFIGS = {
+    manager: { tier: 2, label: 'Manager', pathKey:'business', requirementText: 'Business Path: save $250 total or grow any Tier 1 job to +10% with one extra client/family/customer/shift.' },
+    entrepreneur: { tier: 3, label: 'Entrepreneur', pathKey:'hustler', requirementText: 'Hustler Path: save $400 total and prove your side hustle can grow customers, or bank $600 total to self-fund the leap.' },
+    ceo: { tier: 3, label: 'CEO', pathKey:'business', requirementText: 'Business Path capstone: unlock Manager, save $1000 total, and raise credit to 740.' }
+  };
+  const STARTER_JOB_IDS = Object.keys(JOB_SYSTEM_CONFIGS).filter(id => !TIER_UNLOCK_CONFIGS[id]);
+  function clampNum(n, min, max){ return Math.max(min, Math.min(max, Number(n || 0))); }
+  function totalSavedAmount(){
+    const bank = (state && state.bank) || {};
+    return Math.max(0, Number(bank.savings || 0) + Number(bank.hysaPrincipal || 0) + Number(bank.hysaAccrued || 0));
+  }
+  function ensureCareerUnlockState(){
+    if(!state.unlockedJobs || !(state.unlockedJobs instanceof Set)) state.unlockedJobs = new Set();
+    STARTER_JOB_IDS.forEach(id => state.unlockedJobs.add(id));
+    if(!state.careerProgress || typeof state.careerProgress !== 'object') state.careerProgress = {};
+    return state.unlockedJobs;
+  }
+  function getUnlockRequirementText(jobId){
+    const cfg = TIER_UNLOCK_CONFIGS[String(jobId || '')];
+    return cfg ? cfg.requirementText : '';
+  }
+  function isJobUnlocked(jobId){
+    ensureCareerUnlockState();
+    return state.unlockedJobs.has(String(jobId || ''));
+  }
+  function currentTier1PerformanceMax(){
+    const systems = (state && state.jobSystems) || {};
+    return Object.entries(systems).reduce((best, entry) => {
+      const sys = entry[1] || {};
+      const clientCount = Number(sys.clientCount || 0);
+      const baseline = Number(sys.baselineClients || 0);
+      const payPct = Number(sys.persistentPayPct || 0);
+      if(clientCount >= baseline + 1 && payPct >= 0.10) return Math.max(best, payPct);
+      return best;
+    }, 0);
+  }
+  function currentPathPerformanceMax(pathKey){
+    const systems = (state && state.jobSystems) || {};
+    return Object.entries(systems).reduce((best, entry) => {
+      const id = String(entry[0] || '');
+      const path = getCareerPathForJobId(id);
+      if(!path || path.key !== String(pathKey || '')) return best;
+      const sys = entry[1] || {};
+      const clientCount = Number(sys.clientCount || 0);
+      const baseline = Number(sys.baselineClients || 0);
+      const payPct = Number(sys.persistentPayPct || 0);
+      if(clientCount >= baseline + 1) return Math.max(best, payPct);
+      return best;
+    }, 0);
+  }
+  function getCareerPathStatus(){
+    return {
+      business: { unlocked: isJobUnlocked ? isJobUnlocked('manager') : false, performance: currentPathPerformanceMax('business') },
+      hustler: { unlocked: isJobUnlocked ? isJobUnlocked('entrepreneur') : false, performance: currentPathPerformanceMax('hustler') },
+      service: { unlocked: false, performance: currentPathPerformanceMax('service') }
+    };
+  }
+  function evaluateTierUnlocks(){
+    ensureCareerUnlockState();
+    const unlocked = [];
+    const savings = totalSavedAmount();
+    const credit = Number((state && state.credit) || 0);
+    const businessPerf = currentPathPerformanceMax('business');
+    const hustlerPerf = currentPathPerformanceMax('hustler');
+    if(!isJobUnlocked('manager') && (savings >= 250 || currentTier1PerformanceMax() >= 0.10 || businessPerf >= 0.08)){
+      state.unlockedJobs.add('manager');
+      unlocked.push({ id:'manager', label:'Manager', path:'Business Path', message:'You proved you can lead more than a shift. Business Path unlocked: Manager.' });
+    }
+    if(!isJobUnlocked('entrepreneur') && ((savings >= 400 && hustlerPerf >= 0.05) || savings >= 600)){
+      state.unlockedJobs.add('entrepreneur');
+      unlocked.push({ id:'entrepreneur', label:'Entrepreneur', path:'Hustler Path', message:'Your side hustle has real legs now. Hustler Path unlocked: Entrepreneur.' });
+    }
+    if(isJobUnlocked('manager') && !isJobUnlocked('ceo') && savings >= 1000 && credit >= 740){
+      state.unlockedJobs.add('ceo');
+      unlocked.push({ id:'ceo', label:'CEO', path:'Business Path', message:'You built trust, money, and leadership. Business Path unlocked: CEO.' });
+    }
+    return unlocked;
+  }
+  function announceTierUnlocks(){
+    const unlocked = evaluateTierUnlocks();
+    if(unlocked.length && typeof showBanner === 'function') showBanner(unlocked.map(x => x.message || x.label).join(' • '));
+    return unlocked;
+  }
+  function findNearestUnlockedJobIndex(startIndex, step){
+    ensureCareerUnlockState();
+    const jobs = (state && state.jobs) || [];
+    if(!jobs.length) return 0;
+    let idx = Number(startIndex || 0);
+    for(let i=0;i<jobs.length;i++){
+      idx = (idx + step + jobs.length) % jobs.length;
+      const job = jobs[idx];
+      if(job && isJobUnlocked(job.id)) return idx;
+    }
+    return Number(startIndex || 0);
+  }
+  function syncJobIndexToUnlocked(){
+    const jobs = (state && state.jobs) || [];
+    if(!jobs.length) return;
+    const current = jobs[state.jobIndex] || jobs[0];
+    if(current && isJobUnlocked(current.id)) return;
+    const idx = jobs.findIndex(job => job && isJobUnlocked(job.id));
+    if(idx >= 0) state.jobIndex = idx;
+  }
+  function buildHighTierPreview(cfg, choice){
+    const energyHit = Number(choice && choice.immediate_effects && choice.immediate_effects.energy || 0);
+    const focusHit = Number(choice && choice.immediate_effects && choice.immediate_effects.focus || 0);
+    const risk = energyHit + focusHit;
+    if(cfg && cfg.previewJob === 'manager'){
+      return risk >= 2
+        ? { job:'manager', outcome:'growth', pay_delta_pct:0.05, note:'You read the room well, redirected the team, and your shift turned into a clean team win.' }
+        : risk <= -3
+          ? { job:'manager', outcome:'warning', pay_delta_pct:-0.05, note:'Your rushed calls caused a scheduling knot, and the team lost momentum for the week.' }
+          : { job:'manager', outcome:'neutral', note:'You kept the floor steady, solved the loudest problem first, and prevented a worse mess.' };
+    }
+    if(cfg && cfg.previewJob === 'entrepreneur'){
+      return risk >= 2
+        ? { job:'entrepreneur', outcome:'growth', client_delta:1, pay_delta_pct:0.05, note:'You stayed sharp, followed up on time, and turned one small opening into fresh business.' }
+        : risk <= -3
+          ? { job:'entrepreneur', outcome:'warning', pay_delta_pct:-0.05, note:'A missed follow-up chilled the sale, and cash flow felt the draft this week.' }
+          : { job:'entrepreneur', outcome:'neutral', note:'No big deal landed, but the business stayed afloat and ready for the next swing.' };
+    }
+    if(cfg && cfg.previewJob === 'ceo'){
+      return risk >= 2
+        ? { job:'ceo', outcome:'growth', pay_delta_pct:0.05, note:'You made a composed executive call, protected morale, and nudged company performance upward.' }
+        : risk <= -3
+          ? { job:'ceo', outcome:'warning', pay_delta_pct:-0.05, note:'A foggy top-level decision created pressure across the company and squeezed results this week.' }
+          : { job:'ceo', outcome:'neutral', note:'You kept the company stable. It was not flashy, but steady leadership kept the machine from wobbling.' };
+    }
+    return null;
   }
   function isCurrentJobSupported(){
     return !!getCurrentJobSystemConfig();
@@ -9347,6 +9594,17 @@ const JOB_SYSTEM_CONFIGS = {
     const n = Number(pct || 0);
     return n === 0 ? '0%' : `${n > 0 ? '+' : ''}${Math.round(n * 100)}%`;
   }
+
+function getJobUnitLabel(cfg, count){
+  const singular = String((cfg && cfg.unitLabel) || (cfg && cfg.relationshipSingular) || 'unit');
+  const pluralSource = String((cfg && cfg.relationshipPlural) || singular + 's');
+  return Number(count) === 1 ? singular : pluralSource;
+}
+function getJobIdentitySummary(cfg){
+  if(!cfg) return '';
+  return `${cfg.jobIdentity || 'Job'} • ${cfg.statusTone || ''}`.trim();
+}
+
   function buildStatusText(){
     const cfg = getCurrentJobSystemConfig();
     if(!cfg) return '';
@@ -9354,7 +9612,7 @@ const JOB_SYSTEM_CONFIGS = {
     const pending = getPendingPayAdjustmentTotal();
     const projectedWeekly = Math.max(0, roundMoney(sys.baseWeeklyPay * (1 + Number(sys.persistentPayPct || 0))));
     const pendingLabel = pending === 0 ? 'No one-time paycheck changes waiting' : `Next paycheck adjustment: ${pending > 0 ? '+' : '-'}${money(Math.abs(pending))}`;
-    return `${cfg.engineLabel} ${cfg.relationshipPlural}: ${sys.clientCount} • ${cfg.modifierLabel}: ${pctLabel(sys.persistentPayPct)} • Projected weekly pay: ${money(projectedWeekly)} • ${pendingLabel}`;
+    return `${cfg.engineLabel} • ${cfg.jobIdentity || 'Job'} • ${sys.clientCount} ${getJobUnitLabel(cfg, sys.clientCount)} • ${cfg.modifierLabel}: ${pctLabel(sys.persistentPayPct)} • Projected weekly pay: ${money(projectedWeekly)} • ${pendingLabel}`;
   }
   function resetRepeatCounters(){
     const sys = ensureCurrentJobSystemState();
@@ -9375,17 +9633,59 @@ function derivePreviewSourceKey(cfg){
   return 'lawn_care';
 }
 function deriveJobPreviewNote(cfg, base){
-  const label = String((cfg && cfg.engineLabel) || 'job').toLowerCase();
   const rel = String((cfg && cfg.relationshipSingular) || 'client').toLowerCase();
   const clientDelta = Number((base && base.client_delta) || 0);
   const payDelta = Number((base && base.pay_delta_pct) || 0);
   const outcome = String((base && base.outcome) || 'neutral');
-  if(clientDelta > 0) return `Because you stayed prepared, your ${label} reputation grew and you picked up another ${rel}.`;
-  if(clientDelta < 0) return `Your choice hurt your ${label} performance, and you lost a ${rel}.`;
+
+  if(cfg && cfg.previewJob === 'manager'){
+    if(clientDelta > 0 || payDelta > 0) return 'Your leadership stayed sharp, the crew stayed on schedule, and team results moved in the right direction.';
+    if(clientDelta < 0 || payDelta < 0) return 'Your energy slipped, communication got messy, and the team felt it in the numbers.';
+    return 'You held the team together this round, even without a big breakthrough.';
+  }
+  if(cfg && cfg.previewJob === 'entrepreneur'){
+    if(clientDelta > 0) return 'You followed up like a pro, landed another customer, and your business momentum grew.';
+    if(clientDelta < 0) return 'A missed step cooled off demand, and your business lost a customer lane.';
+    if(payDelta > 0) return 'You turned preparation into profit and gave your cash flow a lift this week.';
+    if(payDelta < 0) return 'Your decision pinched cash flow, so the business feels tighter this week.';
+    return 'Nothing exploded and nothing boomed. In business, steady still counts.';
+  }
+  if(cfg && cfg.previewJob === 'ceo'){
+    if(clientDelta > 0 || payDelta > 0) return 'You made a calm executive call, morale held, and one part of the company moved stronger.';
+    if(clientDelta < 0 || payDelta < 0) return 'The decision created pressure at the top, and the company felt it down the chain.';
+    return 'The company stayed steady this round. Quiet leadership is still leadership.';
+  }
+  if(cfg && cfg.familyType === 'client_route'){
+    if(clientDelta > 0) return `Because you stayed prepared, your route grew and you picked up another ${rel}.`;
+    if(clientDelta < 0) return `Your choice hurt route performance, and you lost a ${rel}.`;
+    if(payDelta > 0) return 'Your route ran smoothly, and this week’s work paid off.';
+    if(payDelta < 0) return 'Your route slipped, so this week’s pay took a hit.';
+    return outcome === 'growth' ? 'You stayed ready, and your route work showed it.' : 'No big route change this time, but the choice still matters.';
+  }
+  if(cfg && cfg.familyType === 'family_care'){
+    if(clientDelta > 0) return `Because you showed care and reliability, another ${rel} trusted you.`;
+    if(clientDelta < 0) return `Trust slipped, and you lost a ${rel}.`;
+    if(payDelta > 0) return 'Your reliability showed, and your care work earned a boost this week.';
+    if(payDelta < 0) return 'Your choice shook trust, so this week’s pay took a hit.';
+    return outcome === 'growth' ? 'You showed up with care, and people noticed.' : 'No major trust shift this time, but the lesson still matters.';
+  }
+  if(cfg && cfg.familyType === 'shift_work'){
+    if(clientDelta > 0) return 'Your effort earned you another shift and stronger standing with the manager.';
+    if(clientDelta < 0) return 'Your performance slipped, and your schedule got cut back.';
+    if(payDelta > 0) return 'You handled the shift well, and your next paycheck gets a lift.';
+    if(payDelta < 0) return 'You brought less energy to the shift, so your paycheck feels it.';
+    return outcome === 'growth' ? 'You stayed dependable and kept your schedule strong.' : 'No schedule change this time, but the habit still matters.';
+  }
+  if(cfg && cfg.familyType === 'micro_business'){
+    if(clientDelta > 0) return `Because you were prepared, demand grew and another ${rel} found your business.`;
+    if(clientDelta < 0) return `Demand cooled off, and you lost a ${rel}.`;
+    if(payDelta > 0) return 'Your choice helped sales, and this week’s business numbers improved.';
+    if(payDelta < 0) return 'Your choice hurt sales, so this week’s numbers dipped.';
+    return outcome === 'growth' ? 'You made a smart move, and the business felt it.' : 'No big sales swing this time, but the decision still echoes.';
+  }
+  const label = String((cfg && cfg.engineLabel) || 'job').toLowerCase();
   if(payDelta > 0) return `Your choice paid off and gave your ${label} results a boost this week.`;
   if(payDelta < 0) return `Your choice hurt your ${label} performance, so this week's pay took a hit.`;
-  if(outcome === 'growth') return `You stayed ready, and your ${label} work showed it.`;
-  if(outcome === 'warning') return `No major ${label} change this time, but the choice still matters.`;
   return `No ${label} pay change this time, but the choice still matters.`;
 }
 function buildDerivedJobPreview(cfg, source){
@@ -9402,7 +9702,7 @@ function getChoicePreviewForCurrentJob(choice){
   if(choice.job_preview && String(choice.job_preview.job || '') === cfg.previewJob) return choice.job_preview;
   const sourceKey = derivePreviewSourceKey(cfg);
   const source = choice.job_previews && typeof choice.job_previews === 'object' ? choice.job_previews[sourceKey] : null;
-  return buildDerivedJobPreview(cfg, source);
+  return buildDerivedJobPreview(cfg, source) || buildHighTierPreview(cfg, choice);
 }
   function applyCurrentJobPreview(picked, choice){
     const cfg = getCurrentJobSystemConfig();
@@ -9419,13 +9719,16 @@ function getChoicePreviewForCurrentJob(choice){
 
     if(clientDelta !== 0){
       sys.clientCount = Math.max(0, Number(sys.clientCount || 0) + clientDelta);
-      if(payPct !== 0) sys.persistentPayPct = Number(sys.persistentPayPct || 0) + payPct;
+      if(payPct !== 0) sys.persistentPayPct = clampNum(Number(sys.persistentPayPct || 0) + payPct, -0.25, 0.30);
       if(clientDelta < 0 || jp.replacement_needed) sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) + Math.abs(clientDelta || 1));
       if(clientDelta > 0) sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) - clientDelta);
-      notes.push(`${cfg.relationshipPlural.charAt(0).toUpperCase() + cfg.relationshipPlural.slice(1)} ${clientDelta > 0 ? 'increased' : 'decreased'} by ${Math.abs(clientDelta)}.`);
-      if(payPct !== 0) notes.push(`${cfg.engineLabel} weekly pay is now ${pctLabel(sys.persistentPayPct)} from your base job pay.`);
+      const unitLabel = getPreviewCountLabel(cfg).toLowerCase();
+      const directionText = clientDelta > 0 ? 'rose' : 'fell';
+      notes.push(`${cfg.engineLabel} ${unitLabel} ${directionText} by ${Math.abs(clientDelta)}.`);
+      if(cfg.statusTone) notes.push(cfg.statusTone);
+      if(payPct !== 0) notes.push(`${cfg.modifierLabel} is now ${pctLabel(sys.persistentPayPct)} from your base ${cfg.engineLabel.toLowerCase()} pay.`);
     } else if(payPct !== 0){
-      const amount = roundMoney(sys.baseWeeklyPay * payPct);
+      const amount = roundMoney(clampNum(sys.baseWeeklyPay * payPct, -sys.baseWeeklyPay * 0.15, sys.baseWeeklyPay * 0.15));
       sys.pendingPaycheckAdjustments.push({
         amount,
         pct: payPct,
@@ -9433,7 +9736,8 @@ function getChoicePreviewForCurrentJob(choice){
         choiceId,
         note: jp.note || ''
       });
-      notes.push(`Your next paycheck will ${amount >= 0 ? 'increase' : 'drop'} by ${money(Math.abs(amount))} from this week's ${cfg.engineLabel.toLowerCase()} result.`);
+      const lane = cfg.familyType === 'shift_work' ? 'shift result' : cfg.familyType === 'family_care' ? 'trust result' : cfg.previewJob === 'ceo' ? 'company result' : cfg.previewJob === 'manager' ? 'team result' : cfg.previewJob === 'entrepreneur' ? 'business result' : 'job result';
+      notes.push(`Your next paycheck will ${amount >= 0 ? 'increase' : 'drop'} by ${money(Math.abs(amount))} from this week's ${lane}.`);
     }
 
     if(Number(jp.repeat_threshold || 0) > 0){
@@ -9441,9 +9745,10 @@ function getChoicePreviewForCurrentJob(choice){
       if(sys.repeatCounters[choiceId] >= Number(jp.repeat_threshold)){
         sys.repeatCounters[choiceId] = 0;
         sys.clientCount = Math.max(0, Number(sys.clientCount || 0) - 1);
-        sys.persistentPayPct = Number(sys.persistentPayPct || 0) - 0.05;
+        sys.persistentPayPct = clampNum(Number(sys.persistentPayPct || 0) - 0.05, -0.25, 0.30);
         sys.clientsLostToReplace = Math.max(0, Number(sys.clientsLostToReplace || 0) + 1);
-        notes.push(`Repeat low performance cost you another ${cfg.relationshipSingular}. Your ${cfg.engineLabel.toLowerCase()} pay dropped an extra 5% until you replace them.`);
+        const lostUnit = (cfg.previewJob === 'manager') ? 'team win' : (cfg.previewJob === 'ceo' ? 'division' : cfg.relationshipSingular);
+        notes.push(`Repeat low performance cost you another ${lostUnit}. Your ${cfg.engineLabel.toLowerCase()} pay dropped an extra 5% until you rebuild that lane.`);
       } else if(jp.repeat_note) {
         notes.push(String(jp.repeat_note));
       }
@@ -9454,6 +9759,7 @@ function getChoicePreviewForCurrentJob(choice){
     if(jp.note) notes.push(String(jp.note));
     pushHistory({ title, choiceId, previewJob: cfg.previewJob, payPct, clientDelta, outcome, note: jp.note || '' });
     syncCurrentJobPlanIncome();
+    announceTierUnlocks();
     return notes.join('\n');
   }
 
@@ -9503,10 +9809,16 @@ function getChoicePreviewForCurrentJob(choice){
 
   const __legacyStartMission_MultiJob = startMission;
   startMission = function(){
+    const currentJob = currentJobObj();
+    if(currentJob && !isJobUnlocked(currentJob.id)){
+      showBanner(currentJob.name + ' is locked. ' + getUnlockRequirementText(currentJob.id));
+      return;
+    }
     const out = __legacyStartMission_MultiJob.apply(this, arguments);
     if(isCurrentJobSupported()){
       ensureCurrentJobSystemState();
       syncCurrentJobPlanIncome();
+      announceTierUnlocks();
       renderAll();
     }
     return out;
@@ -9522,15 +9834,59 @@ function getChoicePreviewForCurrentJob(choice){
 
   const __legacyRenderJob_MultiJob = renderJob;
   renderJob = function(){
+    ensureCareerUnlockState();
+    announceTierUnlocks();
     const out = __legacyRenderJob_MultiJob.apply(this, arguments);
+    const job = currentJobObj();
     const cfg = getCurrentJobSystemConfig();
+    const tags = $('jobTags');
+    const locked = job && !isJobUnlocked(job.id);
+    if(job && $('jobName')) $('jobName').textContent = locked ? `🔒 ${job.name}` : job.name;
     if(cfg){
       const el = $('jobPay');
       if(el){
-        const sys = ensureCurrentJobSystemState();
-        const projectedWeekly = Math.max(0, roundMoney(sys.baseWeeklyPay * (1 + Number(sys.persistentPayPct || 0))));
-        el.textContent = `Weekly Pay: ${money(projectedWeekly)} • ${cfg.relationshipPlural.charAt(0).toUpperCase() + cfg.relationshipPlural.slice(1)}: ${sys.clientCount} • ${cfg.modifierLabel}: ${pctLabel(sys.persistentPayPct)}`;
-        el.title = buildStatusText();
+        if(locked){
+          el.textContent = 'Locked Job • ' + getUnlockRequirementText(job.id);
+          el.title = getUnlockRequirementText(job.id);
+        } else {
+          const sys = ensureCurrentJobSystemState();
+          const projectedWeekly = Math.max(0, roundMoney(sys.baseWeeklyPay * (1 + Number(sys.persistentPayPct || 0))));
+          el.textContent = `Weekly Pay: ${money(projectedWeekly)} • ${cfg.relationshipPlural.charAt(0).toUpperCase() + cfg.relationshipPlural.slice(1)}: ${sys.clientCount} • ${cfg.modifierLabel}: ${pctLabel(sys.persistentPayPct)}`;
+          el.title = buildStatusText() + (cfg.statusTone ? `\n${cfg.statusTone}` : '');
+        }
+      }
+    } else if(job && $('jobPay') && locked){
+      $('jobPay').textContent = 'Locked Job • ' + getUnlockRequirementText(job.id);
+      $('jobPay').title = getUnlockRequirementText(job.id);
+    }
+    if(tags && job){
+      const path = getCareerPathForJobId(job.id);
+      if(cfg){
+        const identityChip = document.createElement('div');
+        identityChip.className = 'chip';
+        identityChip.textContent = `${cfg.jobIdentity || 'Job'} • ${cfg.modifierLabel}`;
+        identityChip.title = getJobIdentitySummary(cfg);
+        tags.appendChild(identityChip);
+      }
+      if(path){
+        const pathChip = document.createElement('div');
+        pathChip.className = 'chip';
+        pathChip.textContent = `${path.name} • ${path.next.join(' → ')}`;
+        pathChip.title = path.tagline || path.name;
+        tags.appendChild(pathChip);
+      }
+      if(TIER_UNLOCK_CONFIGS[job.id]){
+        const cfgTier = TIER_UNLOCK_CONFIGS[job.id];
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = locked ? `🔒 Tier ${cfgTier.tier}: ${getUnlockRequirementText(job.id)}` : `✅ Tier ${cfgTier.tier} unlocked • ${cfgTier.pathKey === 'business' ? 'Leadership lane' : 'Owner lane'}`;
+        tags.appendChild(chip);
+      } else if(path && path.key === 'service'){
+        const serviceChip = document.createElement('div');
+        serviceChip.className = 'chip';
+        serviceChip.textContent = `Service Goal • ${path.next.join(' → ')}`;
+        serviceChip.title = path.tagline || '';
+        tags.appendChild(serviceChip);
       }
     }
     return out;
@@ -9567,6 +9923,7 @@ function getChoicePreviewForCurrentJob(choice){
     if(typeof restoreIncome === 'function'){
       try{ restoreIncome(); renderAll(); }catch(err){}
     }
+    try{ announceTierUnlocks(); }catch(err){}
     return result;
   };
 
@@ -9635,7 +9992,10 @@ const __jobDebugMappings = {
   cashier: ['inspectCashier','forceCashierShift','Select Cashier first.'],
   restaurant: ['inspectRestaurantWorker','forceRestaurantShift','Select Restaurant Worker first.'],
   errands: ['inspectRunningErrands','forceErrandsClient','Select Running Errands first.'],
-  crafts: ['inspectSellingCrafts','forceCraftsCustomer','Select Selling Crafts first.']
+  crafts: ['inspectSellingCrafts','forceCraftsCustomer','Select Selling Crafts first.'],
+  manager: ['inspectManager','forceManagerWin','Select Manager first.'],
+  entrepreneur: ['inspectEntrepreneur','forceEntrepreneurCustomer','Select Entrepreneur first.'],
+  ceo: ['inspectCEO','forceCEODivision','Select CEO first.']
 };
 Object.entries(__jobDebugMappings).forEach(([jobId, names]) => {
   const inspectName = names[0], forceName = names[1], msg = names[2];
@@ -9649,6 +10009,48 @@ Object.entries(__jobDebugMappings).forEach(([jobId, names]) => {
     return window.WGLT_DEBUG.forceCurrentJobClient(delta);
   };
 });
+
+window.WGLT_DEBUG.inspectJobIdentity = function(jobId){
+  const id = String(jobId || ((currentJobObj() || {}).id || ''));
+  const cfg = JOB_SYSTEM_CONFIGS[id];
+  if(!cfg) return null;
+  const sys = state && state.jobSystems ? state.jobSystems[cfg.systemKey] : null;
+  return {
+    id,
+    engineLabel: cfg.engineLabel,
+    jobIdentity: cfg.jobIdentity,
+    relationshipPlural: cfg.relationshipPlural,
+    relationshipSingular: cfg.relationshipSingular,
+    modifierLabel: cfg.modifierLabel,
+    unitLabel: cfg.unitLabel,
+    statusTone: cfg.statusTone,
+    projectedWeeklyPay: sys ? Math.max(0, roundMoney(sys.baseWeeklyPay * (1 + Number(sys.persistentPayPct || 0)))) : null,
+    activeCount: sys ? Number(sys.clientCount || 0) : null
+  };
+};
+
+      window.WGLT_DEBUG.inspectUnlocks = function(){
+        ensureCareerUnlockState();
+        return {
+          unlockedJobs: Array.from(state.unlockedJobs || []),
+          totalSaved: totalSavedAmount(),
+          credit: Number(state.credit || 0),
+          tier1PerformanceMax: currentTier1PerformanceMax(),
+          careerPaths: getCareerPathStatus()
+        };
+      };
+      window.WGLT_DEBUG.unlockJob = function(jobId){
+        ensureCareerUnlockState();
+        if(jobId) state.unlockedJobs.add(String(jobId));
+        renderAll();
+        return Array.from(state.unlockedJobs || []);
+      };
+      window.WGLT_DEBUG.unlockAllAdvancedJobs = function(){
+        ensureCareerUnlockState();
+        ['manager','entrepreneur','ceo'].forEach(id => state.unlockedJobs.add(id));
+        renderAll();
+        return Array.from(state.unlockedJobs || []);
+      };
     }
   }catch(err){}
 })();
