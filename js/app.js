@@ -8378,6 +8378,14 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     if(state.jobLocked || state.mission.active){ beep("warn"); showBanner("Job already locked — reset to change"); return; }
     const job = state.jobs[state.jobIndex];
     if(job && !isJobUnlocked(job.id)){ beep("warn"); showBanner(job.name + " is locked. " + getUnlockRequirementText(job.id)); return; }
+    state.jobLocked = true;
+    state.plan.income = state.jobs[state.jobIndex].pay*4;
+    applyBudgetModel(state.plan.model || "rule702010");
+    renderJob();
+    renderHeader();
+    renderSheet();
+    applyLockRules();
+    refreshPreMissionPulse();
     beep("success");
     showBanner(job.name + " selected and locked!");
     setLog("Job locked: " + job.name + ". Now build your wants and tap Start Year Mission.");
@@ -8717,7 +8725,7 @@ function renderAll(){
   updateImpactStrip();
   applyLockRules();
   if(!state.mission.active){
-    if(state.plan.lockedForYear && !state.jobLocked){
+    if(state.plan.lockedForYear && state.jobLocked){
       guideWantsStep();
     } else {
       guidePreStart();
