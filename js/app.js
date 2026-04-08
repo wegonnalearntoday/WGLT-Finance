@@ -8379,6 +8379,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     const job = state.jobs[state.jobIndex];
     if(job && !isJobUnlocked(job.id)){ beep("warn"); showBanner(job.name + " is locked. " + getUnlockRequirementText(job.id)); return; }
     state.jobLocked = true;
+<<<<<<< HEAD
     state.plan.income = state.jobs[state.jobIndex].pay*4;
     applyBudgetModel(state.plan.model || "rule702010");
     renderJob();
@@ -8386,9 +8387,17 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     renderSheet();
     applyLockRules();
     refreshPreMissionPulse();
+=======
+    state.plan.income = job.pay * 4;
+    applyBudgetModel(state.plan.model || "rule702010");
+>>>>>>> da32adf3098c13457b89e2cbd883ac2b0f919e23
     beep("success");
     showBanner(job.name + " selected and locked!");
     setLog("Job locked: " + job.name + ". Now build your wants and tap Start Year Mission.");
+    renderJob();
+    renderHeader();
+    renderSheet();
+    refreshPreMissionPulse();
     guideWantsStep();
     scrollToBtn("btnAddWant");
   };
