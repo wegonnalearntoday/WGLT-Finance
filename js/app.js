@@ -4099,9 +4099,13 @@ function renderMeters(){
 }
 
 
+let _startMissionPulseTimer = null;
+
 function refreshPreMissionPulse(){
   if(state.mission && state.mission.active) return;
   clearGlow();
+  clearTimeout(_startMissionPulseTimer);
+  _startMissionPulseTimer = null;
 
   const planTab = document.querySelector('.tab[data-tab="plan"]');
   if(planTab) planTab.classList.add("glow");
@@ -4121,9 +4125,13 @@ function refreshPreMissionPulse(){
     if($("jobPrev")) $("jobPrev").classList.add("glow-next");
     if($("jobNext")) $("jobNext").classList.add("glow-next");
     if($("btnAddWant")) $("btnAddWant").classList.add("glow-next");
-    // after 5 seconds also pulse Start Year Mission
-    setTimeout(()=>{
+    // after 5 seconds also pulse Start Year Mission — cancel if state changes
+    _startMissionPulseTimer = setTimeout(()=>{
+      _startMissionPulseTimer = null;
       if(!state.mission.active && state.plan.lockedForYear && !state.jobLocked){
+        if($("jobPrev")) $("jobPrev").classList.add("glow-next");
+        if($("jobNext")) $("jobNext").classList.add("glow-next");
+        if($("btnAddWant")) $("btnAddWant").classList.add("glow-next");
         if($("btnStartMission")) $("btnStartMission").classList.add("glow-next");
       }
     }, 5000);
