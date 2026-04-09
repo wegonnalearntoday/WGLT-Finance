@@ -3462,7 +3462,7 @@ function showBanner(text){
   $("bannerText").textContent=text;
   $("banner").classList.add("show");
   clearTimeout(bannerTimer);
-  bannerTimer=setTimeout(()=> $("banner").classList.remove("show"), 5000);
+  bannerTimer=setTimeout(()=> $("banner").classList.remove("show"), 3000);
 }
 
 /* Benchmarks */
