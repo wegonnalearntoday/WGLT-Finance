@@ -3450,49 +3450,9 @@ function openModal({title,meta="",body="",buttons=[{id:"close",label:"Close",kin
   $("overlay").classList.add("show");
   $("overlay").setAttribute("aria-hidden","false");
 }
-
-function ensureInteractiveUi(){
-  const overlay = $("overlay");
-  if(overlay && !overlay.classList.contains("show")){
-    overlay.style.pointerEvents = "none";
-  }
-  if(overlay && overlay.classList.contains("show")){
-    overlay.style.pointerEvents = "auto";
-  }
-  const modeScreen = $("modeSelectScreen");
-  if(modeScreen && modeScreen.style.display === "none"){
-    modeScreen.style.pointerEvents = "none";
-  }
-  document.querySelectorAll("button").forEach(b=>{
-    b.style.pointerEvents = b.disabled ? "none" : "auto";
-  });
-  document.querySelectorAll(".tab").forEach(t=>{
-    t.style.pointerEvents = "auto";
-  });
-}
-
-function bindPress(el, fn){
-  if(!el || !fn) return;
-  let fired = false;
-  const run = (e)=>{
-    if(e){ e.preventDefault(); e.stopPropagation(); }
-    if(fired) return;
-    fired = true;
-    try{ fn(e); } finally { setTimeout(()=>{ fired = false; }, 50); }
-  };
-  el.onclick = run;
-  el.onpointerup = run;
-  el.ontouchend = run;
-}
-
 function closeModal(){
-  const overlay = $("overlay");
-  if(overlay){
-    overlay.classList.remove("show");
-    overlay.setAttribute("aria-hidden","true");
-    overlay.style.pointerEvents = "none";
-  }
-  ensureInteractiveUi();
+  $("overlay").classList.remove("show");
+  $("overlay").setAttribute("aria-hidden","true");
 }
 $("overlay").addEventListener("click",(e)=>{ if(e.target===$("overlay")) { beep("warn"); } });
 
@@ -3853,13 +3813,9 @@ function applyLockRules(){
   if($("btnReflectionReport")) $("btnReflectionReport").onclick=()=>{ beep("click"); toggleReflectionReport(); };
 
 document.querySelectorAll(".tab").forEach(t=>{ t.style.opacity="1"; t.style.cursor="pointer"; });
-    document.querySelectorAll("button").forEach(b=> {
-      b.disabled=false;
-      b.style.pointerEvents="auto";
-    });
+    document.querySelectorAll("button").forEach(b=> b.disabled=false);
     applyRandomEventButtonState();
     applyCheckToolAvailability();
-    ensureInteractiveUi();
     return;
   }
 
@@ -5027,15 +4983,8 @@ function startMission(){
   state.standardV1.chainWindowsFired = {};
 
   setLog("Year mission started! June Week 1 — follow the glowing actions. Health and choice echoes are now live.");
-  const modeScreen = $("modeSelectScreen");
-  if(modeScreen){
-    modeScreen.style.display = "none";
-    modeScreen.style.pointerEvents = "none";
-  }
-  closeModal();
   setTimeout(()=>promptWeeklyGoalIfNeeded(null, {jumpToBankAfterPick:true}), 200);
   renderAll();
-  ensureInteractiveUi();
   runCurrentMissionStep();
 }
 
@@ -5659,7 +5608,7 @@ You begin with ${money(state.cash)} in cash.
     const closeBtn = document.createElement('button');
     closeBtn.className = 'btn secondary';
     closeBtn.textContent = 'Close';
-    bindPress(closeBtn, ()=>{ beep('click'); closeModal(); });
+    closeBtn.onclick = ()=>{ beep('click'); closeModal(); };
 
     const doneBtn = document.createElement('button');
     doneBtn.className = 'btn success' + (startupSelectionComplete() ? ' done-ready' : '');
@@ -5727,10 +5676,9 @@ Most people deposit to checking so bills can be paid easily.`,
 
     $("overlay").classList.add('show');
     $("overlay").setAttribute('aria-hidden','false');
-    $("overlay").style.pointerEvents = 'auto';
 
     document.querySelectorAll('[data-startup-action]').forEach(btn=>{
-      bindPress(btn, ()=>{
+      btn.onclick = ()=>{
         const id = btn.dataset.startupAction;
         if(id==='c_student') state.bank.checkingType='student';
         if(id==='c_standard') state.bank.checkingType='standard';
@@ -5779,7 +5727,7 @@ Rewards
     const closeBtn = document.createElement('button');
     closeBtn.className = 'btn secondary';
     closeBtn.textContent = 'Close';
-    bindPress(closeBtn, ()=>{ beep('click'); closeModal(); });
+    closeBtn.onclick = ()=>{ beep('click'); closeModal(); };
 
     const doneBtn = document.createElement('button');
     doneBtn.className = 'btn success' + (state.savingsGoal ? ' done-ready' : '');
@@ -5798,15 +5746,14 @@ Rewards
         checkSavingsMilestones();
       }, 80);
       notifyAction("savings_goal");
-    });
+    };
     foot.appendChild(closeBtn);
     foot.appendChild(doneBtn);
 
     $("overlay").classList.add('show');
     $("overlay").setAttribute('aria-hidden','false');
-    $("overlay").style.pointerEvents = 'auto';
     document.querySelectorAll('[data-goal]').forEach(btn=>{
-      bindPress(btn, ()=>{
+      btn.onclick = ()=>{
         state.savingsGoal = Number(btn.dataset.goal);
         beep('click');
         renderHeader();
@@ -5952,12 +5899,12 @@ ${state.plan.lockedForYear ? 'This plan is already locked for the current year.'
     const closeBtn = document.createElement('button');
     closeBtn.className = 'btn secondary';
     closeBtn.textContent = 'Close';
-    bindPress(closeBtn, ()=>{ beep('click'); closeModal(); });
+    closeBtn.onclick = ()=>{ beep('click'); closeModal(); };
 
     const applyBtn = document.createElement('button');
     applyBtn.className = 'btn success' + (state.plan.lockedForYear ? '' : ' done-ready');
     applyBtn.textContent = state.plan.lockedForYear ? 'Locked ✓' : 'Use This Rule';
-    bindPress(applyBtn, ()=>{
+    applyBtn.onclick = ()=>{
       if(state.plan.lockedForYear){ beep('warn'); showBanner('Year plan already locked'); return; }
       state.plan.model = chosen;
       state.plan.chosenForYear = true;
@@ -5967,20 +5914,19 @@ ${state.plan.lockedForYear ? 'This plan is already locked for the current year.'
       guidePreStart();
       showBanner(`${models[chosen].name} selected. Lock it in next.`);
       setLog(`${models[chosen].name} selected. Tap Lock Plan for Year to lock this rule, then choose a job.`);
-    });
+    };
     foot.appendChild(closeBtn);
     foot.appendChild(applyBtn);
 
     $("overlay").classList.add('show');
     $("overlay").setAttribute('aria-hidden','false');
-    $("overlay").style.pointerEvents = 'auto';
     document.querySelectorAll('[data-model]').forEach(btn=>{
-      bindPress(btn, ()=>{
+      btn.onclick = ()=>{
         if(state.plan.lockedForYear){ beep('warn'); showBanner('Year plan already locked'); return; }
         state.plan.model = btn.dataset.model;
         beep('click');
         renderPlanModal();
-      });
+      };
     });
   }
   renderPlanModal();
@@ -5988,7 +5934,6 @@ ${state.plan.lockedForYear ? 'This plan is already locked for the current year.'
 
 /* Apply Plan */
 function applyPlan(){
-  closeModal();
   if(state.plan.lockedForYear){
     beep("warn");
     showBanner("Year plan already locked");
@@ -8433,14 +8378,6 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     if(state.jobLocked || state.mission.active){ beep("warn"); showBanner("Job already locked — reset to change"); return; }
     const job = state.jobs[state.jobIndex];
     if(job && !isJobUnlocked(job.id)){ beep("warn"); showBanner(job.name + " is locked. " + getUnlockRequirementText(job.id)); return; }
-    state.jobLocked = true;
-    state.plan.income = state.jobs[state.jobIndex].pay*4;
-    applyBudgetModel(state.plan.model || "rule702010");
-    renderJob();
-    renderHeader();
-    renderSheet();
-    applyLockRules();
-    refreshPreMissionPulse();
     beep("success");
     showBanner(job.name + " selected and locked!");
     setLog("Job locked: " + job.name + ". Now build your wants and tap Start Year Mission.");
@@ -8780,7 +8717,7 @@ function renderAll(){
   updateImpactStrip();
   applyLockRules();
   if(!state.mission.active){
-    if(state.plan.lockedForYear && state.jobLocked){
+    if(state.plan.lockedForYear && !state.jobLocked){
       guideWantsStep();
     } else {
       guidePreStart();
