@@ -466,6 +466,25 @@ main::before{
     .mode-btn .emoji{ font-size:28px; display:block; margin-bottom:8px; }
     .mode-btn small{ display:block; color:var(--muted); font-weight:800; line-height:1.35; margin-top:6px; }
     .mode-screen-actions{ margin-top:14px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+
+    /* ===== Character picker ===== */
+    .char-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-top:16px; }
+    .char-btn{
+      border:2px solid #bcd3ff; border-radius:20px;
+      background:linear-gradient(180deg,#f7fbff,#eef5ff);
+      padding:18px 14px; text-align:center; cursor:pointer;
+      font-weight:1000; color:var(--ink);
+      box-shadow:0 6px 18px rgba(25,45,80,.08);
+      transition:transform .1s, border-color .1s, box-shadow .1s;
+      display:flex; flex-direction:column; align-items:center; gap:6px;
+    }
+    .char-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(25,45,80,.14); border-color:#7ab4ff; }
+    .char-btn.selected{ border-color:var(--primary); background:linear-gradient(180deg,#e3f0ff,#d6e9ff); box-shadow:0 0 0 3px rgba(31,122,224,.18); }
+    .char-btn .char-avatar{ font-size:36px; line-height:1; }
+    .char-btn .char-name{ font-size:15px; font-weight:1100; }
+    .char-btn .char-job{ font-size:12px; color:var(--primary); font-weight:900; }
+    .char-btn .char-story{ font-size:12px; color:var(--muted); line-height:1.45; margin-top:4px; font-weight:800; }
+    #charContinueBtn{ margin-top:18px; display:block; width:100%; padding:13px; font-size:15px; }
     .save-toolkit{
       border:1px solid var(--line); border-radius:18px; padding:14px; background:#fff;
     }
@@ -513,6 +532,42 @@ main::before{
     </div>
   </div>
 
+
+  <!-- ===== Character Picker Screen ===== -->
+  <div class="mode-screen" id="charPickerScreen">
+    <div class="mode-card">
+      <div style="font-size:28px;font-weight:1100">Who are you?</div>
+      <div class="muted" style="margin-top:6px;font-size:13px">Pick your character. Their story shapes every decision you'll make this year.</div>
+      <div class="char-grid" id="charGrid">
+        <button class="char-btn" data-name="Jordan" data-avatar="🌿" data-job="Lawn Care" onclick="selectCharacter(this)" type="button">
+          <span class="char-avatar">🌿</span>
+          <span class="char-name">Jordan</span>
+          <span class="char-job">Lawn Care</span>
+          <span class="char-story">Saved $200 over the summer and just bought a used mower. Goal: replace it with a better one by winter.</span>
+        </button>
+        <button class="char-btn" data-name="Maya" data-avatar="📚" data-job="Babysitting &amp; Tutoring" onclick="selectCharacter(this)" type="button">
+          <span class="char-avatar">📚</span>
+          <span class="char-name">Maya</span>
+          <span class="char-job">Babysitting &amp; Tutoring</span>
+          <span class="char-story">Juggles two gigs after school. Smart with money but always tempted to spend on her friends.</span>
+        </button>
+        <button class="char-btn" data-name="Devon" data-avatar="🐕" data-job="Dog Walking" onclick="selectCharacter(this)" type="button">
+          <span class="char-avatar">🐕</span>
+          <span class="char-name">Devon</span>
+          <span class="char-job">Dog Walking</span>
+          <span class="char-story">Has six regular clients on a daily route. Rain or shine. Saving up to buy a used bike to expand the route.</span>
+        </button>
+        <button class="char-btn" data-name="Sam" data-avatar="🔧" data-job="Repair Shop Helper" onclick="selectCharacter(this)" type="button">
+          <span class="char-avatar">🔧</span>
+          <span class="char-name">Sam</span>
+          <span class="char-job">Repair Shop Helper</span>
+          <span class="char-story">Works weekends at a local shop learning real skills. Wants to start a fix-it side hustle by spring.</span>
+        </button>
+      </div>
+      <button class="btn" id="charContinueBtn" disabled onclick="confirmCharacter()" type="button">Choose your character to continue →</button>
+      <div class="muted" style="margin-top:10px;font-size:11px;text-align:center">Teacher? Skip character setup — your mode select is next either way.</div>
+    </div>
+  </div>
 
   <div class="mode-screen" id="modeSelectScreen">
     <div class="mode-card">
@@ -1071,6 +1126,51 @@ Insurance: Not chosen</div>
 
 
 <script>
+/* ===== Character Picker Logic ===== */
+(function(){
+  var PROFILE_KEY = 'wgltSharedPlayerProfile';
+
+  function loadProfile(){ try{ var r=localStorage.getItem(PROFILE_KEY); return r?JSON.parse(r):null; }catch(e){ return null; } }
+  function saveProfile(p){ try{ localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); }catch(e){} }
+
+  var selectedChar = null;
+
+  window.selectCharacter = function(btn){
+    selectedChar = { name: btn.dataset.name, avatar: btn.dataset.avatar, job: btn.dataset.job };
+    document.querySelectorAll('.char-btn').forEach(function(b){ b.classList.remove('selected'); });
+    btn.classList.add('selected');
+    var continueBtn = document.getElementById('charContinueBtn');
+    if(continueBtn){
+      continueBtn.disabled = false;
+      continueBtn.textContent = 'Play as ' + selectedChar.name + ' →';
+    }
+  };
+
+  window.confirmCharacter = function(){
+    if(!selectedChar) return;
+    saveProfile({ playerName: selectedChar.name, avatar: selectedChar.avatar, avatarName: selectedChar.name + ' (' + selectedChar.job + ')' });
+    var pickerScreen = document.getElementById('charPickerScreen');
+    var modeScreen = document.getElementById('modeSelectScreen');
+    if(pickerScreen) pickerScreen.style.display = 'none';
+    if(modeScreen) modeScreen.style.display = 'flex';
+  };
+
+  /* On page load: show character picker first, hide mode screen */
+  document.addEventListener('DOMContentLoaded', function(){
+    var pickerScreen = document.getElementById('charPickerScreen');
+    var modeScreen = document.getElementById('modeSelectScreen');
+    /* If a profile already exists, skip straight to mode select */
+    var existing = loadProfile();
+    if(existing && existing.playerName){
+      if(pickerScreen) pickerScreen.style.display = 'none';
+      if(modeScreen) modeScreen.style.display = 'flex';
+    } else {
+      if(pickerScreen) pickerScreen.style.display = 'flex';
+      if(modeScreen) modeScreen.style.display = 'none';
+    }
+  });
+})();
+
 window.startRoleDifficulty = window.startRoleDifficulty || function(role, experience){
   try {
     if(experience === 'beginner'){

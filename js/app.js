@@ -3431,7 +3431,22 @@ function beep(type="success"){
 function openModal({title,meta="",body="",buttons=[{id:"close",label:"Close",kind:"secondary"}],onPick=null}){
   $("mTitle").textContent=title;
   $("mMeta").textContent=meta;
-  $("mBody").textContent=body;
+  /* Storyboard: swap You/your for the player character name */
+  (function(){
+    var displayBody = body;
+    try{
+      var raw = localStorage.getItem("wgltSharedPlayerProfile");
+      var prof = raw ? JSON.parse(raw) : null;
+      var name = prof && prof.playerName ? prof.playerName : null;
+      if(name){
+        displayBody = body
+          .replace(/You/g, name)
+          .replace(/your/g, name + "'s")
+          .replace(/Your/g, name + "'s");
+      }
+    }catch(e){}
+    $("mBody").textContent = displayBody;
+  })();
 
   const foot=$("mFoot"); foot.innerHTML="";
   buttons.forEach(b=>{
@@ -8217,7 +8232,12 @@ function goTeacherMainMenu(){
     const ok = window.confirm("Quit to the main menu? Your progress was saved locally first.");
     if(!ok) return;
   }
-  if($("modeSelectScreen")) $("modeSelectScreen").style.display = "flex";
+  /* Storyboard: return to character picker so student can pick a new character */
+  try{ localStorage.removeItem("wgltSharedPlayerProfile"); }catch(e){}
+  var cp = document.getElementById("charPickerScreen");
+  var ms = document.getElementById("modeSelectScreen");
+  if(cp){ cp.style.display="flex"; document.querySelectorAll(".char-btn").forEach(function(b){b.classList.remove("selected");}); var cb=document.getElementById("charContinueBtn"); if(cb){cb.disabled=true;cb.textContent="Choose your character to continue →";} }
+  if(ms) ms.style.display="none";
   openTab("plan");
   showBanner("Back to main menu");
 }
