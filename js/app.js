@@ -3822,6 +3822,7 @@ document.querySelectorAll(".tab").forEach(t=>{ t.style.opacity="1"; t.style.curs
   const requiredElId = req ? req.el : null;
   const always = new Set([
     "btnPauseMission","btnResetMission","btnStartMission","jobPrev","jobNext",
+    "btnLockJob",
     "playlistStart","playlistPause","playlistLoop","btnPlaylistNext","btnPlaylistProgress"
   ]);
 
