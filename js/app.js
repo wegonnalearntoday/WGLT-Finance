@@ -3450,9 +3450,31 @@ function openModal({title,meta="",body="",buttons=[{id:"close",label:"Close",kin
   $("overlay").classList.add("show");
   $("overlay").setAttribute("aria-hidden","false");
 }
+
+function ensureInteractiveUi(){
+  const overlay = $("overlay");
+  if(overlay && !overlay.classList.contains("show")){
+    overlay.style.pointerEvents = "none";
+  }
+  if(overlay && overlay.classList.contains("show")){
+    overlay.style.pointerEvents = "auto";
+  }
+  const modeScreen = $("modeSelectScreen");
+  if(modeScreen && modeScreen.style.display === "none"){
+    modeScreen.style.pointerEvents = "none";
+  }
+  document.querySelectorAll("button").forEach(b=>{
+    b.style.pointerEvents = b.disabled ? "none" : "auto";
+  });
+  document.querySelectorAll(".tab").forEach(t=>{
+    t.style.pointerEvents = "auto";
+  });
+}
+
 function closeModal(){
   $("overlay").classList.remove("show");
   $("overlay").setAttribute("aria-hidden","true");
+  ensureInteractiveUi();
 }
 $("overlay").addEventListener("click",(e)=>{ if(e.target===$("overlay")) { beep("warn"); } });
 
@@ -3813,9 +3835,13 @@ function applyLockRules(){
   if($("btnReflectionReport")) $("btnReflectionReport").onclick=()=>{ beep("click"); toggleReflectionReport(); };
 
 document.querySelectorAll(".tab").forEach(t=>{ t.style.opacity="1"; t.style.cursor="pointer"; });
-    document.querySelectorAll("button").forEach(b=> b.disabled=false);
+    document.querySelectorAll("button").forEach(b=> {
+      b.disabled=false;
+      b.style.pointerEvents="auto";
+    });
     applyRandomEventButtonState();
     applyCheckToolAvailability();
+    ensureInteractiveUi();
     return;
   }
 
@@ -4983,8 +5009,15 @@ function startMission(){
   state.standardV1.chainWindowsFired = {};
 
   setLog("Year mission started! June Week 1 — follow the glowing actions. Health and choice echoes are now live.");
+  const modeScreen = $("modeSelectScreen");
+  if(modeScreen){
+    modeScreen.style.display = "none";
+    modeScreen.style.pointerEvents = "none";
+  }
+  closeModal();
   setTimeout(()=>promptWeeklyGoalIfNeeded(null, {jumpToBankAfterPick:true}), 200);
   renderAll();
+  ensureInteractiveUi();
   runCurrentMissionStep();
 }
 
@@ -8379,7 +8412,6 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     const job = state.jobs[state.jobIndex];
     if(job && !isJobUnlocked(job.id)){ beep("warn"); showBanner(job.name + " is locked. " + getUnlockRequirementText(job.id)); return; }
     state.jobLocked = true;
-<<<<<<< HEAD
     state.plan.income = state.jobs[state.jobIndex].pay*4;
     applyBudgetModel(state.plan.model || "rule702010");
     renderJob();
@@ -8387,17 +8419,9 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     renderSheet();
     applyLockRules();
     refreshPreMissionPulse();
-=======
-    state.plan.income = job.pay * 4;
-    applyBudgetModel(state.plan.model || "rule702010");
->>>>>>> da32adf3098c13457b89e2cbd883ac2b0f919e23
     beep("success");
     showBanner(job.name + " selected and locked!");
     setLog("Job locked: " + job.name + ". Now build your wants and tap Start Year Mission.");
-    renderJob();
-    renderHeader();
-    renderSheet();
-    refreshPreMissionPulse();
     guideWantsStep();
     scrollToBtn("btnAddWant");
   };
