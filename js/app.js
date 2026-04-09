@@ -3462,7 +3462,7 @@ function showBanner(text){
   $("bannerText").textContent=text;
   $("banner").classList.add("show");
   clearTimeout(bannerTimer);
-  bannerTimer=setTimeout(()=> $("banner").classList.remove("show"), 1400);
+  bannerTimer=setTimeout(()=> $("banner").classList.remove("show"), 5000);
 }
 
 /* Benchmarks */
@@ -8381,6 +8381,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     state.plan.income=state.jobs[state.jobIndex].pay*4;
     applyBudgetModel(state.plan.model || "rule702010");
     renderJob(); renderHeader(); renderSheet();
+    refreshPreMissionPulse();
   };
   $("jobNext").onclick=()=>{
     if(!state.plan.lockedForYear){ beep("warn"); showBanner("Lock the year plan first"); openTab("plan"); guidePreStart(); return; }
@@ -8390,6 +8391,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     state.plan.income=state.jobs[state.jobIndex].pay*4;
     applyBudgetModel(state.plan.model || "rule702010");
     renderJob(); renderHeader(); renderSheet();
+    refreshPreMissionPulse();
   };
 
   $("btnStartMission").onclick=()=>{ beep("click"); startMission(); };
