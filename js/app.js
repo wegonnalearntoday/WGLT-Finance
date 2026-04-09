@@ -4121,6 +4121,12 @@ function refreshPreMissionPulse(){
     if($("jobPrev")) $("jobPrev").classList.add("glow-next");
     if($("jobNext")) $("jobNext").classList.add("glow-next");
     if($("btnAddWant")) $("btnAddWant").classList.add("glow-next");
+    // after 5 seconds also pulse Start Year Mission
+    setTimeout(()=>{
+      if(!state.mission.active && state.plan.lockedForYear && !state.jobLocked){
+        if($("btnStartMission")) $("btnStartMission").classList.add("glow-next");
+      }
+    }, 5000);
     return;
   }
 
