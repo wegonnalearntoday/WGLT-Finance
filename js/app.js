@@ -4117,7 +4117,10 @@ function refreshPreMissionPulse(){
   }
 
   if(!state.jobLocked){
-    if($("btnLockJob")) $("btnLockJob").classList.add("glow-next");
+    // pulse both job arrows so user knows to browse and pick a job
+    if($("jobPrev")) $("jobPrev").classList.add("glow-next");
+    if($("jobNext")) $("jobNext").classList.add("glow-next");
+    if($("btnAddWant")) $("btnAddWant").classList.add("glow-next");
     return;
   }
 
@@ -4152,9 +4155,11 @@ function guidePreStart(){
     openTab("plan");
     const planTab = document.querySelector('.tab[data-tab="plan"]');
     if(planTab) planTab.classList.add("glow");
-    if($("btnLockJob")) $("btnLockJob").classList.add("glow-next");
-    setLog("Step 2: choose a student job, then tap Lock Job After Your Choice.");
-    scrollToBtn("btnLockJob");
+    if($("jobPrev")) $("jobPrev").classList.add("glow-next");
+    if($("jobNext")) $("jobNext").classList.add("glow-next");
+    if($("btnAddWant")) $("btnAddWant").classList.add("glow-next");
+    setLog("Step 2: use the arrows to choose a student job, then add your wants and tap Start Year Mission.");
+    scrollToBtn("jobNext");
   } else {
     openTab("plan");
   }
