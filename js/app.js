@@ -8378,11 +8378,13 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
     if(state.jobLocked || state.mission.active){ beep("warn"); showBanner("Job already locked — reset to change"); return; }
     const job = state.jobs[state.jobIndex];
     if(job && !isJobUnlocked(job.id)){ beep("warn"); showBanner(job.name + " is locked. " + getUnlockRequirementText(job.id)); return; }
+    state.jobLocked = true;
     beep("success");
     showBanner(job.name + " selected and locked!");
     setLog("Job locked: " + job.name + ". Now build your wants and tap Start Year Mission.");
     guideWantsStep();
     scrollToBtn("btnAddWant");
+    renderAll();
   };
   $("btnPauseMission").onclick=()=>{ beep("click"); pauseMission(); };
   $("btnResetMission").onclick=()=>{ beep("click"); confirmResetMission(); };
