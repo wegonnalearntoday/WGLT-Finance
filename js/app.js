@@ -4155,7 +4155,7 @@ function guidePreStart(){
 
 function guideWantsStep(){
   openTab('plan');
-  clearGlow();
+  // glows must be applied AFTER openTab, because openTab -> applyLockRules -> clearGlow
   const planTab = document.querySelector('.tab[data-tab="plan"]');
   if(planTab) planTab.classList.add('glow');
   const wantsField = $("wantsPick") ? $("wantsPick").closest('.field') : null;
@@ -4916,13 +4916,6 @@ function startMission(){
     guidePreStart();
     return;
   }
-  if(!state.jobLocked){
-    beep("warn");
-    openTab("plan");
-    showBanner("Choose and lock a job first");
-    guidePreStart();
-    return;
-  }
   if(!state.plan.wantsCommitted || state.plan.wants < getWantsTargetAmount()){
     beep("warn");
     openTab("plan");
@@ -5240,14 +5233,14 @@ function updateWantsUI(){
     wantsEl.style.color = state.plan.wantsCommitted && state.plan.wants >= target ? 'var(--success)' : 'var(--danger)';
   }
   if(addBtn){
-    const canPulseDuringSetup = !state.mission.active && state.plan.lockedForYear && state.jobLocked;
+    const canPulseDuringSetup = !state.mission.active && state.plan.lockedForYear;
     const canPulseDuringMonthlyRefresh = !!state._wantsRefreshCallback;
     const shouldGlow = pending >= target && !state.plan.wantsCommitted && (canPulseDuringSetup || canPulseDuringMonthlyRefresh);
     addBtn.classList.toggle('glow-next', shouldGlow);
     addBtn.classList.remove('glow');  // never blue-glow this button
   }
   if(startBtn){
-    const startReady = !state.mission.active && state.plan.lockedForYear && state.jobLocked && state.plan.wantsCommitted && state.plan.wants >= target;
+    const startReady = !state.mission.active && state.plan.lockedForYear && state.plan.wantsCommitted && state.plan.wants >= target;
     startBtn.classList.toggle('glow-next', startReady);
     startBtn.classList.remove('glow');  // never blue-glow this button
     if(startReady) scrollToBtn("btnStartMission");
@@ -8382,17 +8375,15 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
 
   $("btnStartMission").onclick=()=>{ beep("click"); startMission(); };
   $("btnLockJob").onclick=()=>{
-    const job = state.jobs[state.jobIndex];
     if(!state.plan.lockedForYear){ beep("warn"); showBanner("Lock the year plan first"); openTab("plan"); guidePreStart(); return; }
     if(state.jobLocked || state.mission.active){ beep("warn"); showBanner("Job already locked — reset to change"); return; }
+    const job = state.jobs[state.jobIndex];
     if(job && !isJobUnlocked(job.id)){ beep("warn"); showBanner(job.name + " is locked. " + getUnlockRequirementText(job.id)); return; }
-    state.jobLocked = true;
     beep("success");
     showBanner(job.name + " selected and locked!");
     setLog("Job locked: " + job.name + ". Now build your wants and tap Start Year Mission.");
     guideWantsStep();
     scrollToBtn("btnAddWant");
-    renderAll();
   };
   $("btnPauseMission").onclick=()=>{ beep("click"); pauseMission(); };
   $("btnResetMission").onclick=()=>{ beep("click"); confirmResetMission(); };
