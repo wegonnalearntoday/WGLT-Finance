@@ -3454,7 +3454,7 @@ function closeModal(){
   $("overlay").classList.remove("show");
   $("overlay").setAttribute("aria-hidden","true");
 }
-$("overlay").addEventListener("click",(e)=>{ if(e.target===$("overlay")) { beep("warn"); } });
+$("overlay").addEventListener("click",(e)=>{ if(e.target===$("overlay")) { beep("warn"); closeModal(); } });
 
 /* Banner */
 let bannerTimer=null;
@@ -8376,19 +8376,6 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>open
   $("btnStartMission").onclick=()=>{ beep("click"); startMission(); };
   $("btnLockJob").onclick=()=>{
     const job = state.jobs[state.jobIndex];
-    const debugMsg = [
-      "DEBUG btnLockJob clicked",
-      "lockedForYear: " + state.plan.lockedForYear,
-      "jobLocked: " + state.jobLocked,
-      "mission.active: " + state.mission.active,
-      "lockMode: " + state.lockMode,
-      "job: " + (job ? job.id + " / " + job.name : "NONE"),
-      "jobIndex: " + state.jobIndex,
-      "isJobUnlocked: " + (job ? isJobUnlocked(job.id) : "N/A"),
-      "waitingAction: " + state.mission.waitingAction,
-      "btnDisabled: " + ($("btnLockJob") ? $("btnLockJob").disabled : "N/A")
-    ].join("\n");
-    alert(debugMsg);
     if(!state.plan.lockedForYear){ beep("warn"); showBanner("Lock the year plan first"); openTab("plan"); guidePreStart(); return; }
     if(state.jobLocked || state.mission.active){ beep("warn"); showBanner("Job already locked — reset to change"); return; }
     if(job && !isJobUnlocked(job.id)){ beep("warn"); showBanner(job.name + " is locked. " + getUnlockRequirementText(job.id)); return; }
