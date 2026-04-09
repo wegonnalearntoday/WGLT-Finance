@@ -4916,6 +4916,13 @@ function startMission(){
     guidePreStart();
     return;
   }
+  if(!state.jobLocked){
+    beep("warn");
+    openTab("plan");
+    showBanner("Choose and lock a job first");
+    guidePreStart();
+    return;
+  }
   if(!state.plan.wantsCommitted || state.plan.wants < getWantsTargetAmount()){
     beep("warn");
     openTab("plan");
@@ -5233,14 +5240,14 @@ function updateWantsUI(){
     wantsEl.style.color = state.plan.wantsCommitted && state.plan.wants >= target ? 'var(--success)' : 'var(--danger)';
   }
   if(addBtn){
-    const canPulseDuringSetup = !state.mission.active && state.plan.lockedForYear;
+    const canPulseDuringSetup = !state.mission.active && state.plan.lockedForYear && state.jobLocked;
     const canPulseDuringMonthlyRefresh = !!state._wantsRefreshCallback;
     const shouldGlow = pending >= target && !state.plan.wantsCommitted && (canPulseDuringSetup || canPulseDuringMonthlyRefresh);
     addBtn.classList.toggle('glow-next', shouldGlow);
     addBtn.classList.remove('glow');  // never blue-glow this button
   }
   if(startBtn){
-    const startReady = !state.mission.active && state.plan.lockedForYear && state.plan.wantsCommitted && state.plan.wants >= target;
+    const startReady = !state.mission.active && state.plan.lockedForYear && state.jobLocked && state.plan.wantsCommitted && state.plan.wants >= target;
     startBtn.classList.toggle('glow-next', startReady);
     startBtn.classList.remove('glow');  // never blue-glow this button
     if(startReady) scrollToBtn("btnStartMission");
