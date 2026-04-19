@@ -1,0 +1,20 @@
+{
+  "package": "WGLT Phase 2 Native Question System",
+  "compatible_with": "Phase 3 schema engine",
+  "replace_files": [
+    "data/scenarios/real-life-expansion-v1.json",
+    "data/scenarios/financial-expansion-v1.json",
+    "data/scenarios/opportunity-job-expansion-v1.json"
+  ],
+  "new_only_files": [
+    "data/scenarios/real-life-expansion-v2-new-only.json",
+    "data/scenarios/financial-expansion-v2-new-only.json",
+    "data/scenarios/opportunity-job-expansion-v2-new-only.json"
+  ],
+  "counts": {
+    "real_life_added": 16,
+    "financial_added": 16,
+    "opportunity_added": 16,
+    "total_added": 48
+  }
+}
