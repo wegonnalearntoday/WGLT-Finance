@@ -1,0 +1,353 @@
+{
+  "events": [
+    {
+      "id": "extra_shift",
+      "title": "Extra Shift Available",
+      "type": "opportunity",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "retail",
+        "fastfood",
+        "college_parttime",
+        "teacher",
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "take_shift",
+          "label": "Take the shift and earn $30",
+          "effects": {
+            "income": 30
+          }
+        },
+        {
+          "id": "decline_shift",
+          "label": "Decline and rest",
+          "effects": {
+            "stress": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "side_hustle_supplies",
+      "title": "Buy Supplies for a Side Hustle",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "freelancer",
+        "business_owner",
+        "college_parttime",
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "buy_20",
+          "label": "Spend $20 on supplies",
+          "effects": {
+            "cash": -20
+          },
+          "paymentRequired": true,
+          "delayedConsequenceId": "side_hustle_profit"
+        },
+        {
+          "id": "buy_40",
+          "label": "Spend $40 for a better setup",
+          "effects": {
+            "cash": -40
+          },
+          "paymentRequired": true,
+          "delayedConsequenceId": "bigger_side_hustle_profit"
+        },
+        {
+          "id": "wait",
+          "label": "Wait until next week",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "campus_gig",
+      "title": "Campus Gig Opportunity",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college"
+      ],
+      "jobsAllowed": [
+        "college_parttime",
+        "intern",
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "take_gig",
+          "label": "Take the gig and earn $25",
+          "effects": {
+            "income": 25
+          }
+        },
+        {
+          "id": "skip_gig",
+          "label": "Skip because your week is too full",
+          "effects": {
+            "stress": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "freelance_client",
+      "title": "Potential Freelance Client",
+      "type": "opportunity",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "freelancer",
+        "tech_junior",
+        "business_owner"
+      ],
+      "choices": [
+        {
+          "id": "accept_client",
+          "label": "Accept and earn later",
+          "effects": {
+            "pipeline": 1
+          },
+          "delayedConsequenceId": "freelance_payment"
+        },
+        {
+          "id": "decline_client",
+          "label": "Decline because capacity is low",
+          "effects": {
+            "stress": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "resell_item",
+      "title": "Sell Something You No Longer Need",
+      "type": "opportunity",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "sell_now",
+          "label": "Sell it and earn $20",
+          "effects": {
+            "income": 20
+          }
+        },
+        {
+          "id": "hold_item",
+          "label": "Keep it for later",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "scholarship_application",
+      "title": "Scholarship or Grant Application",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "apply",
+          "label": "Apply and spend time on it",
+          "effects": {
+            "time": -1
+          },
+          "delayedConsequenceId": "small_award_possible"
+        },
+        {
+          "id": "skip",
+          "label": "Skip it",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "referral_bonus",
+      "title": "Referral Bonus Opportunity",
+      "type": "opportunity",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "adult",
+        "college"
+      ],
+      "jobsAllowed": [
+        "teacher",
+        "tech_junior",
+        "business_owner",
+        "freelancer",
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "follow_up",
+          "label": "Follow up and try for the bonus",
+          "effects": {
+            "time": -1
+          },
+          "delayedConsequenceId": "referral_bonus_paid"
+        },
+        {
+          "id": "ignore",
+          "label": "Ignore it",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "tutor_job",
+      "title": "Tutoring Opportunity",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "intern",
+        "teacher",
+        "college_parttime",
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "take_tutor",
+          "label": "Tutor and earn $35",
+          "effects": {
+            "income": 35
+          }
+        },
+        {
+          "id": "decline_tutor",
+          "label": "Decline and keep your time",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "startup_pitch",
+      "title": "Pitch a Small Idea",
+      "type": "opportunity",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "business_owner",
+        "freelancer",
+        "tech_junior"
+      ],
+      "choices": [
+        {
+          "id": "pitch",
+          "label": "Spend $25 preparing materials",
+          "effects": {
+            "cash": -25
+          },
+          "paymentRequired": true,
+          "delayedConsequenceId": "pitch_result"
+        },
+        {
+          "id": "wait",
+          "label": "Wait until you're more ready",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "used_book_flip",
+      "title": "Flip a Used Book or Item",
+      "type": "opportunity",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "all"
+      ],
+      "choices": [
+        {
+          "id": "buy_flip",
+          "label": "Spend $5 and try to resell",
+          "effects": {
+            "cash": -5
+          },
+          "paymentRequired": true,
+          "delayedConsequenceId": "small_flip_profit"
+        },
+        {
+          "id": "skip",
+          "label": "Skip it",
+          "effects": {}
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2117 @@
+[
+  {
+    "id": "fin2_babysitting_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "babysitting"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Babysitting: Work Supplies Decision",
+    "prompt": "You realize you need a few supplies to do this job well. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "babysitting"
+    ],
+    "choices": [
+      {
+        "id": "buy_basic",
+        "label": "Buy the basic supplies you need",
+        "immediate_effects": {
+          "checking": -8,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "prepared",
+        "ledger_note": "Bought basic supplies and stayed prepared",
+        "job_preview": {
+          "job": "babysitting",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "Being prepared helped the job run smoothly and boosted confidence in your work."
+        },
+        "job_previews": {
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "Being prepared helped the job run smoothly and boosted confidence in your work."
+          }
+        }
+      },
+      {
+        "id": "borrow_now",
+        "label": "Borrow supplies for now and plan to replace them later",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "borrow_tradeoff",
+        "ledger_note": "Borrowed supplies for now",
+        "job_preview": {
+          "job": "babysitting",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You got through the job, but now you owe someone a favor."
+        },
+        "job_previews": {
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through the job, but now you owe someone a favor."
+          }
+        }
+      },
+      {
+        "id": "skip_supplies",
+        "label": "Try to work without the supplies",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "underprepared",
+        "ledger_note": "Worked without the right supplies",
+        "job_preview": {
+          "job": "babysitting",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "The job felt sloppy, and trust took a hit."
+        },
+        "job_previews": {
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "The job felt sloppy, and trust took a hit."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "babysitting",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_pet_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "pet"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Pet Sitting: Work Supplies Decision",
+    "prompt": "You realize you need a few supplies to do this job well. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "pet"
+    ],
+    "choices": [
+      {
+        "id": "buy_basic",
+        "label": "Buy the basic supplies you need",
+        "immediate_effects": {
+          "checking": -8,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "prepared",
+        "ledger_note": "Bought basic supplies and stayed prepared",
+        "job_preview": {
+          "job": "pet_sitting",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "Being prepared helped the job run smoothly and boosted confidence in your work."
+        },
+        "job_previews": {
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "Being prepared helped the job run smoothly and boosted confidence in your work."
+          }
+        }
+      },
+      {
+        "id": "borrow_now",
+        "label": "Borrow supplies for now and plan to replace them later",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "borrow_tradeoff",
+        "ledger_note": "Borrowed supplies for now",
+        "job_preview": {
+          "job": "pet_sitting",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You got through the job, but now you owe someone a favor."
+        },
+        "job_previews": {
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got through the job, but now you owe someone a favor."
+          }
+        }
+      },
+      {
+        "id": "skip_supplies",
+        "label": "Try to work without the supplies",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "underprepared",
+        "ledger_note": "Worked without the right supplies",
+        "job_preview": {
+          "job": "pet_sitting",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "The job felt sloppy, and trust took a hit."
+        },
+        "job_previews": {
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "The job felt sloppy, and trust took a hit."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "pet",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_dogwalk_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "dogwalk"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Dog Walking: Equipment Maintenance",
+    "prompt": "Your equipment needs a small fix before your next workday. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "dogwalk"
+    ],
+    "choices": [
+      {
+        "id": "fix_now",
+        "label": "Pay for the fix now",
+        "immediate_effects": {
+          "checking": -12,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "invest_tools",
+        "ledger_note": "Paid for needed equipment maintenance",
+        "job_preview": {
+          "job": "dog_walking",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 0,
+          "note": "The fix kept your route smooth and protected future earnings."
+        },
+        "job_previews": {
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 0,
+            "note": "The fix kept your route smooth and protected future earnings."
+          }
+        }
+      },
+      {
+        "id": "temporary_patch",
+        "label": "Use a cheap temporary patch",
+        "immediate_effects": {
+          "checking": -4,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "temporary_fix",
+        "ledger_note": "Used a temporary patch on equipment",
+        "job_preview": {
+          "job": "dog_walking",
+          "outcome": "warning",
+          "pay_delta_pct": -0.03,
+          "client_delta": 0,
+          "note": "You saved money now, but the weak fix could slow you down soon."
+        },
+        "job_previews": {
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "You saved money now, but the weak fix could slow you down soon."
+          }
+        }
+      },
+      {
+        "id": "delay_fix",
+        "label": "Delay the fix and hope it holds",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "delay_maintenance",
+        "ledger_note": "Delayed equipment maintenance",
+        "job_preview": {
+          "job": "dog_walking",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "A rough workday hurt how one client viewed your service."
+        },
+        "job_previews": {
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "A rough workday hurt how one client viewed your service."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "dogwalk",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_lawn_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lawn"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Lawn Care: Equipment Maintenance",
+    "prompt": "Your equipment needs a small fix before your next workday. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "lawn"
+    ],
+    "choices": [
+      {
+        "id": "fix_now",
+        "label": "Pay for the fix now",
+        "immediate_effects": {
+          "checking": -12,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "invest_tools",
+        "ledger_note": "Paid for needed equipment maintenance",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 0,
+          "note": "The fix kept your route smooth and protected future earnings."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 0,
+            "note": "The fix kept your route smooth and protected future earnings."
+          }
+        }
+      },
+      {
+        "id": "temporary_patch",
+        "label": "Use a cheap temporary patch",
+        "immediate_effects": {
+          "checking": -4,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "temporary_fix",
+        "ledger_note": "Used a temporary patch on equipment",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.03,
+          "client_delta": 0,
+          "note": "You saved money now, but the weak fix could slow you down soon."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "You saved money now, but the weak fix could slow you down soon."
+          }
+        }
+      },
+      {
+        "id": "delay_fix",
+        "label": "Delay the fix and hope it holds",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "delay_maintenance",
+        "ledger_note": "Delayed equipment maintenance",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "A rough workday hurt how one client viewed your service."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "A rough workday hurt how one client viewed your service."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "lawn",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_cars_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cars"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Washing Cars: Equipment Maintenance",
+    "prompt": "Your equipment needs a small fix before your next workday. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "cars"
+    ],
+    "choices": [
+      {
+        "id": "fix_now",
+        "label": "Pay for the fix now",
+        "immediate_effects": {
+          "checking": -12,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "invest_tools",
+        "ledger_note": "Paid for needed equipment maintenance",
+        "job_preview": {
+          "job": "washing_cars",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 0,
+          "note": "The fix kept your route smooth and protected future earnings."
+        },
+        "job_previews": {
+          "washing_cars": {
+            "job": "washing_cars",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 0,
+            "note": "The fix kept your route smooth and protected future earnings."
+          }
+        }
+      },
+      {
+        "id": "temporary_patch",
+        "label": "Use a cheap temporary patch",
+        "immediate_effects": {
+          "checking": -4,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "temporary_fix",
+        "ledger_note": "Used a temporary patch on equipment",
+        "job_preview": {
+          "job": "washing_cars",
+          "outcome": "warning",
+          "pay_delta_pct": -0.03,
+          "client_delta": 0,
+          "note": "You saved money now, but the weak fix could slow you down soon."
+        },
+        "job_previews": {
+          "washing_cars": {
+            "job": "washing_cars",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "You saved money now, but the weak fix could slow you down soon."
+          }
+        }
+      },
+      {
+        "id": "delay_fix",
+        "label": "Delay the fix and hope it holds",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "delay_maintenance",
+        "ledger_note": "Delayed equipment maintenance",
+        "job_preview": {
+          "job": "washing_cars",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "A rough workday hurt how one client viewed your service."
+        },
+        "job_previews": {
+          "washing_cars": {
+            "job": "washing_cars",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "A rough workday hurt how one client viewed your service."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "cars",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_tutor_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "tutor"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Tutoring: Learning Materials",
+    "prompt": "You could buy better learning materials for your students. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "tutor"
+    ],
+    "choices": [
+      {
+        "id": "buy_materials",
+        "label": "Buy the materials and improve your sessions",
+        "immediate_effects": {
+          "checking": -10,
+          "health_score": 1
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "invest_learning",
+        "ledger_note": "Bought better learning materials",
+        "job_preview": {
+          "job": "tutoring",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 0,
+          "note": "Your sessions became stronger, and word-of-mouth started helping."
+        },
+        "job_previews": {
+          "tutoring": {
+            "job": "tutoring",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 0,
+            "note": "Your sessions became stronger, and word-of-mouth started helping."
+          }
+        }
+      },
+      {
+        "id": "use_free_tools",
+        "label": "Use free tools and keep costs low",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "free_tools",
+        "ledger_note": "Used free learning tools",
+        "job_preview": {
+          "job": "tutoring",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.03,
+          "client_delta": 0,
+          "note": "You stayed lean and still delivered decent value."
+        },
+        "job_previews": {
+          "tutoring": {
+            "job": "tutoring",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "You stayed lean and still delivered decent value."
+          }
+        }
+      },
+      {
+        "id": "wing_it",
+        "label": "Just wing it without preparing",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "no_prep",
+        "ledger_note": "Skipped prep and materials",
+        "job_preview": {
+          "job": "tutoring",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "The session felt weaker than usual, and confidence dropped."
+        },
+        "job_previews": {
+          "tutoring": {
+            "job": "tutoring",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "The session felt weaker than usual, and confidence dropped."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "tutor",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_chores_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "chores"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "House Cleaning: Equipment Maintenance",
+    "prompt": "Your equipment needs a small fix before your next workday. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "chores"
+    ],
+    "choices": [
+      {
+        "id": "fix_now",
+        "label": "Pay for the fix now",
+        "immediate_effects": {
+          "checking": -12,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "invest_tools",
+        "ledger_note": "Paid for needed equipment maintenance",
+        "job_preview": {
+          "job": "house_cleaning",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 0,
+          "note": "The fix kept your route smooth and protected future earnings."
+        },
+        "job_previews": {
+          "house_cleaning": {
+            "job": "house_cleaning",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 0,
+            "note": "The fix kept your route smooth and protected future earnings."
+          }
+        }
+      },
+      {
+        "id": "temporary_patch",
+        "label": "Use a cheap temporary patch",
+        "immediate_effects": {
+          "checking": -4,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "temporary_fix",
+        "ledger_note": "Used a temporary patch on equipment",
+        "job_preview": {
+          "job": "house_cleaning",
+          "outcome": "warning",
+          "pay_delta_pct": -0.03,
+          "client_delta": 0,
+          "note": "You saved money now, but the weak fix could slow you down soon."
+        },
+        "job_previews": {
+          "house_cleaning": {
+            "job": "house_cleaning",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "You saved money now, but the weak fix could slow you down soon."
+          }
+        }
+      },
+      {
+        "id": "delay_fix",
+        "label": "Delay the fix and hope it holds",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "delay_maintenance",
+        "ledger_note": "Delayed equipment maintenance",
+        "job_preview": {
+          "job": "house_cleaning",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "A rough workday hurt how one client viewed your service."
+        },
+        "job_previews": {
+          "house_cleaning": {
+            "job": "house_cleaning",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "A rough workday hurt how one client viewed your service."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "chores",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_errands_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "errands"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Running Errands: Equipment Maintenance",
+    "prompt": "Your equipment needs a small fix before your next workday. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "errands"
+    ],
+    "choices": [
+      {
+        "id": "fix_now",
+        "label": "Pay for the fix now",
+        "immediate_effects": {
+          "checking": -12,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "invest_tools",
+        "ledger_note": "Paid for needed equipment maintenance",
+        "job_preview": {
+          "job": "running_errands",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 0,
+          "note": "The fix kept your route smooth and protected future earnings."
+        },
+        "job_previews": {
+          "running_errands": {
+            "job": "running_errands",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 0,
+            "note": "The fix kept your route smooth and protected future earnings."
+          }
+        }
+      },
+      {
+        "id": "temporary_patch",
+        "label": "Use a cheap temporary patch",
+        "immediate_effects": {
+          "checking": -4,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "temporary_fix",
+        "ledger_note": "Used a temporary patch on equipment",
+        "job_preview": {
+          "job": "running_errands",
+          "outcome": "warning",
+          "pay_delta_pct": -0.03,
+          "client_delta": 0,
+          "note": "You saved money now, but the weak fix could slow you down soon."
+        },
+        "job_previews": {
+          "running_errands": {
+            "job": "running_errands",
+            "outcome": "warning",
+            "pay_delta_pct": -0.03,
+            "client_delta": 0,
+            "note": "You saved money now, but the weak fix could slow you down soon."
+          }
+        }
+      },
+      {
+        "id": "delay_fix",
+        "label": "Delay the fix and hope it holds",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "delay_maintenance",
+        "ledger_note": "Delayed equipment maintenance",
+        "job_preview": {
+          "job": "running_errands",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "A rough workday hurt how one client viewed your service."
+        },
+        "job_previews": {
+          "running_errands": {
+            "job": "running_errands",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "A rough workday hurt how one client viewed your service."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "errands",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_crafts_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "crafts"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Selling Crafts: Reinvest or Spend",
+    "prompt": "You made some profit this week. What should happen to it?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "crafts"
+    ],
+    "choices": [
+      {
+        "id": "reinvest",
+        "label": "Reinvest part of it into the business",
+        "immediate_effects": {
+          "checking": -10,
+          "career_progress": 2
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reinvest_growth",
+        "ledger_note": "Reinvested profit into the business",
+        "job_preview": {
+          "job": "selling_crafts",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "Your business looked more polished and ready to grow."
+        },
+        "job_previews": {
+          "selling_crafts": {
+            "job": "selling_crafts",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "Your business looked more polished and ready to grow."
+          }
+        }
+      },
+      {
+        "id": "split_profit",
+        "label": "Split it between business and yourself",
+        "immediate_effects": {
+          "checking": -4,
+          "savings": 4,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_profit",
+        "ledger_note": "Split profit between business and personal goals",
+        "job_preview": {
+          "job": "selling_crafts",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You balanced growth with stability."
+        },
+        "job_previews": {
+          "selling_crafts": {
+            "job": "selling_crafts",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You balanced growth with stability."
+          }
+        }
+      },
+      {
+        "id": "spend_profit",
+        "label": "Spend it all on wants",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "spent_profit",
+        "ledger_note": "Spent your profit instead of planning with it",
+        "job_preview": {
+          "job": "selling_crafts",
+          "outcome": "warning",
+          "pay_delta_pct": -0.08,
+          "client_delta": 0,
+          "note": "The business stayed alive, but growth slowed down."
+        },
+        "job_previews": {
+          "selling_crafts": {
+            "job": "selling_crafts",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": 0,
+            "note": "The business stayed alive, but growth slowed down."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "crafts",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_lemonade_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lemonade"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Lemonade Stand: Reinvest or Spend",
+    "prompt": "You made some profit this week. What should happen to it?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "lemonade"
+    ],
+    "choices": [
+      {
+        "id": "reinvest",
+        "label": "Reinvest part of it into the business",
+        "immediate_effects": {
+          "checking": -10,
+          "career_progress": 2
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reinvest_growth",
+        "ledger_note": "Reinvested profit into the business",
+        "job_preview": {
+          "job": "lemonade_stand",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "Your business looked more polished and ready to grow."
+        },
+        "job_previews": {
+          "lemonade_stand": {
+            "job": "lemonade_stand",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "Your business looked more polished and ready to grow."
+          }
+        }
+      },
+      {
+        "id": "split_profit",
+        "label": "Split it between business and yourself",
+        "immediate_effects": {
+          "checking": -4,
+          "savings": 4,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_profit",
+        "ledger_note": "Split profit between business and personal goals",
+        "job_preview": {
+          "job": "lemonade_stand",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You balanced growth with stability."
+        },
+        "job_previews": {
+          "lemonade_stand": {
+            "job": "lemonade_stand",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You balanced growth with stability."
+          }
+        }
+      },
+      {
+        "id": "spend_profit",
+        "label": "Spend it all on wants",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "spent_profit",
+        "ledger_note": "Spent your profit instead of planning with it",
+        "job_preview": {
+          "job": "lemonade_stand",
+          "outcome": "warning",
+          "pay_delta_pct": -0.08,
+          "client_delta": 0,
+          "note": "The business stayed alive, but growth slowed down."
+        },
+        "job_previews": {
+          "lemonade_stand": {
+            "job": "lemonade_stand",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": 0,
+            "note": "The business stayed alive, but growth slowed down."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "lemonade",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_grocery_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "grocery"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Grocery Bagger: Uniform or Work Item Purchase",
+    "prompt": "You need a small work-related item for your shift. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "grocery"
+    ],
+    "choices": [
+      {
+        "id": "buy_item",
+        "label": "Buy the item and stay ready",
+        "immediate_effects": {
+          "checking": -9,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "work_ready",
+        "ledger_note": "Bought the item you needed for work",
+        "job_preview": {
+          "job": "grocery_bagger",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "Being ready helped you look reliable on the job."
+        },
+        "job_previews": {
+          "grocery_bagger": {
+            "job": "grocery_bagger",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "Being ready helped you look reliable on the job."
+          }
+        }
+      },
+      {
+        "id": "borrow_item",
+        "label": "Borrow one for now",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "borrow_work_item",
+        "ledger_note": "Borrowed a work item for now",
+        "job_preview": {
+          "job": "grocery_bagger",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You got by, but now you owe someone a favor."
+        },
+        "job_previews": {
+          "grocery_bagger": {
+            "job": "grocery_bagger",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got by, but now you owe someone a favor."
+          }
+        }
+      },
+      {
+        "id": "ignore_item",
+        "label": "Ignore it and hope nobody notices",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "late_to_shift_warning"
+        ],
+        "reflection_tag": "underprepared_shift",
+        "ledger_note": "Showed up unprepared for work",
+        "job_preview": {
+          "job": "grocery_bagger",
+          "outcome": "warning",
+          "pay_delta_pct": -0.08,
+          "client_delta": -1,
+          "note": "The shift got awkward, and trust from the manager slipped."
+        },
+        "job_previews": {
+          "grocery_bagger": {
+            "job": "grocery_bagger",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": -1,
+            "note": "The shift got awkward, and trust from the manager slipped."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "grocery",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_cashier_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cashier"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Cashier: Uniform or Work Item Purchase",
+    "prompt": "You need a small work-related item for your shift. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "cashier"
+    ],
+    "choices": [
+      {
+        "id": "buy_item",
+        "label": "Buy the item and stay ready",
+        "immediate_effects": {
+          "checking": -9,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "work_ready",
+        "ledger_note": "Bought the item you needed for work",
+        "job_preview": {
+          "job": "cashier",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "Being ready helped you look reliable on the job."
+        },
+        "job_previews": {
+          "cashier": {
+            "job": "cashier",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "Being ready helped you look reliable on the job."
+          }
+        }
+      },
+      {
+        "id": "borrow_item",
+        "label": "Borrow one for now",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "borrow_work_item",
+        "ledger_note": "Borrowed a work item for now",
+        "job_preview": {
+          "job": "cashier",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You got by, but now you owe someone a favor."
+        },
+        "job_previews": {
+          "cashier": {
+            "job": "cashier",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got by, but now you owe someone a favor."
+          }
+        }
+      },
+      {
+        "id": "ignore_item",
+        "label": "Ignore it and hope nobody notices",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "late_to_shift_warning"
+        ],
+        "reflection_tag": "underprepared_shift",
+        "ledger_note": "Showed up unprepared for work",
+        "job_preview": {
+          "job": "cashier",
+          "outcome": "warning",
+          "pay_delta_pct": -0.08,
+          "client_delta": -1,
+          "note": "The shift got awkward, and trust from the manager slipped."
+        },
+        "job_previews": {
+          "cashier": {
+            "job": "cashier",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": -1,
+            "note": "The shift got awkward, and trust from the manager slipped."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "cashier",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_restaurant_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "restaurant"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Restaurant Worker: Uniform or Work Item Purchase",
+    "prompt": "You need a small work-related item for your shift. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "restaurant"
+    ],
+    "choices": [
+      {
+        "id": "buy_item",
+        "label": "Buy the item and stay ready",
+        "immediate_effects": {
+          "checking": -9,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "work_ready",
+        "ledger_note": "Bought the item you needed for work",
+        "job_preview": {
+          "job": "restaurant_worker",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "Being ready helped you look reliable on the job."
+        },
+        "job_previews": {
+          "restaurant_worker": {
+            "job": "restaurant_worker",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "Being ready helped you look reliable on the job."
+          }
+        }
+      },
+      {
+        "id": "borrow_item",
+        "label": "Borrow one for now",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "social_tension_minor"
+        ],
+        "reflection_tag": "borrow_work_item",
+        "ledger_note": "Borrowed a work item for now",
+        "job_preview": {
+          "job": "restaurant_worker",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You got by, but now you owe someone a favor."
+        },
+        "job_previews": {
+          "restaurant_worker": {
+            "job": "restaurant_worker",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You got by, but now you owe someone a favor."
+          }
+        }
+      },
+      {
+        "id": "ignore_item",
+        "label": "Ignore it and hope nobody notices",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "late_to_shift_warning"
+        ],
+        "reflection_tag": "underprepared_shift",
+        "ledger_note": "Showed up unprepared for work",
+        "job_preview": {
+          "job": "restaurant_worker",
+          "outcome": "warning",
+          "pay_delta_pct": -0.08,
+          "client_delta": -1,
+          "note": "The shift got awkward, and trust from the manager slipped."
+        },
+        "job_previews": {
+          "restaurant_worker": {
+            "job": "restaurant_worker",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": -1,
+            "note": "The shift got awkward, and trust from the manager slipped."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "restaurant",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_manager_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "manager"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Manager: Budget Line Decision",
+    "prompt": "You have a small budget line to use. What do you do with it?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "manager"
+    ],
+    "choices": [
+      {
+        "id": "invest_team",
+        "label": "Use it to support team performance",
+        "immediate_effects": {
+          "checking": -10,
+          "career_progress": 2
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "team_invest",
+        "ledger_note": "Used the budget line to support team performance",
+        "job_preview": {
+          "job": "manager",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "The team worked better and your leadership looked stronger."
+        },
+        "job_previews": {
+          "manager": {
+            "job": "manager",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "The team worked better and your leadership looked stronger."
+          }
+        }
+      },
+      {
+        "id": "save_line",
+        "label": "Hold the money until you know more",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "hold_budget",
+        "ledger_note": "Held the budget line for later",
+        "job_preview": {
+          "job": "manager",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.03,
+          "client_delta": 0,
+          "note": "You stayed cautious and protected flexibility."
+        },
+        "job_previews": {
+          "manager": {
+            "job": "manager",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "You stayed cautious and protected flexibility."
+          }
+        }
+      },
+      {
+        "id": "waste_line",
+        "label": "Use it without a clear plan",
+        "immediate_effects": {
+          "checking": -10,
+          "career_progress": -1
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "poor_budget_use",
+        "ledger_note": "Used the budget line without a clear plan",
+        "job_preview": {
+          "job": "manager",
+          "outcome": "warning",
+          "pay_delta_pct": -0.08,
+          "client_delta": -1,
+          "note": "The spend did not help much, and pressure came back fast."
+        },
+        "job_previews": {
+          "manager": {
+            "job": "manager",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": -1,
+            "note": "The spend did not help much, and pressure came back fast."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "manager",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_entrepreneur_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "entrepreneur"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Entrepreneur: Reinvest or Spend",
+    "prompt": "You made some profit this week. What should happen to it?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "entrepreneur"
+    ],
+    "choices": [
+      {
+        "id": "reinvest",
+        "label": "Reinvest part of it into the business",
+        "immediate_effects": {
+          "checking": -10,
+          "career_progress": 2
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reinvest_growth",
+        "ledger_note": "Reinvested profit into the business",
+        "job_preview": {
+          "job": "entrepreneur",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "Your business looked more polished and ready to grow."
+        },
+        "job_previews": {
+          "entrepreneur": {
+            "job": "entrepreneur",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "Your business looked more polished and ready to grow."
+          }
+        }
+      },
+      {
+        "id": "split_profit",
+        "label": "Split it between business and yourself",
+        "immediate_effects": {
+          "checking": -4,
+          "savings": 4,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_profit",
+        "ledger_note": "Split profit between business and personal goals",
+        "job_preview": {
+          "job": "entrepreneur",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You balanced growth with stability."
+        },
+        "job_previews": {
+          "entrepreneur": {
+            "job": "entrepreneur",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You balanced growth with stability."
+          }
+        }
+      },
+      {
+        "id": "spend_profit",
+        "label": "Spend it all on wants",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "spent_profit",
+        "ledger_note": "Spent your profit instead of planning with it",
+        "job_preview": {
+          "job": "entrepreneur",
+          "outcome": "warning",
+          "pay_delta_pct": -0.08,
+          "client_delta": 0,
+          "note": "The business stayed alive, but growth slowed down."
+        },
+        "job_previews": {
+          "entrepreneur": {
+            "job": "entrepreneur",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": 0,
+            "note": "The business stayed alive, but growth slowed down."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "entrepreneur",
+      "financial"
+    ]
+  },
+  {
+    "id": "fin2_ceo_01",
+    "category": "financial",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "ceo"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "CEO: Capital Allocation",
+    "prompt": "You can direct a small amount of company money this week. What do you do?",
+    "step_tags": [
+      "money_choice",
+      "planning",
+      "ceo"
+    ],
+    "choices": [
+      {
+        "id": "invest_growth",
+        "label": "Put it toward long-term growth",
+        "immediate_effects": {
+          "checking": -15,
+          "career_progress": 3
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "capital_growth",
+        "ledger_note": "Allocated capital toward long-term growth",
+        "job_preview": {
+          "job": "ceo",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "The company strengthened its future position."
+        },
+        "job_previews": {
+          "ceo": {
+            "job": "ceo",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "The company strengthened its future position."
+          }
+        }
+      },
+      {
+        "id": "hold_cash",
+        "label": "Hold cash and wait for better timing",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "hold_cash",
+        "ledger_note": "Held company cash for flexibility",
+        "job_preview": {
+          "job": "ceo",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.03,
+          "client_delta": 0,
+          "note": "You protected cash flow while watching the market."
+        },
+        "job_previews": {
+          "ceo": {
+            "job": "ceo",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "You protected cash flow while watching the market."
+          }
+        }
+      },
+      {
+        "id": "chase_noise",
+        "label": "Spend it chasing a weak short-term signal",
+        "immediate_effects": {
+          "checking": -12,
+          "career_progress": -1
+        },
+        "delayed_hooks": [
+          "budget_squeeze"
+        ],
+        "reflection_tag": "chase_noise",
+        "ledger_note": "Spent capital on a weak short-term signal",
+        "job_preview": {
+          "job": "ceo",
+          "outcome": "warning",
+          "pay_delta_pct": -0.08,
+          "client_delta": -1,
+          "note": "The company spent money without real progress to show for it."
+        },
+        "job_previews": {
+          "ceo": {
+            "job": "ceo",
+            "outcome": "warning",
+            "pay_delta_pct": -0.08,
+            "client_delta": -1,
+            "note": "The company spent money without real progress to show for it."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "build_savings"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "money_choice",
+      "planning",
+      "ceo",
+      "financial"
+    ]
+  }
+]
