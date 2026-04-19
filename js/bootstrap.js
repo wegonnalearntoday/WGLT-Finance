@@ -1,6 +1,6 @@
 
 (async function(){
-  const APP_VERSION = '2026.03.22.wantfix-r7';
+  const APP_VERSION = '2026.04.19.phase5-scenario-only-r1';
 
   async function clearWGLTSiteData(){
     try{ localStorage.clear(); }catch(err){}

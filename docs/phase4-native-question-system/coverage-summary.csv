@@ -1,0 +1,17 @@
+job_id,job_name,original_real_life,original_financial,original_job_opportunity,phase2_real_life_total,phase2_financial_total,phase2_job_opportunity_total,phase2_new_real_life_direct,phase2_new_financial_direct,phase2_new_job_opportunity_direct,phase2_total_new_direct,coverage_note
+babysitting,Babysitting,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+pet,Pet Sitting,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+dogwalk,Dog Walking,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+lawn,Lawn Care,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+cars,Washing Cars,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+tutor,Tutoring,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+chores,House Cleaning,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+errands,Running Errands,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+crafts,Selling Crafts,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+lemonade,Lemonade Stand,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+grocery,Grocery Bagger,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+cashier,Cashier,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+restaurant,Restaurant Worker,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+manager,Manager,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+entrepreneur,Entrepreneur,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions
+ceo,CEO,19,21,4,20,22,5,1,1,1,3,Balanced shared coverage + 3 direct native additions

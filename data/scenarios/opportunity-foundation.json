@@ -1,24 +1,21 @@
 [
   {
-    "id": "opp_extra_shift_01",
+    "id": "opp_shared_extra_shift_01",
     "category": "opportunity",
     "mode": [
+      "beginner",
       "standard",
       "elite"
     ],
     "jobs": [
-      "retail",
-      "car_wash",
-      "food_service",
-      "office_helper",
       "all"
     ],
     "grade_band": [
       "6-8",
       "9-12"
     ],
-    "title": "Extra Shift Offer",
-    "prompt": "Your manager offers you an extra shift. What do you do?",
+    "title": "Extra Work Offer",
+    "prompt": "You get offered extra work this week. What do you do?",
     "step_tags": [
       "job",
       "income",
@@ -27,61 +24,57 @@
     "choices": [
       {
         "id": "take_shift",
-        "label": "Take the shift and earn extra money",
+        "label": "Take it and earn extra",
         "immediate_effects": {
-          "checking": 20,
+          "checking": 18,
           "health_score": -1
         },
         "delayed_hooks": [
-          "fatigue_risk_minor"
+          "fatigue_chain"
         ],
         "reflection_tag": "income_priority",
-        "ledger_note": "Accepted extra shift"
+        "ledger_note": "Took extra work for more income."
       },
       {
-        "id": "decline_shift",
-        "label": "Decline and protect your time",
+        "id": "take_partial",
+        "label": "Take only part of it",
         "immediate_effects": {
-          "checking": 0,
+          "checking": 10
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_hustle",
+        "ledger_note": "Took a smaller extra job and stayed balanced."
+      },
+      {
+        "id": "pass_offer",
+        "label": "Pass and protect your energy",
+        "immediate_effects": {
           "health_score": 1
         },
         "delayed_hooks": [],
-        "reflection_tag": "balance_time",
-        "ledger_note": "Declined extra shift"
+        "reflection_tag": "energy_protection",
+        "ledger_note": "Passed on extra work to protect your schedule."
       }
     ],
     "triggers": {
       "min_step": 1,
-      "max_step": 48,
-      "monthly_focus_bonus": [
-        "grow_job_income"
-      ],
-      "requires": [],
-      "blocks_if": []
+      "max_step": 48
     },
-    "consequence_paths": [
-      {
-        "hook": "fatigue_risk_minor",
-        "possible_outcomes": [
-          "late_to_shift_warning"
-        ]
-      }
-    ],
-    "weight": 7,
+    "consequence_paths": [],
+    "weight": 4,
     "repeat_rule": {
-      "cooldown_steps": 8,
+      "cooldown_steps": 6,
       "max_uses_per_year": 2
     },
     "tags": [
-      "job",
-      "income",
-      "time"
+      "shared"
     ]
   },
   {
-    "id": "opp_contract_tool_01",
+    "id": "opp_shared_tool_contract_01",
     "category": "opportunity",
     "mode": [
+      "beginner",
       "standard",
       "elite"
     ],
@@ -92,69 +85,2898 @@
       "6-8",
       "9-12"
     ],
-    "title": "Monthly Tool Contract",
-    "prompt": "A tool or service contract could help you work, but it adds a monthly payment. What do you do?",
+    "title": "Monthly Tool or Service Contract",
+    "prompt": "A monthly contract could help you work, but it comes with a future bill.",
     "step_tags": [
       "contract",
-      "monthly_payment",
-      "job_growth"
+      "job_growth",
+      "monthly_payment"
     ],
     "choices": [
       {
         "id": "take_contract",
         "label": "Take the contract",
         "immediate_effects": {
-          "checking": 0,
           "active_contracts": 1,
           "health_score": 1
         },
         "delayed_hooks": [
           "monthly_contract_charge"
         ],
-        "reflection_tag": "invest_in_work",
-        "ledger_note": "Accepted tool/service contract"
+        "reflection_tag": "growth_contract",
+        "ledger_note": "Accepted a monthly contract to support work."
       },
       {
-        "id": "skip_contract",
-        "label": "Skip it for now",
-        "immediate_effects": {
-          "checking": 0,
-          "health_score": 0
-        },
+        "id": "wait_contract",
+        "label": "Wait until you have more cash",
+        "immediate_effects": {},
         "delayed_hooks": [],
-        "reflection_tag": "avoid_new_bill",
-        "ledger_note": "Skipped contract"
+        "reflection_tag": "wait_for_cash",
+        "ledger_note": "Waited before adding a monthly contract."
+      },
+      {
+        "id": "say_no",
+        "label": "Say no and keep things simple",
+        "immediate_effects": {},
+        "delayed_hooks": [],
+        "reflection_tag": "avoid_fixed_cost",
+        "ledger_note": "Avoided taking on a new fixed cost."
       }
     ],
     "triggers": {
-      "min_step": 4,
-      "max_step": 48,
-      "monthly_focus_bonus": [
-        "grow_job_income"
-      ],
-      "requires": [],
-      "blocks_if": [
-        "contract_already_active"
-      ]
+      "min_step": 1,
+      "max_step": 48
     },
-    "consequence_paths": [
-      {
-        "hook": "monthly_contract_charge",
-        "possible_outcomes": [
-          "ledger_contract_charge",
-          "profit_if_used_well"
-        ]
-      }
-    ],
-    "weight": 5,
+    "consequence_paths": [],
+    "weight": 4,
     "repeat_rule": {
-      "cooldown_steps": 16,
-      "max_uses_per_year": 1
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
     },
     "tags": [
-      "contract",
-      "job_growth",
-      "monthly_bill"
+      "shared"
+    ]
+  },
+  {
+    "id": "opp_shared_referral_client_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Referral Opportunity",
+    "prompt": "A happy customer could refer more work if you make a strong impression now.",
+    "step_tags": [
+      "referral",
+      "job",
+      "growth"
+    ],
+    "choices": [
+      {
+        "id": "invest_polish",
+        "label": "Invest $6 in a polished finish",
+        "immediate_effects": {
+          "checking": -6
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "invest_in_reputation",
+        "ledger_note": "Spent a little to strengthen your reputation."
+      },
+      {
+        "id": "standard_finish",
+        "label": "Do a normal finish",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_work",
+        "ledger_note": "Did solid work without extra spending."
+      },
+      {
+        "id": "rush_it",
+        "label": "Rush it and move on",
+        "immediate_effects": {
+          "health_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rushed_work",
+        "ledger_note": "Rushed the work and risked weaker referrals."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "opp_shared_supply_issue_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Supply Problem",
+    "prompt": "You are low on something important for work.",
+    "step_tags": [
+      "supplies",
+      "job",
+      "planning"
+    ],
+    "choices": [
+      {
+        "id": "restock_now",
+        "label": "Restock now for $9",
+        "immediate_effects": {
+          "checking": -9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "restock_need",
+        "ledger_note": "Restocked so you can keep working."
+      },
+      {
+        "id": "borrow_supply",
+        "label": "Borrow or improvise this week",
+        "immediate_effects": {},
+        "delayed_hooks": [],
+        "reflection_tag": "improvise",
+        "ledger_note": "Borrowed or improvised to avoid spending today."
+      },
+      {
+        "id": "skip_job",
+        "label": "Skip the task and lose the chance",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "lost_income",
+        "ledger_note": "Skipped the chance because you were not ready."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "opp_shared_promo_push_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Promo Push",
+    "prompt": "You can spend a little to promote your work this week.",
+    "step_tags": [
+      "marketing",
+      "growth",
+      "job"
+    ],
+    "choices": [
+      {
+        "id": "promote",
+        "label": "Spend $7 to promote",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "marketing_spend",
+        "ledger_note": "Invested a little in promotion."
+      },
+      {
+        "id": "word_of_mouth",
+        "label": "Use word of mouth only",
+        "immediate_effects": {},
+        "delayed_hooks": [],
+        "reflection_tag": "slow_growth",
+        "ledger_note": "Relied on word of mouth instead."
+      },
+      {
+        "id": "ignore_promo",
+        "label": "Do nothing",
+        "immediate_effects": {},
+        "delayed_hooks": [],
+        "reflection_tag": "no_push",
+        "ledger_note": "Skipped promoting this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "opp_shared_customer_fix_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Customer Wants a Small Fix",
+    "prompt": "A customer asks for a small fix before leaving a review.",
+    "step_tags": [
+      "service",
+      "reputation",
+      "job"
+    ],
+    "choices": [
+      {
+        "id": "fix_it",
+        "label": "Fix it and protect your reputation",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "protect_reputation",
+        "ledger_note": "Handled the small fix to protect your reputation."
+      },
+      {
+        "id": "discount",
+        "label": "Give a small $4 discount instead",
+        "immediate_effects": {
+          "checking": -4
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "discount_to_keep_client",
+        "ledger_note": "Gave a small discount to keep the customer happy."
+      },
+      {
+        "id": "decline_fix",
+        "label": "Decline and move on",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "lose_goodwill",
+        "ledger_note": "Declined the fix and risked goodwill."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "opp_shared_rush_order_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Rush Order Request",
+    "prompt": "A customer wants something fast and is willing to pay more.",
+    "step_tags": [
+      "rush",
+      "income",
+      "stress"
+    ],
+    "choices": [
+      {
+        "id": "accept_rush",
+        "label": "Accept the rush for more pay",
+        "immediate_effects": {
+          "checking": 20,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "rush_income",
+        "ledger_note": "Accepted a rush job for more pay."
+      },
+      {
+        "id": "accept_with_limit",
+        "label": "Accept but set clear limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "boundary_hustle",
+        "ledger_note": "Accepted the rush job with limits."
+      },
+      {
+        "id": "decline_rush",
+        "label": "Decline and keep your schedule sane",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "decline_for_balance",
+        "ledger_note": "Declined the rush to protect your schedule."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "opp_shared_equipment_upgrade_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Equipment Upgrade Offer",
+    "prompt": "A better tool could help you work faster or better.",
+    "step_tags": [
+      "upgrade",
+      "job",
+      "investment"
+    ],
+    "choices": [
+      {
+        "id": "buy_upgrade",
+        "label": "Buy the upgrade for $18",
+        "immediate_effects": {
+          "checking": -18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "invest_for_output",
+        "ledger_note": "Bought an upgrade to improve your work."
+      },
+      {
+        "id": "save_for_it",
+        "label": "Start saving for it instead",
+        "immediate_effects": {
+          "checking": -6,
+          "savings": 6
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "save_for_upgrade",
+        "ledger_note": "Started saving before buying."
+      },
+      {
+        "id": "keep_current",
+        "label": "Keep your current setup",
+        "immediate_effects": {},
+        "delayed_hooks": [],
+        "reflection_tag": "stay_basic",
+        "ledger_note": "Kept your current setup for now."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "opp_shared_schedule_conflict_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Schedule Conflict",
+    "prompt": "Two responsibilities are fighting for the same time slot.",
+    "step_tags": [
+      "schedule",
+      "planning",
+      "tradeoff"
+    ],
+    "choices": [
+      {
+        "id": "reschedule",
+        "label": "Reschedule the work and keep trust",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "reschedule_well",
+        "ledger_note": "Rescheduled and communicated well."
+      },
+      {
+        "id": "squeeze_both",
+        "label": "Try to squeeze both in",
+        "immediate_effects": {
+          "checking": 8,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "overstretch",
+        "ledger_note": "Tried to squeeze both in and stretched yourself thin."
+      },
+      {
+        "id": "cancel_job",
+        "label": "Cancel the work",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "cancelled_job",
+        "ledger_note": "Canceled the work and took the hit."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "opp_shared_bonus_tip_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Bonus Tip",
+    "prompt": "Someone gives you a tip or bonus after good work.",
+    "step_tags": [
+      "tip",
+      "income",
+      "saving"
+    ],
+    "choices": [
+      {
+        "id": "save_tip",
+        "label": "Put the tip into savings",
+        "immediate_effects": {
+          "savings": 8
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_bonus",
+        "ledger_note": "Saved your extra tip money."
+      },
+      {
+        "id": "split_tip",
+        "label": "Save some and keep some",
+        "immediate_effects": {
+          "savings": 4,
+          "checking": 4
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_bonus",
+        "ledger_note": "Split your tip between saving and spending."
+      },
+      {
+        "id": "spend_tip",
+        "label": "Spend it all today",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_bonus",
+        "ledger_note": "Kept the extra tip for spending."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "opp_babysitting_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "babysitting"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Babysitting: Job Event 1",
+    "prompt": "A family asks if you can watch two kids instead of one for higher pay.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "babysitting"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Babysitting: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Babysitting: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Babysitting: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "babysitting",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_babysitting_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "babysitting"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Babysitting: Job Event 2",
+    "prompt": "A parent offers a recurring weekly babysitting slot if you stay reliable.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "babysitting"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Babysitting: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Babysitting: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Babysitting: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "babysitting",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_pet_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "pet"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Pet Sitting: Job Event 1",
+    "prompt": "A client asks if you can add medicine time for a higher rate.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "pet"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Pet Sitting: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Pet Sitting: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Pet Sitting: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "pet",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_pet_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "pet"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Pet Sitting: Job Event 2",
+    "prompt": "A happy family might refer another pet owner if you go the extra mile.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "pet"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Pet Sitting: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Pet Sitting: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Pet Sitting: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "pet",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_dogwalk_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "dogwalk"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Dog Walking: Job Event 1",
+    "prompt": "A client wants a second walk added for extra pay.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "dogwalk"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Dog Walking: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Dog Walking: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Dog Walking: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "dogwalk",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_dogwalk_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "dogwalk"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Dog Walking: Job Event 2",
+    "prompt": "You can print simple route cards to look more professional.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "dogwalk"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Dog Walking: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Dog Walking: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Dog Walking: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "dogwalk",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_lawn_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lawn"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Lawn Care: Job Event 1",
+    "prompt": "A neighbor wants edging added for a higher price.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "lawn"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Lawn Care: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Lawn Care: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Lawn Care: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "lawn",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_lawn_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lawn"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Lawn Care: Job Event 2",
+    "prompt": "A yard on the next street could join your route if you stay consistent.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "lawn"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Lawn Care: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Lawn Care: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Lawn Care: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "lawn",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_cars_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cars"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Washing Cars: Job Event 1",
+    "prompt": "A customer wants an interior add-on for extra pay.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "cars"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Washing Cars: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Washing Cars: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Washing Cars: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "cars",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_cars_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cars"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Washing Cars: Job Event 2",
+    "prompt": "A regular customer might book every month if you impress them now.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "cars"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Washing Cars: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Washing Cars: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Washing Cars: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "cars",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_tutor_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "tutor"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Tutoring: Job Event 1",
+    "prompt": "A parent asks if you can add another subject for more pay.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "tutor"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Tutoring: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Tutoring: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Tutoring: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "tutor",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_tutor_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "tutor"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Tutoring: Job Event 2",
+    "prompt": "A strong session could turn into weekly recurring tutoring.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "tutor"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Tutoring: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Tutoring: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Tutoring: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "tutor",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_chores_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "chores"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "House Cleaning: Job Event 1",
+    "prompt": "Someone offers extra money for a bigger cleanup job.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "chores"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "House Cleaning: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "House Cleaning: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "House Cleaning: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "chores",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_chores_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "chores"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "House Cleaning: Job Event 2",
+    "prompt": "Doing a careful job today could turn chores into a regular paid routine.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "chores"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "House Cleaning: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "House Cleaning: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "House Cleaning: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "chores",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_errands_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "errands"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Running Errands: Job Event 1",
+    "prompt": "A customer offers one more stop for extra money.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "errands"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Running Errands: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Running Errands: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Running Errands: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "errands",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_errands_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "errands"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Running Errands: Job Event 2",
+    "prompt": "A reliable delivery could turn into weekly errand work.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "errands"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Running Errands: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Running Errands: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Running Errands: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "errands",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_crafts_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "crafts"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Selling Crafts: Job Event 1",
+    "prompt": "A buyer wants a custom add-on for a higher price.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "crafts"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Selling Crafts: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Selling Crafts: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Selling Crafts: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "crafts",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_crafts_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "crafts"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Selling Crafts: Job Event 2",
+    "prompt": "A good sale today could turn into a referral chain for your crafts.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "crafts"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Selling Crafts: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Selling Crafts: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Selling Crafts: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "crafts",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_lemonade_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lemonade"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Lemonade Stand: Job Event 1",
+    "prompt": "A busy event nearby could boost sales if you set up there.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "lemonade"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Lemonade Stand: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Lemonade Stand: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Lemonade Stand: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "lemonade",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_lemonade_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lemonade"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Lemonade Stand: Job Event 2",
+    "prompt": "A customer asks about a larger order for a small gathering.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "lemonade"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Lemonade Stand: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Lemonade Stand: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Lemonade Stand: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "lemonade",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_grocery_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "grocery"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Grocery Bagger: Job Event 1",
+    "prompt": "Your manager offers an extra shift because you are reliable.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "grocery"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Grocery Bagger: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Grocery Bagger: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Grocery Bagger: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "grocery",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_grocery_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "grocery"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Grocery Bagger: Job Event 2",
+    "prompt": "You can cross-train for a better path if you invest effort now.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "grocery"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Grocery Bagger: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Grocery Bagger: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Grocery Bagger: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "grocery",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_cashier_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cashier"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Cashier: Job Event 1",
+    "prompt": "You can take an extra cashier shift for more income.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "cashier"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Cashier: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Cashier: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Cashier: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "cashier",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_cashier_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cashier"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Cashier: Job Event 2",
+    "prompt": "Your manager notices you and offers more responsibility.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "cashier"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Cashier: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Cashier: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Cashier: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "cashier",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_restaurant_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "restaurant"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Restaurant Worker: Job Event 1",
+    "prompt": "A coworker wants to trade shifts and you could earn more.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "restaurant"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Restaurant Worker: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Restaurant Worker: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Restaurant Worker: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "restaurant",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_restaurant_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "restaurant"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Restaurant Worker: Job Event 2",
+    "prompt": "A manager hints that stronger reliability could lead to better sections or hours.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "restaurant"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Restaurant Worker: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Restaurant Worker: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Restaurant Worker: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "restaurant",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_manager_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "manager"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Manager: Job Event 1",
+    "prompt": "Leading well today could create stronger team performance next week.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "manager"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 40,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Manager: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 32
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Manager: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Manager: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "manager",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_manager_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "manager"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Manager: Job Event 2",
+    "prompt": "You can invest in team systems or keep things basic and react later.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "manager"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $18 in reputation or systems",
+        "immediate_effects": {
+          "checking": -18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Manager: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 15
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Manager: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Manager: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "manager",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_entrepreneur_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "entrepreneur"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Entrepreneur: Job Event 1",
+    "prompt": "A new customer opportunity appears if you put money into promotion.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "entrepreneur"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Entrepreneur: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 14
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Entrepreneur: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "Entrepreneur: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "entrepreneur",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_entrepreneur_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "entrepreneur"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Entrepreneur: Job Event 2",
+    "prompt": "A repeat buyer could become steady business if you overdeliver a little now.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "entrepreneur"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $7 in reputation or systems",
+        "immediate_effects": {
+          "checking": -7
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "Entrepreneur: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "Entrepreneur: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "Entrepreneur: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "entrepreneur",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_ceo_job_01",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "ceo"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "CEO: Job Event 1",
+    "prompt": "A partnership opportunity appears, but it needs a careful call.",
+    "step_tags": [
+      "job_event",
+      "growth",
+      "ceo"
+    ],
+    "choices": [
+      {
+        "id": "take_growth",
+        "label": "Take the opportunity for more income",
+        "immediate_effects": {
+          "checking": 40,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_chain"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "CEO: took the growth opportunity."
+      },
+      {
+        "id": "take_limited",
+        "label": "Take part of it with limits",
+        "immediate_effects": {
+          "checking": 32
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "CEO: took part of the opportunity with limits."
+      },
+      {
+        "id": "pass_growth",
+        "label": "Pass and protect capacity",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_capacity",
+        "ledger_note": "CEO: passed to protect capacity this week."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "ceo",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "opp_ceo_job_02",
+    "category": "opportunity",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "ceo"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "CEO: Job Event 2",
+    "prompt": "You can invest in systems now to reduce chaos later.",
+    "step_tags": [
+      "job_event",
+      "reputation",
+      "ceo"
+    ],
+    "choices": [
+      {
+        "id": "invest_reputation",
+        "label": "Invest $18 in reputation or systems",
+        "immediate_effects": {
+          "checking": -18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "reputation_invest",
+        "ledger_note": "CEO: invested in systems or reputation for future growth."
+      },
+      {
+        "id": "steady_choice",
+        "label": "Do solid work without extra spending",
+        "immediate_effects": {
+          "checking": 15
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_choice",
+        "ledger_note": "CEO: chose steady work without extra investment."
+      },
+      {
+        "id": "rush_or_skip",
+        "label": "Rush it or skip the extra effort",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "rush_choice",
+        "ledger_note": "CEO: skipped the extra effort and risked future growth."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "ceo",
+      "job_specific"
     ]
   }
 ]

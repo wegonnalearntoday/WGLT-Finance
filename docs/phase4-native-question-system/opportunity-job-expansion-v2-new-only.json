@@ -1,0 +1,2078 @@
+[
+  {
+    "id": "opp2_babysitting_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "babysitting"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Babysitting: Repeat Booking Opportunity",
+    "prompt": "A current family asks if you can take on one more booking this week. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "babysitting"
+    ],
+    "choices": [
+      {
+        "id": "accept_repeat",
+        "label": "Accept the extra booking",
+        "immediate_effects": {
+          "checking": 18,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_risk_minor"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Accepted an extra booking",
+        "job_preview": {
+          "job": "babysitting",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "You handled the extra work well and strengthened your reputation."
+        },
+        "job_previews": {
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "You handled the extra work well and strengthened your reputation."
+          }
+        }
+      },
+      {
+        "id": "accept_limited",
+        "label": "Accept but limit the hours",
+        "immediate_effects": {
+          "checking": 10,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Accepted a smaller booking",
+        "job_preview": {
+          "job": "babysitting",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You grew carefully without stretching too thin."
+        },
+        "job_previews": {
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You grew carefully without stretching too thin."
+          }
+        }
+      },
+      {
+        "id": "decline_repeat",
+        "label": "Decline to protect your schedule",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_balance",
+        "ledger_note": "Declined the extra booking to protect your energy",
+        "job_preview": {
+          "job": "babysitting",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You passed on extra money, but protected your consistency."
+        },
+        "job_previews": {
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You passed on extra money, but protected your consistency."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "babysitting",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_pet_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "pet"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Pet Sitting: Repeat Booking Opportunity",
+    "prompt": "A current family asks if you can take on one more booking this week. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "pet"
+    ],
+    "choices": [
+      {
+        "id": "accept_repeat",
+        "label": "Accept the extra booking",
+        "immediate_effects": {
+          "checking": 18,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_risk_minor"
+        ],
+        "reflection_tag": "growth_choice",
+        "ledger_note": "Accepted an extra booking",
+        "job_preview": {
+          "job": "pet_sitting",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "You handled the extra work well and strengthened your reputation."
+        },
+        "job_previews": {
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "You handled the extra work well and strengthened your reputation."
+          }
+        }
+      },
+      {
+        "id": "accept_limited",
+        "label": "Accept but limit the hours",
+        "immediate_effects": {
+          "checking": 10,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_growth",
+        "ledger_note": "Accepted a smaller booking",
+        "job_preview": {
+          "job": "pet_sitting",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You grew carefully without stretching too thin."
+        },
+        "job_previews": {
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You grew carefully without stretching too thin."
+          }
+        }
+      },
+      {
+        "id": "decline_repeat",
+        "label": "Decline to protect your schedule",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_balance",
+        "ledger_note": "Declined the extra booking to protect your energy",
+        "job_preview": {
+          "job": "pet_sitting",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You passed on extra money, but protected your consistency."
+        },
+        "job_previews": {
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You passed on extra money, but protected your consistency."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "pet",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_dogwalk_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "dogwalk"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Dog Walking: Neighbor Referral",
+    "prompt": "A customer says a neighbor may want your help too. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "dogwalk"
+    ],
+    "choices": [
+      {
+        "id": "take_referral",
+        "label": "Take the referral and add the stop",
+        "immediate_effects": {
+          "checking": 20,
+          "health_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "route_growth",
+        "ledger_note": "Added a new referral stop",
+        "job_preview": {
+          "job": "dog_walking",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "Your route grew because your work made a good impression."
+        },
+        "job_previews": {
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "Your route grew because your work made a good impression."
+          }
+        }
+      },
+      {
+        "id": "quote_later",
+        "label": "Ask to start next week so you can plan it right",
+        "immediate_effects": {
+          "checking": 8,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "planned_growth",
+        "ledger_note": "Planned the referral carefully",
+        "job_preview": {
+          "job": "dog_walking",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You grew the smart way without overloading your schedule."
+        },
+        "job_previews": {
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You grew the smart way without overloading your schedule."
+          }
+        }
+      },
+      {
+        "id": "pass_referral",
+        "label": "Pass on the referral",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "missed_opportunity_minor"
+        ],
+        "reflection_tag": "skip_growth",
+        "ledger_note": "Passed on a possible new client",
+        "job_preview": {
+          "job": "dog_walking",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You kept your workload steady but missed a growth moment."
+        },
+        "job_previews": {
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You kept your workload steady but missed a growth moment."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "dogwalk",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_lawn_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lawn"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Lawn Care: Neighbor Referral",
+    "prompt": "A customer says a neighbor may want your help too. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "lawn"
+    ],
+    "choices": [
+      {
+        "id": "take_referral",
+        "label": "Take the referral and add the stop",
+        "immediate_effects": {
+          "checking": 20,
+          "health_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "route_growth",
+        "ledger_note": "Added a new referral stop",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "Your route grew because your work made a good impression."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "Your route grew because your work made a good impression."
+          }
+        }
+      },
+      {
+        "id": "quote_later",
+        "label": "Ask to start next week so you can plan it right",
+        "immediate_effects": {
+          "checking": 8,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "planned_growth",
+        "ledger_note": "Planned the referral carefully",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You grew the smart way without overloading your schedule."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You grew the smart way without overloading your schedule."
+          }
+        }
+      },
+      {
+        "id": "pass_referral",
+        "label": "Pass on the referral",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "missed_opportunity_minor"
+        ],
+        "reflection_tag": "skip_growth",
+        "ledger_note": "Passed on a possible new client",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You kept your workload steady but missed a growth moment."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You kept your workload steady but missed a growth moment."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "lawn",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_cars_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cars"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Washing Cars: Neighbor Referral",
+    "prompt": "A customer says a neighbor may want your help too. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "cars"
+    ],
+    "choices": [
+      {
+        "id": "take_referral",
+        "label": "Take the referral and add the stop",
+        "immediate_effects": {
+          "checking": 20,
+          "health_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "route_growth",
+        "ledger_note": "Added a new referral stop",
+        "job_preview": {
+          "job": "washing_cars",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "Your route grew because your work made a good impression."
+        },
+        "job_previews": {
+          "washing_cars": {
+            "job": "washing_cars",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "Your route grew because your work made a good impression."
+          }
+        }
+      },
+      {
+        "id": "quote_later",
+        "label": "Ask to start next week so you can plan it right",
+        "immediate_effects": {
+          "checking": 8,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "planned_growth",
+        "ledger_note": "Planned the referral carefully",
+        "job_preview": {
+          "job": "washing_cars",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You grew the smart way without overloading your schedule."
+        },
+        "job_previews": {
+          "washing_cars": {
+            "job": "washing_cars",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You grew the smart way without overloading your schedule."
+          }
+        }
+      },
+      {
+        "id": "pass_referral",
+        "label": "Pass on the referral",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "missed_opportunity_minor"
+        ],
+        "reflection_tag": "skip_growth",
+        "ledger_note": "Passed on a possible new client",
+        "job_preview": {
+          "job": "washing_cars",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You kept your workload steady but missed a growth moment."
+        },
+        "job_previews": {
+          "washing_cars": {
+            "job": "washing_cars",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You kept your workload steady but missed a growth moment."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "cars",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_tutor_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "tutor"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Tutoring: Exam Prep Request",
+    "prompt": "A student asks for an extra exam-prep session this week. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "tutor"
+    ],
+    "choices": [
+      {
+        "id": "add_session",
+        "label": "Add the prep session",
+        "immediate_effects": {
+          "checking": 22,
+          "health_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "extra_session",
+        "ledger_note": "Added an extra exam-prep session",
+        "job_preview": {
+          "job": "tutoring",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "A strong result made your tutoring reputation climb."
+        },
+        "job_previews": {
+          "tutoring": {
+            "job": "tutoring",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "A strong result made your tutoring reputation climb."
+          }
+        }
+      },
+      {
+        "id": "group_session",
+        "label": "Offer a shorter shared review session",
+        "immediate_effects": {
+          "checking": 12,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "smart_offer",
+        "ledger_note": "Offered a smaller review option",
+        "job_preview": {
+          "job": "tutoring",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You found a smart way to help without overcommitting."
+        },
+        "job_previews": {
+          "tutoring": {
+            "job": "tutoring",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You found a smart way to help without overcommitting."
+          }
+        }
+      },
+      {
+        "id": "decline_session",
+        "label": "Decline the extra session",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_focus",
+        "ledger_note": "Declined to protect your workload",
+        "job_preview": {
+          "job": "tutoring",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You stayed balanced even though you passed on extra income."
+        },
+        "job_previews": {
+          "tutoring": {
+            "job": "tutoring",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You stayed balanced even though you passed on extra income."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "tutor",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_chores_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "chores"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "House Cleaning: Neighbor Referral",
+    "prompt": "A customer says a neighbor may want your help too. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "chores"
+    ],
+    "choices": [
+      {
+        "id": "take_referral",
+        "label": "Take the referral and add the stop",
+        "immediate_effects": {
+          "checking": 20,
+          "health_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "route_growth",
+        "ledger_note": "Added a new referral stop",
+        "job_preview": {
+          "job": "house_cleaning",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "Your route grew because your work made a good impression."
+        },
+        "job_previews": {
+          "house_cleaning": {
+            "job": "house_cleaning",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "Your route grew because your work made a good impression."
+          }
+        }
+      },
+      {
+        "id": "quote_later",
+        "label": "Ask to start next week so you can plan it right",
+        "immediate_effects": {
+          "checking": 8,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "planned_growth",
+        "ledger_note": "Planned the referral carefully",
+        "job_preview": {
+          "job": "house_cleaning",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You grew the smart way without overloading your schedule."
+        },
+        "job_previews": {
+          "house_cleaning": {
+            "job": "house_cleaning",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You grew the smart way without overloading your schedule."
+          }
+        }
+      },
+      {
+        "id": "pass_referral",
+        "label": "Pass on the referral",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "missed_opportunity_minor"
+        ],
+        "reflection_tag": "skip_growth",
+        "ledger_note": "Passed on a possible new client",
+        "job_preview": {
+          "job": "house_cleaning",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You kept your workload steady but missed a growth moment."
+        },
+        "job_previews": {
+          "house_cleaning": {
+            "job": "house_cleaning",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You kept your workload steady but missed a growth moment."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "chores",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_errands_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "errands"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Running Errands: Neighbor Referral",
+    "prompt": "A customer says a neighbor may want your help too. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "errands"
+    ],
+    "choices": [
+      {
+        "id": "take_referral",
+        "label": "Take the referral and add the stop",
+        "immediate_effects": {
+          "checking": 20,
+          "health_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "route_growth",
+        "ledger_note": "Added a new referral stop",
+        "job_preview": {
+          "job": "running_errands",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "Your route grew because your work made a good impression."
+        },
+        "job_previews": {
+          "running_errands": {
+            "job": "running_errands",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "Your route grew because your work made a good impression."
+          }
+        }
+      },
+      {
+        "id": "quote_later",
+        "label": "Ask to start next week so you can plan it right",
+        "immediate_effects": {
+          "checking": 8,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "planned_growth",
+        "ledger_note": "Planned the referral carefully",
+        "job_preview": {
+          "job": "running_errands",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You grew the smart way without overloading your schedule."
+        },
+        "job_previews": {
+          "running_errands": {
+            "job": "running_errands",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You grew the smart way without overloading your schedule."
+          }
+        }
+      },
+      {
+        "id": "pass_referral",
+        "label": "Pass on the referral",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "missed_opportunity_minor"
+        ],
+        "reflection_tag": "skip_growth",
+        "ledger_note": "Passed on a possible new client",
+        "job_preview": {
+          "job": "running_errands",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You kept your workload steady but missed a growth moment."
+        },
+        "job_previews": {
+          "running_errands": {
+            "job": "running_errands",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You kept your workload steady but missed a growth moment."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "errands",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_crafts_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "crafts"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Selling Crafts: Pop-Up Sales Chance",
+    "prompt": "You get a chance to sell at a small pop-up event. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "crafts"
+    ],
+    "choices": [
+      {
+        "id": "take_popup",
+        "label": "Pay the small cost and take the pop-up spot",
+        "immediate_effects": {
+          "checking": 14,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "popup_growth",
+        "ledger_note": "Joined a small pop-up event",
+        "job_preview": {
+          "job": "selling_crafts",
+          "outcome": "growth",
+          "pay_delta_pct": 0.12,
+          "client_delta": 1,
+          "note": "The extra visibility brought in new customers."
+        },
+        "job_previews": {
+          "selling_crafts": {
+            "job": "selling_crafts",
+            "outcome": "growth",
+            "pay_delta_pct": 0.12,
+            "client_delta": 1,
+            "note": "The extra visibility brought in new customers."
+          }
+        }
+      },
+      {
+        "id": "share_table",
+        "label": "Share a smaller table or setup",
+        "immediate_effects": {
+          "checking": 8,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "lean_popup",
+        "ledger_note": "Used a smaller setup at the event",
+        "job_preview": {
+          "job": "selling_crafts",
+          "outcome": "growth",
+          "pay_delta_pct": 0.06,
+          "client_delta": 0,
+          "note": "You tested growth without going all-in."
+        },
+        "job_previews": {
+          "selling_crafts": {
+            "job": "selling_crafts",
+            "outcome": "growth",
+            "pay_delta_pct": 0.06,
+            "client_delta": 0,
+            "note": "You tested growth without going all-in."
+          }
+        }
+      },
+      {
+        "id": "skip_popup",
+        "label": "Skip the pop-up for now",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "skip_popup",
+        "ledger_note": "Skipped the pop-up event",
+        "job_preview": {
+          "job": "selling_crafts",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You stayed comfortable, but the business did not expand this week."
+        },
+        "job_previews": {
+          "selling_crafts": {
+            "job": "selling_crafts",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You stayed comfortable, but the business did not expand this week."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "crafts",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_lemonade_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lemonade"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Lemonade Stand: Pop-Up Sales Chance",
+    "prompt": "You get a chance to sell at a small pop-up event. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "lemonade"
+    ],
+    "choices": [
+      {
+        "id": "take_popup",
+        "label": "Pay the small cost and take the pop-up spot",
+        "immediate_effects": {
+          "checking": 14,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "popup_growth",
+        "ledger_note": "Joined a small pop-up event",
+        "job_preview": {
+          "job": "lemonade_stand",
+          "outcome": "growth",
+          "pay_delta_pct": 0.12,
+          "client_delta": 1,
+          "note": "The extra visibility brought in new customers."
+        },
+        "job_previews": {
+          "lemonade_stand": {
+            "job": "lemonade_stand",
+            "outcome": "growth",
+            "pay_delta_pct": 0.12,
+            "client_delta": 1,
+            "note": "The extra visibility brought in new customers."
+          }
+        }
+      },
+      {
+        "id": "share_table",
+        "label": "Share a smaller table or setup",
+        "immediate_effects": {
+          "checking": 8,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "lean_popup",
+        "ledger_note": "Used a smaller setup at the event",
+        "job_preview": {
+          "job": "lemonade_stand",
+          "outcome": "growth",
+          "pay_delta_pct": 0.06,
+          "client_delta": 0,
+          "note": "You tested growth without going all-in."
+        },
+        "job_previews": {
+          "lemonade_stand": {
+            "job": "lemonade_stand",
+            "outcome": "growth",
+            "pay_delta_pct": 0.06,
+            "client_delta": 0,
+            "note": "You tested growth without going all-in."
+          }
+        }
+      },
+      {
+        "id": "skip_popup",
+        "label": "Skip the pop-up for now",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "skip_popup",
+        "ledger_note": "Skipped the pop-up event",
+        "job_preview": {
+          "job": "lemonade_stand",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You stayed comfortable, but the business did not expand this week."
+        },
+        "job_previews": {
+          "lemonade_stand": {
+            "job": "lemonade_stand",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You stayed comfortable, but the business did not expand this week."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "lemonade",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_grocery_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "grocery"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Grocery Bagger: Extra Shift Window",
+    "prompt": "A small extra shift window opens this week. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "grocery"
+    ],
+    "choices": [
+      {
+        "id": "take_window",
+        "label": "Take the extra shift",
+        "immediate_effects": {
+          "checking": 18,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_risk_minor"
+        ],
+        "reflection_tag": "extra_shift",
+        "ledger_note": "Took an extra shift",
+        "job_preview": {
+          "job": "grocery_bagger",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "Your manager liked that you stepped up when needed."
+        },
+        "job_previews": {
+          "grocery_bagger": {
+            "job": "grocery_bagger",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "Your manager liked that you stepped up when needed."
+          }
+        }
+      },
+      {
+        "id": "take_partial",
+        "label": "Take part of the extra hours only",
+        "immediate_effects": {
+          "checking": 10,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "partial_shift",
+        "ledger_note": "Took part of the extra shift window",
+        "job_preview": {
+          "job": "grocery_bagger",
+          "outcome": "growth",
+          "pay_delta_pct": 0.04,
+          "client_delta": 0,
+          "note": "You earned more while keeping some balance."
+        },
+        "job_previews": {
+          "grocery_bagger": {
+            "job": "grocery_bagger",
+            "outcome": "growth",
+            "pay_delta_pct": 0.04,
+            "client_delta": 0,
+            "note": "You earned more while keeping some balance."
+          }
+        }
+      },
+      {
+        "id": "pass_window",
+        "label": "Pass on the extra hours",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "skip_extra_shift",
+        "ledger_note": "Passed on the extra hours",
+        "job_preview": {
+          "job": "grocery_bagger",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You protected your energy, even though income stayed flat."
+        },
+        "job_previews": {
+          "grocery_bagger": {
+            "job": "grocery_bagger",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You protected your energy, even though income stayed flat."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "grocery",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_cashier_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cashier"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Cashier: Extra Shift Window",
+    "prompt": "A small extra shift window opens this week. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "cashier"
+    ],
+    "choices": [
+      {
+        "id": "take_window",
+        "label": "Take the extra shift",
+        "immediate_effects": {
+          "checking": 18,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_risk_minor"
+        ],
+        "reflection_tag": "extra_shift",
+        "ledger_note": "Took an extra shift",
+        "job_preview": {
+          "job": "cashier",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "Your manager liked that you stepped up when needed."
+        },
+        "job_previews": {
+          "cashier": {
+            "job": "cashier",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "Your manager liked that you stepped up when needed."
+          }
+        }
+      },
+      {
+        "id": "take_partial",
+        "label": "Take part of the extra hours only",
+        "immediate_effects": {
+          "checking": 10,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "partial_shift",
+        "ledger_note": "Took part of the extra shift window",
+        "job_preview": {
+          "job": "cashier",
+          "outcome": "growth",
+          "pay_delta_pct": 0.04,
+          "client_delta": 0,
+          "note": "You earned more while keeping some balance."
+        },
+        "job_previews": {
+          "cashier": {
+            "job": "cashier",
+            "outcome": "growth",
+            "pay_delta_pct": 0.04,
+            "client_delta": 0,
+            "note": "You earned more while keeping some balance."
+          }
+        }
+      },
+      {
+        "id": "pass_window",
+        "label": "Pass on the extra hours",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "skip_extra_shift",
+        "ledger_note": "Passed on the extra hours",
+        "job_preview": {
+          "job": "cashier",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You protected your energy, even though income stayed flat."
+        },
+        "job_previews": {
+          "cashier": {
+            "job": "cashier",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You protected your energy, even though income stayed flat."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "cashier",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_restaurant_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "restaurant"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Restaurant Worker: Extra Shift Window",
+    "prompt": "A small extra shift window opens this week. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "restaurant"
+    ],
+    "choices": [
+      {
+        "id": "take_window",
+        "label": "Take the extra shift",
+        "immediate_effects": {
+          "checking": 18,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_risk_minor"
+        ],
+        "reflection_tag": "extra_shift",
+        "ledger_note": "Took an extra shift",
+        "job_preview": {
+          "job": "restaurant_worker",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "Your manager liked that you stepped up when needed."
+        },
+        "job_previews": {
+          "restaurant_worker": {
+            "job": "restaurant_worker",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "Your manager liked that you stepped up when needed."
+          }
+        }
+      },
+      {
+        "id": "take_partial",
+        "label": "Take part of the extra hours only",
+        "immediate_effects": {
+          "checking": 10,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "partial_shift",
+        "ledger_note": "Took part of the extra shift window",
+        "job_preview": {
+          "job": "restaurant_worker",
+          "outcome": "growth",
+          "pay_delta_pct": 0.04,
+          "client_delta": 0,
+          "note": "You earned more while keeping some balance."
+        },
+        "job_previews": {
+          "restaurant_worker": {
+            "job": "restaurant_worker",
+            "outcome": "growth",
+            "pay_delta_pct": 0.04,
+            "client_delta": 0,
+            "note": "You earned more while keeping some balance."
+          }
+        }
+      },
+      {
+        "id": "pass_window",
+        "label": "Pass on the extra hours",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "skip_extra_shift",
+        "ledger_note": "Passed on the extra hours",
+        "job_preview": {
+          "job": "restaurant_worker",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You protected your energy, even though income stayed flat."
+        },
+        "job_previews": {
+          "restaurant_worker": {
+            "job": "restaurant_worker",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You protected your energy, even though income stayed flat."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "restaurant",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_manager_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "manager"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Manager: Team Improvement Idea",
+    "prompt": "You can test a small improvement with your team this week. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "manager"
+    ],
+    "choices": [
+      {
+        "id": "pilot_change",
+        "label": "Pilot the idea with clear follow-through",
+        "immediate_effects": {
+          "checking": 10,
+          "career_progress": 2
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "pilot_growth",
+        "ledger_note": "Piloted a useful team improvement",
+        "job_preview": {
+          "job": "manager",
+          "outcome": "growth",
+          "pay_delta_pct": 0.1,
+          "client_delta": 1,
+          "note": "The team responded well and your leadership momentum grew."
+        },
+        "job_previews": {
+          "manager": {
+            "job": "manager",
+            "outcome": "growth",
+            "pay_delta_pct": 0.1,
+            "client_delta": 1,
+            "note": "The team responded well and your leadership momentum grew."
+          }
+        }
+      },
+      {
+        "id": "small_test",
+        "label": "Test it on a smaller scale first",
+        "immediate_effects": {
+          "checking": 6,
+          "career_progress": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "small_test",
+        "ledger_note": "Ran a smaller leadership test",
+        "job_preview": {
+          "job": "manager",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You learned without overcommitting."
+        },
+        "job_previews": {
+          "manager": {
+            "job": "manager",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You learned without overcommitting."
+          }
+        }
+      },
+      {
+        "id": "skip_change",
+        "label": "Skip the idea and keep everything the same",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "skip_change",
+        "ledger_note": "Skipped the improvement idea",
+        "job_preview": {
+          "job": "manager",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "Nothing broke, but the team did not move forward either."
+        },
+        "job_previews": {
+          "manager": {
+            "job": "manager",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "Nothing broke, but the team did not move forward either."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "manager",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_entrepreneur_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "entrepreneur"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Entrepreneur: Pop-Up Sales Chance",
+    "prompt": "You get a chance to sell at a small pop-up event. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "entrepreneur"
+    ],
+    "choices": [
+      {
+        "id": "take_popup",
+        "label": "Pay the small cost and take the pop-up spot",
+        "immediate_effects": {
+          "checking": 14,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "popup_growth",
+        "ledger_note": "Joined a small pop-up event",
+        "job_preview": {
+          "job": "entrepreneur",
+          "outcome": "growth",
+          "pay_delta_pct": 0.12,
+          "client_delta": 1,
+          "note": "The extra visibility brought in new customers."
+        },
+        "job_previews": {
+          "entrepreneur": {
+            "job": "entrepreneur",
+            "outcome": "growth",
+            "pay_delta_pct": 0.12,
+            "client_delta": 1,
+            "note": "The extra visibility brought in new customers."
+          }
+        }
+      },
+      {
+        "id": "share_table",
+        "label": "Share a smaller table or setup",
+        "immediate_effects": {
+          "checking": 8,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "lean_popup",
+        "ledger_note": "Used a smaller setup at the event",
+        "job_preview": {
+          "job": "entrepreneur",
+          "outcome": "growth",
+          "pay_delta_pct": 0.06,
+          "client_delta": 0,
+          "note": "You tested growth without going all-in."
+        },
+        "job_previews": {
+          "entrepreneur": {
+            "job": "entrepreneur",
+            "outcome": "growth",
+            "pay_delta_pct": 0.06,
+            "client_delta": 0,
+            "note": "You tested growth without going all-in."
+          }
+        }
+      },
+      {
+        "id": "skip_popup",
+        "label": "Skip the pop-up for now",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "skip_popup",
+        "ledger_note": "Skipped the pop-up event",
+        "job_preview": {
+          "job": "entrepreneur",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You stayed comfortable, but the business did not expand this week."
+        },
+        "job_previews": {
+          "entrepreneur": {
+            "job": "entrepreneur",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You stayed comfortable, but the business did not expand this week."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "entrepreneur",
+      "opportunity"
+    ]
+  },
+  {
+    "id": "opp2_ceo_01",
+    "category": "opportunity",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "ceo"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "CEO: Strategic Expansion Lead",
+    "prompt": "A new strategic lead appears that could grow the company. What do you do?",
+    "step_tags": [
+      "job_growth",
+      "income",
+      "ceo"
+    ],
+    "choices": [
+      {
+        "id": "take_lead",
+        "label": "Pursue the lead with a clear plan",
+        "immediate_effects": {
+          "checking": 20,
+          "career_progress": 3
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "strategic_lead",
+        "ledger_note": "Pursued a strategic expansion lead",
+        "job_preview": {
+          "job": "ceo",
+          "outcome": "growth",
+          "pay_delta_pct": 0.12,
+          "client_delta": 1,
+          "note": "A strong move opened the door to wider company growth."
+        },
+        "job_previews": {
+          "ceo": {
+            "job": "ceo",
+            "outcome": "growth",
+            "pay_delta_pct": 0.12,
+            "client_delta": 1,
+            "note": "A strong move opened the door to wider company growth."
+          }
+        }
+      },
+      {
+        "id": "research_lead",
+        "label": "Research it before committing",
+        "immediate_effects": {
+          "checking": 8,
+          "career_progress": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "research_lead",
+        "ledger_note": "Researched the strategic lead carefully",
+        "job_preview": {
+          "job": "ceo",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You moved thoughtfully instead of rushing."
+        },
+        "job_previews": {
+          "ceo": {
+            "job": "ceo",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You moved thoughtfully instead of rushing."
+          }
+        }
+      },
+      {
+        "id": "ignore_lead",
+        "label": "Ignore it and stay with the current plan",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "ignore_lead",
+        "ledger_note": "Ignored the strategic lead",
+        "job_preview": {
+          "job": "ceo",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "You protected focus, but gave up a growth chance."
+        },
+        "job_previews": {
+          "ceo": {
+            "job": "ceo",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "You protected focus, but gave up a growth chance."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "grow_job_income"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 7,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_growth",
+      "income",
+      "ceo",
+      "opportunity"
+    ]
+  }
+]
