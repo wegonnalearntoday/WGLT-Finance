@@ -1,0 +1,114 @@
+[
+  {
+    "job": "babysitting",
+    "name": "Babysitting",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "pet",
+    "name": "Pet Sitting",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "dogwalk",
+    "name": "Dog Walking",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "lawn",
+    "name": "Lawn Care",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "cars",
+    "name": "Washing Cars",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "tutor",
+    "name": "Tutoring",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "chores",
+    "name": "House Cleaning",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "errands",
+    "name": "Running Errands",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "crafts",
+    "name": "Selling Crafts",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "lemonade",
+    "name": "Lemonade Stand",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "grocery",
+    "name": "Grocery Bagger",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "cashier",
+    "name": "Cashier",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "restaurant",
+    "name": "Restaurant Worker",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "manager",
+    "name": "Manager",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "entrepreneur",
+    "name": "Entrepreneur",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  },
+  {
+    "job": "ceo",
+    "name": "CEO",
+    "real_life": 12,
+    "financial": 12,
+    "opportunity": 12
+  }
+]
