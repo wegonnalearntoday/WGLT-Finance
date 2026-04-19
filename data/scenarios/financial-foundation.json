@@ -1,8 +1,9 @@
 [
   {
-    "id": "fin_overdraft_warning_01",
+    "id": "fin_shared_checking_low_01",
     "category": "financial",
     "mode": [
+      "beginner",
       "standard",
       "elite"
     ],
@@ -13,17 +14,17 @@
       "6-8",
       "9-12"
     ],
-    "title": "Overdraft Warning",
-    "prompt": "Your checking account is running low, and a planned bill is due tomorrow. What do you do?",
+    "title": "Checking Is Running Low",
+    "prompt": "Your checking account is getting low while a bill is coming up.",
     "step_tags": [
-      "bills",
       "checking",
-      "credit_protection"
+      "bills",
+      "protection"
     ],
     "choices": [
       {
-        "id": "move_savings",
-        "label": "Transfer money from savings",
+        "id": "move_15",
+        "label": "Move $15 from savings",
         "immediate_effects": {
           "checking": 15,
           "savings": -15,
@@ -31,67 +32,50 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "protect_bills",
-        "ledger_note": "Transfer from savings to checking"
+        "ledger_note": "Moved money to protect the bill."
       },
       {
-        "id": "delay_bill",
-        "label": "Wait and hope it works out",
+        "id": "cut_wants",
+        "label": "Cut wants and wait",
         "immediate_effects": {
-          "checking": 0,
-          "credit_score": -3
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "cut_wants",
+        "ledger_note": "Cut wants to avoid a transfer."
+      },
+      {
+        "id": "ignore_warning",
+        "label": "Ignore it and hope it works out",
+        "immediate_effects": {
+          "credit_score": -2
         },
         "delayed_hooks": [
           "late_fee_chain"
         ],
-        "reflection_tag": "delay_problem",
-        "ledger_note": "Bill delayed"
-      },
-      {
-        "id": "cut_wants",
-        "label": "Cancel a planned want and cover the bill",
-        "immediate_effects": {
-          "checking": 5,
-          "health_score": 1,
-          "credit_score": 2
-        },
-        "delayed_hooks": [],
-        "reflection_tag": "prioritize_bills",
-        "ledger_note": "Cut wants to protect bill"
+        "reflection_tag": "avoidance",
+        "ledger_note": "Ignored the warning and risked fees."
       }
     ],
     "triggers": {
       "min_step": 1,
-      "max_step": 48,
-      "monthly_focus_bonus": [
-        "protect_credit"
-      ],
-      "requires": [],
-      "blocks_if": []
+      "max_step": 48
     },
-    "consequence_paths": [
-      {
-        "hook": "late_fee_chain",
-        "possible_outcomes": [
-          "fee_hit",
-          "credit_drop_notice"
-        ]
-      }
-    ],
-    "weight": 8,
+    "consequence_paths": [],
+    "weight": 4,
     "repeat_rule": {
-      "cooldown_steps": 10,
+      "cooldown_steps": 6,
       "max_uses_per_year": 2
     },
     "tags": [
-      "bills",
-      "credit",
-      "checking"
+      "shared"
     ]
   },
   {
-    "id": "fin_birthday_gift_01",
+    "id": "fin_shared_gift_money_01",
     "category": "financial",
     "mode": [
+      "beginner",
       "standard",
       "elite"
     ],
@@ -102,86 +86,2969 @@
       "6-8",
       "9-12"
     ],
-    "title": "Grandparent Gift",
-    "prompt": "Your grandparent gives you birthday money. What do you do with it?",
+    "title": "Cash Gift Arrives",
+    "prompt": "You receive unexpected gift money.",
     "step_tags": [
       "gift",
       "saving",
-      "investing"
+      "choice"
     ],
     "choices": [
       {
-        "id": "put_hysa",
-        "label": "Put it in HYSA",
+        "id": "save_all",
+        "label": "Save all $20",
         "immediate_effects": {
-          "savings": 25,
-          "health_score": 1
+          "savings": 20
         },
         "delayed_hooks": [
           "steady_growth"
         ],
-        "reflection_tag": "safe_growth",
-        "ledger_note": "Birthday gift placed in HYSA"
+        "reflection_tag": "save_bonus",
+        "ledger_note": "Saved the full gift amount."
       },
       {
-        "id": "put_cd",
-        "label": "Put it in a CD",
+        "id": "split_money",
+        "label": "Save $10 and spend $10",
         "immediate_effects": {
-          "cd_balance": 25,
-          "health_score": 1
-        },
-        "delayed_hooks": [
-          "locked_growth"
-        ],
-        "reflection_tag": "locked_saving",
-        "ledger_note": "Birthday gift placed in CD"
-      },
-      {
-        "id": "spend_some_save_some",
-        "label": "Spend some and save some",
-        "immediate_effects": {
-          "checking": 10,
-          "savings": 15,
-          "health_score": 0
+          "savings": 10,
+          "checking": 10
         },
         "delayed_hooks": [],
         "reflection_tag": "split_choice",
-        "ledger_note": "Split birthday gift between checking and savings"
+        "ledger_note": "Split the gift between saving and spending."
+      },
+      {
+        "id": "spend_all",
+        "label": "Spend the full $20",
+        "immediate_effects": {
+          "checking": 20
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_bonus",
+        "ledger_note": "Kept the full gift for spending."
       }
     ],
     "triggers": {
       "min_step": 1,
-      "max_step": 48,
-      "monthly_focus_bonus": [
-        "build_savings"
-      ],
-      "requires": [],
-      "blocks_if": []
+      "max_step": 48
     },
-    "consequence_paths": [
-      {
-        "hook": "steady_growth",
-        "possible_outcomes": [
-          "interest_bonus"
-        ]
-      },
-      {
-        "hook": "locked_growth",
-        "possible_outcomes": [
-          "maturity_bonus"
-        ]
-      }
-    ],
-    "weight": 6,
+    "consequence_paths": [],
+    "weight": 4,
     "repeat_rule": {
-      "cooldown_steps": 24,
-      "max_uses_per_year": 1
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
     },
     "tags": [
-      "gift",
+      "shared"
+    ]
+  },
+  {
+    "id": "fin_shared_subscription_hit_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Subscription Renewal Hits",
+    "prompt": "A subscription renewal hits before you expected it.",
+    "step_tags": [
+      "subscriptions",
+      "bills",
+      "wants"
+    ],
+    "choices": [
+      {
+        "id": "keep_it",
+        "label": "Keep it and pay $11",
+        "immediate_effects": {
+          "checking": -11
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "keep_want",
+        "ledger_note": "Paid a subscription renewal."
+      },
+      {
+        "id": "cancel_it",
+        "label": "Cancel it and stop the leak",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "cancel_subscription",
+        "ledger_note": "Canceled the subscription before it kept draining money."
+      },
+      {
+        "id": "borrow_to_cover",
+        "label": "Cover it by moving $11 from savings",
+        "immediate_effects": {
+          "checking": 11,
+          "savings": -11
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_checking",
+        "ledger_note": "Moved savings to cover the renewal."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "fin_shared_hysa_boost_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "HYSA Bonus Opportunity",
+    "prompt": "Your bank is offering a small reward if you save consistently.",
+    "step_tags": [
       "savings",
       "hysa",
-      "cd"
+      "planning"
+    ],
+    "choices": [
+      {
+        "id": "add_10",
+        "label": "Add $10 to savings",
+        "immediate_effects": {
+          "checking": -10,
+          "savings": 10
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "steady_saver",
+        "ledger_note": "Added $10 to savings for the bonus path."
+      },
+      {
+        "id": "wait_one_week",
+        "label": "Wait and keep cash free",
+        "immediate_effects": {},
+        "delayed_hooks": [],
+        "reflection_tag": "liquidity_choice",
+        "ledger_note": "Kept your cash free for now."
+      },
+      {
+        "id": "spend_10",
+        "label": "Spend the $10 instead",
+        "immediate_effects": {
+          "checking": -10
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "skip_growth",
+        "ledger_note": "Skipped the saving chance and spent instead."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "fin_shared_late_bill_risk_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Bill Due Tomorrow",
+    "prompt": "A bill is due tomorrow and you are not ready.",
+    "step_tags": [
+      "bills",
+      "timing",
+      "late_fee"
+    ],
+    "choices": [
+      {
+        "id": "pay_now",
+        "label": "Pay the bill now",
+        "immediate_effects": {
+          "checking": -12,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "on_time",
+        "ledger_note": "Paid the bill on time."
+      },
+      {
+        "id": "partial_then_plan",
+        "label": "Pay part and make a plan",
+        "immediate_effects": {
+          "checking": -6
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "partial_strategy",
+        "ledger_note": "Paid part and built a quick plan."
+      },
+      {
+        "id": "miss_it",
+        "label": "Miss it and deal with the fee later",
+        "immediate_effects": {
+          "credit_score": -3
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "late_payment",
+        "ledger_note": "Missed the bill and invited a late fee."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "fin_shared_tool_upgrade_fund_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Tool Upgrade Savings",
+    "prompt": "You are thinking about saving toward a better tool or upgrade.",
+    "step_tags": [
+      "goal",
+      "saving",
+      "future_spend"
+    ],
+    "choices": [
+      {
+        "id": "save_for_upgrade",
+        "label": "Save $15 toward it",
+        "immediate_effects": {
+          "checking": -15,
+          "savings": 15
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "future_purchase",
+        "ledger_note": "Saved money toward a future upgrade."
+      },
+      {
+        "id": "buy_small_now",
+        "label": "Buy a small cheap fix for $6",
+        "immediate_effects": {
+          "checking": -6
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "short_patch",
+        "ledger_note": "Bought a small cheap fix for now."
+      },
+      {
+        "id": "forget_it",
+        "label": "Ignore the plan completely",
+        "immediate_effects": {},
+        "delayed_hooks": [],
+        "reflection_tag": "no_plan",
+        "ledger_note": "Dropped the saving goal for now."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "fin_shared_cd_choice_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Lock or Keep Liquid",
+    "prompt": "You can lock money into a CD or keep it flexible.",
+    "step_tags": [
+      "cd",
+      "savings",
+      "tradeoff"
+    ],
+    "choices": [
+      {
+        "id": "lock_20",
+        "label": "Lock $20 for future growth",
+        "immediate_effects": {
+          "cd_balance": 20
+        },
+        "delayed_hooks": [
+          "locked_growth"
+        ],
+        "reflection_tag": "lock_growth",
+        "ledger_note": "Locked money into a CD for future growth."
+      },
+      {
+        "id": "keep_liquid",
+        "label": "Keep the money in savings",
+        "immediate_effects": {
+          "savings": 10
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "liquid_choice",
+        "ledger_note": "Kept your money available in savings."
+      },
+      {
+        "id": "spend_cash",
+        "label": "Keep it for spending instead",
+        "immediate_effects": {
+          "checking": 10
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_now",
+        "ledger_note": "Kept the money free to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "fin_shared_peer_purchase_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Friends Upgrading Their Stuff",
+    "prompt": "Friends are upgrading their stuff and you feel pressure too.",
+    "step_tags": [
+      "peer_pressure",
+      "tech",
+      "wants"
+    ],
+    "choices": [
+      {
+        "id": "buy_now",
+        "label": "Buy now for $25",
+        "immediate_effects": {
+          "checking": -25
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "comparison_spend",
+        "ledger_note": "Spent because of comparison pressure."
+      },
+      {
+        "id": "save_goal",
+        "label": "Start a savings goal first",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "goal_based_spend",
+        "ledger_note": "Started a savings goal instead of rushing."
+      },
+      {
+        "id": "skip_upgrade",
+        "label": "Skip the upgrade",
+        "immediate_effects": {
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "contentment",
+        "ledger_note": "Skipped the upgrade and stayed on plan."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "fin_shared_bank_fee_notice_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Bank Fee Notice",
+    "prompt": "You notice a bank fee that could hit if you are careless.",
+    "step_tags": [
+      "banking",
+      "fees",
+      "attention"
+    ],
+    "choices": [
+      {
+        "id": "fix_it",
+        "label": "Fix the issue now",
+        "immediate_effects": {
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "attention_to_detail",
+        "ledger_note": "Handled the issue before it turned into a fee."
+      },
+      {
+        "id": "small_transfer",
+        "label": "Transfer $8 to stay above the minimum",
+        "immediate_effects": {
+          "checking": 8,
+          "savings": -8
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fee_prevention",
+        "ledger_note": "Made a small transfer to avoid the fee."
+      },
+      {
+        "id": "ignore_fee",
+        "label": "Ignore the notice",
+        "immediate_effects": {
+          "checking": -8,
+          "credit_score": -1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fee_hit",
+        "ledger_note": "Ignored the notice and got hit."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "fin_shared_emergency_jar_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "all"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Emergency Fund Choice",
+    "prompt": "You have a chance to build a small emergency fund.",
+    "step_tags": [
+      "emergency",
+      "savings",
+      "resilience"
+    ],
+    "choices": [
+      {
+        "id": "start_jar",
+        "label": "Put $12 into emergency savings",
+        "immediate_effects": {
+          "checking": -12,
+          "savings": 12
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "emergency_fund",
+        "ledger_note": "Started or added to your emergency fund."
+      },
+      {
+        "id": "split_jar",
+        "label": "Put in $6 and keep $6 flexible",
+        "immediate_effects": {
+          "checking": -6,
+          "savings": 6
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balanced_reserve",
+        "ledger_note": "Split the money between safety and flexibility."
+      },
+      {
+        "id": "skip_jar",
+        "label": "Skip it for now",
+        "immediate_effects": {},
+        "delayed_hooks": [],
+        "reflection_tag": "skip_safety",
+        "ledger_note": "Skipped the emergency fund chance."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 4,
+    "repeat_rule": {
+      "cooldown_steps": 6,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "shared"
+    ]
+  },
+  {
+    "id": "fin_babysitting_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "babysitting"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Babysitting: Financial Decision 1",
+    "prompt": "You want to save for babysitting games and supplies that make families trust you more.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "babysitting"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Babysitting: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Babysitting: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Babysitting: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "babysitting",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_babysitting_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "babysitting"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Babysitting: Financial Decision 2",
+    "prompt": "A family pays you cash and you need to decide what to do with the money right away.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "babysitting"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Babysitting: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Babysitting: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Babysitting: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "babysitting",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_pet_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "pet"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Pet Sitting: Financial Decision 1",
+    "prompt": "You may need to buy a small pet supply to stay prepared.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "pet"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Pet Sitting: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Pet Sitting: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Pet Sitting: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "pet",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_pet_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "pet"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Pet Sitting: Financial Decision 2",
+    "prompt": "You earned pet sitting money and need to split it between saving and spending.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "pet"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Pet Sitting: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Pet Sitting: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Pet Sitting: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "pet",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_dogwalk_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "dogwalk"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Dog Walking: Financial Decision 1",
+    "prompt": "A sturdy leash or waste-bag refill would help your dog walking business.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "dogwalk"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Dog Walking: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Dog Walking: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Dog Walking: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "dogwalk",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_dogwalk_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "dogwalk"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Dog Walking: Financial Decision 2",
+    "prompt": "A dog walking tip comes in and you need to choose where it goes.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "dogwalk"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Dog Walking: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Dog Walking: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Dog Walking: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "dogwalk",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_lawn_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lawn"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Lawn Care: Financial Decision 1",
+    "prompt": "Gas or blade upkeep is coming for your lawn equipment.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "lawn"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Lawn Care: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Lawn Care: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Lawn Care: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "lawn",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_lawn_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lawn"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Lawn Care: Financial Decision 2",
+    "prompt": "You are thinking about saving for a better mower attachment.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "lawn"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Lawn Care: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Lawn Care: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Lawn Care: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "lawn",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_cars_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cars"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Washing Cars: Financial Decision 1",
+    "prompt": "Soap, towels, or wax supplies are getting low.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "cars"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Washing Cars: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Washing Cars: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Washing Cars: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "cars",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_cars_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cars"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Washing Cars: Financial Decision 2",
+    "prompt": "A tip from a clean job gives you a chance to save or spend.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "cars"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Washing Cars: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Washing Cars: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Washing Cars: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "cars",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_tutor_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "tutor"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Tutoring: Financial Decision 1",
+    "prompt": "You want to buy printed practice pages or a small teaching tool.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "tutor"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Tutoring: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Tutoring: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Tutoring: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "tutor",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_tutor_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "tutor"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Tutoring: Financial Decision 2",
+    "prompt": "Tutoring money comes in and you must decide how much to save.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "tutor"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Tutoring: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Tutoring: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Tutoring: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "tutor",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_chores_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "chores"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "House Cleaning: Financial Decision 1",
+    "prompt": "Cleaning supplies or gloves would make the work easier.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "chores"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "House Cleaning: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "House Cleaning: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "House Cleaning: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "chores",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_chores_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "chores"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "House Cleaning: Financial Decision 2",
+    "prompt": "You got paid for chores and need to decide where the money goes.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "chores"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "House Cleaning: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "House Cleaning: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "House Cleaning: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "chores",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_errands_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "errands"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Running Errands: Financial Decision 1",
+    "prompt": "Transportation costs are rising for your errands work.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "errands"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Running Errands: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Running Errands: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Running Errands: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "errands",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_errands_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "errands"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Running Errands: Financial Decision 2",
+    "prompt": "A delivery tip gives you a quick money choice to make.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "errands"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Running Errands: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Running Errands: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Running Errands: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "errands",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_crafts_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "crafts"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Selling Crafts: Financial Decision 1",
+    "prompt": "You need art supplies to finish a craft order well.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "crafts"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Selling Crafts: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Selling Crafts: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Selling Crafts: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "crafts",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_crafts_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "crafts"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Selling Crafts: Financial Decision 2",
+    "prompt": "Craft sales money arrives and you need to split it wisely.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "crafts"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Selling Crafts: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Selling Crafts: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Selling Crafts: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "crafts",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_lemonade_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lemonade"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Lemonade Stand: Financial Decision 1",
+    "prompt": "You need cups, lemons, or ice before the next sales day.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "lemonade"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Lemonade Stand: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Lemonade Stand: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Lemonade Stand: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "lemonade",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_lemonade_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lemonade"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Lemonade Stand: Financial Decision 2",
+    "prompt": "You made lemonade stand money and need to decide how much to save.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "lemonade"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Lemonade Stand: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Lemonade Stand: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Lemonade Stand: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "lemonade",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_grocery_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "grocery"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Grocery Bagger: Financial Decision 1",
+    "prompt": "A paycheck lands and you have bills or goals waiting.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "grocery"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Grocery Bagger: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Grocery Bagger: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Grocery Bagger: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "grocery",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_grocery_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "grocery"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Grocery Bagger: Financial Decision 2",
+    "prompt": "Work shoes or small job gear may need replacing soon.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "grocery"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Grocery Bagger: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Grocery Bagger: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Grocery Bagger: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "grocery",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_cashier_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cashier"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Cashier: Financial Decision 1",
+    "prompt": "A paycheck hits and you must decide how much to move to savings.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "cashier"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Cashier: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Cashier: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Cashier: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "cashier",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_cashier_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cashier"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Cashier: Financial Decision 2",
+    "prompt": "A snack-and-drink habit during shifts is quietly eating your money.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "cashier"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Cashier: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Cashier: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Cashier: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "cashier",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_restaurant_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "restaurant"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Restaurant Worker: Financial Decision 1",
+    "prompt": "Tips or shift pay give you a chance to build savings fast.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "restaurant"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Restaurant Worker: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Restaurant Worker: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Restaurant Worker: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "restaurant",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_restaurant_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "restaurant"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Restaurant Worker: Financial Decision 2",
+    "prompt": "Work meals and convenience spending can start leaking your money.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "restaurant"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Restaurant Worker: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Restaurant Worker: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Restaurant Worker: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "restaurant",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_manager_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "manager"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Manager: Financial Decision 1",
+    "prompt": "A manager paycheck is bigger, but so are your chances to overspend.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "manager"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $25",
+        "immediate_effects": {
+          "checking": -25,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Manager: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -12,
+          "savings": 12
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Manager: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Manager: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "manager",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_manager_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "manager"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Manager: Financial Decision 2",
+    "prompt": "You are thinking about saving for leadership tools, classes, or a professional look.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "manager"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 17,
+          "checking": 17
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Manager: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 35
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Manager: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 35
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Manager: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "manager",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_entrepreneur_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "entrepreneur"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Entrepreneur: Financial Decision 1",
+    "prompt": "You need to decide whether to reinvest business money or keep it liquid.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "entrepreneur"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $10",
+        "immediate_effects": {
+          "checking": -10,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "Entrepreneur: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -5,
+          "savings": 5
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "Entrepreneur: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "Entrepreneur: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "entrepreneur",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_entrepreneur_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "entrepreneur"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "Entrepreneur: Financial Decision 2",
+    "prompt": "A slow week makes cash-flow planning more important than usual.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "entrepreneur"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 9,
+          "checking": 9
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "Entrepreneur: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 18
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "Entrepreneur: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 18
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "Entrepreneur: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "entrepreneur",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_ceo_money_01",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "ceo"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "CEO: Financial Decision 1",
+    "prompt": "You must decide how much company cash to preserve versus push toward growth.",
+    "step_tags": [
+      "job_money",
+      "planning",
+      "ceo"
+    ],
+    "choices": [
+      {
+        "id": "fund_need",
+        "label": "Cover it now for $25",
+        "immediate_effects": {
+          "checking": -25,
+          "credit_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "fund_need",
+        "ledger_note": "CEO: covered a work-related money need."
+      },
+      {
+        "id": "save_toward_it",
+        "label": "Start or add to a savings plan",
+        "immediate_effects": {
+          "checking": -12,
+          "savings": 12
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_first",
+        "ledger_note": "CEO: saved toward the goal instead of rushing."
+      },
+      {
+        "id": "delay_cost",
+        "label": "Delay it and risk a bigger cost later",
+        "immediate_effects": {
+          "credit_score": -1
+        },
+        "delayed_hooks": [
+          "late_fee_chain"
+        ],
+        "reflection_tag": "delay_cost",
+        "ledger_note": "CEO: delayed the cost and increased risk."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "ceo",
+      "job_specific"
+    ]
+  },
+  {
+    "id": "fin_ceo_money_02",
+    "category": "financial",
+    "mode": [
+      "beginner",
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "ceo"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12"
+    ],
+    "title": "CEO: Financial Decision 2",
+    "prompt": "A strong revenue moment gives you a chance to strengthen reserves.",
+    "step_tags": [
+      "job_money",
+      "allocation",
+      "ceo"
+    ],
+    "choices": [
+      {
+        "id": "split_pay",
+        "label": "Split the money between savings and checking",
+        "immediate_effects": {
+          "savings": 17,
+          "checking": 17
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "split_pay",
+        "ledger_note": "CEO: split new money between saving and spending."
+      },
+      {
+        "id": "save_more",
+        "label": "Save most of it",
+        "immediate_effects": {
+          "savings": 35
+        },
+        "delayed_hooks": [
+          "steady_growth"
+        ],
+        "reflection_tag": "save_pay",
+        "ledger_note": "CEO: saved the new money."
+      },
+      {
+        "id": "spend_more",
+        "label": "Keep it available to spend",
+        "immediate_effects": {
+          "checking": 35
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "spend_pay",
+        "ledger_note": "CEO: kept the new money available to spend."
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48
+    },
+    "consequence_paths": [],
+    "weight": 5,
+    "repeat_rule": {
+      "cooldown_steps": 4,
+      "max_uses_per_year": 2
+    },
+    "tags": [
+      "ceo",
+      "job_specific"
     ]
   }
 ]
