@@ -1,0 +1,665 @@
+{
+  "jobs": {
+    "babysitting": {
+      "job_name": "Babysitting",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_babysitting_01",
+              "title": "Babysitting: Schedule Conflict",
+              "prompt": "A family asks you to stay later than planned, but you already had your own plans. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_babysitting_01",
+              "title": "Babysitting: Work Supplies Decision",
+              "prompt": "You realize you need a few supplies to do this job well. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_babysitting_01",
+              "title": "Babysitting: Repeat Booking Opportunity",
+              "prompt": "A current family asks if you can take on one more booking this week. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "pet": {
+      "job_name": "Pet Sitting",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_pet_01",
+              "title": "Pet Sitting: Schedule Conflict",
+              "prompt": "A family asks you to stay later than planned, but you already had your own plans. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_pet_01",
+              "title": "Pet Sitting: Work Supplies Decision",
+              "prompt": "You realize you need a few supplies to do this job well. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_pet_01",
+              "title": "Pet Sitting: Repeat Booking Opportunity",
+              "prompt": "A current family asks if you can take on one more booking this week. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "dogwalk": {
+      "job_name": "Dog Walking",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_dogwalk_01",
+              "title": "Dog Walking: Transportation Problem",
+              "prompt": "Your ride falls through right before your route. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_dogwalk_01",
+              "title": "Dog Walking: Equipment Maintenance",
+              "prompt": "Your equipment needs a small fix before your next workday. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_dogwalk_01",
+              "title": "Dog Walking: Neighbor Referral",
+              "prompt": "A customer says a neighbor may want your help too. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "lawn": {
+      "job_name": "Lawn Care",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_lawn_01",
+              "title": "Lawn Care: Transportation Problem",
+              "prompt": "Your ride falls through right before your route. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_lawn_01",
+              "title": "Lawn Care: Equipment Maintenance",
+              "prompt": "Your equipment needs a small fix before your next workday. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_lawn_01",
+              "title": "Lawn Care: Neighbor Referral",
+              "prompt": "A customer says a neighbor may want your help too. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "cars": {
+      "job_name": "Washing Cars",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_cars_01",
+              "title": "Washing Cars: Transportation Problem",
+              "prompt": "Your ride falls through right before your route. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_cars_01",
+              "title": "Washing Cars: Equipment Maintenance",
+              "prompt": "Your equipment needs a small fix before your next workday. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_cars_01",
+              "title": "Washing Cars: Neighbor Referral",
+              "prompt": "A customer says a neighbor may want your help too. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "tutor": {
+      "job_name": "Tutoring",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_tutor_01",
+              "title": "Tutoring: Study-Time Tradeoff",
+              "prompt": "You have your own schoolwork to finish, but a client wants extra help. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_tutor_01",
+              "title": "Tutoring: Learning Materials",
+              "prompt": "You could buy better learning materials for your students. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_tutor_01",
+              "title": "Tutoring: Exam Prep Request",
+              "prompt": "A student asks for an extra exam-prep session this week. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "chores": {
+      "job_name": "House Cleaning",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_chores_01",
+              "title": "House Cleaning: Transportation Problem",
+              "prompt": "Your ride falls through right before your route. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_chores_01",
+              "title": "House Cleaning: Equipment Maintenance",
+              "prompt": "Your equipment needs a small fix before your next workday. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_chores_01",
+              "title": "House Cleaning: Neighbor Referral",
+              "prompt": "A customer says a neighbor may want your help too. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "errands": {
+      "job_name": "Running Errands",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_errands_01",
+              "title": "Running Errands: Transportation Problem",
+              "prompt": "Your ride falls through right before your route. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_errands_01",
+              "title": "Running Errands: Equipment Maintenance",
+              "prompt": "Your equipment needs a small fix before your next workday. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_errands_01",
+              "title": "Running Errands: Neighbor Referral",
+              "prompt": "A customer says a neighbor may want your help too. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "crafts": {
+      "job_name": "Selling Crafts",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_crafts_01",
+              "title": "Selling Crafts: Supply Cost Surprise",
+              "prompt": "Supply costs jump right before your next sales day. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_crafts_01",
+              "title": "Selling Crafts: Reinvest or Spend",
+              "prompt": "You made some profit this week. What should happen to it?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_crafts_01",
+              "title": "Selling Crafts: Pop-Up Sales Chance",
+              "prompt": "You get a chance to sell at a small pop-up event. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "lemonade": {
+      "job_name": "Lemonade Stand",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_lemonade_01",
+              "title": "Lemonade Stand: Supply Cost Surprise",
+              "prompt": "Supply costs jump right before your next sales day. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_lemonade_01",
+              "title": "Lemonade Stand: Reinvest or Spend",
+              "prompt": "You made some profit this week. What should happen to it?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_lemonade_01",
+              "title": "Lemonade Stand: Pop-Up Sales Chance",
+              "prompt": "You get a chance to sell at a small pop-up event. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "grocery": {
+      "job_name": "Grocery Bagger",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_grocery_01",
+              "title": "Grocery Bagger: Late Start Risk",
+              "prompt": "You are running behind before your shift starts. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_grocery_01",
+              "title": "Grocery Bagger: Uniform or Work Item Purchase",
+              "prompt": "You need a small work-related item for your shift. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_grocery_01",
+              "title": "Grocery Bagger: Extra Shift Window",
+              "prompt": "A small extra shift window opens this week. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "cashier": {
+      "job_name": "Cashier",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_cashier_01",
+              "title": "Cashier: Late Start Risk",
+              "prompt": "You are running behind before your shift starts. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_cashier_01",
+              "title": "Cashier: Uniform or Work Item Purchase",
+              "prompt": "You need a small work-related item for your shift. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_cashier_01",
+              "title": "Cashier: Extra Shift Window",
+              "prompt": "A small extra shift window opens this week. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "restaurant": {
+      "job_name": "Restaurant Worker",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_restaurant_01",
+              "title": "Restaurant Worker: Late Start Risk",
+              "prompt": "You are running behind before your shift starts. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_restaurant_01",
+              "title": "Restaurant Worker: Uniform or Work Item Purchase",
+              "prompt": "You need a small work-related item for your shift. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_restaurant_01",
+              "title": "Restaurant Worker: Extra Shift Window",
+              "prompt": "A small extra shift window opens this week. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "manager": {
+      "job_name": "Manager",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_manager_01",
+              "title": "Manager: Team Coverage Problem",
+              "prompt": "A team member calls out, and the schedule suddenly gets tight. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_manager_01",
+              "title": "Manager: Budget Line Decision",
+              "prompt": "You have a small budget line to use. What do you do with it?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_manager_01",
+              "title": "Manager: Team Improvement Idea",
+              "prompt": "You can test a small improvement with your team this week. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "entrepreneur": {
+      "job_name": "Entrepreneur",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_entrepreneur_01",
+              "title": "Entrepreneur: Supply Cost Surprise",
+              "prompt": "Supply costs jump right before your next sales day. What do you do?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_entrepreneur_01",
+              "title": "Entrepreneur: Reinvest or Spend",
+              "prompt": "You made some profit this week. What should happen to it?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_entrepreneur_01",
+              "title": "Entrepreneur: Pop-Up Sales Chance",
+              "prompt": "You get a chance to sell at a small pop-up event. What do you do?"
+            }
+          ]
+        }
+      }
+    },
+    "ceo": {
+      "job_name": "CEO",
+      "details": {
+        "real_life": {
+          "original_count": 19,
+          "phase2_total_count": 20,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "rl2_ceo_01",
+              "title": "CEO: Company Pressure Week",
+              "prompt": "Several issues hit your company in the same week. What do you do first?"
+            }
+          ]
+        },
+        "financial": {
+          "original_count": 21,
+          "phase2_total_count": 22,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "fin2_ceo_01",
+              "title": "CEO: Capital Allocation",
+              "prompt": "You can direct a small amount of company money this week. What do you do?"
+            }
+          ]
+        },
+        "job_opportunity": {
+          "original_count": 4,
+          "phase2_total_count": 5,
+          "phase2_new_direct_count": 1,
+          "new_scenarios": [
+            {
+              "id": "opp2_ceo_01",
+              "title": "CEO: Strategic Expansion Lead",
+              "prompt": "A new strategic lead appears that could grow the company. What do you do?"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "replace_these_files": [
+    "real-life-expansion-v1.json",
+    "financial-expansion-v1.json",
+    "opportunity-job-expansion-v1.json"
+  ]
+}
