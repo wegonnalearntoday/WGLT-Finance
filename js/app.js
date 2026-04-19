@@ -3376,7 +3376,20 @@ function runEventEngineV1(week, onAllDone){
 
 /* Main weekly scenario runner — called from nextWeek() */
 function runWeeklyScenarios(week, onAllDone){
-  return runEventEngineV1(week, onAllDone);
+  const categoryOrder = ['real_life','opportunity','financial'];
+  let idx = 0;
+  function runNext(){
+    if(idx >= categoryOrder.length){ if(typeof onAllDone === 'function') onAllDone(); return; }
+    const category = categoryOrder[idx++];
+    if(!state.ui) state.ui = {};
+    state.ui._scenarioChainNext = runNext;
+    return runScenarioFoundationCategory(category, ()=>{
+      delete state.ui._scenarioChainNext;
+      addLedgerLine(`Scenario engine fallback: no matching ${category} scenario found for Week ${week}.`);
+      runNext();
+    });
+  }
+  return runNext();
 }
 
 /* Update the header week/month display */
@@ -8027,8 +8040,7 @@ function selectConfiguration(role='teacher', experience='standard'){
       sessionStorage.setItem('wglt_jr_role', role);
       sessionStorage.setItem('wglt_jr_experience', experience);
     }catch(e){}
-    window.location.href = './budget-boss-jr.html?teacher=' + (role === 'teacher' ? '1' : '0') + '&role=' + encodeURIComponent(role) + '&experience=' + encodeURIComponent(experience);
-    return;
+    // Phase 5: keep Beginner inside the same 48-week engine instead of redirecting to the 12-week Jr app.
   }
   if($("modeSelectScreen")) $("modeSelectScreen").style.display = "none";
   state.presentationRole = role;
@@ -9113,7 +9125,11 @@ function playScenarioFoundationScenario(picked, category){
         buttons:[{id:'ok',label:'Continue',kind:'primary'}],
         onPick: ()=> {
           renderAll();
-          if(typeof notifyAction === 'function') notifyAction(category === 'opportunity' ? 'job_event' : 'weekly');
+          if(state && state.ui && typeof state.ui._scenarioChainNext === 'function'){
+              const chainNext = state.ui._scenarioChainNext;
+              delete state.ui._scenarioChainNext;
+              setTimeout(()=>chainNext(), 0);
+            } else if(typeof notifyAction === 'function') notifyAction(category === 'opportunity' ? 'job_event' : 'weekly');
         }
       });
     }
@@ -9164,6 +9180,29 @@ try{
     window.WGLT_DEBUG.listLifeScenarios = function(){
       return getScenarioFoundationPacksByCategory('real_life').map(sc => ({ id: sc.id, title: sc.title }));
     };
+    window.WGLT_DEBUG.listFinancialScenarios = function(){
+      return getScenarioFoundationPacksByCategory('financial').map(sc => ({ id: sc.id, title: sc.title }));
+    };
+    window.WGLT_DEBUG.listOpportunityScenarios = function(){
+      return getScenarioFoundationPacksByCategory('opportunity').map(sc => ({ id: sc.id, title: sc.title }));
+    };
+    window.WGLT_DEBUG.inspectScenarioCoverage = function(){
+      const jobs = (window.WGLT_DATA && window.WGLT_DATA.jobs) || [];
+      const byCat = {
+        real_life: getScenarioFoundationPacksByCategory('real_life'),
+        financial: getScenarioFoundationPacksByCategory('financial'),
+        opportunity: getScenarioFoundationPacksByCategory('opportunity')
+      };
+      return jobs.map(job => ({
+        job: job.id,
+        real_life: byCat.real_life.filter(sc => (sc.jobs||[]).includes('all') || (sc.jobs||[]).includes(job.id)).length,
+        financial: byCat.financial.filter(sc => (sc.jobs||[]).includes('all') || (sc.jobs||[]).includes(job.id)).length,
+        opportunity: byCat.opportunity.filter(sc => (sc.jobs||[]).includes('all') || (sc.jobs||[]).includes(job.id)).length
+      }));
+    };
+    window.WGLT_DEBUG.runWeekScenarioChain = function(){
+      return runWeeklyScenarios((state.weekEngine && state.weekEngine.week) || 1, function(){ console.log('Scenario chain done'); });
+    };
   }
 }catch(err){}
 
@@ -9172,17 +9211,22 @@ const __legacyRunFinancialDecision = runFinancialDecision;
 const __legacyRunJobRealLifeEvent = runJobRealLifeEvent;
 
 runLifeScenarioDecision = function(){
-  return runScenarioFoundationCategory('real_life', __legacyRunLifeScenarioDecision);
+  return runScenarioFoundationCategory('real_life');
 };
 runFinancialDecision = function(){
   const useEliteCredit = isEliteExperience() && Math.random() < 0.25;
-  return runScenarioFoundationCategory(useEliteCredit ? 'elite_credit' : 'financial', __legacyRunFinancialDecision);
+  return runScenarioFoundationCategory(useEliteCredit ? 'elite_credit' : 'financial');
 };
 runJobRealLifeEvent = function(afterDone){
   if(state && state.ui && state.ui.forceWeeklySupplyDecision){
     return __legacyRunJobRealLifeEvent(afterDone);
   }
-  return runScenarioFoundationCategory('opportunity', __legacyRunJobRealLifeEvent, afterDone);
+  if(!state.ui) state.ui = {};
+  state.ui._scenarioChainNext = typeof afterDone === 'function' ? afterDone : null;
+  return runScenarioFoundationCategory('opportunity', ()=>{
+    delete state.ui._scenarioChainNext;
+    if(typeof afterDone === 'function') afterDone();
+  });
 };
 
 
@@ -9831,7 +9875,11 @@ function getChoicePreviewForCurrentJob(choice){
           buttons:[{id:'ok',label:'Continue',kind:'primary'}],
           onPick: ()=> {
             renderAll();
-            if(typeof notifyAction === 'function') notifyAction(category === 'opportunity' ? 'job_event' : 'weekly');
+            if(state && state.ui && typeof state.ui._scenarioChainNext === 'function'){
+              const chainNext = state.ui._scenarioChainNext;
+              delete state.ui._scenarioChainNext;
+              setTimeout(()=>chainNext(), 0);
+            } else if(typeof notifyAction === 'function') notifyAction(category === 'opportunity' ? 'job_event' : 'weekly');
           }
         });
       }
