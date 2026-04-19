@@ -1,0 +1,2094 @@
+[
+  {
+    "id": "rl2_babysitting_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "babysitting"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Babysitting: Schedule Conflict",
+    "prompt": "A family asks you to stay later than planned, but you already had your own plans. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "babysitting"
+    ],
+    "choices": [
+      {
+        "id": "stay_help",
+        "label": "Stay later and finish strong",
+        "immediate_effects": {
+          "checking": 12,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_risk_minor"
+        ],
+        "reflection_tag": "dependability_win",
+        "ledger_note": "Stayed late to help a family",
+        "job_preview": {
+          "job": "babysitting",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "You were flexible and dependable, so the family recommended you to another household."
+        },
+        "job_previews": {
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "You were flexible and dependable, so the family recommended you to another household."
+          }
+        }
+      },
+      {
+        "id": "set_boundary",
+        "label": "Keep your original end time and communicate clearly",
+        "immediate_effects": {
+          "checking": 6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "healthy_boundary",
+        "ledger_note": "Kept schedule and communicated clearly",
+        "job_preview": {
+          "job": "babysitting",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.03,
+          "client_delta": 0,
+          "note": "You protected your time and still looked professional."
+        },
+        "job_previews": {
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "You protected your time and still looked professional."
+          }
+        }
+      },
+      {
+        "id": "leave_early",
+        "label": "Rush out without explaining",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "trust_loss",
+        "ledger_note": "Left early without a clear handoff",
+        "job_preview": {
+          "job": "babysitting",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "The family felt uncertain about trusting you for the next booking."
+        },
+        "job_previews": {
+          "babysitting": {
+            "job": "babysitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "The family felt uncertain about trusting you for the next booking."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "babysitting",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_pet_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "pet"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Pet Sitting: Schedule Conflict",
+    "prompt": "A family asks you to stay later than planned, but you already had your own plans. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "pet"
+    ],
+    "choices": [
+      {
+        "id": "stay_help",
+        "label": "Stay later and finish strong",
+        "immediate_effects": {
+          "checking": 12,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_risk_minor"
+        ],
+        "reflection_tag": "dependability_win",
+        "ledger_note": "Stayed late to help a family",
+        "job_preview": {
+          "job": "pet_sitting",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "You were flexible and dependable, so the family recommended you to another household."
+        },
+        "job_previews": {
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "You were flexible and dependable, so the family recommended you to another household."
+          }
+        }
+      },
+      {
+        "id": "set_boundary",
+        "label": "Keep your original end time and communicate clearly",
+        "immediate_effects": {
+          "checking": 6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "healthy_boundary",
+        "ledger_note": "Kept schedule and communicated clearly",
+        "job_preview": {
+          "job": "pet_sitting",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.03,
+          "client_delta": 0,
+          "note": "You protected your time and still looked professional."
+        },
+        "job_previews": {
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.03,
+            "client_delta": 0,
+            "note": "You protected your time and still looked professional."
+          }
+        }
+      },
+      {
+        "id": "leave_early",
+        "label": "Rush out without explaining",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "trust_loss",
+        "ledger_note": "Left early without a clear handoff",
+        "job_preview": {
+          "job": "pet_sitting",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "The family felt uncertain about trusting you for the next booking."
+        },
+        "job_previews": {
+          "pet_sitting": {
+            "job": "pet_sitting",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "The family felt uncertain about trusting you for the next booking."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "pet",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_dogwalk_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "dogwalk"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Dog Walking: Transportation Problem",
+    "prompt": "Your ride falls through right before your route. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "dogwalk"
+    ],
+    "choices": [
+      {
+        "id": "pay_ride",
+        "label": "Pay for a quick ride so you stay on time",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_route",
+        "ledger_note": "Paid for transportation to stay on time",
+        "job_preview": {
+          "job": "dog_walking",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.04,
+          "client_delta": 0,
+          "note": "You protected your route and showed clients you are reliable."
+        },
+        "job_previews": {
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.04,
+            "client_delta": 0,
+            "note": "You protected your route and showed clients you are reliable."
+          }
+        }
+      },
+      {
+        "id": "reschedule_cleanly",
+        "label": "Reschedule early with clear communication",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "reschedule_well",
+        "ledger_note": "Rescheduled your stops early",
+        "job_preview": {
+          "job": "dog_walking",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "Clients appreciated the heads-up even though the route changed."
+        },
+        "job_previews": {
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "Clients appreciated the heads-up even though the route changed."
+          }
+        }
+      },
+      {
+        "id": "miss_route",
+        "label": "Show up late with no warning",
+        "immediate_effects": {
+          "checking": -5,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "missed_route",
+        "ledger_note": "Missed part of your route with no warning",
+        "job_preview": {
+          "job": "dog_walking",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "One client started looking for someone more dependable."
+        },
+        "job_previews": {
+          "dog_walking": {
+            "job": "dog_walking",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "One client started looking for someone more dependable."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "dogwalk",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_lawn_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lawn"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Lawn Care: Transportation Problem",
+    "prompt": "Your ride falls through right before your route. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "lawn"
+    ],
+    "choices": [
+      {
+        "id": "pay_ride",
+        "label": "Pay for a quick ride so you stay on time",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_route",
+        "ledger_note": "Paid for transportation to stay on time",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.04,
+          "client_delta": 0,
+          "note": "You protected your route and showed clients you are reliable."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.04,
+            "client_delta": 0,
+            "note": "You protected your route and showed clients you are reliable."
+          }
+        }
+      },
+      {
+        "id": "reschedule_cleanly",
+        "label": "Reschedule early with clear communication",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "reschedule_well",
+        "ledger_note": "Rescheduled your stops early",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "Clients appreciated the heads-up even though the route changed."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "Clients appreciated the heads-up even though the route changed."
+          }
+        }
+      },
+      {
+        "id": "miss_route",
+        "label": "Show up late with no warning",
+        "immediate_effects": {
+          "checking": -5,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "missed_route",
+        "ledger_note": "Missed part of your route with no warning",
+        "job_preview": {
+          "job": "lawn_care",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "One client started looking for someone more dependable."
+        },
+        "job_previews": {
+          "lawn_care": {
+            "job": "lawn_care",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "One client started looking for someone more dependable."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "lawn",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_cars_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cars"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Washing Cars: Transportation Problem",
+    "prompt": "Your ride falls through right before your route. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "cars"
+    ],
+    "choices": [
+      {
+        "id": "pay_ride",
+        "label": "Pay for a quick ride so you stay on time",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_route",
+        "ledger_note": "Paid for transportation to stay on time",
+        "job_preview": {
+          "job": "washing_cars",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.04,
+          "client_delta": 0,
+          "note": "You protected your route and showed clients you are reliable."
+        },
+        "job_previews": {
+          "washing_cars": {
+            "job": "washing_cars",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.04,
+            "client_delta": 0,
+            "note": "You protected your route and showed clients you are reliable."
+          }
+        }
+      },
+      {
+        "id": "reschedule_cleanly",
+        "label": "Reschedule early with clear communication",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "reschedule_well",
+        "ledger_note": "Rescheduled your stops early",
+        "job_preview": {
+          "job": "washing_cars",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "Clients appreciated the heads-up even though the route changed."
+        },
+        "job_previews": {
+          "washing_cars": {
+            "job": "washing_cars",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "Clients appreciated the heads-up even though the route changed."
+          }
+        }
+      },
+      {
+        "id": "miss_route",
+        "label": "Show up late with no warning",
+        "immediate_effects": {
+          "checking": -5,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "missed_route",
+        "ledger_note": "Missed part of your route with no warning",
+        "job_preview": {
+          "job": "washing_cars",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "One client started looking for someone more dependable."
+        },
+        "job_previews": {
+          "washing_cars": {
+            "job": "washing_cars",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "One client started looking for someone more dependable."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "cars",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_tutor_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "tutor"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Tutoring: Study-Time Tradeoff",
+    "prompt": "You have your own schoolwork to finish, but a client wants extra help. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "tutor"
+    ],
+    "choices": [
+      {
+        "id": "balance_both",
+        "label": "Set a clear schedule and do both responsibly",
+        "immediate_effects": {
+          "checking": 10,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "balance_skill",
+        "ledger_note": "Balanced your own work and the tutoring session",
+        "job_preview": {
+          "job": "tutoring",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "Families noticed your organization and professionalism."
+        },
+        "job_previews": {
+          "tutoring": {
+            "job": "tutoring",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "Families noticed your organization and professionalism."
+          }
+        }
+      },
+      {
+        "id": "help_client_only",
+        "label": "Put your own work aside and help the client first",
+        "immediate_effects": {
+          "checking": 14,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "fatigue_risk_minor"
+        ],
+        "reflection_tag": "short_term_service",
+        "ledger_note": "Prioritized the client and pushed your own work back",
+        "job_preview": {
+          "job": "tutoring",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.04,
+          "client_delta": 0,
+          "note": "You earned more today, but the pressure on your own schedule increased."
+        },
+        "job_previews": {
+          "tutoring": {
+            "job": "tutoring",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.04,
+            "client_delta": 0,
+            "note": "You earned more today, but the pressure on your own schedule increased."
+          }
+        }
+      },
+      {
+        "id": "cancel_last_minute",
+        "label": "Cancel late because you ran out of time",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "last_minute_cancel",
+        "ledger_note": "Canceled a session late",
+        "job_preview": {
+          "job": "tutoring",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "The family questioned whether they could count on you each week."
+        },
+        "job_previews": {
+          "tutoring": {
+            "job": "tutoring",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "The family questioned whether they could count on you each week."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "tutor",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_chores_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "chores"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "House Cleaning: Transportation Problem",
+    "prompt": "Your ride falls through right before your route. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "chores"
+    ],
+    "choices": [
+      {
+        "id": "pay_ride",
+        "label": "Pay for a quick ride so you stay on time",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_route",
+        "ledger_note": "Paid for transportation to stay on time",
+        "job_preview": {
+          "job": "house_cleaning",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.04,
+          "client_delta": 0,
+          "note": "You protected your route and showed clients you are reliable."
+        },
+        "job_previews": {
+          "house_cleaning": {
+            "job": "house_cleaning",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.04,
+            "client_delta": 0,
+            "note": "You protected your route and showed clients you are reliable."
+          }
+        }
+      },
+      {
+        "id": "reschedule_cleanly",
+        "label": "Reschedule early with clear communication",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "reschedule_well",
+        "ledger_note": "Rescheduled your stops early",
+        "job_preview": {
+          "job": "house_cleaning",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "Clients appreciated the heads-up even though the route changed."
+        },
+        "job_previews": {
+          "house_cleaning": {
+            "job": "house_cleaning",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "Clients appreciated the heads-up even though the route changed."
+          }
+        }
+      },
+      {
+        "id": "miss_route",
+        "label": "Show up late with no warning",
+        "immediate_effects": {
+          "checking": -5,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "missed_route",
+        "ledger_note": "Missed part of your route with no warning",
+        "job_preview": {
+          "job": "house_cleaning",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "One client started looking for someone more dependable."
+        },
+        "job_previews": {
+          "house_cleaning": {
+            "job": "house_cleaning",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "One client started looking for someone more dependable."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "chores",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_errands_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "errands"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Running Errands: Transportation Problem",
+    "prompt": "Your ride falls through right before your route. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "errands"
+    ],
+    "choices": [
+      {
+        "id": "pay_ride",
+        "label": "Pay for a quick ride so you stay on time",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_route",
+        "ledger_note": "Paid for transportation to stay on time",
+        "job_preview": {
+          "job": "running_errands",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.04,
+          "client_delta": 0,
+          "note": "You protected your route and showed clients you are reliable."
+        },
+        "job_previews": {
+          "running_errands": {
+            "job": "running_errands",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.04,
+            "client_delta": 0,
+            "note": "You protected your route and showed clients you are reliable."
+          }
+        }
+      },
+      {
+        "id": "reschedule_cleanly",
+        "label": "Reschedule early with clear communication",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "reschedule_well",
+        "ledger_note": "Rescheduled your stops early",
+        "job_preview": {
+          "job": "running_errands",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.0,
+          "client_delta": 0,
+          "note": "Clients appreciated the heads-up even though the route changed."
+        },
+        "job_previews": {
+          "running_errands": {
+            "job": "running_errands",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.0,
+            "client_delta": 0,
+            "note": "Clients appreciated the heads-up even though the route changed."
+          }
+        }
+      },
+      {
+        "id": "miss_route",
+        "label": "Show up late with no warning",
+        "immediate_effects": {
+          "checking": -5,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "missed_route",
+        "ledger_note": "Missed part of your route with no warning",
+        "job_preview": {
+          "job": "running_errands",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "One client started looking for someone more dependable."
+        },
+        "job_previews": {
+          "running_errands": {
+            "job": "running_errands",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "One client started looking for someone more dependable."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "errands",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_crafts_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "crafts"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Selling Crafts: Supply Cost Surprise",
+    "prompt": "Supply costs jump right before your next sales day. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "crafts"
+    ],
+    "choices": [
+      {
+        "id": "adjust_plan",
+        "label": "Adjust your plan and protect profit",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "adapt_business",
+        "ledger_note": "Adjusted your supply plan to protect profit",
+        "job_preview": {
+          "job": "selling_crafts",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "You stayed flexible and kept your small business moving."
+        },
+        "job_previews": {
+          "selling_crafts": {
+            "job": "selling_crafts",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "You stayed flexible and kept your small business moving."
+          }
+        }
+      },
+      {
+        "id": "pay_full",
+        "label": "Pay the full increase without changing anything",
+        "immediate_effects": {
+          "checking": -12,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "eat_cost",
+        "ledger_note": "Absorbed the full supply increase",
+        "job_preview": {
+          "job": "selling_crafts",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "You stayed open, but your profit margin got tighter."
+        },
+        "job_previews": {
+          "selling_crafts": {
+            "job": "selling_crafts",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed open, but your profit margin got tighter."
+          }
+        }
+      },
+      {
+        "id": "cancel_day",
+        "label": "Cancel the sales day entirely",
+        "immediate_effects": {
+          "checking": -5,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "missed_opportunity_minor"
+        ],
+        "reflection_tag": "cancel_sales",
+        "ledger_note": "Canceled your sales day",
+        "job_preview": {
+          "job": "selling_crafts",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "You lost momentum and a few customers moved on."
+        },
+        "job_previews": {
+          "selling_crafts": {
+            "job": "selling_crafts",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "You lost momentum and a few customers moved on."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "crafts",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_lemonade_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "lemonade"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Lemonade Stand: Supply Cost Surprise",
+    "prompt": "Supply costs jump right before your next sales day. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "lemonade"
+    ],
+    "choices": [
+      {
+        "id": "adjust_plan",
+        "label": "Adjust your plan and protect profit",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "adapt_business",
+        "ledger_note": "Adjusted your supply plan to protect profit",
+        "job_preview": {
+          "job": "lemonade_stand",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "You stayed flexible and kept your small business moving."
+        },
+        "job_previews": {
+          "lemonade_stand": {
+            "job": "lemonade_stand",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "You stayed flexible and kept your small business moving."
+          }
+        }
+      },
+      {
+        "id": "pay_full",
+        "label": "Pay the full increase without changing anything",
+        "immediate_effects": {
+          "checking": -12,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "eat_cost",
+        "ledger_note": "Absorbed the full supply increase",
+        "job_preview": {
+          "job": "lemonade_stand",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "You stayed open, but your profit margin got tighter."
+        },
+        "job_previews": {
+          "lemonade_stand": {
+            "job": "lemonade_stand",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed open, but your profit margin got tighter."
+          }
+        }
+      },
+      {
+        "id": "cancel_day",
+        "label": "Cancel the sales day entirely",
+        "immediate_effects": {
+          "checking": -5,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "missed_opportunity_minor"
+        ],
+        "reflection_tag": "cancel_sales",
+        "ledger_note": "Canceled your sales day",
+        "job_preview": {
+          "job": "lemonade_stand",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "You lost momentum and a few customers moved on."
+        },
+        "job_previews": {
+          "lemonade_stand": {
+            "job": "lemonade_stand",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "You lost momentum and a few customers moved on."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "lemonade",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_grocery_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "grocery"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Grocery Bagger: Late Start Risk",
+    "prompt": "You are running behind before your shift starts. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "grocery"
+    ],
+    "choices": [
+      {
+        "id": "move_fast",
+        "label": "Spend a little to get there on time",
+        "immediate_effects": {
+          "checking": -4,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_shift",
+        "ledger_note": "Protected your start time and showed up ready",
+        "job_preview": {
+          "job": "grocery_bagger",
+          "outcome": "growth",
+          "pay_delta_pct": 0.06,
+          "client_delta": 0,
+          "note": "You stayed dependable and avoided schedule trouble."
+        },
+        "job_previews": {
+          "grocery_bagger": {
+            "job": "grocery_bagger",
+            "outcome": "growth",
+            "pay_delta_pct": 0.06,
+            "client_delta": 0,
+            "note": "You stayed dependable and avoided schedule trouble."
+          }
+        }
+      },
+      {
+        "id": "call_ahead",
+        "label": "Call ahead early and explain the issue",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "communicate_shift",
+        "ledger_note": "Called ahead and communicated clearly",
+        "job_preview": {
+          "job": "grocery_bagger",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "The manager appreciated the communication."
+        },
+        "job_previews": {
+          "grocery_bagger": {
+            "job": "grocery_bagger",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "The manager appreciated the communication."
+          }
+        }
+      },
+      {
+        "id": "show_late",
+        "label": "Show up late without warning",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "late_to_shift_warning"
+        ],
+        "reflection_tag": "late_shift",
+        "ledger_note": "Showed up late without warning",
+        "job_preview": {
+          "job": "grocery_bagger",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "Your manager noticed the pattern and your schedule felt less secure."
+        },
+        "job_previews": {
+          "grocery_bagger": {
+            "job": "grocery_bagger",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "Your manager noticed the pattern and your schedule felt less secure."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "grocery",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_cashier_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "cashier"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Cashier: Late Start Risk",
+    "prompt": "You are running behind before your shift starts. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "cashier"
+    ],
+    "choices": [
+      {
+        "id": "move_fast",
+        "label": "Spend a little to get there on time",
+        "immediate_effects": {
+          "checking": -4,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_shift",
+        "ledger_note": "Protected your start time and showed up ready",
+        "job_preview": {
+          "job": "cashier",
+          "outcome": "growth",
+          "pay_delta_pct": 0.06,
+          "client_delta": 0,
+          "note": "You stayed dependable and avoided schedule trouble."
+        },
+        "job_previews": {
+          "cashier": {
+            "job": "cashier",
+            "outcome": "growth",
+            "pay_delta_pct": 0.06,
+            "client_delta": 0,
+            "note": "You stayed dependable and avoided schedule trouble."
+          }
+        }
+      },
+      {
+        "id": "call_ahead",
+        "label": "Call ahead early and explain the issue",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "communicate_shift",
+        "ledger_note": "Called ahead and communicated clearly",
+        "job_preview": {
+          "job": "cashier",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "The manager appreciated the communication."
+        },
+        "job_previews": {
+          "cashier": {
+            "job": "cashier",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "The manager appreciated the communication."
+          }
+        }
+      },
+      {
+        "id": "show_late",
+        "label": "Show up late without warning",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "late_to_shift_warning"
+        ],
+        "reflection_tag": "late_shift",
+        "ledger_note": "Showed up late without warning",
+        "job_preview": {
+          "job": "cashier",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "Your manager noticed the pattern and your schedule felt less secure."
+        },
+        "job_previews": {
+          "cashier": {
+            "job": "cashier",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "Your manager noticed the pattern and your schedule felt less secure."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "cashier",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_restaurant_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "restaurant"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Restaurant Worker: Late Start Risk",
+    "prompt": "You are running behind before your shift starts. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "restaurant"
+    ],
+    "choices": [
+      {
+        "id": "move_fast",
+        "label": "Spend a little to get there on time",
+        "immediate_effects": {
+          "checking": -4,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "protect_shift",
+        "ledger_note": "Protected your start time and showed up ready",
+        "job_preview": {
+          "job": "restaurant_worker",
+          "outcome": "growth",
+          "pay_delta_pct": 0.06,
+          "client_delta": 0,
+          "note": "You stayed dependable and avoided schedule trouble."
+        },
+        "job_previews": {
+          "restaurant_worker": {
+            "job": "restaurant_worker",
+            "outcome": "growth",
+            "pay_delta_pct": 0.06,
+            "client_delta": 0,
+            "note": "You stayed dependable and avoided schedule trouble."
+          }
+        }
+      },
+      {
+        "id": "call_ahead",
+        "label": "Call ahead early and explain the issue",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "communicate_shift",
+        "ledger_note": "Called ahead and communicated clearly",
+        "job_preview": {
+          "job": "restaurant_worker",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "The manager appreciated the communication."
+        },
+        "job_previews": {
+          "restaurant_worker": {
+            "job": "restaurant_worker",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "The manager appreciated the communication."
+          }
+        }
+      },
+      {
+        "id": "show_late",
+        "label": "Show up late without warning",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "late_to_shift_warning"
+        ],
+        "reflection_tag": "late_shift",
+        "ledger_note": "Showed up late without warning",
+        "job_preview": {
+          "job": "restaurant_worker",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "Your manager noticed the pattern and your schedule felt less secure."
+        },
+        "job_previews": {
+          "restaurant_worker": {
+            "job": "restaurant_worker",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "Your manager noticed the pattern and your schedule felt less secure."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "restaurant",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_manager_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "manager"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Manager: Team Coverage Problem",
+    "prompt": "A team member calls out, and the schedule suddenly gets tight. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "manager"
+    ],
+    "choices": [
+      {
+        "id": "cover_and_plan",
+        "label": "Cover the gap and reorganize the team",
+        "immediate_effects": {
+          "checking": 12,
+          "health_score": -1,
+          "career_progress": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "leader_step_up",
+        "ledger_note": "Stepped up and reorganized coverage",
+        "job_preview": {
+          "job": "manager",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "Your team saw calm leadership under pressure."
+        },
+        "job_previews": {
+          "manager": {
+            "job": "manager",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "Your team saw calm leadership under pressure."
+          }
+        }
+      },
+      {
+        "id": "delegate_carefully",
+        "label": "Delegate tasks and keep the day steady",
+        "immediate_effects": {
+          "checking": 8,
+          "health_score": 1,
+          "career_progress": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "smart_delegate",
+        "ledger_note": "Delegated tasks clearly",
+        "job_preview": {
+          "job": "manager",
+          "outcome": "growth",
+          "pay_delta_pct": 0.06,
+          "client_delta": 0,
+          "note": "You showed you can lead without doing everything yourself."
+        },
+        "job_previews": {
+          "manager": {
+            "job": "manager",
+            "outcome": "growth",
+            "pay_delta_pct": 0.06,
+            "client_delta": 0,
+            "note": "You showed you can lead without doing everything yourself."
+          }
+        }
+      },
+      {
+        "id": "let_chaos_build",
+        "label": "React late and let the team scramble",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1,
+          "career_progress": -1
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "chaos_leadership",
+        "ledger_note": "Let the team scramble without direction",
+        "job_preview": {
+          "job": "manager",
+          "outcome": "warning",
+          "pay_delta_pct": -0.1,
+          "client_delta": -1,
+          "note": "The team lost confidence in your leadership for the week."
+        },
+        "job_previews": {
+          "manager": {
+            "job": "manager",
+            "outcome": "warning",
+            "pay_delta_pct": -0.1,
+            "client_delta": -1,
+            "note": "The team lost confidence in your leadership for the week."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "manager",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_entrepreneur_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "entrepreneur"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "Entrepreneur: Supply Cost Surprise",
+    "prompt": "Supply costs jump right before your next sales day. What do you do?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "entrepreneur"
+    ],
+    "choices": [
+      {
+        "id": "adjust_plan",
+        "label": "Adjust your plan and protect profit",
+        "immediate_effects": {
+          "checking": -6,
+          "health_score": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "adapt_business",
+        "ledger_note": "Adjusted your supply plan to protect profit",
+        "job_preview": {
+          "job": "entrepreneur",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "You stayed flexible and kept your small business moving."
+        },
+        "job_previews": {
+          "entrepreneur": {
+            "job": "entrepreneur",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "You stayed flexible and kept your small business moving."
+          }
+        }
+      },
+      {
+        "id": "pay_full",
+        "label": "Pay the full increase without changing anything",
+        "immediate_effects": {
+          "checking": -12,
+          "health_score": 0
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "eat_cost",
+        "ledger_note": "Absorbed the full supply increase",
+        "job_preview": {
+          "job": "entrepreneur",
+          "outcome": "neutral",
+          "pay_delta_pct": 0.02,
+          "client_delta": 0,
+          "note": "You stayed open, but your profit margin got tighter."
+        },
+        "job_previews": {
+          "entrepreneur": {
+            "job": "entrepreneur",
+            "outcome": "neutral",
+            "pay_delta_pct": 0.02,
+            "client_delta": 0,
+            "note": "You stayed open, but your profit margin got tighter."
+          }
+        }
+      },
+      {
+        "id": "cancel_day",
+        "label": "Cancel the sales day entirely",
+        "immediate_effects": {
+          "checking": -5,
+          "health_score": -1
+        },
+        "delayed_hooks": [
+          "missed_opportunity_minor"
+        ],
+        "reflection_tag": "cancel_sales",
+        "ledger_note": "Canceled your sales day",
+        "job_preview": {
+          "job": "entrepreneur",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "You lost momentum and a few customers moved on."
+        },
+        "job_previews": {
+          "entrepreneur": {
+            "job": "entrepreneur",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "You lost momentum and a few customers moved on."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "entrepreneur",
+      "real_life"
+    ]
+  },
+  {
+    "id": "rl2_ceo_01",
+    "category": "real_life",
+    "mode": [
+      "standard",
+      "elite"
+    ],
+    "jobs": [
+      "ceo"
+    ],
+    "grade_band": [
+      "6-8",
+      "9-12",
+      "college",
+      "adult"
+    ],
+    "title": "CEO: Company Pressure Week",
+    "prompt": "Several issues hit your company in the same week. What do you do first?",
+    "step_tags": [
+      "job_balance",
+      "decision",
+      "ceo"
+    ],
+    "choices": [
+      {
+        "id": "prioritize_first",
+        "label": "Set priorities and calm the company down",
+        "immediate_effects": {
+          "checking": 16,
+          "health_score": -1,
+          "career_progress": 2
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "steady_exec",
+        "ledger_note": "Set priorities and stabilized the company",
+        "job_preview": {
+          "job": "ceo",
+          "outcome": "growth",
+          "pay_delta_pct": 0.08,
+          "client_delta": 1,
+          "note": "Your company handled the pressure because you stayed clear and decisive."
+        },
+        "job_previews": {
+          "ceo": {
+            "job": "ceo",
+            "outcome": "growth",
+            "pay_delta_pct": 0.08,
+            "client_delta": 1,
+            "note": "Your company handled the pressure because you stayed clear and decisive."
+          }
+        }
+      },
+      {
+        "id": "delegate_exec",
+        "label": "Delegate well and monitor the response",
+        "immediate_effects": {
+          "checking": 10,
+          "health_score": 1,
+          "career_progress": 1
+        },
+        "delayed_hooks": [],
+        "reflection_tag": "delegate_exec",
+        "ledger_note": "Delegated company pressure points clearly",
+        "job_preview": {
+          "job": "ceo",
+          "outcome": "growth",
+          "pay_delta_pct": 0.05,
+          "client_delta": 0,
+          "note": "You kept the company moving without carrying every detail yourself."
+        },
+        "job_previews": {
+          "ceo": {
+            "job": "ceo",
+            "outcome": "growth",
+            "pay_delta_pct": 0.05,
+            "client_delta": 0,
+            "note": "You kept the company moving without carrying every detail yourself."
+          }
+        }
+      },
+      {
+        "id": "panic_exec",
+        "label": "React late and let pressure spread",
+        "immediate_effects": {
+          "checking": 0,
+          "health_score": -1,
+          "career_progress": -2
+        },
+        "delayed_hooks": [
+          "job_trust_drop"
+        ],
+        "reflection_tag": "panic_exec",
+        "ledger_note": "Let company pressure spread before acting",
+        "job_preview": {
+          "job": "ceo",
+          "outcome": "warning",
+          "pay_delta_pct": -0.12,
+          "client_delta": -1,
+          "note": "A division lost confidence and performance slipped."
+        },
+        "job_previews": {
+          "ceo": {
+            "job": "ceo",
+            "outcome": "warning",
+            "pay_delta_pct": -0.12,
+            "client_delta": -1,
+            "note": "A division lost confidence and performance slipped."
+          }
+        }
+      }
+    ],
+    "triggers": {
+      "min_step": 1,
+      "max_step": 48,
+      "monthly_focus_bonus": [
+        "budget_smarter"
+      ],
+      "requires": [],
+      "blocks_if": []
+    },
+    "consequence_paths": [],
+    "weight": 6,
+    "repeat_rule": {
+      "cooldown_steps": 8,
+      "max_uses_per_year": 1
+    },
+    "tags": [
+      "job_balance",
+      "decision",
+      "ceo",
+      "real_life"
+    ]
+  }
+]
