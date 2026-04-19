@@ -1,0 +1,22 @@
+{
+  "chains": [
+    {
+      "id": "impulse_chain",
+      "label": "Impulse Pressure Chain",
+      "description": "Repeated impulse choices reduce flexibility later.",
+      "triggerNote": "Triggered when spending pressure builds for several weeks."
+    },
+    {
+      "id": "saving_chain",
+      "label": "Savings Momentum Chain",
+      "description": "Consistent saving can unlock bonus stability later.",
+      "triggerNote": "Triggered by strong saving patterns over time."
+    },
+    {
+      "id": "credit_chain",
+      "label": "Credit Trust Chain",
+      "description": "Late or avoided decisions can lower confidence and credit later.",
+      "triggerNote": "Triggered when protective actions are skipped too often."
+    }
+  ]
+}
