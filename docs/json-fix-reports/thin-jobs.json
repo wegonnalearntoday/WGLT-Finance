@@ -1,0 +1,22 @@
+[
+  {
+    "jobId": "car_wash",
+    "events": 7,
+    "status": "ok"
+  },
+  {
+    "jobId": "food_service",
+    "events": 7,
+    "status": "ok"
+  },
+  {
+    "jobId": "office_helper",
+    "events": 7,
+    "status": "ok"
+  },
+  {
+    "jobId": "retail",
+    "events": 7,
+    "status": "ok"
+  }
+]

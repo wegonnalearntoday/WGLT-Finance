@@ -30,9 +30,7 @@
           "effects": {
             "cash": -4
           },
-          "paymentRequired": true,
-          "cost": 4,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "buy_snack",
@@ -40,9 +38,7 @@
           "effects": {
             "cash": -2
           },
-          "paymentRequired": true,
-          "cost": 2,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "skip_lunch",
@@ -84,9 +80,7 @@
             "cash": -8,
             "social": 1
           },
-          "paymentRequired": true,
-          "cost": 8,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "go_small",
@@ -94,9 +88,7 @@
           "effects": {
             "cash": -4
           },
-          "paymentRequired": true,
-          "cost": 4,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "skip",
@@ -137,9 +129,7 @@
           "effects": {
             "cash": -20
           },
-          "paymentRequired": true,
-          "cost": 20,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "borrow",
@@ -187,9 +177,7 @@
             "cash": -15,
             "social": 1
           },
-          "paymentRequired": true,
-          "cost": 15,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "gift_5",
@@ -197,18 +185,14 @@
           "effects": {
             "cash": -5
           },
-          "paymentRequired": true,
-          "cost": 5,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "make_card",
           "label": "Make a card and spend $0",
           "effects": {
             "cash": 0
-          },
-          "cost": 0,
-          "costStatus": "smart_default"
+          }
         }
       ]
     },
@@ -238,9 +222,7 @@
           "effects": {
             "cash": -12
           },
-          "paymentRequired": true,
-          "cost": 12,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "ask_help",
@@ -291,9 +273,7 @@
           "effects": {
             "cash": -25
           },
-          "paymentRequired": true,
-          "cost": 25,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "rideshare",
@@ -301,9 +281,7 @@
           "effects": {
             "cash": -12
           },
-          "paymentRequired": true,
-          "cost": 12,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "ask_ride",
@@ -341,9 +319,7 @@
           "effects": {
             "cash": -85
           },
-          "paymentRequired": true,
-          "cost": 85,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "cheap_case",
@@ -351,9 +327,7 @@
           "effects": {
             "cash": -15
           },
-          "paymentRequired": true,
-          "cost": 15,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "wait",
@@ -397,9 +371,7 @@
           "effects": {
             "cash": -250
           },
-          "paymentRequired": true,
-          "cost": 250,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "borrow_car",
@@ -451,9 +423,7 @@
             "cash": -40
           },
           "paymentRequired": true,
-          "delayedConsequenceId": "roommate_pays_back",
-          "cost": 40,
-          "costStatus": "original"
+          "delayedConsequenceId": "roommate_pays_back"
         },
         {
           "id": "partial_cover",
@@ -462,9 +432,7 @@
             "cash": -20,
             "stress": 1
           },
-          "paymentRequired": true,
-          "cost": 20,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "refuse",
@@ -503,9 +471,7 @@
           "effects": {
             "cash": -8
           },
-          "paymentRequired": true,
-          "cost": 8,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "wait_week",
@@ -520,9 +486,7 @@
           "effects": {
             "cash": -4
           },
-          "paymentRequired": true,
-          "cost": 4,
-          "costStatus": "original"
+          "paymentRequired": true
         }
       ]
     },
@@ -553,9 +517,7 @@
           "effects": {
             "cash": -90
           },
-          "paymentRequired": true,
-          "cost": 90,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "rent",
@@ -563,9 +525,7 @@
           "effects": {
             "cash": -35
           },
-          "paymentRequired": true,
-          "cost": 35,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "borrow_library",
@@ -607,9 +567,7 @@
           "effects": {
             "cash": -30
           },
-          "paymentRequired": true,
-          "cost": 30,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "borrow_piece",
@@ -624,9 +582,7 @@
           "effects": {
             "cash": -12
           },
-          "paymentRequired": true,
-          "cost": 12,
-          "costStatus": "original"
+          "paymentRequired": true
         }
       ]
     },
@@ -655,9 +611,7 @@
           "effects": {
             "cash": -35
           },
-          "paymentRequired": true,
-          "cost": 35,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "reschedule",
@@ -672,10 +626,7 @@
           "label": "Use saved medical money",
           "effects": {
             "savings": -35
-          },
-          "paymentRequired": true,
-          "cost": 35,
-          "costStatus": "original"
+          }
         }
       ]
     },
@@ -706,9 +657,7 @@
           "effects": {
             "cash": -60
           },
-          "paymentRequired": true,
-          "cost": 60,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "ask_family",
@@ -755,9 +704,7 @@
           "effects": {
             "cash": -55
           },
-          "paymentRequired": true,
-          "cost": 55,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "thrift",
@@ -765,9 +712,7 @@
           "effects": {
             "cash": -18
           },
-          "paymentRequired": true,
-          "cost": 18,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "borrow",
@@ -807,9 +752,7 @@
           "effects": {
             "cash": -30
           },
-          "paymentRequired": true,
-          "cost": 30,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "buy_small",
@@ -817,9 +760,7 @@
           "effects": {
             "cash": -15
           },
-          "paymentRequired": true,
-          "cost": 15,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "delay",
@@ -861,9 +802,7 @@
           "effects": {
             "cash": -25
           },
-          "paymentRequired": true,
-          "cost": 25,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "appeal",
@@ -908,9 +847,7 @@
             "cash": -100,
             "social": 1
           },
-          "paymentRequired": true,
-          "cost": 100,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "travel_budget",
@@ -918,9 +855,7 @@
           "effects": {
             "cash": -45
           },
-          "paymentRequired": true,
-          "cost": 45,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "stay_local",
@@ -960,9 +895,7 @@
           "effects": {
             "cash": -75
           },
-          "paymentRequired": true,
-          "cost": 75,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "save_and_delay",
@@ -1011,9 +944,7 @@
           "effects": {
             "cash": -40
           },
-          "paymentRequired": true,
-          "cost": 40,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "borrow_boxes",
@@ -1021,9 +952,7 @@
           "effects": {
             "cash": -10
           },
-          "paymentRequired": true,
-          "cost": 10,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "wait_move",
@@ -1066,9 +995,7 @@
           "effects": {
             "cash": -20
           },
-          "paymentRequired": true,
-          "cost": 20,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "use_hotspot",
@@ -1115,9 +1042,7 @@
           "effects": {
             "cash": -18
           },
-          "paymentRequired": true,
-          "cost": 18,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "public_transit",
@@ -1125,9 +1050,7 @@
           "effects": {
             "cash": -4
           },
-          "paymentRequired": true,
-          "cost": 4,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "friend_dropoff",
@@ -1165,9 +1088,7 @@
           "effects": {
             "cash": -15
           },
-          "paymentRequired": true,
-          "cost": 15,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "temporary_pass",
@@ -1213,9 +1134,7 @@
           "effects": {
             "cash": -65
           },
-          "paymentRequired": true,
-          "cost": 65,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "diy_small",
@@ -1223,9 +1142,7 @@
           "effects": {
             "cash": -15
           },
-          "paymentRequired": true,
-          "cost": 15,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "wait_repair",
@@ -1265,9 +1182,7 @@
             "cash": -20,
             "social": 1
           },
-          "paymentRequired": true,
-          "cost": 20,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "help_time",
@@ -1314,9 +1229,7 @@
           "effects": {
             "cash": -12
           },
-          "paymentRequired": true,
-          "cost": 12,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "eat_out",
@@ -1325,9 +1238,7 @@
             "cash": -25
           },
           "paymentRequired": true,
-          "delayedConsequenceId": "budget_pressure",
-          "cost": 25,
-          "costStatus": "original"
+          "delayedConsequenceId": "budget_pressure"
         },
         {
           "id": "use_pantry",
@@ -1365,9 +1276,7 @@
           "effects": {
             "cash": -10
           },
-          "paymentRequired": true,
-          "cost": 10,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "split_cost",
@@ -1375,9 +1284,7 @@
           "effects": {
             "cash": -5
           },
-          "paymentRequired": true,
-          "cost": 5,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "use_free_materials",
@@ -1416,9 +1323,7 @@
             "cash": -50,
             "social": 1
           },
-          "paymentRequired": true,
-          "cost": 50,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "budget_15",
@@ -1426,9 +1331,7 @@
           "effects": {
             "cash": -15
           },
-          "paymentRequired": true,
-          "cost": 15,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "celebrate_free",

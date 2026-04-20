@@ -1,0 +1,560 @@
+[
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_bank_fee_01",
+    "title": "Bank Fee Notice",
+    "choiceId": "cover_fee",
+    "label": "Cover it and adjust your budget",
+    "cost": 5,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_bill_reminder_01",
+    "title": "Bill Reminder Alert",
+    "choiceId": "move_money",
+    "label": "Move money from savings and pay it",
+    "cost": 12,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_bill_reminder_01",
+    "title": "Bill Reminder Alert",
+    "choiceId": "pay_now",
+    "label": "Pay it today",
+    "cost": 12,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_fee_reversal_01",
+    "title": "Fee Reversal Chance",
+    "choiceId": "pay_and_move",
+    "label": "Just pay it and move on",
+    "cost": 6,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_streaming_bill_01",
+    "title": "Streaming Bill Hits",
+    "choiceId": "keep_service",
+    "label": "Keep it and cover the bill",
+    "cost": 11,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_streaming_bill_01",
+    "title": "Streaming Bill Hits",
+    "choiceId": "use_savings",
+    "label": "Pull from savings to cover it",
+    "cost": 11,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_textbook_fee_01",
+    "title": "Textbook Fee",
+    "choiceId": "pay_now",
+    "label": "Pay it now",
+    "cost": 14,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_textbook_fee_01",
+    "title": "Textbook Fee",
+    "choiceId": "payment_plan",
+    "label": "Ask about a simple payment plan",
+    "cost": 7,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_library_fee_01",
+    "title": "Library Fee Notice",
+    "choiceId": "cut_snack",
+    "label": "Cut a small want and pay the fee",
+    "cost": 4,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_library_fee_01",
+    "title": "Library Fee Notice",
+    "choiceId": "pay_now",
+    "label": "Pay it now",
+    "cost": 4,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_school_trip_01",
+    "title": "School Trip Fee",
+    "choiceId": "ask_family",
+    "label": "Ask family if they can help cover part of it",
+    "cost": 8,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_school_trip_01",
+    "title": "School Trip Fee",
+    "choiceId": "pay_full",
+    "label": "Pay the fee and go",
+    "cost": 18,
+    "priority": "high"
+  },
+  {
+    "sourceFile": "data/scenarios/elite-credit-foundation.json",
+    "eventId": "elite_apartment_check_01",
+    "title": "Apartment Application",
+    "choiceId": "apply_now",
+    "label": "Apply now",
+    "cost": 20,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_apartment_deposit_01",
+    "title": "Apartment Deposit Target",
+    "choiceId": "save_target",
+    "label": "Save toward the target now",
+    "cost": 15,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_apartment_deposit_01",
+    "title": "Apartment Deposit Target",
+    "choiceId": "small_target",
+    "label": "Save a smaller amount",
+    "cost": 5,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_overdraft_buffer_01",
+    "title": "Build an Overdraft Buffer",
+    "choiceId": "build_buffer",
+    "label": "Move $15 into checking as a buffer",
+    "cost": 15,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_cd_lock_01",
+    "title": "CD Lock-In",
+    "choiceId": "keep_hysa",
+    "label": "Keep the money in flexible savings",
+    "cost": 20,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_cd_lock_01",
+    "title": "CD Lock-In",
+    "choiceId": "open_cd",
+    "label": "Open the CD with $20",
+    "cost": 20,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_emergency_jar_01",
+    "title": "Emergency Jar",
+    "choiceId": "start_jar",
+    "label": "Start an emergency jar with $10",
+    "cost": 10,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_hysa_bonus_01",
+    "title": "HYSA Bonus Offer",
+    "choiceId": "add_10",
+    "label": "Add $10 to savings",
+    "cost": 10,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_hysa_bonus_01",
+    "title": "HYSA Bonus Offer",
+    "choiceId": "move_want_money",
+    "label": "Cut a want and move $10 to savings",
+    "cost": 10,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_investment_mix_01",
+    "title": "Investment Mix Choice",
+    "choiceId": "balanced_mix",
+    "label": "Choose a balanced mix",
+    "cost": 10,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_investment_mix_01",
+    "title": "Investment Mix Choice",
+    "choiceId": "risky_mix",
+    "label": "Choose a riskier mix",
+    "cost": 10,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_investment_mix_01",
+    "title": "Investment Mix Choice",
+    "choiceId": "safe_mix",
+    "label": "Choose a safer mix",
+    "cost": 10,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_loan_due_01",
+    "title": "Loan Payment Due",
+    "choiceId": "partial_pay",
+    "label": "Pay part now and plan the rest",
+    "cost": 10,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_loan_due_01",
+    "title": "Loan Payment Due",
+    "choiceId": "pay_on_time",
+    "label": "Pay it on time",
+    "cost": 20,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_school_lunch_plan_01",
+    "title": "Lunch Budget Plan",
+    "choiceId": "snack_budget",
+    "label": "Set a tiny snack budget only",
+    "cost": 2,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_reinvest_choice_01",
+    "title": "Reinvest Decision",
+    "choiceId": "from_checking",
+    "label": "Take it from checking and invest it",
+    "cost": 10,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_car_cost_01",
+    "title": "Unexpected Car Cost",
+    "choiceId": "adjust_budget",
+    "label": "Adjust your budget to cover it",
+    "cost": 12,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-expansion-v1.json",
+    "eventId": "fin_car_cost_01",
+    "title": "Unexpected Car Cost",
+    "choiceId": "use_savings",
+    "label": "Use savings to protect the month",
+    "cost": 12,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/financial-foundation.json",
+    "eventId": "fin_overdraft_warning_01",
+    "title": "Overdraft Warning",
+    "choiceId": "move_savings",
+    "label": "Transfer money from savings",
+    "cost": 15,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/opportunity-job-expansion-v1.json",
+    "eventId": "opp_retail_discount_01",
+    "title": "Employee Discount Temptation",
+    "choiceId": "buy_discount",
+    "label": "Buy it because it is on discount",
+    "cost": 15,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/opportunity-job-expansion-v1.json",
+    "eventId": "opp_carwash_weather_01",
+    "title": "Rainy Week Slowdown",
+    "choiceId": "spend_anyway",
+    "label": "Keep spending like normal",
+    "cost": 8,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/opportunity-job-expansion-v1.json",
+    "eventId": "opp_food_tip_pool_01",
+    "title": "Tip Pool Question",
+    "choiceId": "spend_normal",
+    "label": "Spend like your tips were normal",
+    "cost": 10,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/opportunity-job-expansion-v1.json",
+    "eventId": "opp_all_transport_01",
+    "title": "Transportation Cost Surprise",
+    "choiceId": "adjust_budget",
+    "label": "Adjust wants to cover the cost",
+    "cost": 6,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/opportunity-job-expansion-v1.json",
+    "eventId": "opp_all_transport_01",
+    "title": "Transportation Cost Surprise",
+    "choiceId": "ignore_cost",
+    "label": "Ignore it and hope the budget works out",
+    "cost": 6,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_birthday_invite_01",
+    "title": "Birthday Invite",
+    "choiceId": "go_full",
+    "label": "Go and spend the full amount",
+    "cost": 16,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_birthday_invite_01",
+    "title": "Birthday Invite",
+    "choiceId": "go_limit",
+    "label": "Go with a smaller budget",
+    "cost": 7,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_bus_fare_01",
+    "title": "Bus Fare Surprise",
+    "choiceId": "pay_bus",
+    "label": "Pay the fare and get where you need to go",
+    "cost": 3,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_community_event_01",
+    "title": "Community Event Booth",
+    "choiceId": "partner_share",
+    "label": "Partner with someone and split the fee",
+    "cost": 5,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_community_event_01",
+    "title": "Community Event Booth",
+    "choiceId": "pay_booth",
+    "label": "Pay the booth fee and try it",
+    "cost": 10,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_family_cookout_01",
+    "title": "Family Cookout Plate",
+    "choiceId": "bring_small_item",
+    "label": "Bring something small and useful",
+    "cost": 6,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_family_cookout_01",
+    "title": "Family Cookout Plate",
+    "choiceId": "buy_big_item",
+    "label": "Buy a larger item to bring",
+    "cost": 14,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_forgot_charger_01",
+    "title": "Forgot Charger",
+    "choiceId": "buy_cheap",
+    "label": "Buy a cheap charger now",
+    "cost": 8,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_water_bottle_01",
+    "title": "Forgot Water Bottle",
+    "choiceId": "buy_drink",
+    "label": "Buy a drink",
+    "cost": 3,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_group_project_01",
+    "title": "Group Project Supplies",
+    "choiceId": "buy_supplies",
+    "label": "Buy the supplies yourself",
+    "cost": 9,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_group_project_01",
+    "title": "Group Project Supplies",
+    "choiceId": "split_cost",
+    "label": "Ask everyone to split the cost",
+    "cost": 3,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_locker_fine_01",
+    "title": "Locker Fine",
+    "choiceId": "cut_wants",
+    "label": "Cut a want and pay it today",
+    "cost": 6,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_locker_fine_01",
+    "title": "Locker Fine",
+    "choiceId": "pay_fine",
+    "label": "Pay the fine now",
+    "cost": 6,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_lost_headphones_01",
+    "title": "Lost Headphones",
+    "choiceId": "replace_now",
+    "label": "Replace them now",
+    "cost": 15,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_missed_alarm_01",
+    "title": "Missed Alarm",
+    "choiceId": "rush_out",
+    "label": "Rush out and buy breakfast later",
+    "cost": 5,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_missing_uniform_01",
+    "title": "Missing Uniform Piece",
+    "choiceId": "buy_item",
+    "label": "Buy the item now",
+    "cost": 10,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_movie_night_01",
+    "title": "Movie Night Vote",
+    "choiceId": "join_snacks_only",
+    "label": "Join but limit what you spend",
+    "cost": 4,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_movie_night_01",
+    "title": "Movie Night Vote",
+    "choiceId": "split_all",
+    "label": "Split the cost and join",
+    "cost": 9,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_game_release_01",
+    "title": "New Game Release",
+    "choiceId": "buy_now",
+    "label": "Buy it now",
+    "cost": 20,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_phone_damage_01",
+    "title": "Phone Screen Crack",
+    "choiceId": "repair_now",
+    "label": "Repair it right away",
+    "cost": 25,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_spirit_day_01",
+    "title": "School Spirit Day",
+    "choiceId": "buy_shirt",
+    "label": "Buy the shirt",
+    "cost": 12,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
+    "eventId": "rl_team_snack_01",
+    "title": "Team Snack Request",
+    "choiceId": "join_order",
+    "label": "Join the snack order",
+    "cost": 7,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-foundation.json",
+    "eventId": "rl_forgot_lunch_01",
+    "title": "Forgot Your Lunch",
+    "choiceId": "buy_lunch",
+    "label": "Buy school lunch for $4",
+    "cost": 4,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-foundation.json",
+    "eventId": "rl_forgot_lunch_01",
+    "title": "Forgot Your Lunch",
+    "choiceId": "buy_snack",
+    "label": "Buy a snack for $2",
+    "cost": 2,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-foundation.json",
+    "eventId": "rl_friend_pizza_01",
+    "title": "Friends Want Pizza",
+    "choiceId": "join_full",
+    "label": "Join in and spend $12",
+    "cost": 12,
+    "priority": "normal"
+  },
+  {
+    "sourceFile": "data/scenarios/real-life-foundation.json",
+    "eventId": "rl_friend_pizza_01",
+    "title": "Friends Want Pizza",
+    "choiceId": "set_limit",
+    "label": "Go, but spend only $5",
+    "cost": 5,
+    "priority": "normal"
+  }
+]

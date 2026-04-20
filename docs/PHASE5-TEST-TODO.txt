@@ -1,0 +1,60 @@
+PHASE 5 TEST TODO
+=================
+This build is scenario-engine only. Legacy event banks are archived under docs/legacy-event-archive/ and the runtime files in data/ are neutralized.
+
+WHAT CHANGED
+------------
+1) The weekly flow now runs three scenario-engine events in order each week:
+   - one Real Life scenario
+   - one Job/Opportunity scenario
+   - one Financial scenario
+2) Beginner no longer redirects to the 12-week Jr app. It stays inside the same 48-week engine.
+3) Scenario packs are the source of truth. Expansion packs are intentionally empty.
+4) Legacy event banks were archived and neutralized so you know the new system is what is firing.
+
+FAST TEST
+---------
+1) Unzip the project.
+2) Open index.html through your normal local server or deploy it where you normally test.
+3) Pick any role + mode, including Beginner, and lock a job and budget rule.
+4) Advance one week.
+5) Confirm you get exactly three scenario prompts after the supply/inventory step:
+   - Life
+   - Job Opportunity
+   - Financial
+6) Make a choice in each and confirm a "Decision recorded" modal appears.
+7) Check the ledger log for the note from each scenario.
+
+48-WEEK TEST
+------------
+1) Start in Beginner, Standard, and Elite separately.
+2) Verify all three stay in the same main app instead of kicking Beginner to Budget Boss Jr.
+3) Advance through Week 12, Week 24, Week 36, and Week 48.
+4) Confirm the header keeps moving beyond Month 3.
+5) Confirm Week 48 triggers year-end behavior only at the end of Week 48.
+
+DEBUG CONSOLE TESTS
+-------------------
+In the browser console, use:
+  WGLT_DEBUG.listLifeScenarios()
+  WGLT_DEBUG.listFinancialScenarios()
+  WGLT_DEBUG.listOpportunityScenarios()
+  WGLT_DEBUG.inspectScenarioCoverage()
+  WGLT_DEBUG.runWeekScenarioChain()
+
+JOB COVERAGE SPOT CHECK
+-----------------------
+Test at least these jobs:
+  lawn
+  dogwalk
+  babysitting
+  entrepreneur
+  ceo
+For each one, advance multiple weeks and confirm you see job-specific prompts with that job named in the title or ledger note.
+
+IF SOMETHING LOOKS OFF
+----------------------
+1) Hard refresh / clear cache because bootstrap versioning changed.
+2) Check the console for JSON load errors.
+3) Run WGLT_DEBUG.inspectScenarioCoverage() and verify counts per job.
+4) Open docs/phase5-scenario-coverage.json to review expected coverage.

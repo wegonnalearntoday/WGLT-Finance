@@ -1,0 +1,22 @@
+WGLT Finance Phase 5.2 Plug-and-Play
+
+This package starts from the working Phase 4 build and folds in the Phase 5 scenario-only engine plus the Phase 5.1 loader diagnostics.
+
+What is already included:
+- New scenario-only weekly chain: Real Life -> Job/Opportunity -> Financial
+- Beginner stays in the same 48-week main app
+- Better JSON loader errors in bootstrap
+- Foundation scenario files updated to the new source-of-truth packs
+- Legacy event archives included under docs/legacy-event-archive
+
+What you should do:
+- Unzip this package fully
+- Make sure index.html, js/, and data/ stay side-by-side
+- Run this package as the project copy
+- Prefer hosting or a local web server over opening with file://
+
+Fast local test:
+python -m http.server 8000
+Then open http://localhost:8000
+
+This is a full project package. Use it as-is.

@@ -31,7 +31,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "protect_bills",
-        "ledger_note": "Transfer from savings to checking"
+        "ledger_note": "Transfer from savings to checking",
+        "paymentRequired": true,
+        "costFinal": 15,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "delay_bill",
@@ -44,7 +51,12 @@
           "late_fee_chain"
         ],
         "reflection_tag": "delay_problem",
-        "ledger_note": "Bill delayed"
+        "ledger_note": "Bill delayed",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "late_fee_chain"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "cut_wants",
@@ -56,7 +68,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "prioritize_bills",
-        "ledger_note": "Cut wants to protect bill"
+        "ledger_note": "Cut wants to protect bill",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -121,7 +136,12 @@
           "steady_growth"
         ],
         "reflection_tag": "safe_growth",
-        "ledger_note": "Birthday gift placed in HYSA"
+        "ledger_note": "Birthday gift placed in HYSA",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "steady_growth"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "put_cd",
@@ -134,7 +154,12 @@
           "locked_growth"
         ],
         "reflection_tag": "locked_saving",
-        "ledger_note": "Birthday gift placed in CD"
+        "ledger_note": "Birthday gift placed in CD",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "locked_growth"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "spend_some_save_some",
@@ -146,7 +171,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "split_choice",
-        "ledger_note": "Split birthday gift between checking and savings"
+        "ledger_note": "Split birthday gift between checking and savings",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {

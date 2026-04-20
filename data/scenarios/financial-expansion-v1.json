@@ -32,7 +32,15 @@
           "steady_growth"
         ],
         "reflection_tag": "steady_saver",
-        "ledger_note": "Added $10 to HYSA"
+        "ledger_note": "Added $10 to HYSA",
+        "paymentRequired": true,
+        "costFinal": 10,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "steady_growth"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "wait_month",
@@ -42,7 +50,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "delay_saving",
-        "ledger_note": "Delayed HYSA deposit"
+        "ledger_note": "Delayed HYSA deposit",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "move_want_money",
@@ -55,7 +66,15 @@
           "steady_growth"
         ],
         "reflection_tag": "prioritize_saving",
-        "ledger_note": "Moved want money to HYSA"
+        "ledger_note": "Moved want money to HYSA",
+        "paymentRequired": true,
+        "costFinal": 10,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "steady_growth"
+        ],
+        "fundingGapPatched": true
       }
     ],
     "triggers": {
@@ -111,7 +130,15 @@
           "budget_squeeze"
         ],
         "reflection_tag": "keep_want",
-        "ledger_note": "Paid streaming renewal"
+        "ledger_note": "Paid streaming renewal",
+        "paymentRequired": true,
+        "costFinal": 11,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "budget_squeeze"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "cancel_service",
@@ -122,7 +149,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "cut_want",
-        "ledger_note": "Canceled streaming renewal"
+        "ledger_note": "Canceled streaming renewal",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "use_savings",
@@ -133,7 +163,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "use_savings",
-        "ledger_note": "Moved savings to cover streaming"
+        "ledger_note": "Moved savings to cover streaming",
+        "paymentRequired": true,
+        "costFinal": 11,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       }
     ],
     "triggers": {
@@ -189,7 +226,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "cover_need",
-        "ledger_note": "Paid class fee"
+        "ledger_note": "Paid class fee",
+        "paymentRequired": true,
+        "costFinal": 14,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "payment_plan",
@@ -201,7 +245,15 @@
           "small_bill_pressure"
         ],
         "reflection_tag": "split_cost",
-        "ledger_note": "Started class fee payment plan"
+        "ledger_note": "Started class fee payment plan",
+        "paymentRequired": true,
+        "costFinal": 7,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "small_bill_pressure"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "delay_it",
@@ -213,7 +265,12 @@
           "late_fee_chain"
         ],
         "reflection_tag": "delay_problem",
-        "ledger_note": "Delayed class fee"
+        "ledger_note": "Delayed class fee",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "late_fee_chain"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -268,7 +325,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "handle_fee",
-        "ledger_note": "Covered bank fee"
+        "ledger_note": "Covered bank fee",
+        "paymentRequired": true,
+        "costFinal": 5,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "ignore_fee",
@@ -280,7 +344,12 @@
           "late_fee_chain"
         ],
         "reflection_tag": "delay_problem",
-        "ledger_note": "Ignored bank fee"
+        "ledger_note": "Ignored bank fee",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "late_fee_chain"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "call_bank",
@@ -290,7 +359,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "advocate",
-        "ledger_note": "Called bank about fee"
+        "ledger_note": "Called bank about fee",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -345,7 +417,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "self_control",
-        "ledger_note": "Started wants cash envelope"
+        "ledger_note": "Started wants cash envelope",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "keep_swiping",
@@ -357,7 +432,12 @@
           "budget_squeeze"
         ],
         "reflection_tag": "no_guardrails",
-        "ledger_note": "Kept same wants habits"
+        "ledger_note": "Kept same wants habits",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "budget_squeeze"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "half_limit",
@@ -367,7 +447,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "light_structure",
-        "ledger_note": "Set partial wants limit"
+        "ledger_note": "Set partial wants limit",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -424,7 +507,15 @@
           "steady_growth"
         ],
         "reflection_tag": "invest_from_checking",
-        "ledger_note": "Reinvested from checking"
+        "ledger_note": "Reinvested from checking",
+        "paymentRequired": true,
+        "costFinal": 10,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "steady_growth"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "from_wants_cut",
@@ -438,7 +529,12 @@
           "steady_growth"
         ],
         "reflection_tag": "cut_and_invest",
-        "ledger_note": "Cut wants to reinvest"
+        "ledger_note": "Cut wants to reinvest",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "steady_growth"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "not_now",
@@ -448,7 +544,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "pause_investing",
-        "ledger_note": "Skipped reinvest decision"
+        "ledger_note": "Skipped reinvest decision",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -505,7 +604,15 @@
           "locked_growth"
         ],
         "reflection_tag": "locked_saving",
-        "ledger_note": "Opened CD"
+        "ledger_note": "Opened CD",
+        "paymentRequired": true,
+        "costFinal": 20,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "locked_growth"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "keep_hysa",
@@ -518,7 +625,15 @@
           "steady_growth"
         ],
         "reflection_tag": "flexible_saving",
-        "ledger_note": "Kept money in HYSA"
+        "ledger_note": "Kept money in HYSA",
+        "paymentRequired": true,
+        "costFinal": 20,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "steady_growth"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "hold_cash",
@@ -528,7 +643,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "wait_choice",
-        "ledger_note": "Held cash in checking"
+        "ledger_note": "Held cash in checking",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -583,7 +701,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "timely_payment",
-        "ledger_note": "Paid bill on time"
+        "ledger_note": "Paid bill on time",
+        "paymentRequired": true,
+        "costFinal": 12,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "move_money",
@@ -595,7 +720,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "protect_credit",
-        "ledger_note": "Moved savings to pay bill"
+        "ledger_note": "Moved savings to pay bill",
+        "paymentRequired": true,
+        "costFinal": 12,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "risk_it",
@@ -607,7 +739,12 @@
           "late_fee_chain"
         ],
         "reflection_tag": "delay_problem",
-        "ledger_note": "Waited on bill reminder"
+        "ledger_note": "Waited on bill reminder",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "late_fee_chain"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -663,7 +800,12 @@
           "steady_growth"
         ],
         "reflection_tag": "all_saving",
-        "ledger_note": "Saved cash gift"
+        "ledger_note": "Saved cash gift",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "steady_growth"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "split_three",
@@ -674,7 +816,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "balanced_split",
-        "ledger_note": "Split cash gift"
+        "ledger_note": "Split cash gift",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "all_spend",
@@ -686,7 +831,12 @@
           "budget_squeeze"
         ],
         "reflection_tag": "bonus_spending",
-        "ledger_note": "Spent cash gift"
+        "ledger_note": "Spent cash gift",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "budget_squeeze"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -743,7 +893,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "protect_bills",
-        "ledger_note": "Built checking buffer"
+        "ledger_note": "Built checking buffer",
+        "paymentRequired": true,
+        "costFinal": 15,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "leave_it",
@@ -755,7 +912,12 @@
           "late_fee_chain"
         ],
         "reflection_tag": "risk_buffer",
-        "ledger_note": "Left checking without buffer"
+        "ledger_note": "Left checking without buffer",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "late_fee_chain"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "cut_wants_buffer",
@@ -766,7 +928,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "adjust_plan",
-        "ledger_note": "Cut wants to protect checking"
+        "ledger_note": "Cut wants to protect checking",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -822,7 +987,12 @@
           "small_bill_pressure"
         ],
         "reflection_tag": "planned_credit_use",
-        "ledger_note": "Used card with plan"
+        "ledger_note": "Used card with plan",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "small_bill_pressure"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "use_card_impulse",
@@ -834,7 +1004,12 @@
           "late_fee_chain"
         ],
         "reflection_tag": "impulse_credit",
-        "ledger_note": "Used card impulsively"
+        "ledger_note": "Used card impulsively",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "late_fee_chain"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "wait_cash",
@@ -844,7 +1019,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "delay_for_plan",
-        "ledger_note": "Waited for cash"
+        "ledger_note": "Waited for cash",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -902,7 +1080,12 @@
           "steady_growth"
         ],
         "reflection_tag": "automation",
-        "ledger_note": "Enabled auto-save"
+        "ledger_note": "Enabled auto-save",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "steady_growth"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "small_auto",
@@ -914,7 +1097,12 @@
           "steady_growth"
         ],
         "reflection_tag": "light_automation",
-        "ledger_note": "Enabled small auto-save"
+        "ledger_note": "Enabled small auto-save",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "steady_growth"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "leave_off",
@@ -924,7 +1112,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "manual_only",
-        "ledger_note": "Skipped auto-save"
+        "ledger_note": "Skipped auto-save",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -979,7 +1170,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "planned_needs",
-        "ledger_note": "Started lunch plan"
+        "ledger_note": "Started lunch plan",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "wing_it",
@@ -991,7 +1185,12 @@
           "budget_squeeze"
         ],
         "reflection_tag": "no_plan",
-        "ledger_note": "Left lunch spending unplanned"
+        "ledger_note": "Left lunch spending unplanned",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "budget_squeeze"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "snack_budget",
@@ -1002,7 +1201,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "mini_plan",
-        "ledger_note": "Set tiny snack budget"
+        "ledger_note": "Set tiny snack budget",
+        "paymentRequired": true,
+        "costFinal": 2,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       }
     ],
     "triggers": {
@@ -1060,7 +1266,15 @@
           "steady_growth"
         ],
         "reflection_tag": "build_buffer",
-        "ledger_note": "Started emergency jar"
+        "ledger_note": "Started emergency jar",
+        "paymentRequired": true,
+        "costFinal": 10,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "steady_growth"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "wait_longer",
@@ -1070,7 +1284,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "delay_buffer",
-        "ledger_note": "Delayed emergency jar"
+        "ledger_note": "Delayed emergency jar",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "use_gift_money",
@@ -1082,7 +1299,12 @@
           "steady_growth"
         ],
         "reflection_tag": "smart_bonus_use",
-        "ledger_note": "Started emergency jar with bonus money"
+        "ledger_note": "Started emergency jar with bonus money",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "steady_growth"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1136,7 +1358,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "timely_payment",
-        "ledger_note": "Made loan payment"
+        "ledger_note": "Made loan payment",
+        "paymentRequired": true,
+        "costFinal": 20,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "partial_pay",
@@ -1148,7 +1377,15 @@
           "small_bill_pressure"
         ],
         "reflection_tag": "partial_solution",
-        "ledger_note": "Made partial loan payment"
+        "ledger_note": "Made partial loan payment",
+        "paymentRequired": true,
+        "costFinal": 10,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "small_bill_pressure"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "miss_payment",
@@ -1161,7 +1398,12 @@
           "loan_payment_cycle"
         ],
         "reflection_tag": "late_credit",
-        "ledger_note": "Missed loan payment"
+        "ledger_note": "Missed loan payment",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "loan_payment_cycle"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1215,7 +1457,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "budget_adjustment",
-        "ledger_note": "Adjusted budget for transportation cost"
+        "ledger_note": "Adjusted budget for transportation cost",
+        "paymentRequired": true,
+        "costFinal": 12,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "use_savings",
@@ -1226,7 +1475,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "use_savings",
-        "ledger_note": "Used savings for transportation cost"
+        "ledger_note": "Used savings for transportation cost",
+        "paymentRequired": true,
+        "costFinal": 12,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "delay_other_bill",
@@ -1238,7 +1494,12 @@
           "late_fee_chain"
         ],
         "reflection_tag": "swap_problem",
-        "ledger_note": "Delayed another bill to cover transport"
+        "ledger_note": "Delayed another bill to cover transport",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "late_fee_chain"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1294,7 +1555,15 @@
           "steady_growth"
         ],
         "reflection_tag": "housing_goal",
-        "ledger_note": "Saved toward deposit"
+        "ledger_note": "Saved toward deposit",
+        "paymentRequired": true,
+        "costFinal": 15,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "steady_growth"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "small_target",
@@ -1307,7 +1576,15 @@
           "steady_growth"
         ],
         "reflection_tag": "small_housing_goal",
-        "ledger_note": "Saved small amount toward deposit"
+        "ledger_note": "Saved small amount toward deposit",
+        "paymentRequired": true,
+        "costFinal": 5,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "steady_growth"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "skip_target",
@@ -1317,7 +1594,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "delay_goal",
-        "ledger_note": "Skipped deposit saving"
+        "ledger_note": "Skipped deposit saving",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1372,7 +1652,15 @@
           "steady_growth"
         ],
         "reflection_tag": "safe_growth",
-        "ledger_note": "Chose safer investment mix"
+        "ledger_note": "Chose safer investment mix",
+        "paymentRequired": true,
+        "costFinal": 10,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "steady_growth"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "balanced_mix",
@@ -1384,7 +1672,15 @@
           "steady_growth"
         ],
         "reflection_tag": "balanced_growth",
-        "ledger_note": "Chose balanced mix"
+        "ledger_note": "Chose balanced mix",
+        "paymentRequired": true,
+        "costFinal": 10,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "steady_growth"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "risky_mix",
@@ -1396,7 +1692,15 @@
           "market_swing_risk"
         ],
         "reflection_tag": "higher_risk",
-        "ledger_note": "Chose riskier investment mix"
+        "ledger_note": "Chose riskier investment mix",
+        "paymentRequired": true,
+        "costFinal": 10,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "market_swing_risk"
+        ],
+        "fundingGapPatched": true
       }
     ],
     "triggers": {
@@ -1450,7 +1754,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "advocate",
-        "ledger_note": "Asked for fee reversal"
+        "ledger_note": "Asked for fee reversal",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "pay_and_move",
@@ -1460,7 +1767,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "move_on",
-        "ledger_note": "Paid fee and moved on"
+        "ledger_note": "Paid fee and moved on",
+        "paymentRequired": true,
+        "costFinal": 6,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "ignore_notice",
@@ -1472,7 +1786,12 @@
           "late_fee_chain"
         ],
         "reflection_tag": "delay_problem",
-        "ledger_note": "Ignored fee notice"
+        "ledger_note": "Ignored fee notice",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "late_fee_chain"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1527,7 +1846,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "discipline",
-        "ledger_note": "Made micro-budget plan"
+        "ledger_note": "Made micro-budget plan",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "guess_week",
@@ -1539,7 +1861,12 @@
           "budget_squeeze"
         ],
         "reflection_tag": "no_plan",
-        "ledger_note": "Guessed through tight week"
+        "ledger_note": "Guessed through tight week",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "budget_squeeze"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "pause_fun",
@@ -1551,7 +1878,12 @@
           "steady_growth"
         ],
         "reflection_tag": "pause_wants",
-        "ledger_note": "Paused fun spending"
+        "ledger_note": "Paused fun spending",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "steady_growth"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1609,7 +1941,12 @@
           "steady_growth"
         ],
         "reflection_tag": "goal_tracking",
-        "ledger_note": "Updated savings tracker"
+        "ledger_note": "Updated savings tracker",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "steady_growth"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "ignore_goal",
@@ -1619,7 +1956,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "no_tracking",
-        "ledger_note": "Ignored savings tracker"
+        "ledger_note": "Ignored savings tracker",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "raise_goal",
@@ -1631,7 +1971,12 @@
           "steady_growth"
         ],
         "reflection_tag": "stretch_goal",
-        "ledger_note": "Raised savings goal"
+        "ledger_note": "Raised savings goal",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "steady_growth"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {

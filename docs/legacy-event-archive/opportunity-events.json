@@ -27,10 +27,7 @@
           "label": "Take the shift and earn $30",
           "effects": {
             "income": 30
-          },
-          "paymentRequired": true,
-          "cost": 30,
-          "costStatus": "original"
+          }
         },
         {
           "id": "decline_shift",
@@ -68,9 +65,7 @@
             "cash": -20
           },
           "paymentRequired": true,
-          "delayedConsequenceId": "side_hustle_profit",
-          "cost": 20,
-          "costStatus": "original"
+          "delayedConsequenceId": "side_hustle_profit"
         },
         {
           "id": "buy_40",
@@ -79,9 +74,7 @@
             "cash": -40
           },
           "paymentRequired": true,
-          "delayedConsequenceId": "bigger_side_hustle_profit",
-          "cost": 40,
-          "costStatus": "original"
+          "delayedConsequenceId": "bigger_side_hustle_profit"
         },
         {
           "id": "wait",
@@ -112,10 +105,7 @@
           "label": "Take the gig and earn $25",
           "effects": {
             "income": 25
-          },
-          "paymentRequired": true,
-          "cost": 25,
-          "costStatus": "original"
+          }
         },
         {
           "id": "skip_gig",
@@ -183,10 +173,7 @@
           "label": "Sell it and earn $20",
           "effects": {
             "income": 20
-          },
-          "paymentRequired": true,
-          "cost": 20,
-          "costStatus": "original"
+          }
         },
         {
           "id": "hold_item",
@@ -285,10 +272,7 @@
           "label": "Tutor and earn $35",
           "effects": {
             "income": 35
-          },
-          "paymentRequired": true,
-          "cost": 35,
-          "costStatus": "original"
+          }
         },
         {
           "id": "decline_tutor",
@@ -321,9 +305,7 @@
             "cash": -25
           },
           "paymentRequired": true,
-          "delayedConsequenceId": "pitch_result",
-          "cost": 25,
-          "costStatus": "original"
+          "delayedConsequenceId": "pitch_result"
         },
         {
           "id": "wait",
@@ -358,9 +340,7 @@
             "cash": -5
           },
           "paymentRequired": true,
-          "delayedConsequenceId": "small_flip_profit",
-          "cost": 5,
-          "costStatus": "original"
+          "delayedConsequenceId": "small_flip_profit"
         },
         {
           "id": "skip",

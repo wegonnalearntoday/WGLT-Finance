@@ -22,10 +22,7 @@
           "label": "Accept the $10 fee",
           "effects": {
             "checking": -10
-          },
-          "paymentRequired": true,
-          "cost": 10,
-          "costStatus": "original"
+          }
         },
         {
           "id": "call_bank",
@@ -108,9 +105,7 @@
           "effects": {
             "cash": -75
           },
-          "paymentRequired": true,
-          "cost": 75,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "minimum",
@@ -119,9 +114,7 @@
             "cash": -35
           },
           "paymentRequired": true,
-          "delayedConsequenceId": "loan_balance_grows",
-          "cost": 35,
-          "costStatus": "original"
+          "delayedConsequenceId": "loan_balance_grows"
         },
         {
           "id": "skip",
@@ -164,10 +157,7 @@
             "checking": -25,
             "hysa": 25
           },
-          "investmentRequired": true,
-          "paymentRequired": true,
-          "cost": 25,
-          "costStatus": "original"
+          "investmentRequired": true
         },
         {
           "id": "move_savings",
@@ -176,10 +166,7 @@
             "checking": -25,
             "savings": 25
           },
-          "investmentRequired": true,
-          "paymentRequired": true,
-          "cost": 25,
-          "costStatus": "original"
+          "investmentRequired": true
         }
       ]
     },
@@ -205,10 +192,7 @@
             "checking": -100,
             "cd": 100
           },
-          "investmentRequired": true,
-          "paymentRequired": true,
-          "cost": 100,
-          "costStatus": "original"
+          "investmentRequired": true
         },
         {
           "id": "use_hysa",
@@ -251,9 +235,7 @@
           "effects": {
             "cash": -18
           },
-          "paymentRequired": true,
-          "cost": 18,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "ignore",
@@ -327,10 +309,7 @@
             "checking": -20,
             "emergency": 20
           },
-          "investmentRequired": true,
-          "paymentRequired": true,
-          "cost": 20,
-          "costStatus": "original"
+          "investmentRequired": true
         },
         {
           "id": "fund_50",
@@ -339,10 +318,7 @@
             "checking": -50,
             "emergency": 50
           },
-          "investmentRequired": true,
-          "paymentRequired": true,
-          "cost": 50,
-          "costStatus": "original"
+          "investmentRequired": true
         },
         {
           "id": "skip",
@@ -373,10 +349,7 @@
             "savings": -15,
             "checking": 15
           },
-          "investmentRequired": true,
-          "paymentRequired": true,
-          "cost": 15,
-          "costStatus": "original"
+          "investmentRequired": true
         },
         {
           "id": "cut_spending",
@@ -419,10 +392,7 @@
             "checking": -25,
             "hysa": 25
           },
-          "investmentRequired": true,
-          "paymentRequired": true,
-          "cost": 25,
-          "costStatus": "original"
+          "investmentRequired": true
         },
         {
           "id": "emergency",
@@ -431,10 +401,7 @@
             "checking": -25,
             "emergency": 25
           },
-          "investmentRequired": true,
-          "paymentRequired": true,
-          "cost": 25,
-          "costStatus": "original"
+          "investmentRequired": true
         },
         {
           "id": "keep_cash",
@@ -510,10 +477,7 @@
           "label": "Cancel one and save $10",
           "effects": {
             "cash": 10
-          },
-          "paymentRequired": true,
-          "cost": 10,
-          "costStatus": "original"
+          }
         },
         {
           "id": "keep_all",
@@ -551,9 +515,7 @@
           "effects": {
             "cash": -25
           },
-          "paymentRequired": true,
-          "cost": 25,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "call_for_extension",
@@ -596,10 +558,7 @@
           "label": "Spend the $20",
           "effects": {
             "cash": 20
-          },
-          "paymentRequired": true,
-          "cost": 20,
-          "costStatus": "original"
+          }
         },
         {
           "id": "save_half",
@@ -614,10 +573,7 @@
           "label": "Save all $20",
           "effects": {
             "savings": 20
-          },
-          "paymentRequired": true,
-          "cost": 20,
-          "costStatus": "original"
+          }
         }
       ]
     },
@@ -645,9 +601,7 @@
           "effects": {
             "cash": -120
           },
-          "paymentRequired": true,
-          "cost": 120,
-          "costStatus": "original"
+          "paymentRequired": true
         },
         {
           "id": "delay_claim",

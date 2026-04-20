@@ -1,0 +1,4 @@
+Phase 5.3 updates:
+ - Setup order changed to: Lock Budget Rule -> Choose Job -> Finalize Wants -> Choose Bank + Insurance -> Set Savings Goal -> Stock up supplies
+ - Setup no longer shows fake week numbers before live play
+ - Week 1 begins only after setup step 6 is completed

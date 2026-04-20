@@ -36,7 +36,12 @@
           "fatigue_risk_minor"
         ],
         "reflection_tag": "income_priority",
-        "ledger_note": "Accepted extra shift"
+        "ledger_note": "Accepted extra shift",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "fatigue_risk_minor"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "decline_shift",
@@ -47,7 +52,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "balance_time",
-        "ledger_note": "Declined extra shift"
+        "ledger_note": "Declined extra shift",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -112,7 +120,12 @@
           "monthly_contract_charge"
         ],
         "reflection_tag": "invest_in_work",
-        "ledger_note": "Accepted tool/service contract"
+        "ledger_note": "Accepted tool/service contract",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "monthly_contract_charge"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "skip_contract",
@@ -123,7 +136,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "avoid_new_bill",
-        "ledger_note": "Skipped contract"
+        "ledger_note": "Skipped contract",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {

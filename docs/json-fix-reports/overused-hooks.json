@@ -1,0 +1,34 @@
+[
+  {
+    "hook": "paymentRequired",
+    "count": 62
+  },
+  {
+    "hook": "steady_growth",
+    "count": 23
+  },
+  {
+    "hook": "budget_squeeze",
+    "count": 20
+  },
+  {
+    "hook": "social_tension_minor",
+    "count": 10
+  },
+  {
+    "hook": "late_fee_chain",
+    "count": 10
+  },
+  {
+    "hook": "job_trust_drop",
+    "count": 7
+  },
+  {
+    "hook": "fatigue_risk_minor",
+    "count": 6
+  },
+  {
+    "hook": "small_bill_pressure",
+    "count": 6
+  }
+]

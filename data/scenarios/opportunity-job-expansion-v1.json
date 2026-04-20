@@ -33,7 +33,12 @@
           "fatigue_risk_minor"
         ],
         "reflection_tag": "income_priority",
-        "ledger_note": "Stayed late during car wash rush"
+        "ledger_note": "Stayed late during car wash rush",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "fatigue_risk_minor"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "keep_schedule",
@@ -44,7 +49,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "balance_time",
-        "ledger_note": "Worked normal rush shift only"
+        "ledger_note": "Worked normal rush shift only",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -103,7 +111,12 @@
           "steady_growth"
         ],
         "reflection_tag": "save_bonus",
-        "ledger_note": "Saved customer tip"
+        "ledger_note": "Saved customer tip",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "steady_growth"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "split_tip",
@@ -114,7 +127,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "balanced_bonus",
-        "ledger_note": "Split customer tip"
+        "ledger_note": "Split customer tip",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "spend_tip",
@@ -127,7 +143,12 @@
           "budget_squeeze"
         ],
         "reflection_tag": "bonus_spending",
-        "ledger_note": "Spent customer tip"
+        "ledger_note": "Spent customer tip",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "budget_squeeze"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -184,7 +205,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "teamwork",
-        "ledger_note": "Handled car wash supply run"
+        "ledger_note": "Handled car wash supply run",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "stay_put",
@@ -195,7 +219,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "limited_help",
-        "ledger_note": "Stayed on station during supply issue"
+        "ledger_note": "Stayed on station during supply issue",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -252,7 +279,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "budget_adjustment",
-        "ledger_note": "Adjusted budget for rainy slowdown"
+        "ledger_note": "Adjusted budget for rainy slowdown",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "spend_anyway",
@@ -265,7 +295,15 @@
           "budget_squeeze"
         ],
         "reflection_tag": "ignore_income_shift",
-        "ledger_note": "Ignored rainy-week slowdown"
+        "ledger_note": "Ignored rainy-week slowdown",
+        "paymentRequired": true,
+        "costFinal": 8,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "budget_squeeze"
+        ],
+        "fundingGapPatched": true
       }
     ],
     "triggers": {
@@ -322,7 +360,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "job_growth",
-        "ledger_note": "Upsold interior clean service"
+        "ledger_note": "Upsold interior clean service",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "skip_addon",
@@ -332,7 +373,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "safe_play",
-        "ledger_note": "Skipped interior clean upsell"
+        "ledger_note": "Skipped interior clean upsell",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -390,7 +434,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "responsibility",
-        "ledger_note": "Called ahead about late arrival"
+        "ledger_note": "Called ahead about late arrival",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "say_nothing",
@@ -403,7 +450,12 @@
           "late_to_shift_warning"
         ],
         "reflection_tag": "poor_communication",
-        "ledger_note": "Late arrival without warning"
+        "ledger_note": "Late arrival without warning",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "late_to_shift_warning"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -462,7 +514,12 @@
           "fatigue_risk_minor"
         ],
         "reflection_tag": "income_priority",
-        "ledger_note": "Worked extra during retail holiday rush"
+        "ledger_note": "Worked extra during retail holiday rush",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "fatigue_risk_minor"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "regular_only",
@@ -473,7 +530,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "balance_time",
-        "ledger_note": "Worked normal retail shift during rush"
+        "ledger_note": "Worked normal retail shift during rush",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -531,7 +591,15 @@
           "budget_squeeze"
         ],
         "reflection_tag": "discount_still_spending",
-        "ledger_note": "Used employee discount for want"
+        "ledger_note": "Used employee discount for want",
+        "paymentRequired": true,
+        "costFinal": 15,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "budget_squeeze"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "walk_away",
@@ -544,7 +612,12 @@
           "steady_growth"
         ],
         "reflection_tag": "planned_spending",
-        "ledger_note": "Skipped discounted purchase"
+        "ledger_note": "Skipped discounted purchase",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "steady_growth"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -602,7 +675,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "integrity",
-        "ledger_note": "Helped review register shortage honestly"
+        "ledger_note": "Helped review register shortage honestly",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "stay_quiet",
@@ -614,7 +690,12 @@
           "job_trust_drop"
         ],
         "reflection_tag": "avoidance",
-        "ledger_note": "Stayed quiet during register shortage"
+        "ledger_note": "Stayed quiet during register shortage",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "job_trust_drop"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -671,7 +752,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "job_growth",
-        "ledger_note": "Joined retail upsell contest"
+        "ledger_note": "Joined retail upsell contest",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "pass_contest",
@@ -681,7 +765,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "steady_work",
-        "ledger_note": "Passed on retail upsell contest"
+        "ledger_note": "Passed on retail upsell contest",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -738,7 +825,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "problem_solving",
-        "ledger_note": "Tried to trade retail shift responsibly"
+        "ledger_note": "Tried to trade retail shift responsibly",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "no_show_risk",
@@ -750,7 +840,12 @@
           "late_to_shift_warning"
         ],
         "reflection_tag": "overcommitment",
-        "ledger_note": "Overcommitted on retail shift"
+        "ledger_note": "Overcommitted on retail shift",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "late_to_shift_warning"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -806,7 +901,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "professionalism",
-        "ledger_note": "Handled suspicious return by policy"
+        "ledger_note": "Handled suspicious return by policy",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "rush_return",
@@ -818,7 +916,12 @@
           "job_trust_drop"
         ],
         "reflection_tag": "shortcut",
-        "ledger_note": "Rushed suspicious return"
+        "ledger_note": "Rushed suspicious return",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "job_trust_drop"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -877,7 +980,12 @@
           "fatigue_risk_minor"
         ],
         "reflection_tag": "income_priority",
-        "ledger_note": "Worked extra during lunch rush"
+        "ledger_note": "Worked extra during lunch rush",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "fatigue_risk_minor"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "normal_shift",
@@ -888,7 +996,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "balance_time",
-        "ledger_note": "Worked normal shift during lunch rush"
+        "ledger_note": "Worked normal shift during lunch rush",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -945,7 +1056,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "needs_first",
-        "ledger_note": "Used meal perk"
+        "ledger_note": "Used meal perk",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "skip_meal",
@@ -957,7 +1071,12 @@
           "low_energy_risk"
         ],
         "reflection_tag": "delay_needs",
-        "ledger_note": "Skipped meal perk"
+        "ledger_note": "Skipped meal perk",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "low_energy_risk"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1014,7 +1133,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "budget_adjustment",
-        "ledger_note": "Adjusted budget after small tip pool"
+        "ledger_note": "Adjusted budget after small tip pool",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "spend_normal",
@@ -1026,7 +1148,15 @@
           "budget_squeeze"
         ],
         "reflection_tag": "ignore_income_shift",
-        "ledger_note": "Ignored smaller tip pool"
+        "ledger_note": "Ignored smaller tip pool",
+        "paymentRequired": true,
+        "costFinal": 10,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "budget_squeeze"
+        ],
+        "fundingGapPatched": true
       }
     ],
     "triggers": {
@@ -1083,7 +1213,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "professionalism",
-        "ledger_note": "Handled customer complaint calmly"
+        "ledger_note": "Handled customer complaint calmly",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "argue_back",
@@ -1096,7 +1229,12 @@
           "job_trust_drop"
         ],
         "reflection_tag": "reactive_choice",
-        "ledger_note": "Argued with customer complaint"
+        "ledger_note": "Argued with customer complaint",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "job_trust_drop"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1152,7 +1290,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "adaptability",
-        "ledger_note": "Helped during equipment breakdown"
+        "ledger_note": "Helped during equipment breakdown",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "wait_out",
@@ -1162,7 +1303,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "passive_choice",
-        "ledger_note": "Waited out equipment issue"
+        "ledger_note": "Waited out equipment issue",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1222,7 +1366,12 @@
           "fatigue_risk_minor"
         ],
         "reflection_tag": "income_priority",
-        "ledger_note": "Covered weekend food service shift"
+        "ledger_note": "Covered weekend food service shift",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "fatigue_risk_minor"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "decline_shift",
@@ -1232,7 +1381,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "balance_time",
-        "ledger_note": "Declined weekend coverage"
+        "ledger_note": "Declined weekend coverage",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1289,7 +1441,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "responsibility",
-        "ledger_note": "Finished extra office data entry"
+        "ledger_note": "Finished extra office data entry",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "leave_stack",
@@ -1301,7 +1456,12 @@
           "job_trust_drop"
         ],
         "reflection_tag": "delay_task",
-        "ledger_note": "Left office data entry unfinished"
+        "ledger_note": "Left office data entry unfinished",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "job_trust_drop"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1357,7 +1517,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "detail_work",
-        "ledger_note": "Handled office supply reorder carefully"
+        "ledger_note": "Handled office supply reorder carefully",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "guess_order",
@@ -1369,7 +1532,12 @@
           "job_trust_drop"
         ],
         "reflection_tag": "shortcut",
-        "ledger_note": "Guessed on office supply order"
+        "ledger_note": "Guessed on office supply order",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "job_trust_drop"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1426,7 +1594,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "teamwork",
-        "ledger_note": "Helped set up office meeting"
+        "ledger_note": "Helped set up office meeting",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "stay_task",
@@ -1436,7 +1607,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "limited_help",
-        "ledger_note": "Stayed on assigned office task only"
+        "ledger_note": "Stayed on assigned office task only",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1493,7 +1667,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "trust_building",
-        "ledger_note": "Handled office banking errand"
+        "ledger_note": "Handled office banking errand",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "avoid_errand",
@@ -1503,7 +1680,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "play_safe",
-        "ledger_note": "Declined office banking errand"
+        "ledger_note": "Declined office banking errand",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1560,7 +1740,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "problem_solving",
-        "ledger_note": "Fixed office calendar mix-up"
+        "ledger_note": "Fixed office calendar mix-up",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "ignore_issue",
@@ -1572,7 +1755,12 @@
           "job_trust_drop"
         ],
         "reflection_tag": "avoidance",
-        "ledger_note": "Ignored office calendar issue"
+        "ledger_note": "Ignored office calendar issue",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "job_trust_drop"
+        ],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1629,7 +1817,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "growth_mindset",
-        "ledger_note": "Helped with office project prep"
+        "ledger_note": "Helped with office project prep",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "pass_project",
@@ -1639,7 +1830,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "routine_choice",
-        "ledger_note": "Passed on office project help"
+        "ledger_note": "Passed on office project help",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1697,7 +1891,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "explore_income",
-        "ledger_note": "Tried referral opportunity"
+        "ledger_note": "Tried referral opportunity",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "skip_referral",
@@ -1707,7 +1904,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "stay_focused",
-        "ledger_note": "Skipped referral opportunity"
+        "ledger_note": "Skipped referral opportunity",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1766,7 +1966,12 @@
           "fatigue_risk_minor"
         ],
         "reflection_tag": "extra_income",
-        "ledger_note": "Completed quick side gig"
+        "ledger_note": "Completed quick side gig",
+        "paymentRequired": false,
+        "hooksFinal": [
+          "fatigue_risk_minor"
+        ],
+        "fundingGapPatched": false
       },
       {
         "id": "rest_instead",
@@ -1776,7 +1981,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "rest_choice",
-        "ledger_note": "Skipped quick side gig"
+        "ledger_note": "Skipped quick side gig",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1833,7 +2041,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "long_term_growth",
-        "ledger_note": "Spent time on skill building"
+        "ledger_note": "Spent time on skill building",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       },
       {
         "id": "skip_skill",
@@ -1843,7 +2054,10 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "short_term_focus",
-        "ledger_note": "Skipped skill building"
+        "ledger_note": "Skipped skill building",
+        "paymentRequired": false,
+        "hooksFinal": [],
+        "fundingGapPatched": false
       }
     ],
     "triggers": {
@@ -1900,7 +2114,14 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "needs_first",
-        "ledger_note": "Covered transportation cost by adjusting budget"
+        "ledger_note": "Covered transportation cost by adjusting budget",
+        "paymentRequired": true,
+        "costFinal": 6,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired"
+        ],
+        "fundingGapPatched": true
       },
       {
         "id": "ignore_cost",
@@ -1912,7 +2133,15 @@
           "budget_squeeze"
         ],
         "reflection_tag": "ignore_pressure",
-        "ledger_note": "Ignored transportation cost pressure"
+        "ledger_note": "Ignored transportation cost pressure",
+        "paymentRequired": true,
+        "costFinal": 6,
+        "costStatus": "original",
+        "hooksFinal": [
+          "paymentRequired",
+          "budget_squeeze"
+        ],
+        "fundingGapPatched": true
       }
     ],
     "triggers": {
