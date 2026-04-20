@@ -1,34 +1,26 @@
 [
   {
     "hook": "paymentRequired",
-    "count": 62
+    "count": 602
   },
   {
-    "hook": "steady_growth",
-    "count": 23
+    "hook": "generated_job_template",
+    "count": 256
   },
   {
-    "hook": "budget_squeeze",
-    "count": 20
+    "hook": "side_hustle_profit",
+    "count": 194
   },
   {
-    "hook": "social_tension_minor",
-    "count": 10
+    "hook": "equal",
+    "count": 144
   },
   {
-    "hook": "late_fee_chain",
-    "count": 10
+    "hook": "Spending Habit Track",
+    "count": 86
   },
   {
-    "hook": "job_trust_drop",
-    "count": 7
-  },
-  {
-    "hook": "fatigue_risk_minor",
-    "count": 6
-  },
-  {
-    "hook": "small_bill_pressure",
-    "count": 6
+    "hook": "spendingHabit",
+    "count": 86
   }
 ]

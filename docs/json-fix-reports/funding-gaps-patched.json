@@ -1,560 +1,2823 @@
 [
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_bank_fee_01",
-    "title": "Bank Fee Notice",
-    "choiceId": "cover_fee",
-    "label": "Cover it and adjust your budget",
-    "cost": 5,
-    "priority": "high"
+    "row": 14,
+    "title": "Unexpected Medical Copay",
+    "choice": 3,
+    "label": "Use saved medical money",
+    "cost": 35
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_bill_reminder_01",
-    "title": "Bill Reminder Alert",
-    "choiceId": "move_money",
-    "label": "Move money from savings and pay it",
-    "cost": 12,
-    "priority": "high"
+    "row": 30,
+    "title": "Unexpected Bank Fee",
+    "choice": 1,
+    "label": "Accept the $10 fee",
+    "cost": 10
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_bill_reminder_01",
-    "title": "Bill Reminder Alert",
-    "choiceId": "pay_now",
-    "label": "Pay it today",
-    "cost": 12,
-    "priority": "high"
+    "row": 33,
+    "title": "Where Should You Put Your Savings?",
+    "choice": 2,
+    "label": "Move $25 into HYSA",
+    "cost": 25
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_fee_reversal_01",
-    "title": "Fee Reversal Chance",
-    "choiceId": "pay_and_move",
-    "label": "Just pay it and move on",
-    "cost": 6,
-    "priority": "high"
+    "row": 33,
+    "title": "Where Should You Put Your Savings?",
+    "choice": 3,
+    "label": "Move $25 into savings",
+    "cost": 25
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_streaming_bill_01",
-    "title": "Streaming Bill Hits",
-    "choiceId": "keep_service",
-    "label": "Keep it and cover the bill",
-    "cost": 11,
-    "priority": "high"
+    "row": 34,
+    "title": "CD Offer from Your Bank",
+    "choice": 1,
+    "label": "Put $100 into a CD",
+    "cost": 100
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_streaming_bill_01",
-    "title": "Streaming Bill Hits",
-    "choiceId": "use_savings",
-    "label": "Pull from savings to cover it",
-    "cost": 11,
-    "priority": "high"
+    "row": 35,
+    "title": "Possible Billing Error",
+    "choice": 1,
+    "label": "Call and fix it now",
+    "cost": 20
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_textbook_fee_01",
-    "title": "Textbook Fee",
-    "choiceId": "pay_now",
-    "label": "Pay it now",
-    "cost": 14,
-    "priority": "high"
+    "row": 37,
+    "title": "Build an Emergency Fund?",
+    "choice": 1,
+    "label": "Put $20 aside",
+    "cost": 20
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_textbook_fee_01",
-    "title": "Textbook Fee",
-    "choiceId": "payment_plan",
-    "label": "Ask about a simple payment plan",
-    "cost": 7,
-    "priority": "high"
+    "row": 37,
+    "title": "Build an Emergency Fund?",
+    "choice": 2,
+    "label": "Put $50 aside",
+    "cost": 50
   },
   {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_library_fee_01",
-    "title": "Library Fee Notice",
-    "choiceId": "cut_snack",
-    "label": "Cut a small want and pay the fee",
-    "cost": 4,
-    "priority": "high"
+    "row": 38,
+    "title": "Your Balance Is Getting Low",
+    "choice": 1,
+    "label": "Transfer $15 from savings",
+    "cost": 15
   },
   {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_library_fee_01",
-    "title": "Library Fee Notice",
-    "choiceId": "pay_now",
-    "label": "Pay it now",
-    "cost": 4,
-    "priority": "high"
+    "row": 39,
+    "title": "You Have $25 Extra",
+    "choice": 1,
+    "label": "Put it in HYSA",
+    "cost": 25
   },
   {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_school_trip_01",
-    "title": "School Trip Fee",
-    "choiceId": "ask_family",
-    "label": "Ask family if they can help cover part of it",
-    "cost": 8,
-    "priority": "high"
+    "row": 39,
+    "title": "You Have $25 Extra",
+    "choice": 2,
+    "label": "Put it in emergency fund",
+    "cost": 25
   },
   {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_school_trip_01",
-    "title": "School Trip Fee",
-    "choiceId": "pay_full",
-    "label": "Pay the fee and go",
-    "cost": 18,
-    "priority": "high"
+    "row": 41,
+    "title": "Review Your Subscriptions",
+    "choice": 1,
+    "label": "Cancel one and save $10",
+    "cost": 10
   },
   {
-    "sourceFile": "data/scenarios/elite-credit-foundation.json",
-    "eventId": "elite_apartment_check_01",
-    "title": "Apartment Application",
-    "choiceId": "apply_now",
-    "label": "Apply now",
-    "cost": 20,
-    "priority": "normal"
+    "row": 43,
+    "title": "You Got a Small Refund",
+    "choice": 1,
+    "label": "Spend the $20",
+    "cost": 20
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_apartment_deposit_01",
-    "title": "Apartment Deposit Target",
-    "choiceId": "save_target",
-    "label": "Save toward the target now",
-    "cost": 15,
-    "priority": "normal"
+    "row": 43,
+    "title": "You Got a Small Refund",
+    "choice": 3,
+    "label": "Save all $20",
+    "cost": 20
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_apartment_deposit_01",
-    "title": "Apartment Deposit Target",
-    "choiceId": "small_target",
-    "label": "Save a smaller amount",
-    "cost": 5,
-    "priority": "normal"
+    "row": 45,
+    "title": "Extra Shift Available",
+    "choice": 1,
+    "label": "Take the shift and earn $30",
+    "cost": 30
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_overdraft_buffer_01",
-    "title": "Build an Overdraft Buffer",
-    "choiceId": "build_buffer",
-    "label": "Move $15 into checking as a buffer",
-    "cost": 15,
-    "priority": "normal"
+    "row": 47,
+    "title": "Campus Gig Opportunity",
+    "choice": 1,
+    "label": "Take the gig and earn $25",
+    "cost": 25
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_cd_lock_01",
-    "title": "CD Lock-In",
-    "choiceId": "keep_hysa",
-    "label": "Keep the money in flexible savings",
-    "cost": 20,
-    "priority": "normal"
+    "row": 49,
+    "title": "Sell Something You No Longer Need",
+    "choice": 1,
+    "label": "Sell it and earn $20",
+    "cost": 20
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_cd_lock_01",
-    "title": "CD Lock-In",
-    "choiceId": "open_cd",
-    "label": "Open the CD with $20",
-    "cost": 20,
-    "priority": "normal"
+    "row": 52,
+    "title": "Tutoring Opportunity",
+    "choice": 1,
+    "label": "Tutor and earn $35",
+    "cost": 35
   },
   {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_emergency_jar_01",
-    "title": "Emergency Jar",
-    "choiceId": "start_jar",
-    "label": "Start an emergency jar with $10",
-    "cost": 10,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_hysa_bonus_01",
-    "title": "HYSA Bonus Offer",
-    "choiceId": "add_10",
-    "label": "Add $10 to savings",
-    "cost": 10,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_hysa_bonus_01",
-    "title": "HYSA Bonus Offer",
-    "choiceId": "move_want_money",
-    "label": "Cut a want and move $10 to savings",
-    "cost": 10,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_investment_mix_01",
-    "title": "Investment Mix Choice",
-    "choiceId": "balanced_mix",
-    "label": "Choose a balanced mix",
-    "cost": 10,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_investment_mix_01",
-    "title": "Investment Mix Choice",
-    "choiceId": "risky_mix",
-    "label": "Choose a riskier mix",
-    "cost": 10,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_investment_mix_01",
-    "title": "Investment Mix Choice",
-    "choiceId": "safe_mix",
-    "label": "Choose a safer mix",
-    "cost": 10,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_loan_due_01",
-    "title": "Loan Payment Due",
-    "choiceId": "partial_pay",
-    "label": "Pay part now and plan the rest",
-    "cost": 10,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_loan_due_01",
-    "title": "Loan Payment Due",
-    "choiceId": "pay_on_time",
-    "label": "Pay it on time",
-    "cost": 20,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_school_lunch_plan_01",
-    "title": "Lunch Budget Plan",
-    "choiceId": "snack_budget",
-    "label": "Set a tiny snack budget only",
-    "cost": 2,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_reinvest_choice_01",
-    "title": "Reinvest Decision",
-    "choiceId": "from_checking",
-    "label": "Take it from checking and invest it",
-    "cost": 10,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_car_cost_01",
-    "title": "Unexpected Car Cost",
-    "choiceId": "adjust_budget",
-    "label": "Adjust your budget to cover it",
-    "cost": 12,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-expansion-v1.json",
-    "eventId": "fin_car_cost_01",
-    "title": "Unexpected Car Cost",
-    "choiceId": "use_savings",
-    "label": "Use savings to protect the month",
-    "cost": 12,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/financial-foundation.json",
-    "eventId": "fin_overdraft_warning_01",
-    "title": "Overdraft Warning",
-    "choiceId": "move_savings",
-    "label": "Transfer money from savings",
-    "cost": 15,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/opportunity-job-expansion-v1.json",
-    "eventId": "opp_retail_discount_01",
-    "title": "Employee Discount Temptation",
-    "choiceId": "buy_discount",
-    "label": "Buy it because it is on discount",
-    "cost": 15,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/opportunity-job-expansion-v1.json",
-    "eventId": "opp_carwash_weather_01",
-    "title": "Rainy Week Slowdown",
-    "choiceId": "spend_anyway",
-    "label": "Keep spending like normal",
-    "cost": 8,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/opportunity-job-expansion-v1.json",
-    "eventId": "opp_food_tip_pool_01",
-    "title": "Tip Pool Question",
-    "choiceId": "spend_normal",
-    "label": "Spend like your tips were normal",
-    "cost": 10,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/opportunity-job-expansion-v1.json",
-    "eventId": "opp_all_transport_01",
-    "title": "Transportation Cost Surprise",
-    "choiceId": "adjust_budget",
-    "label": "Adjust wants to cover the cost",
-    "cost": 6,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/opportunity-job-expansion-v1.json",
-    "eventId": "opp_all_transport_01",
-    "title": "Transportation Cost Surprise",
-    "choiceId": "ignore_cost",
-    "label": "Ignore it and hope the budget works out",
-    "cost": 6,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_birthday_invite_01",
-    "title": "Birthday Invite",
-    "choiceId": "go_full",
-    "label": "Go and spend the full amount",
-    "cost": 16,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_birthday_invite_01",
-    "title": "Birthday Invite",
-    "choiceId": "go_limit",
-    "label": "Go with a smaller budget",
-    "cost": 7,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_bus_fare_01",
-    "title": "Bus Fare Surprise",
-    "choiceId": "pay_bus",
-    "label": "Pay the fare and get where you need to go",
-    "cost": 3,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_community_event_01",
-    "title": "Community Event Booth",
-    "choiceId": "partner_share",
-    "label": "Partner with someone and split the fee",
-    "cost": 5,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_community_event_01",
-    "title": "Community Event Booth",
-    "choiceId": "pay_booth",
-    "label": "Pay the booth fee and try it",
-    "cost": 10,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_family_cookout_01",
-    "title": "Family Cookout Plate",
-    "choiceId": "bring_small_item",
-    "label": "Bring something small and useful",
-    "cost": 6,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_family_cookout_01",
-    "title": "Family Cookout Plate",
-    "choiceId": "buy_big_item",
-    "label": "Buy a larger item to bring",
-    "cost": 14,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_forgot_charger_01",
-    "title": "Forgot Charger",
-    "choiceId": "buy_cheap",
-    "label": "Buy a cheap charger now",
-    "cost": 8,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_water_bottle_01",
-    "title": "Forgot Water Bottle",
-    "choiceId": "buy_drink",
-    "label": "Buy a drink",
-    "cost": 3,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_group_project_01",
-    "title": "Group Project Supplies",
-    "choiceId": "buy_supplies",
-    "label": "Buy the supplies yourself",
-    "cost": 9,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_group_project_01",
-    "title": "Group Project Supplies",
-    "choiceId": "split_cost",
-    "label": "Ask everyone to split the cost",
-    "cost": 3,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_locker_fine_01",
-    "title": "Locker Fine",
-    "choiceId": "cut_wants",
-    "label": "Cut a want and pay it today",
-    "cost": 6,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_locker_fine_01",
-    "title": "Locker Fine",
-    "choiceId": "pay_fine",
-    "label": "Pay the fine now",
-    "cost": 6,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_lost_headphones_01",
-    "title": "Lost Headphones",
-    "choiceId": "replace_now",
-    "label": "Replace them now",
-    "cost": 15,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_missed_alarm_01",
-    "title": "Missed Alarm",
-    "choiceId": "rush_out",
-    "label": "Rush out and buy breakfast later",
-    "cost": 5,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_missing_uniform_01",
-    "title": "Missing Uniform Piece",
-    "choiceId": "buy_item",
-    "label": "Buy the item now",
-    "cost": 10,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_movie_night_01",
-    "title": "Movie Night Vote",
-    "choiceId": "join_snacks_only",
-    "label": "Join but limit what you spend",
-    "cost": 4,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_movie_night_01",
-    "title": "Movie Night Vote",
-    "choiceId": "split_all",
-    "label": "Split the cost and join",
-    "cost": 9,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_game_release_01",
-    "title": "New Game Release",
-    "choiceId": "buy_now",
-    "label": "Buy it now",
-    "cost": 20,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_phone_damage_01",
-    "title": "Phone Screen Crack",
-    "choiceId": "repair_now",
-    "label": "Repair it right away",
-    "cost": 25,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_spirit_day_01",
-    "title": "School Spirit Day",
-    "choiceId": "buy_shirt",
-    "label": "Buy the shirt",
-    "cost": 12,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-expansion-v1.json",
-    "eventId": "rl_team_snack_01",
-    "title": "Team Snack Request",
-    "choiceId": "join_order",
-    "label": "Join the snack order",
-    "cost": 7,
-    "priority": "normal"
-  },
-  {
-    "sourceFile": "data/scenarios/real-life-foundation.json",
-    "eventId": "rl_forgot_lunch_01",
+    "row": 55,
     "title": "Forgot Your Lunch",
-    "choiceId": "buy_lunch",
+    "choice": 1,
     "label": "Buy school lunch for $4",
-    "cost": 4,
-    "priority": "normal"
+    "cost": 4
   },
   {
-    "sourceFile": "data/scenarios/real-life-foundation.json",
-    "eventId": "rl_forgot_lunch_01",
+    "row": 55,
     "title": "Forgot Your Lunch",
-    "choiceId": "buy_snack",
+    "choice": 2,
     "label": "Buy a snack for $2",
-    "cost": 2,
-    "priority": "normal"
+    "cost": 2
   },
   {
-    "sourceFile": "data/scenarios/real-life-foundation.json",
-    "eventId": "rl_friend_pizza_01",
+    "row": 56,
     "title": "Friends Want Pizza",
-    "choiceId": "join_full",
+    "choice": 1,
     "label": "Join in and spend $12",
-    "cost": 12,
-    "priority": "normal"
+    "cost": 12
   },
   {
-    "sourceFile": "data/scenarios/real-life-foundation.json",
-    "eventId": "rl_friend_pizza_01",
+    "row": 56,
     "title": "Friends Want Pizza",
-    "choiceId": "set_limit",
+    "choice": 2,
     "label": "Go, but spend only $5",
-    "cost": 5,
-    "priority": "normal"
+    "cost": 5
+  },
+  {
+    "row": 57,
+    "title": "Bus Fare Surprise",
+    "choice": 1,
+    "label": "Pay the fare and get where you need to go",
+    "cost": 3
+  },
+  {
+    "row": 58,
+    "title": "School Trip Fee",
+    "choice": 1,
+    "label": "Pay the fee and go",
+    "cost": 18
+  },
+  {
+    "row": 58,
+    "title": "School Trip Fee",
+    "choice": 3,
+    "label": "Ask family if they can help cover part of it",
+    "cost": 8
+  },
+  {
+    "row": 59,
+    "title": "Phone Screen Crack",
+    "choice": 1,
+    "label": "Repair it right away",
+    "cost": 25
+  },
+  {
+    "row": 60,
+    "title": "Locker Fine",
+    "choice": 1,
+    "label": "Pay the fine now",
+    "cost": 6
+  },
+  {
+    "row": 60,
+    "title": "Locker Fine",
+    "choice": 3,
+    "label": "Cut a want and pay it today",
+    "cost": 6
+  },
+  {
+    "row": 61,
+    "title": "New Game Release",
+    "choice": 1,
+    "label": "Buy it now",
+    "cost": 20
+  },
+  {
+    "row": 62,
+    "title": "School Spirit Day",
+    "choice": 1,
+    "label": "Buy the shirt",
+    "cost": 12
+  },
+  {
+    "row": 63,
+    "title": "Missed Alarm",
+    "choice": 1,
+    "label": "Rush out and buy breakfast later",
+    "cost": 5
+  },
+  {
+    "row": 64,
+    "title": "Group Project Supplies",
+    "choice": 1,
+    "label": "Buy the supplies yourself",
+    "cost": 9
+  },
+  {
+    "row": 64,
+    "title": "Group Project Supplies",
+    "choice": 2,
+    "label": "Ask everyone to split the cost",
+    "cost": 3
+  },
+  {
+    "row": 65,
+    "title": "Family Cookout Plate",
+    "choice": 1,
+    "label": "Buy a larger item to bring",
+    "cost": 14
+  },
+  {
+    "row": 65,
+    "title": "Family Cookout Plate",
+    "choice": 2,
+    "label": "Bring something small and useful",
+    "cost": 6
+  },
+  {
+    "row": 66,
+    "title": "Lost Headphones",
+    "choice": 1,
+    "label": "Replace them now",
+    "cost": 15
+  },
+  {
+    "row": 67,
+    "title": "Team Snack Request",
+    "choice": 1,
+    "label": "Join the snack order",
+    "cost": 7
+  },
+  {
+    "row": 68,
+    "title": "Library Fee Notice",
+    "choice": 1,
+    "label": "Pay it now",
+    "cost": 4
+  },
+  {
+    "row": 68,
+    "title": "Library Fee Notice",
+    "choice": 3,
+    "label": "Cut a small want and pay the fee",
+    "cost": 4
+  },
+  {
+    "row": 69,
+    "title": "Birthday Invite",
+    "choice": 1,
+    "label": "Go and spend the full amount",
+    "cost": 16
+  },
+  {
+    "row": 69,
+    "title": "Birthday Invite",
+    "choice": 2,
+    "label": "Go with a smaller budget",
+    "cost": 7
+  },
+  {
+    "row": 70,
+    "title": "Missing Uniform Piece",
+    "choice": 1,
+    "label": "Buy the item now",
+    "cost": 10
+  },
+  {
+    "row": 71,
+    "title": "Forgot Water Bottle",
+    "choice": 1,
+    "label": "Buy a drink",
+    "cost": 3
+  },
+  {
+    "row": 72,
+    "title": "Community Event Booth",
+    "choice": 1,
+    "label": "Pay the booth fee and try it",
+    "cost": 10
+  },
+  {
+    "row": 72,
+    "title": "Community Event Booth",
+    "choice": 2,
+    "label": "Partner with someone and split the fee",
+    "cost": 5
+  },
+  {
+    "row": 73,
+    "title": "Forgot Charger",
+    "choice": 1,
+    "label": "Buy a cheap charger now",
+    "cost": 8
+  },
+  {
+    "row": 75,
+    "title": "Movie Night Vote",
+    "choice": 1,
+    "label": "Split the cost and join",
+    "cost": 9
+  },
+  {
+    "row": 75,
+    "title": "Movie Night Vote",
+    "choice": 2,
+    "label": "Join but limit what you spend",
+    "cost": 4
+  },
+  {
+    "row": 76,
+    "title": "Overdraft Warning",
+    "choice": 1,
+    "label": "Transfer money from savings",
+    "cost": 15
+  },
+  {
+    "row": 76,
+    "title": "Overdraft Warning",
+    "choice": 3,
+    "label": "Cancel a planned want and cover the bill",
+    "cost": 20
+  },
+  {
+    "row": 78,
+    "title": "HYSA Bonus Offer",
+    "choice": 1,
+    "label": "Add $10 to savings",
+    "cost": 10
+  },
+  {
+    "row": 78,
+    "title": "HYSA Bonus Offer",
+    "choice": 3,
+    "label": "Cut a want and move $10 to savings",
+    "cost": 10
+  },
+  {
+    "row": 79,
+    "title": "Streaming Bill Hits",
+    "choice": 1,
+    "label": "Keep it and cover the bill",
+    "cost": 11
+  },
+  {
+    "row": 79,
+    "title": "Streaming Bill Hits",
+    "choice": 3,
+    "label": "Pull from savings to cover it",
+    "cost": 11
+  },
+  {
+    "row": 80,
+    "title": "Textbook Fee",
+    "choice": 1,
+    "label": "Pay it now",
+    "cost": 14
+  },
+  {
+    "row": 80,
+    "title": "Textbook Fee",
+    "choice": 2,
+    "label": "Ask about a simple payment plan",
+    "cost": 7
+  },
+  {
+    "row": 81,
+    "title": "Bank Fee Notice",
+    "choice": 1,
+    "label": "Cover it and adjust your budget",
+    "cost": 5
+  },
+  {
+    "row": 81,
+    "title": "Bank Fee Notice",
+    "choice": 2,
+    "label": "Ignore it and move on",
+    "cost": 10
+  },
+  {
+    "row": 83,
+    "title": "Reinvest Decision",
+    "choice": 1,
+    "label": "Take it from checking and invest it",
+    "cost": 10
+  },
+  {
+    "row": 83,
+    "title": "Reinvest Decision",
+    "choice": 2,
+    "label": "Cut wants and invest the difference",
+    "cost": 15
+  },
+  {
+    "row": 84,
+    "title": "CD Lock-In",
+    "choice": 1,
+    "label": "Open the CD with $20",
+    "cost": 20
+  },
+  {
+    "row": 84,
+    "title": "CD Lock-In",
+    "choice": 2,
+    "label": "Keep the money in flexible savings",
+    "cost": 20
+  },
+  {
+    "row": 85,
+    "title": "Bill Reminder Alert",
+    "choice": 1,
+    "label": "Pay it today",
+    "cost": 12
+  },
+  {
+    "row": 85,
+    "title": "Bill Reminder Alert",
+    "choice": 2,
+    "label": "Move money from savings and pay it",
+    "cost": 12
+  },
+  {
+    "row": 87,
+    "title": "Build an Overdraft Buffer",
+    "choice": 1,
+    "label": "Move $15 into checking as a buffer",
+    "cost": 15
+  },
+  {
+    "row": 88,
+    "title": "Card Purchase Decision",
+    "choice": 1,
+    "label": "Use the card only if you can cover it",
+    "cost": 20
+  },
+  {
+    "row": 90,
+    "title": "Lunch Budget Plan",
+    "choice": 3,
+    "label": "Set a tiny snack budget only",
+    "cost": 2
+  },
+  {
+    "row": 91,
+    "title": "Emergency Jar",
+    "choice": 1,
+    "label": "Start an emergency jar with $10",
+    "cost": 10
+  },
+  {
+    "row": 91,
+    "title": "Emergency Jar",
+    "choice": 3,
+    "label": "Use gift or bonus money to start it",
+    "cost": 15
+  },
+  {
+    "row": 92,
+    "title": "Loan Payment Due",
+    "choice": 1,
+    "label": "Pay it on time",
+    "cost": 20
+  },
+  {
+    "row": 92,
+    "title": "Loan Payment Due",
+    "choice": 2,
+    "label": "Pay part now and plan the rest",
+    "cost": 10
+  },
+  {
+    "row": 93,
+    "title": "Unexpected Car Cost",
+    "choice": 1,
+    "label": "Adjust your budget to cover it",
+    "cost": 12
+  },
+  {
+    "row": 93,
+    "title": "Unexpected Car Cost",
+    "choice": 2,
+    "label": "Use savings to protect the month",
+    "cost": 12
+  },
+  {
+    "row": 94,
+    "title": "Apartment Deposit Target",
+    "choice": 1,
+    "label": "Save toward the target now",
+    "cost": 15
+  },
+  {
+    "row": 94,
+    "title": "Apartment Deposit Target",
+    "choice": 2,
+    "label": "Save a smaller amount",
+    "cost": 5
+  },
+  {
+    "row": 95,
+    "title": "Investment Mix Choice",
+    "choice": 1,
+    "label": "Choose a safer mix",
+    "cost": 10
+  },
+  {
+    "row": 95,
+    "title": "Investment Mix Choice",
+    "choice": 2,
+    "label": "Choose a balanced mix",
+    "cost": 10
+  },
+  {
+    "row": 95,
+    "title": "Investment Mix Choice",
+    "choice": 3,
+    "label": "Choose a riskier mix",
+    "cost": 10
+  },
+  {
+    "row": 96,
+    "title": "Fee Reversal Chance",
+    "choice": 2,
+    "label": "Just pay it and move on",
+    "cost": 6
+  },
+  {
+    "row": 101,
+    "title": "Busy Saturday Rush",
+    "choice": 1,
+    "label": "Stay extra time for more pay",
+    "cost": 18
+  },
+  {
+    "row": 104,
+    "title": "Rainy Week Slowdown",
+    "choice": 2,
+    "label": "Keep spending like normal",
+    "cost": 8
+  },
+  {
+    "row": 107,
+    "title": "Holiday Rush",
+    "choice": 1,
+    "label": "Help cover the rush for extra hours",
+    "cost": 10
+  },
+  {
+    "row": 108,
+    "title": "Employee Discount Temptation",
+    "choice": 1,
+    "label": "Buy it because it is on discount",
+    "cost": 15
+  },
+  {
+    "row": 110,
+    "title": "Upsell Contest",
+    "choice": 1,
+    "label": "Join the contest and try to win",
+    "cost": 18
+  },
+  {
+    "row": 115,
+    "title": "Tip Pool Question",
+    "choice": 2,
+    "label": "Spend like your tips were normal",
+    "cost": 10
+  },
+  {
+    "row": 118,
+    "title": "Weekend Shift Need",
+    "choice": 1,
+    "label": "Cover the shift for extra pay",
+    "cost": 18
+  },
+  {
+    "row": 120,
+    "title": "Supply Closet Order",
+    "choice": 1,
+    "label": "Check the list and order carefully",
+    "cost": 12
+  },
+  {
+    "row": 122,
+    "title": "Bank Errand Opportunity",
+    "choice": 1,
+    "label": "Handle it carefully and on time",
+    "cost": 18
+  },
+  {
+    "row": 123,
+    "title": "Calendar Mix-Up",
+    "choice": 1,
+    "label": "Fix the schedule and communicate quickly",
+    "cost": 18
+  },
+  {
+    "row": 128,
+    "title": "Transportation Cost Surprise",
+    "choice": 1,
+    "label": "Adjust wants to cover the cost",
+    "cost": 6
+  },
+  {
+    "row": 128,
+    "title": "Transportation Cost Surprise",
+    "choice": 2,
+    "label": "Ignore it and hope the budget works out",
+    "cost": 6
+  },
+  {
+    "row": 130,
+    "title": "Apartment Application",
+    "choice": 1,
+    "label": "Apply now",
+    "cost": 20
+  },
+  {
+    "row": 131,
+    "title": "\ud83c\udf6c Candy Stop",
+    "choice": 2,
+    "label": "Go and spend $3",
+    "cost": 3
+  },
+  {
+    "row": 132,
+    "title": "\ud83e\udd68 Snack Run",
+    "choice": 2,
+    "label": "Go and spend $5",
+    "cost": 5
+  },
+  {
+    "row": 133,
+    "title": "\ud83c\udfac Movie Night",
+    "choice": 2,
+    "label": "Go and spend $10",
+    "cost": 10
+  },
+  {
+    "row": 134,
+    "title": "\ud83c\udfb5 Music Subscription",
+    "choice": 2,
+    "label": "Go and spend $12",
+    "cost": 12
+  },
+  {
+    "row": 135,
+    "title": "\ud83d\udd79\ufe0f New Game Skin",
+    "choice": 2,
+    "label": "Go and spend $15",
+    "cost": 15
+  },
+  {
+    "row": 136,
+    "title": "\ud83c\udf55 Pizza Night",
+    "choice": 2,
+    "label": "Go and spend $18",
+    "cost": 18
+  },
+  {
+    "row": 137,
+    "title": "\ud83c\udfae Video Game Rental",
+    "choice": 2,
+    "label": "Go and spend $20",
+    "cost": 20
+  },
+  {
+    "row": 138,
+    "title": "\ud83d\udd79\ufe0f Arcade Day",
+    "choice": 2,
+    "label": "Go and spend $25",
+    "cost": 25
+  },
+  {
+    "row": 139,
+    "title": "\ud83d\udc5f Style Drop",
+    "choice": 2,
+    "label": "Go and spend $30",
+    "cost": 30
+  },
+  {
+    "row": 140,
+    "title": "\ud83c\udfaf Full Game Purchase",
+    "choice": 2,
+    "label": "Go and spend $40",
+    "cost": 40
+  },
+  {
+    "row": 141,
+    "title": "\ud83c\udf89 Weekend Fun Pack",
+    "choice": 2,
+    "label": "Go and spend $50",
+    "cost": 50
+  },
+  {
+    "row": 142,
+    "title": "\ud83c\udfa4 Concert / Big Trip",
+    "choice": 2,
+    "label": "Go and spend $75",
+    "cost": 75
+  },
+  {
+    "row": 143,
+    "title": "\ud83d\udc85 Nail Appointment",
+    "choice": 2,
+    "label": "Go and spend $22",
+    "cost": 22
+  },
+  {
+    "row": 144,
+    "title": "\ud83d\udecd\ufe0f Mall Shopping Trip",
+    "choice": 2,
+    "label": "Go and spend $28",
+    "cost": 28
+  },
+  {
+    "row": 145,
+    "title": "\u2728 Beauty Supply Stop",
+    "choice": 2,
+    "label": "Go and spend $24",
+    "cost": 24
+  },
+  {
+    "row": 146,
+    "title": "\ud83e\uddd6 Self-Care Day",
+    "choice": 2,
+    "label": "Go and spend $35",
+    "cost": 35
+  },
+  {
+    "row": 147,
+    "title": "Payday Temptation",
+    "choice": 2,
+    "label": "Set a rough plan then review later",
+    "cost": 5
+  },
+  {
+    "row": 147,
+    "title": "Payday Temptation",
+    "choice": 3,
+    "label": "Shop first and plan later",
+    "cost": 20
+  },
+  {
+    "row": 148,
+    "title": "Mall Invite",
+    "choice": 2,
+    "label": "Go but promise not to buy much",
+    "cost": 5
+  },
+  {
+    "row": 148,
+    "title": "Mall Invite",
+    "choice": 3,
+    "label": "Go and spend first",
+    "cost": 20
+  },
+  {
+    "row": 149,
+    "title": "Online Deal",
+    "choice": 2,
+    "label": "Save the item for later",
+    "cost": 5
+  },
+  {
+    "row": 149,
+    "title": "Online Deal",
+    "choice": 3,
+    "label": "Buy it now because it is on sale",
+    "cost": 20
+  },
+  {
+    "row": 150,
+    "title": "Toiletries vs Treat",
+    "choice": 1,
+    "label": "Buy the toiletries first",
+    "cost": 4
+  },
+  {
+    "row": 150,
+    "title": "Toiletries vs Treat",
+    "choice": 2,
+    "label": "Split money between both",
+    "cost": 5
+  },
+  {
+    "row": 150,
+    "title": "Toiletries vs Treat",
+    "choice": 3,
+    "label": "Spend on snacks and skip the need",
+    "cost": 20
+  },
+  {
+    "row": 151,
+    "title": "Supplies vs Gift Card",
+    "choice": 2,
+    "label": "Buy the supplies and a tiny treat",
+    "cost": 5
+  },
+  {
+    "row": 151,
+    "title": "Supplies vs Gift Card",
+    "choice": 3,
+    "label": "Buy the gift card first",
+    "cost": 20
+  },
+  {
+    "row": 152,
+    "title": "Lunch Money Choice",
+    "choice": 2,
+    "label": "Reduce the lunch plan a little",
+    "cost": 5
+  },
+  {
+    "row": 152,
+    "title": "Lunch Money Choice",
+    "choice": 3,
+    "label": "Spend it on the want",
+    "cost": 20
+  },
+  {
+    "row": 153,
+    "title": "First Savings Transfer",
+    "choice": 1,
+    "label": "Transfer savings first",
+    "cost": 10
+  },
+  {
+    "row": 153,
+    "title": "First Savings Transfer",
+    "choice": 3,
+    "label": "Skip savings this time",
+    "cost": 20
+  },
+  {
+    "row": 154,
+    "title": "Advice at Home",
+    "choice": 2,
+    "label": "Save after one small purchase",
+    "cost": 5
+  },
+  {
+    "row": 154,
+    "title": "Advice at Home",
+    "choice": 3,
+    "label": "Ignore the advice",
+    "cost": 20
+  },
+  {
+    "row": 155,
+    "title": "Sale Day Conflict",
+    "choice": 2,
+    "label": "Save part and spend part",
+    "cost": 5
+  },
+  {
+    "row": 155,
+    "title": "Sale Day Conflict",
+    "choice": 3,
+    "label": "Spend instead of saving",
+    "cost": 20
+  },
+  {
+    "row": 156,
+    "title": "After-School Snacks",
+    "choice": 2,
+    "label": "Limit yourself to one stop",
+    "cost": 5
+  },
+  {
+    "row": 156,
+    "title": "After-School Snacks",
+    "choice": 3,
+    "label": "Keep buying a little every day",
+    "cost": 20
+  },
+  {
+    "row": 157,
+    "title": "Cheap Fun Trap",
+    "choice": 2,
+    "label": "Only cut back a little",
+    "cost": 5
+  },
+  {
+    "row": 157,
+    "title": "Cheap Fun Trap",
+    "choice": 3,
+    "label": "Keep spending because it is only a little",
+    "cost": 20
+  },
+  {
+    "row": 158,
+    "title": "Convenience Habit",
+    "choice": 2,
+    "label": "Do it once, not often",
+    "cost": 5
+  },
+  {
+    "row": 158,
+    "title": "Convenience Habit",
+    "choice": 3,
+    "label": "Keep choosing convenience",
+    "cost": 20
+  },
+  {
+    "row": 159,
+    "title": "Forgot Lunch",
+    "choice": 1,
+    "label": "Buy a small option",
+    "cost": 4
+  },
+  {
+    "row": 159,
+    "title": "Forgot Lunch",
+    "choice": 2,
+    "label": "Buy a full meal",
+    "cost": 5
+  },
+  {
+    "row": 159,
+    "title": "Forgot Lunch",
+    "choice": 3,
+    "label": "Spend extra on extras too",
+    "cost": 20
+  },
+  {
+    "row": 160,
+    "title": "Convenience Store Stop",
+    "choice": 2,
+    "label": "Buy one low-cost item",
+    "cost": 5
+  },
+  {
+    "row": 160,
+    "title": "Convenience Store Stop",
+    "choice": 3,
+    "label": "Match what everyone else buys",
+    "cost": 20
+  },
+  {
+    "row": 161,
+    "title": "Post-Practice Hunger",
+    "choice": 2,
+    "label": "Buy the cheapest item",
+    "cost": 5
+  },
+  {
+    "row": 161,
+    "title": "Post-Practice Hunger",
+    "choice": 3,
+    "label": "Buy a combo and dessert",
+    "cost": 20
+  },
+  {
+    "row": 162,
+    "title": "Pizza Night",
+    "choice": 3,
+    "label": "Go because everyone else is going",
+    "cost": 20
+  },
+  {
+    "row": 163,
+    "title": "Team Snack Fund",
+    "choice": 1,
+    "label": "Contribute only if it fits the budget",
+    "cost": 4
+  },
+  {
+    "row": 163,
+    "title": "Team Snack Fund",
+    "choice": 2,
+    "label": "Contribute a smaller amount",
+    "cost": 5
+  },
+  {
+    "row": 163,
+    "title": "Team Snack Fund",
+    "choice": 3,
+    "label": "Pay more than you planned to fit in",
+    "cost": 20
+  },
+  {
+    "row": 164,
+    "title": "Movie Invite",
+    "choice": 2,
+    "label": "Go but set a spending cap",
+    "cost": 5
+  },
+  {
+    "row": 164,
+    "title": "Movie Invite",
+    "choice": 3,
+    "label": "Say yes and spend freely",
+    "cost": 20
+  },
+  {
+    "row": 165,
+    "title": "Receipt Check",
+    "choice": 2,
+    "label": "Review only the bigger purchases",
+    "cost": 5
+  },
+  {
+    "row": 165,
+    "title": "Receipt Check",
+    "choice": 3,
+    "label": "Ignore the receipts",
+    "cost": 20
+  },
+  {
+    "row": 166,
+    "title": "Budget App Entry",
+    "choice": 2,
+    "label": "Log most of it later tonight",
+    "cost": 5
+  },
+  {
+    "row": 166,
+    "title": "Budget App Entry",
+    "choice": 3,
+    "label": "Do not log anything",
+    "cost": 20
+  },
+  {
+    "row": 167,
+    "title": "Cash Left Question",
+    "choice": 2,
+    "label": "Estimate and move on",
+    "cost": 5
+  },
+  {
+    "row": 167,
+    "title": "Cash Left Question",
+    "choice": 3,
+    "label": "Ignore the missing details",
+    "cost": 20
+  },
+  {
+    "row": 168,
+    "title": "Lost Charger",
+    "choice": 1,
+    "label": "Buy a basic replacement",
+    "cost": 10
+  },
+  {
+    "row": 168,
+    "title": "Lost Charger",
+    "choice": 2,
+    "label": "Borrow one for now",
+    "cost": 5
+  },
+  {
+    "row": 168,
+    "title": "Lost Charger",
+    "choice": 3,
+    "label": "Buy an expensive replacement bundle",
+    "cost": 20
+  },
+  {
+    "row": 169,
+    "title": "Club Fee Reminder",
+    "choice": 2,
+    "label": "Ask for a little more time",
+    "cost": 5
+  },
+  {
+    "row": 169,
+    "title": "Club Fee Reminder",
+    "choice": 3,
+    "label": "Ignore it until it gets worse",
+    "cost": 20
+  },
+  {
+    "row": 170,
+    "title": "Broken Headphones",
+    "choice": 1,
+    "label": "Choose a low-cost fix or replacement",
+    "cost": 20
+  },
+  {
+    "row": 170,
+    "title": "Broken Headphones",
+    "choice": 2,
+    "label": "Use a temporary workaround",
+    "cost": 5
+  },
+  {
+    "row": 170,
+    "title": "Broken Headphones",
+    "choice": 3,
+    "label": "Buy the flashy version fast",
+    "cost": 20
+  },
+  {
+    "row": 171,
+    "title": "Cash or Deposit",
+    "choice": 1,
+    "label": "Deposit it into the right account",
+    "cost": 25
+  },
+  {
+    "row": 171,
+    "title": "Cash or Deposit",
+    "choice": 2,
+    "label": "Keep a little cash and deposit the rest",
+    "cost": 5
+  },
+  {
+    "row": 171,
+    "title": "Cash or Deposit",
+    "choice": 3,
+    "label": "Keep it all on you",
+    "cost": 20
+  },
+  {
+    "row": 172,
+    "title": "Checking vs Savings",
+    "choice": 1,
+    "label": "Move it to savings",
+    "cost": 10
+  },
+  {
+    "row": 172,
+    "title": "Checking vs Savings",
+    "choice": 2,
+    "label": "Leave it in checking for now",
+    "cost": 5
+  },
+  {
+    "row": 172,
+    "title": "Checking vs Savings",
+    "choice": 3,
+    "label": "Spend it because it is easy to access",
+    "cost": 20
+  },
+  {
+    "row": 173,
+    "title": "Birthday Money Choice",
+    "choice": 2,
+    "label": "Split it between saving and fun",
+    "cost": 5
+  },
+  {
+    "row": 173,
+    "title": "Birthday Money Choice",
+    "choice": 3,
+    "label": "Spend it all quickly",
+    "cost": 20
+  },
+  {
+    "row": 174,
+    "title": "Shoes Now or Later",
+    "choice": 2,
+    "label": "Buy a cheaper pair",
+    "cost": 5
+  },
+  {
+    "row": 174,
+    "title": "Shoes Now or Later",
+    "choice": 3,
+    "label": "Buy the expensive pair now",
+    "cost": 20
+  },
+  {
+    "row": 175,
+    "title": "Accessories vs Goal",
+    "choice": 2,
+    "label": "Buy one small upgrade only",
+    "cost": 5
+  },
+  {
+    "row": 175,
+    "title": "Accessories vs Goal",
+    "choice": 3,
+    "label": "Buy several extras now",
+    "cost": 20
+  },
+  {
+    "row": 176,
+    "title": "Concert Ticket Temptation",
+    "choice": 2,
+    "label": "Look for a cheaper option",
+    "cost": 5
+  },
+  {
+    "row": 176,
+    "title": "Concert Ticket Temptation",
+    "choice": 3,
+    "label": "Spend without checking the budget",
+    "cost": 20
+  },
+  {
+    "row": 177,
+    "title": "Extra Shift Offer",
+    "choice": 2,
+    "label": "Take some extra time but not all",
+    "cost": 5
+  },
+  {
+    "row": 177,
+    "title": "Extra Shift Offer",
+    "choice": 3,
+    "label": "Skip extra income and still spend big",
+    "cost": 20
+  },
+  {
+    "row": 178,
+    "title": "Smaller Paycheck",
+    "choice": 2,
+    "label": "Make only a small adjustment",
+    "cost": 5
+  },
+  {
+    "row": 178,
+    "title": "Smaller Paycheck",
+    "choice": 3,
+    "label": "Keep spending like nothing changed",
+    "cost": 20
+  },
+  {
+    "row": 179,
+    "title": "Side Hustle Idea",
+    "choice": 2,
+    "label": "Use part for fun and part for goals",
+    "cost": 5
+  },
+  {
+    "row": 179,
+    "title": "Side Hustle Idea",
+    "choice": 3,
+    "label": "Spend all extra money right away",
+    "cost": 20
+  },
+  {
+    "row": 180,
+    "title": "Strong Week",
+    "choice": 2,
+    "label": "Use a little and save a little",
+    "cost": 5
+  },
+  {
+    "row": 180,
+    "title": "Strong Week",
+    "choice": 3,
+    "label": "Spend it because you earned it",
+    "cost": 20
+  },
+  {
+    "row": 181,
+    "title": "Reset Moment",
+    "choice": 2,
+    "label": "Make a few small fixes",
+    "cost": 5
+  },
+  {
+    "row": 181,
+    "title": "Reset Moment",
+    "choice": 3,
+    "label": "Ignore it and hope next week is better",
+    "cost": 20
+  },
+  {
+    "row": 182,
+    "title": "Routine Check",
+    "choice": 2,
+    "label": "Keep most habits but loosen one",
+    "cost": 5
+  },
+  {
+    "row": 182,
+    "title": "Routine Check",
+    "choice": 3,
+    "label": "Drop the routine because you feel comfortable",
+    "cost": 20
+  },
+  {
+    "row": 183,
+    "title": "Phone Bill",
+    "choice": 1,
+    "label": "Pay it from planned money",
+    "cost": 20
+  },
+  {
+    "row": 183,
+    "title": "Phone Bill",
+    "choice": 2,
+    "label": "Pay it late in the week",
+    "cost": 5
+  },
+  {
+    "row": 183,
+    "title": "Phone Bill",
+    "choice": 3,
+    "label": "Spend the bill money elsewhere",
+    "cost": 20
+  },
+  {
+    "row": 184,
+    "title": "Transportation Cost",
+    "choice": 2,
+    "label": "Cut another category to cover it",
+    "cost": 5
+  },
+  {
+    "row": 184,
+    "title": "Transportation Cost",
+    "choice": 3,
+    "label": "Ignore it and hope it works out",
+    "cost": 20
+  },
+  {
+    "row": 185,
+    "title": "Monthly Service",
+    "choice": 2,
+    "label": "Downsize the service",
+    "cost": 5
+  },
+  {
+    "row": 185,
+    "title": "Monthly Service",
+    "choice": 3,
+    "label": "Forget it and let it pile up",
+    "cost": 20
+  },
+  {
+    "row": 186,
+    "title": "Due Date Today",
+    "choice": 1,
+    "label": "Pay it on time",
+    "cost": 20
+  },
+  {
+    "row": 186,
+    "title": "Due Date Today",
+    "choice": 2,
+    "label": "Pay it later this week",
+    "cost": 5
+  },
+  {
+    "row": 186,
+    "title": "Due Date Today",
+    "choice": 3,
+    "label": "Ignore the due date",
+    "cost": 20
+  },
+  {
+    "row": 187,
+    "title": "Reminder Notice",
+    "choice": 1,
+    "label": "Handle it now",
+    "cost": 10
+  },
+  {
+    "row": 187,
+    "title": "Reminder Notice",
+    "choice": 2,
+    "label": "Set a calendar alert and wait",
+    "cost": 5
+  },
+  {
+    "row": 187,
+    "title": "Reminder Notice",
+    "choice": 3,
+    "label": "Dismiss the reminder",
+    "cost": 20
+  },
+  {
+    "row": 188,
+    "title": "Bill Money Temptation",
+    "choice": 2,
+    "label": "Borrow a little and replace it fast",
+    "cost": 5
+  },
+  {
+    "row": 188,
+    "title": "Bill Money Temptation",
+    "choice": 3,
+    "label": "Spend the bill money",
+    "cost": 20
+  },
+  {
+    "row": 189,
+    "title": "Streaming Stack",
+    "choice": 2,
+    "label": "Keep one and cancel one",
+    "cost": 5
+  },
+  {
+    "row": 189,
+    "title": "Streaming Stack",
+    "choice": 3,
+    "label": "Keep all of them because it is convenient",
+    "cost": 20
+  },
+  {
+    "row": 190,
+    "title": "Trial Period Ending",
+    "choice": 2,
+    "label": "Keep it only if it truly fits the budget",
+    "cost": 5
+  },
+  {
+    "row": 190,
+    "title": "Trial Period Ending",
+    "choice": 3,
+    "label": "Forget about it and let it charge",
+    "cost": 20
+  },
+  {
+    "row": 191,
+    "title": "Music Plan Upgrade",
+    "choice": 2,
+    "label": "Try it for one month with a reminder",
+    "cost": 5
+  },
+  {
+    "row": 191,
+    "title": "Music Plan Upgrade",
+    "choice": 3,
+    "label": "Upgrade without checking the cost over time",
+    "cost": 20
+  },
+  {
+    "row": 192,
+    "title": "Shared Item Care",
+    "choice": 1,
+    "label": "Own it and make a plan to fix it",
+    "cost": 10
+  },
+  {
+    "row": 192,
+    "title": "Shared Item Care",
+    "choice": 2,
+    "label": "Explain it and ask for time",
+    "cost": 5
+  },
+  {
+    "row": 192,
+    "title": "Shared Item Care",
+    "choice": 3,
+    "label": "Avoid the situation",
+    "cost": 20
+  },
+  {
+    "row": 193,
+    "title": "Missed Preparation",
+    "choice": 1,
+    "label": "Fix the budget and learn from it",
+    "cost": 10
+  },
+  {
+    "row": 193,
+    "title": "Missed Preparation",
+    "choice": 2,
+    "label": "Patch the problem for now",
+    "cost": 5
+  },
+  {
+    "row": 193,
+    "title": "Missed Preparation",
+    "choice": 3,
+    "label": "Blame the situation and do nothing",
+    "cost": 20
+  },
+  {
+    "row": 194,
+    "title": "Future Option",
+    "choice": 2,
+    "label": "Take a moderate approach",
+    "cost": 5
+  },
+  {
+    "row": 194,
+    "title": "Future Option",
+    "choice": 3,
+    "label": "Choose the easy-now path",
+    "cost": 20
+  },
+  {
+    "row": 195,
+    "title": "Split the Ride",
+    "choice": 1,
+    "label": "Join only if it fits the budget",
+    "cost": 10
+  },
+  {
+    "row": 195,
+    "title": "Split the Ride",
+    "choice": 2,
+    "label": "Join but cut another want",
+    "cost": 5
+  },
+  {
+    "row": 195,
+    "title": "Split the Ride",
+    "choice": 3,
+    "label": "Pay without checking your budget",
+    "cost": 20
+  },
+  {
+    "row": 196,
+    "title": "Group Gift",
+    "choice": 1,
+    "label": "Contribute an amount you can afford",
+    "cost": 15
+  },
+  {
+    "row": 196,
+    "title": "Group Gift",
+    "choice": 2,
+    "label": "Contribute a small amount and explain",
+    "cost": 5
+  },
+  {
+    "row": 196,
+    "title": "Group Gift",
+    "choice": 3,
+    "label": "Contribute more than planned to look good",
+    "cost": 20
+  },
+  {
+    "row": 197,
+    "title": "Shared Food Cost",
+    "choice": 2,
+    "label": "Pay this time but note it",
+    "cost": 5
+  },
+  {
+    "row": 197,
+    "title": "Shared Food Cost",
+    "choice": 3,
+    "label": "Stay silent and overspend again",
+    "cost": 20
+  },
+  {
+    "row": 198,
+    "title": "Store Display",
+    "choice": 3,
+    "label": "Buy it right away",
+    "cost": 20
+  },
+  {
+    "row": 199,
+    "title": "Online Cart",
+    "choice": 3,
+    "label": "Check out immediately",
+    "cost": 20
+  },
+  {
+    "row": 200,
+    "title": "Limited Time Sign",
+    "choice": 2,
+    "label": "Research quickly before deciding",
+    "cost": 5
+  },
+  {
+    "row": 200,
+    "title": "Limited Time Sign",
+    "choice": 3,
+    "label": "Buy because the timer is ticking",
+    "cost": 20
+  },
+  {
+    "row": 201,
+    "title": "Schedule Change",
+    "choice": 1,
+    "label": "Adjust the budget and cover it calmly",
+    "cost": 10
+  },
+  {
+    "row": 201,
+    "title": "Schedule Change",
+    "choice": 2,
+    "label": "Cover it by trimming wants",
+    "cost": 5
+  },
+  {
+    "row": 201,
+    "title": "Schedule Change",
+    "choice": 3,
+    "label": "Act like it did not happen until later",
+    "cost": 20
+  },
+  {
+    "row": 202,
+    "title": "School Cost Surprise",
+    "choice": 2,
+    "label": "Ask for a short extension",
+    "cost": 5
+  },
+  {
+    "row": 202,
+    "title": "School Cost Surprise",
+    "choice": 3,
+    "label": "Spend without checking the impact",
+    "cost": 20
+  },
+  {
+    "row": 203,
+    "title": "Family Schedule Shift",
+    "choice": 2,
+    "label": "Make a temporary compromise",
+    "cost": 5
+  },
+  {
+    "row": 203,
+    "title": "Family Schedule Shift",
+    "choice": 3,
+    "label": "Panic spend for convenience",
+    "cost": 20
+  },
+  {
+    "row": 204,
+    "title": "Small Emergency",
+    "choice": 2,
+    "label": "Use flexible spending and rebuild later",
+    "cost": 5
+  },
+  {
+    "row": 204,
+    "title": "Small Emergency",
+    "choice": 3,
+    "label": "Use money that was meant for something critical",
+    "cost": 20
+  },
+  {
+    "row": 205,
+    "title": "Need It Fast",
+    "choice": 2,
+    "label": "Ask for help, then make a payback plan",
+    "cost": 5
+  },
+  {
+    "row": 205,
+    "title": "Need It Fast",
+    "choice": 3,
+    "label": "Charge ahead without a plan",
+    "cost": 20
+  },
+  {
+    "row": 206,
+    "title": "After the Emergency",
+    "choice": 2,
+    "label": "Rebuild slowly",
+    "cost": 5
+  },
+  {
+    "row": 206,
+    "title": "After the Emergency",
+    "choice": 3,
+    "label": "Forget rebuilding it",
+    "cost": 20
+  },
+  {
+    "row": 207,
+    "title": "Family Request",
+    "choice": 3,
+    "label": "Give more than you can handle",
+    "cost": 20
+  },
+  {
+    "row": 208,
+    "title": "Shared Responsibility",
+    "choice": 1,
+    "label": "Contribute what you planned for",
+    "cost": 10
+  },
+  {
+    "row": 208,
+    "title": "Shared Responsibility",
+    "choice": 2,
+    "label": "Contribute with a reduced personal want",
+    "cost": 5
+  },
+  {
+    "row": 208,
+    "title": "Shared Responsibility",
+    "choice": 3,
+    "label": "Contribute impulsively and ignore your own needs",
+    "cost": 20
+  },
+  {
+    "row": 209,
+    "title": "Loan Request",
+    "choice": 2,
+    "label": "Lend a small amount you can lose",
+    "cost": 5
+  },
+  {
+    "row": 209,
+    "title": "Loan Request",
+    "choice": 3,
+    "label": "Lend money you cannot afford to lose",
+    "cost": 20
+  },
+  {
+    "row": 210,
+    "title": "Same Item Different Prices",
+    "choice": 1,
+    "label": "Buy the best value option",
+    "cost": 40
+  },
+  {
+    "row": 210,
+    "title": "Same Item Different Prices",
+    "choice": 2,
+    "label": "Buy the middle option for convenience",
+    "cost": 5
+  },
+  {
+    "row": 210,
+    "title": "Same Item Different Prices",
+    "choice": 3,
+    "label": "Buy the first one you saw",
+    "cost": 20
+  },
+  {
+    "row": 211,
+    "title": "Brand vs Basic",
+    "choice": 3,
+    "label": "Choose the brand for status only",
+    "cost": 20
+  },
+  {
+    "row": 212,
+    "title": "Quick Purchase Pressure",
+    "choice": 2,
+    "label": "Check one more option only",
+    "cost": 5
+  },
+  {
+    "row": 212,
+    "title": "Quick Purchase Pressure",
+    "choice": 3,
+    "label": "Buy immediately because you are in a hurry",
+    "cost": 20
+  },
+  {
+    "row": 213,
+    "title": "Big Goal Reminder",
+    "choice": 2,
+    "label": "Spend a little, save the rest",
+    "cost": 5
+  },
+  {
+    "row": 213,
+    "title": "Big Goal Reminder",
+    "choice": 3,
+    "label": "Forget the goal for today\u2019s fun",
+    "cost": 20
+  },
+  {
+    "row": 214,
+    "title": "Weekend Temptation",
+    "choice": 2,
+    "label": "Set a small budget for the weekend",
+    "cost": 5
+  },
+  {
+    "row": 214,
+    "title": "Weekend Temptation",
+    "choice": 3,
+    "label": "Spend freely and restart later",
+    "cost": 20
+  },
+  {
+    "row": 215,
+    "title": "Goal Progress Check",
+    "choice": 2,
+    "label": "Keep contributions the same",
+    "cost": 5
+  },
+  {
+    "row": 215,
+    "title": "Goal Progress Check",
+    "choice": 3,
+    "label": "Pause the goal for random spending",
+    "cost": 20
+  },
+  {
+    "row": 216,
+    "title": "Savings Cushion",
+    "choice": 2,
+    "label": "Pause for one controlled week",
+    "cost": 5
+  },
+  {
+    "row": 216,
+    "title": "Savings Cushion",
+    "choice": 3,
+    "label": "Start draining it for wants",
+    "cost": 20
+  },
+  {
+    "row": 217,
+    "title": "Review Week Win",
+    "choice": 2,
+    "label": "Celebrate moderately",
+    "cost": 5
+  },
+  {
+    "row": 217,
+    "title": "Review Week Win",
+    "choice": 3,
+    "label": "Use the win as an excuse to splurge",
+    "cost": 20
+  },
+  {
+    "row": 218,
+    "title": "Peace of Mind Choice",
+    "choice": 2,
+    "label": "Relax the plan slightly",
+    "cost": 5
+  },
+  {
+    "row": 218,
+    "title": "Peace of Mind Choice",
+    "choice": 3,
+    "label": "Abandon the plan because things feel better",
+    "cost": 20
+  },
+  {
+    "row": 219,
+    "title": "Savings Growth Notice",
+    "choice": 3,
+    "label": "Withdraw it because it is extra money",
+    "cost": 20
+  },
+  {
+    "row": 220,
+    "title": "Interest Lesson",
+    "choice": 2,
+    "label": "Listen but make no change yet",
+    "cost": 5
+  },
+  {
+    "row": 220,
+    "title": "Interest Lesson",
+    "choice": 3,
+    "label": "Ignore the lesson",
+    "cost": 20
+  },
+  {
+    "row": 221,
+    "title": "Small Gain Question",
+    "choice": 2,
+    "label": "Save, but not as consistently",
+    "cost": 5
+  },
+  {
+    "row": 221,
+    "title": "Small Gain Question",
+    "choice": 3,
+    "label": "Give up because it is not fast enough",
+    "cost": 20
+  },
+  {
+    "row": 222,
+    "title": "HYSA Option",
+    "choice": 3,
+    "label": "Leave everything in checking",
+    "cost": 20
+  },
+  {
+    "row": 223,
+    "title": "Birthday Money Deposit",
+    "choice": 2,
+    "label": "Split between HYSA and spending",
+    "cost": 5
+  },
+  {
+    "row": 223,
+    "title": "Birthday Money Deposit",
+    "choice": 3,
+    "label": "Spend it because it feels separate from the budget",
+    "cost": 20
+  },
+  {
+    "row": 224,
+    "title": "Growth Comparison",
+    "choice": 1,
+    "label": "Move more to the HYSA",
+    "cost": 10
+  },
+  {
+    "row": 224,
+    "title": "Growth Comparison",
+    "choice": 2,
+    "label": "Move only a little for now",
+    "cost": 5
+  },
+  {
+    "row": 224,
+    "title": "Growth Comparison",
+    "choice": 3,
+    "label": "Do nothing because it feels like too much effort",
+    "cost": 20
+  },
+  {
+    "row": 225,
+    "title": "Six-Month CD",
+    "choice": 3,
+    "label": "Ignore saving and spend it",
+    "cost": 20
+  },
+  {
+    "row": 226,
+    "title": "Locked Money Concern",
+    "choice": 2,
+    "label": "Start with a small amount",
+    "cost": 5
+  },
+  {
+    "row": 226,
+    "title": "Locked Money Concern",
+    "choice": 3,
+    "label": "Avoid all growth tools because of discomfort",
+    "cost": 20
+  },
+  {
+    "row": 227,
+    "title": "Friend\u2019s Opinion",
+    "choice": 3,
+    "label": "Follow your friend and spend instead",
+    "cost": 20
+  },
+  {
+    "row": 228,
+    "title": "Waiting Pays",
+    "choice": 2,
+    "label": "Take a smaller version now",
+    "cost": 5
+  },
+  {
+    "row": 228,
+    "title": "Waiting Pays",
+    "choice": 3,
+    "label": "Grab the fast option now",
+    "cost": 20
+  },
+  {
+    "row": 229,
+    "title": "Goal Almost There",
+    "choice": 2,
+    "label": "Slow down but keep moving",
+    "cost": 5
+  },
+  {
+    "row": 229,
+    "title": "Goal Almost There",
+    "choice": 3,
+    "label": "Quit and spend the money",
+    "cost": 20
+  },
+  {
+    "row": 230,
+    "title": "Sale Countdown",
+    "choice": 2,
+    "label": "Research it before the sale ends",
+    "cost": 5
+  },
+  {
+    "row": 230,
+    "title": "Sale Countdown",
+    "choice": 3,
+    "label": "Buy fast because you might miss out",
+    "cost": 20
+  },
+  {
+    "row": 231,
+    "title": "Spend Next Week\u2019s Money",
+    "choice": 2,
+    "label": "Borrow a tiny amount with a payback plan",
+    "cost": 5
+  },
+  {
+    "row": 231,
+    "title": "Spend Next Week\u2019s Money",
+    "choice": 3,
+    "label": "Use it freely now",
+    "cost": 20
+  },
+  {
+    "row": 232,
+    "title": "Advance Offer",
+    "choice": 2,
+    "label": "Use it only for a true need",
+    "cost": 5
+  },
+  {
+    "row": 232,
+    "title": "Advance Offer",
+    "choice": 3,
+    "label": "Use pay-later for a want",
+    "cost": 20
+  },
+  {
+    "row": 233,
+    "title": "Borrow From a Goal",
+    "choice": 2,
+    "label": "Borrow a little and replace it quickly",
+    "cost": 5
+  },
+  {
+    "row": 233,
+    "title": "Borrow From a Goal",
+    "choice": 3,
+    "label": "Use the goal money and hope to rebuild later",
+    "cost": 20
+  },
+  {
+    "row": 234,
+    "title": "Account Check",
+    "choice": 2,
+    "label": "Make one improvement today",
+    "cost": 5
+  },
+  {
+    "row": 234,
+    "title": "Account Check",
+    "choice": 3,
+    "label": "Leave things messy",
+    "cost": 20
+  },
+  {
+    "row": 235,
+    "title": "Debit Card Habit",
+    "choice": 2,
+    "label": "Use it with a small cap",
+    "cost": 5
+  },
+  {
+    "row": 235,
+    "title": "Debit Card Habit",
+    "choice": 3,
+    "label": "Swipe without checking",
+    "cost": 20
+  },
+  {
+    "row": 236,
+    "title": "Bank Alert Setup",
+    "choice": 2,
+    "label": "Set only one alert",
+    "cost": 5
+  },
+  {
+    "row": 236,
+    "title": "Bank Alert Setup",
+    "choice": 3,
+    "label": "Ignore alerts",
+    "cost": 20
+  },
+  {
+    "row": 237,
+    "title": "Loan to a Friend",
+    "choice": 2,
+    "label": "Lend a small amount only",
+    "cost": 5
+  },
+  {
+    "row": 237,
+    "title": "Loan to a Friend",
+    "choice": 3,
+    "label": "Lend without boundaries",
+    "cost": 20
+  },
+  {
+    "row": 238,
+    "title": "Service Agreement",
+    "choice": 2,
+    "label": "Skim key parts and ask questions",
+    "cost": 5
+  },
+  {
+    "row": 238,
+    "title": "Service Agreement",
+    "choice": 3,
+    "label": "Accept without looking",
+    "cost": 20
+  },
+  {
+    "row": 239,
+    "title": "Shared Purchase Plan",
+    "choice": 2,
+    "label": "Agree casually but write down basics",
+    "cost": 5
+  },
+  {
+    "row": 239,
+    "title": "Shared Purchase Plan",
+    "choice": 3,
+    "label": "Rely on memory and vibes",
+    "cost": 20
+  },
+  {
+    "row": 240,
+    "title": "Tiny Print",
+    "choice": 3,
+    "label": "Ignore the tiny print",
+    "cost": 20
+  },
+  {
+    "row": 241,
+    "title": "Auto-Renew Clause",
+    "choice": 2,
+    "label": "Notice it but hope you remember",
+    "cost": 5
+  },
+  {
+    "row": 241,
+    "title": "Auto-Renew Clause",
+    "choice": 3,
+    "label": "Miss the clause entirely",
+    "cost": 20
+  },
+  {
+    "row": 242,
+    "title": "Return Policy",
+    "choice": 2,
+    "label": "Buy only if you are sure",
+    "cost": 5
+  },
+  {
+    "row": 242,
+    "title": "Return Policy",
+    "choice": 3,
+    "label": "Ignore the policy and buy anyway",
+    "cost": 20
+  },
+  {
+    "row": 243,
+    "title": "Three Easy Payments",
+    "choice": 2,
+    "label": "Use it only for a real need",
+    "cost": 5
+  },
+  {
+    "row": 243,
+    "title": "Three Easy Payments",
+    "choice": 3,
+    "label": "Use it for a want because the payment looks small",
+    "cost": 20
+  },
+  {
+    "row": 244,
+    "title": "Split-Pay App",
+    "choice": 2,
+    "label": "Use split pay with strict tracking",
+    "cost": 5
+  },
+  {
+    "row": 244,
+    "title": "Split-Pay App",
+    "choice": 3,
+    "label": "Split pay with no tracking",
+    "cost": 20
+  },
+  {
+    "row": 245,
+    "title": "Monthly vs Total",
+    "choice": 3,
+    "label": "Focus only on the monthly amount",
+    "cost": 20
+  },
+  {
+    "row": 246,
+    "title": "Flash Sale Message",
+    "choice": 2,
+    "label": "Research quickly before acting",
+    "cost": 5
+  },
+  {
+    "row": 246,
+    "title": "Flash Sale Message",
+    "choice": 3,
+    "label": "Buy because it sounds amazing",
+    "cost": 20
+  },
+  {
+    "row": 247,
+    "title": "Luxury for Cheap",
+    "choice": 3,
+    "label": "Grab it fast because it is rare",
+    "cost": 20
+  },
+  {
+    "row": 248,
+    "title": "Urgent Offer",
+    "choice": 3,
+    "label": "Buy because you feel rushed",
+    "cost": 20
+  },
+  {
+    "row": 249,
+    "title": "Fake Prize",
+    "choice": 3,
+    "label": "Pay to claim the prize",
+    "cost": 20
+  },
+  {
+    "row": 250,
+    "title": "Suspicious Seller",
+    "choice": 2,
+    "label": "Ask more questions first",
+    "cost": 5
+  },
+  {
+    "row": 250,
+    "title": "Suspicious Seller",
+    "choice": 3,
+    "label": "Send money anyway",
+    "cost": 20
+  },
+  {
+    "row": 251,
+    "title": "Link Pressure",
+    "choice": 3,
+    "label": "Click the link immediately",
+    "cost": 20
+  },
+  {
+    "row": 252,
+    "title": "Laptop Choice",
+    "choice": 3,
+    "label": "Buy the flashy version without a plan",
+    "cost": 20
+  },
+  {
+    "row": 253,
+    "title": "Transportation Upgrade",
+    "choice": 2,
+    "label": "Buy used after careful comparison",
+    "cost": 18
+  },
+  {
+    "row": 253,
+    "title": "Transportation Upgrade",
+    "choice": 3,
+    "label": "Rush into the first option",
+    "cost": 20
+  },
+  {
+    "row": 254,
+    "title": "Special Event Cost",
+    "choice": 2,
+    "label": "Go smaller than originally planned",
+    "cost": 5
+  },
+  {
+    "row": 254,
+    "title": "Special Event Cost",
+    "choice": 3,
+    "label": "Go all out because it feels special",
+    "cost": 20
+  },
+  {
+    "row": 255,
+    "title": "Goal Jar",
+    "choice": 2,
+    "label": "Add a smaller amount",
+    "cost": 5
+  },
+  {
+    "row": 255,
+    "title": "Goal Jar",
+    "choice": 3,
+    "label": "Pause the goal for wants",
+    "cost": 20
+  },
+  {
+    "row": 256,
+    "title": "Used vs New",
+    "choice": 3,
+    "label": "Pick based on status only",
+    "cost": 20
+  },
+  {
+    "row": 257,
+    "title": "Almost There",
+    "choice": 3,
+    "label": "Use a pay-later shortcut",
+    "cost": 20
+  },
+  {
+    "row": 258,
+    "title": "Category Budgeting",
+    "choice": 2,
+    "label": "Use leftover money only",
+    "cost": 5
+  },
+  {
+    "row": 258,
+    "title": "Category Budgeting",
+    "choice": 3,
+    "label": "Do not budget for the goal at all",
+    "cost": 20
+  },
+  {
+    "row": 259,
+    "title": "Wants Compete With Goal",
+    "choice": 2,
+    "label": "Reduce the contribution slightly",
+    "cost": 5
+  },
+  {
+    "row": 259,
+    "title": "Wants Compete With Goal",
+    "choice": 3,
+    "label": "Skip the goal for the want",
+    "cost": 20
+  },
+  {
+    "row": 260,
+    "title": "Visible Progress",
+    "choice": 3,
+    "label": "Celebrate by raiding the fund",
+    "cost": 20
+  },
+  {
+    "row": 261,
+    "title": "Class Trip Chance",
+    "choice": 2,
+    "label": "Cover part and ask for time on the rest",
+    "cost": 5
+  },
+  {
+    "row": 261,
+    "title": "Class Trip Chance",
+    "choice": 3,
+    "label": "Miss it because all money was spent",
+    "cost": 20
+  },
+  {
+    "row": 262,
+    "title": "Discounted Tool or Course",
+    "choice": 3,
+    "label": "Buy it without checking fit or budget",
+    "cost": 20
+  },
+  {
+    "row": 263,
+    "title": "Community Event Entry",
+    "choice": 2,
+    "label": "Adjust the budget carefully to attend",
+    "cost": 5
+  },
+  {
+    "row": 263,
+    "title": "Community Event Entry",
+    "choice": 3,
+    "label": "Cannot go because spending was never controlled",
+    "cost": 20
+  },
+  {
+    "row": 264,
+    "title": "Routine Over Mood",
+    "choice": 2,
+    "label": "Allow one controlled exception",
+    "cost": 5
+  },
+  {
+    "row": 264,
+    "title": "Routine Over Mood",
+    "choice": 3,
+    "label": "Drop the rules because you are tired",
+    "cost": 20
+  },
+  {
+    "row": 265,
+    "title": "Quiet Win",
+    "choice": 2,
+    "label": "Relax slightly but monitor it",
+    "cost": 5
+  },
+  {
+    "row": 265,
+    "title": "Quiet Win",
+    "choice": 3,
+    "label": "Spend because nothing bad happened",
+    "cost": 20
+  },
+  {
+    "row": 266,
+    "title": "Independent Choice",
+    "choice": 2,
+    "label": "Mostly stay on track",
+    "cost": 5
+  },
+  {
+    "row": 266,
+    "title": "Independent Choice",
+    "choice": 3,
+    "label": "Spend loosely when no one sees",
+    "cost": 20
+  },
+  {
+    "row": 267,
+    "title": "Help With Boundaries",
+    "choice": 3,
+    "label": "Give beyond your limit",
+    "cost": 20
+  },
+  {
+    "row": 268,
+    "title": "Birthday or Celebration",
+    "choice": 2,
+    "label": "Split the cost with others",
+    "cost": 5
+  },
+  {
+    "row": 268,
+    "title": "Birthday or Celebration",
+    "choice": 3,
+    "label": "Spend big to impress",
+    "cost": 20
+  },
+  {
+    "row": 269,
+    "title": "Saying No Kindly",
+    "choice": 2,
+    "label": "Delay and explain later",
+    "cost": 5
+  },
+  {
+    "row": 269,
+    "title": "Saying No Kindly",
+    "choice": 3,
+    "label": "Say yes when you mean no",
+    "cost": 20
+  },
+  {
+    "row": 270,
+    "title": "Strong Pattern",
+    "choice": 3,
+    "label": "Assume success means you can stop trying",
+    "cost": 20
+  },
+  {
+    "row": 271,
+    "title": "System Check",
+    "choice": 2,
+    "label": "Simplify one part of the system",
+    "cost": 5
+  },
+  {
+    "row": 271,
+    "title": "System Check",
+    "choice": 3,
+    "label": "Stop tracking because it feels repetitive",
+    "cost": 20
+  },
+  {
+    "row": 272,
+    "title": "Habit Pressure Test",
+    "choice": 2,
+    "label": "Keep the biggest habits only",
+    "cost": 5
+  },
+  {
+    "row": 272,
+    "title": "Habit Pressure Test",
+    "choice": 3,
+    "label": "Drop all routine tools",
+    "cost": 20
+  },
+  {
+    "row": 273,
+    "title": "Earlier Choice Echo",
+    "choice": 2,
+    "label": "Recover partially from the earlier choice",
+    "cost": 5
+  },
+  {
+    "row": 273,
+    "title": "Earlier Choice Echo",
+    "choice": 3,
+    "label": "Repeat the same mistake again",
+    "cost": 20
+  },
+  {
+    "row": 274,
+    "title": "Consequence Review",
+    "choice": 2,
+    "label": "Acknowledge it but change slowly",
+    "cost": 5
+  },
+  {
+    "row": 274,
+    "title": "Consequence Review",
+    "choice": 3,
+    "label": "Blame luck only",
+    "cost": 20
+  },
+  {
+    "row": 275,
+    "title": "Window of Opportunity",
+    "choice": 2,
+    "label": "Handle it okay, but not perfectly",
+    "cost": 5
+  },
+  {
+    "row": 275,
+    "title": "Window of Opportunity",
+    "choice": 3,
+    "label": "Miss the chance because of earlier habits",
+    "cost": 20
+  },
+  {
+    "row": 276,
+    "title": "Money Voice",
+    "choice": 2,
+    "label": "Speak up a little",
+    "cost": 5
+  },
+  {
+    "row": 276,
+    "title": "Money Voice",
+    "choice": 3,
+    "label": "Stay silent even though it costs you",
+    "cost": 20
+  },
+  {
+    "row": 277,
+    "title": "Smart Choice Without Approval",
+    "choice": 2,
+    "label": "Second-guess yourself but still choose well",
+    "cost": 5
+  },
+  {
+    "row": 277,
+    "title": "Smart Choice Without Approval",
+    "choice": 3,
+    "label": "Change your choice to fit in",
+    "cost": 20
+  },
+  {
+    "row": 278,
+    "title": "Banking Question",
+    "choice": 3,
+    "label": "Pretend to understand and choose badly",
+    "cost": 20
+  },
+  {
+    "row": 279,
+    "title": "Plan vs Panic",
+    "choice": 2,
+    "label": "Partly use the plan",
+    "cost": 5
+  },
+  {
+    "row": 279,
+    "title": "Plan vs Panic",
+    "choice": 3,
+    "label": "React without a plan",
+    "cost": 20
+  },
+  {
+    "row": 280,
+    "title": "End-of-Week Feeling",
+    "choice": 2,
+    "label": "See mixed results and tighten the plan",
+    "cost": 5
+  },
+  {
+    "row": 280,
+    "title": "End-of-Week Feeling",
+    "choice": 3,
+    "label": "Ignore the lesson and keep winging it",
+    "cost": 20
+  },
+  {
+    "row": 281,
+    "title": "Deadline Pressure",
+    "choice": 2,
+    "label": "Ask for time and regroup",
+    "cost": 5
+  },
+  {
+    "row": 281,
+    "title": "Deadline Pressure",
+    "choice": 3,
+    "label": "Spend quickly just to end the feeling",
+    "cost": 20
+  },
+  {
+    "row": 282,
+    "title": "Budget for Something Bigger",
+    "choice": 3,
+    "label": "Keep budgeting separate from your dreams",
+    "cost": 20
+  },
+  {
+    "row": 283,
+    "title": "Purposeful Spending",
+    "choice": 2,
+    "label": "Split between goal and fun",
+    "cost": 5
+  },
+  {
+    "row": 283,
+    "title": "Purposeful Spending",
+    "choice": 3,
+    "label": "Spend without connecting to any goal",
+    "cost": 20
+  },
+  {
+    "row": 284,
+    "title": "Goal Priority Check",
+    "choice": 3,
+    "label": "Pick the want because it feels better today",
+    "cost": 20
+  },
+  {
+    "row": 285,
+    "title": "Small Wins Add Up",
+    "choice": 2,
+    "label": "Keep most but not all",
+    "cost": 5
+  },
+  {
+    "row": 285,
+    "title": "Small Wins Add Up",
+    "choice": 3,
+    "label": "Assume the work is done now",
+    "cost": 20
+  },
+  {
+    "row": 286,
+    "title": "Growth Reflection",
+    "choice": 2,
+    "label": "Notice it but do not record it",
+    "cost": 5
+  },
+  {
+    "row": 286,
+    "title": "Growth Reflection",
+    "choice": 3,
+    "label": "Treat the result like luck only",
+    "cost": 20
+  },
+  {
+    "row": 287,
+    "title": "Compound Trouble",
+    "choice": 2,
+    "label": "Fix just one weak spot",
+    "cost": 5
+  },
+  {
+    "row": 287,
+    "title": "Compound Trouble",
+    "choice": 3,
+    "label": "Ignore the pattern",
+    "cost": 20
+  },
+  {
+    "row": 288,
+    "title": "Year Review",
+    "choice": 3,
+    "label": "Focus only on wins and ignore weak spots",
+    "cost": 20
+  },
+  {
+    "row": 289,
+    "title": "Next Year Plan",
+    "choice": 2,
+    "label": "Keep what worked and adjust later",
+    "cost": 5
+  },
+  {
+    "row": 289,
+    "title": "Next Year Plan",
+    "choice": 3,
+    "label": "Start over with no lessons kept",
+    "cost": 20
+  },
+  {
+    "row": 290,
+    "title": "Identity Statement",
+    "choice": 3,
+    "label": "Say it does not matter who you become with money",
+    "cost": 20
+  },
+  {
+    "row": 291,
+    "title": "Babysitting: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 10
+  },
+  {
+    "row": 308,
+    "title": "Pet Sitting: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 10
+  },
+  {
+    "row": 325,
+    "title": "Dog Walking: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 6
+  },
+  {
+    "row": 342,
+    "title": "Lawn Care: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 12
+  },
+  {
+    "row": 359,
+    "title": "Washing Cars: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 9
+  },
+  {
+    "row": 376,
+    "title": "Tutoring: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 7
+  },
+  {
+    "row": 393,
+    "title": "House Cleaning: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 5
+  },
+  {
+    "row": 410,
+    "title": "Running Errands: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 4
+  },
+  {
+    "row": 427,
+    "title": "Selling Crafts: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 12
+  },
+  {
+    "row": 444,
+    "title": "Lemonade Stand: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 8
+  },
+  {
+    "row": 461,
+    "title": "Grocery Bagger: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 8
+  },
+  {
+    "row": 478,
+    "title": "Cashier: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 8
+  },
+  {
+    "row": 495,
+    "title": "Restaurant Worker: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 8
+  },
+  {
+    "row": 512,
+    "title": "Manager: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 8
+  },
+  {
+    "row": 529,
+    "title": "Entrepreneur: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 8
+  },
+  {
+    "row": 546,
+    "title": "CEO: Supply Decision",
+    "choice": 1,
+    "label": "Buy supplies now",
+    "cost": 8
   }
 ]

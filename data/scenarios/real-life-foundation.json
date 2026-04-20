@@ -67,14 +67,7 @@
             "client_delta": 1,
             "note": "Because you stayed dependable and prepared, another family asked you to book another pet-care visit."
           }
-        },
-        "paymentRequired": true,
-        "costFinal": 4,
-        "costStatus": "original",
-        "hooksFinal": [
-          "paymentRequired"
-        ],
-        "fundingGapPatched": true
+        }
       },
       {
         "id": "buy_snack",
@@ -134,15 +127,7 @@
             "repeat_threshold": 2,
             "repeat_note": "If this kind of problem keeps happening, a family may stop booking pet care with you."
           }
-        },
-        "paymentRequired": true,
-        "costFinal": 2,
-        "costStatus": "original",
-        "hooksFinal": [
-          "paymentRequired",
-          "low_energy_risk"
-        ],
-        "fundingGapPatched": true
+        }
       },
       {
         "id": "skip_food",
@@ -197,12 +182,7 @@
             "note": "The family noticed the issue and chose another pet sitter. Your pet sitting pay stays lower until you book a new family.",
             "replacement_needed": true
           }
-        },
-        "paymentRequired": false,
-        "hooksFinal": [
-          "fatigue_chain"
-        ],
-        "fundingGapPatched": false
+        }
       }
     ],
     "triggers": {
@@ -313,15 +293,7 @@
             "client_delta": 0,
             "note": "Your energy and focus slipped during pet sitting, so one family paid less this week."
           }
-        },
-        "paymentRequired": true,
-        "costFinal": 12,
-        "costStatus": "original",
-        "hooksFinal": [
-          "paymentRequired",
-          "budget_squeeze"
-        ],
-        "fundingGapPatched": true
+        }
       },
       {
         "id": "set_limit",
@@ -369,14 +341,7 @@
             "client_delta": 0,
             "note": "No pet sitting pay change this time, but the choice still matters."
           }
-        },
-        "paymentRequired": true,
-        "costFinal": 5,
-        "costStatus": "original",
-        "hooksFinal": [
-          "paymentRequired"
-        ],
-        "fundingGapPatched": true
+        }
       },
       {
         "id": "skip_event",
@@ -426,12 +391,7 @@
             "client_delta": 0,
             "note": "Your calm, responsible choices helped you babysit well. One family added a bonus to this week's pay."
           }
-        },
-        "paymentRequired": false,
-        "hooksFinal": [
-          "social_tension_minor"
-        ],
-        "fundingGapPatched": false
+        }
       }
     ],
     "triggers": {

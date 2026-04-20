@@ -1,0 +1,26 @@
+[
+  {
+    "id": "teacher",
+    "name": "Teacher Mode",
+    "description": "Guided classroom flow",
+    "eventWeights": {
+      "life": 40,
+      "job": 30,
+      "financial": 30
+    },
+    "requireMonthlyReflection": false,
+    "showTeacherTools": true
+  },
+  {
+    "id": "elite",
+    "name": "Elite Mode",
+    "description": "Advanced pressure + monthly reflection",
+    "eventWeights": {
+      "life": 35,
+      "job": 40,
+      "financial": 25
+    },
+    "requireMonthlyReflection": true,
+    "showTeacherTools": true
+  }
+]

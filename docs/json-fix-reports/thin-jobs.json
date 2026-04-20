@@ -1,22 +1,32 @@
 [
   {
-    "jobId": "car_wash",
-    "events": 7,
-    "status": "ok"
+    "jobId": "babysitting",
+    "jobName": "Babysitting",
+    "events": 275,
+    "questions": 809
   },
   {
-    "jobId": "food_service",
-    "events": 7,
-    "status": "ok"
+    "jobId": "chores",
+    "jobName": "House Cleaning",
+    "events": 275,
+    "questions": 809
   },
   {
-    "jobId": "office_helper",
-    "events": 7,
-    "status": "ok"
+    "jobId": "dogwalk",
+    "jobName": "Dog Walking",
+    "events": 275,
+    "questions": 809
   },
   {
-    "jobId": "retail",
-    "events": 7,
-    "status": "ok"
+    "jobId": "lawn",
+    "jobName": "Lawn Care",
+    "events": 275,
+    "questions": 809
+  },
+  {
+    "jobId": "pet",
+    "jobName": "Pet Sitting",
+    "events": 275,
+    "questions": 809
   }
 ]

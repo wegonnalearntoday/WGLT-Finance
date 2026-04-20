@@ -1,0 +1,74 @@
+[
+  {
+    "id": "phone",
+    "name": "Phone Plan",
+    "monthly": 30,
+    "autoRenew": true,
+    "cancelFee": 25,
+    "disclosure": "Auto-renews monthly. Watch fees.",
+    "bucket": [
+      10,
+      13
+    ]
+  },
+  {
+    "id": "stream",
+    "name": "Streaming Subscription",
+    "monthly": 12,
+    "autoRenew": true,
+    "cancelFee": 0,
+    "disclosure": "Easy to forget. Small monthly drain.",
+    "bucket": [
+      10,
+      3
+    ]
+  },
+  {
+    "id": "gym",
+    "name": "Gym Membership",
+    "monthly": 25,
+    "autoRenew": true,
+    "cancelFee": 40,
+    "disclosure": "Often has cancellation rules.",
+    "bucket": [
+      10,
+      13
+    ]
+  },
+  {
+    "id": "gaming",
+    "name": "Game Pass",
+    "monthly": 15,
+    "autoRenew": true,
+    "cancelFee": 0,
+    "disclosure": "Recurring wants. Track it.",
+    "bucket": [
+      10,
+      3
+    ]
+  },
+  {
+    "id": "bike",
+    "name": "Bike Repair Plan",
+    "monthly": 8,
+    "autoRenew": false,
+    "cancelFee": 0,
+    "disclosure": "Helps with repairs, not recurring.",
+    "bucket": [
+      10,
+      6
+    ]
+  },
+  {
+    "id": "tutor",
+    "name": "Tutoring Platform Fee",
+    "monthly": 10,
+    "autoRenew": true,
+    "cancelFee": 10,
+    "disclosure": "Fee reduces earnings.",
+    "bucket": [
+      10,
+      1
+    ]
+  }
+]

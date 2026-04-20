@@ -1,0 +1,17 @@
+WGLT Pack Expansion Summary
+
+This bundle includes:
+- Phase 3 engine-refactor bridge
+- Job Event Pack Expansion v1
+- Real-Life Pack Expansion v1
+- Financial Pack Expansion v1
+
+Scenario counts:
+- real-life expansion: 19
+- financial expansion: 21
+- job/opportunity expansion: 28
+- foundation packs remain included
+
+Notes:
+- The JSON engine can now pull from much larger real-life, financial, and opportunity decks.
+- This bundle is intended as one wrapped project build for testing and plug-and-play use.

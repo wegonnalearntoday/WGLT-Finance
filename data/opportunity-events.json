@@ -1,0 +1,1907 @@
+{
+  "events": [
+    {
+      "id": "extra_shift",
+      "title": "Extra Shift Available",
+      "type": "opportunity",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "manager",
+        "restaurant",
+        "errands",
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "crafts",
+        "lemonade",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Take the shift and earn $30",
+          "effects": {
+            "income": 30
+          },
+          "cost": 30,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Decline and rest",
+          "effects": {
+            "stress": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "side_hustle_supplies",
+      "title": "Buy Supplies for a Side Hustle",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "crafts",
+        "lemonade",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Spend $20 on supplies",
+          "effects": {
+            "cash": -20
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "side_hustle_profit"
+          ],
+          "delayedConsequenceId": "side_hustle_profit"
+        },
+        {
+          "id": "choice_2",
+          "label": "Spend $40 for a better setup",
+          "effects": {
+            "cash": -40
+          },
+          "cost": 40,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "bigger_side_hustle_profit"
+          ],
+          "delayedConsequenceId": "bigger_side_hustle_profit"
+        },
+        {
+          "id": "choice_3",
+          "label": "Wait until next week",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "campus_gig",
+      "title": "Campus Gig Opportunity",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "crafts",
+        "lemonade",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Take the gig and earn $25",
+          "effects": {
+            "income": 25
+          },
+          "cost": 25,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Skip because your week is too full",
+          "effects": {
+            "stress": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "freelance_client",
+      "title": "Potential Freelance Client",
+      "type": "opportunity",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "entrepreneur",
+        "crafts",
+        "lemonade",
+        "manager",
+        "cashier",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Accept and earn later",
+          "effects": {
+            "pipeline": 1
+          },
+          "hooksFinal": [
+            "freelance_payment"
+          ],
+          "delayedConsequenceId": "freelance_payment"
+        },
+        {
+          "id": "choice_2",
+          "label": "Decline because capacity is low",
+          "effects": {
+            "stress": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "resell_item",
+      "title": "Sell Something You No Longer Need",
+      "type": "opportunity",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Sell it and earn $20",
+          "effects": {
+            "income": 20
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Keep it for later",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "scholarship_application",
+      "title": "Scholarship or Grant Application",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Apply and spend time on it",
+          "effects": {
+            "time": -1
+          },
+          "hooksFinal": [
+            "small_award_possible"
+          ],
+          "delayedConsequenceId": "small_award_possible"
+        },
+        {
+          "id": "choice_2",
+          "label": "Skip it",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "referral_bonus",
+      "title": "Referral Bonus Opportunity",
+      "type": "opportunity",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "adult",
+        "college"
+      ],
+      "jobsAllowed": [
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Follow up and try for the bonus",
+          "effects": {
+            "time": -1
+          },
+          "hooksFinal": [
+            "referral_bonus_paid"
+          ],
+          "delayedConsequenceId": "referral_bonus_paid"
+        },
+        {
+          "id": "choice_2",
+          "label": "Ignore it",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "tutor_job",
+      "title": "Tutoring Opportunity",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "tutor",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "crafts",
+        "lemonade",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Tutor and earn $35",
+          "effects": {
+            "income": 35
+          },
+          "cost": 35,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Decline and keep your time",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "startup_pitch",
+      "title": "Pitch a Small Idea",
+      "type": "opportunity",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "entrepreneur",
+        "ceo",
+        "manager",
+        "crafts",
+        "lemonade",
+        "cashier"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Spend $25 preparing materials",
+          "effects": {
+            "cash": -25
+          },
+          "cost": 25,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "pitch_result"
+          ],
+          "delayedConsequenceId": "pitch_result"
+        },
+        {
+          "id": "choice_2",
+          "label": "Wait until you're more ready",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "used_book_flip",
+      "title": "Flip a Used Book or Item",
+      "type": "opportunity",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Spend $5 and try to resell",
+          "effects": {
+            "cash": -5
+          },
+          "cost": 5,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "small_flip_profit"
+          ],
+          "delayedConsequenceId": "small_flip_profit"
+        },
+        {
+          "id": "choice_2",
+          "label": "Skip it",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "opp_extra_shift_01",
+      "title": "Extra Shift Offer",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "manager",
+        "cars",
+        "restaurant",
+        "errands",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "tutor",
+        "chores",
+        "crafts",
+        "lemonade",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Take the shift and earn extra money",
+          "effects": {
+            "checking": 20,
+            "health_score": -1
+          },
+          "hooksFinal": [
+            "fatigue_risk_minor"
+          ],
+          "delayedConsequenceId": "fatigue_risk_minor"
+        },
+        {
+          "id": "choice_2",
+          "label": "Decline and protect your time",
+          "effects": {
+            "checking": 0,
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your manager offers you an extra shift. What do you do?"
+    },
+    {
+      "id": "opp_contract_tool_01",
+      "title": "Monthly Tool Contract",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Take the contract",
+          "effects": {
+            "checking": 0,
+            "active_contracts": 1,
+            "health_score": 1
+          },
+          "hooksFinal": [
+            "monthly_contract_charge"
+          ],
+          "delayedConsequenceId": "monthly_contract_charge"
+        },
+        {
+          "id": "choice_2",
+          "label": "Skip it for now",
+          "effects": {
+            "checking": 0,
+            "health_score": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        4,
+        48
+      ],
+      "prompt": "A tool or service contract could help you work, but it adds a monthly payment. What do you do?"
+    },
+    {
+      "id": "opp_carwash_rush_01",
+      "title": "Busy Saturday Rush",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "cars"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Stay extra time for more pay",
+          "effects": {
+            "checking": 22,
+            "health_score": -1
+          },
+          "cost": 18,
+          "paymentRequired": true,
+          "costStatus": "inferred_category",
+          "hooksFinal": [
+            "fatigue_risk_minor"
+          ],
+          "delayedConsequenceId": "fatigue_risk_minor",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Work your normal shift only",
+          "effects": {
+            "checking": 10,
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "The car wash is packed and your manager needs extra help. What do you do?"
+    },
+    {
+      "id": "opp_carwash_tip_01",
+      "title": "Customer Tips Extra",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "cars"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Put the whole tip in savings",
+          "effects": {
+            "savings": 8,
+            "health_score": 1
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        },
+        {
+          "id": "choice_2",
+          "label": "Split it between checking and savings",
+          "effects": {
+            "checking": 4,
+            "savings": 4
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Use it for wants",
+          "effects": {
+            "checking": 8,
+            "health_score": 0
+          },
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A customer is impressed with your work and offers a tip. What do you do with it?"
+    },
+    {
+      "id": "opp_carwash_supply_01",
+      "title": "Soap Supply Problem",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "cars"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Take the supply run and help the team",
+          "effects": {
+            "checking": 5,
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Stay at your station",
+          "effects": {
+            "checking": 0,
+            "health_score": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "The wash is low on supplies and the manager asks who should make the supply run. What do you do?"
+    },
+    {
+      "id": "opp_carwash_weather_01",
+      "title": "Rainy Week Slowdown",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "cars"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Cut wants and protect your budget",
+          "effects": {
+            "health_score": 1,
+            "credit_score": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Keep spending like normal",
+          "effects": {
+            "checking": -8,
+            "health_score": 0
+          },
+          "cost": 8,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Rainy weather is slowing business this week. What do you do?"
+    },
+    {
+      "id": "opp_carwash_upsell_01",
+      "title": "Interior Clean Upsell",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "cars"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Offer the add-on confidently",
+          "effects": {
+            "checking": 12,
+            "career_progress": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Skip the upsell and keep it simple",
+          "effects": {
+            "checking": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You can offer an interior clean add-on to earn more. What do you do?"
+    },
+    {
+      "id": "opp_carwash_late_01",
+      "title": "Late Arrival Warning",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "cars"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Call ahead and explain",
+          "effects": {
+            "health_score": 1,
+            "career_progress": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Show up late without warning",
+          "effects": {
+            "health_score": -1,
+            "career_progress": -1
+          },
+          "hooksFinal": [
+            "late_to_shift_warning"
+          ],
+          "delayedConsequenceId": "late_to_shift_warning"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You are running late for your shift. What do you do?"
+    },
+    {
+      "id": "opp_retail_holiday_01",
+      "title": "Holiday Rush",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "manager"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Help cover the rush for extra hours",
+          "effects": {
+            "checking": 18,
+            "health_score": -1
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "inferred_keyword",
+          "hooksFinal": [
+            "fatigue_risk_minor"
+          ],
+          "delayedConsequenceId": "fatigue_risk_minor",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Stick to your normal duties",
+          "effects": {
+            "checking": 8,
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "The store is slammed and your supervisor asks for extra hustle. What do you do?"
+    },
+    {
+      "id": "opp_retail_discount_01",
+      "title": "Employee Discount Temptation",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "manager"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy it because it is on discount",
+          "effects": {
+            "checking": -15
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Skip it and stay on budget",
+          "effects": {
+            "health_score": 1,
+            "savings": 5
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You see something you want and your employee discount makes it tempting. What do you do?"
+    },
+    {
+      "id": "opp_retail_register_01",
+      "title": "Register Comes Up Short",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "manager"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Be honest and help review the receipts",
+          "effects": {
+            "career_progress": 1,
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Stay quiet and hope it blows over",
+          "effects": {
+            "career_progress": -1
+          },
+          "hooksFinal": [
+            "job_trust_drop"
+          ],
+          "delayedConsequenceId": "job_trust_drop"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "The register is short and the team is being asked questions. What do you do?"
+    },
+    {
+      "id": "opp_retail_upsell_01",
+      "title": "Upsell Contest",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "manager"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Join the contest and try to win",
+          "effects": {
+            "checking": 10,
+            "career_progress": 1
+          },
+          "cost": 18,
+          "paymentRequired": true,
+          "costStatus": "inferred_category",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Pass on the contest",
+          "effects": {
+            "checking": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "There is a friendly contest to sell one more item at checkout. What do you do?"
+    },
+    {
+      "id": "opp_retail_schedule_01",
+      "title": "Schedule Conflict",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "manager"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Try to trade the shift responsibly",
+          "effects": {
+            "career_progress": 1,
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Take the shift and hope it works out",
+          "effects": {
+            "health_score": -1
+          },
+          "hooksFinal": [
+            "late_to_shift_warning"
+          ],
+          "delayedConsequenceId": "late_to_shift_warning"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You are offered a shift that clashes with something else you planned. What do you do?"
+    },
+    {
+      "id": "opp_retail_return_01",
+      "title": "Suspicious Return",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "manager"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Follow policy step by step",
+          "effects": {
+            "career_progress": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Rush through it to avoid conflict",
+          "effects": {
+            "career_progress": -1
+          },
+          "hooksFinal": [
+            "job_trust_drop"
+          ],
+          "delayedConsequenceId": "job_trust_drop"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A return feels suspicious and your manager wants careful handling. What do you do?"
+    },
+    {
+      "id": "opp_food_rush_01",
+      "title": "Lunch Rush Boost",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "restaurant"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Jump in and work the rush",
+          "effects": {
+            "checking": 20,
+            "health_score": -1
+          },
+          "hooksFinal": [
+            "fatigue_risk_minor"
+          ],
+          "delayedConsequenceId": "fatigue_risk_minor"
+        },
+        {
+          "id": "choice_2",
+          "label": "Stick to your normal pace",
+          "effects": {
+            "checking": 9,
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "The lunch rush is intense and extra help means more hours. What do you do?"
+    },
+    {
+      "id": "opp_food_free_meal_01",
+      "title": "Free Meal Temptation",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "restaurant"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Take the meal and protect your food budget",
+          "effects": {
+            "health_score": 2,
+            "checking": 4
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Skip the meal and save it for later",
+          "effects": {
+            "health_score": -1
+          },
+          "hooksFinal": [
+            "low_energy_risk"
+          ],
+          "delayedConsequenceId": "low_energy_risk"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You can use your meal perk. What do you do?"
+    },
+    {
+      "id": "opp_food_tip_pool_01",
+      "title": "Tip Pool Question",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "restaurant"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Adjust your budget for a lighter tip week",
+          "effects": {
+            "health_score": 1,
+            "credit_score": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Spend like your tips were normal",
+          "effects": {
+            "checking": -10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "The tip pool is smaller than expected this week. What do you do?"
+    },
+    {
+      "id": "opp_food_customer_01",
+      "title": "Customer Complaint",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "restaurant"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Stay calm and solve the issue",
+          "effects": {
+            "career_progress": 1,
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Argue back because the complaint feels unfair",
+          "effects": {
+            "career_progress": -1,
+            "health_score": -1
+          },
+          "hooksFinal": [
+            "job_trust_drop"
+          ],
+          "delayedConsequenceId": "job_trust_drop"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A customer complains and your response could affect how your manager sees you. What do you do?"
+    },
+    {
+      "id": "opp_food_equipment_01",
+      "title": "Broken Equipment Delay",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "restaurant"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Learn the backup process and help out",
+          "effects": {
+            "career_progress": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Wait for someone else to solve it",
+          "effects": {
+            "career_progress": -1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A machine goes down and the team has to adapt fast. What do you do?"
+    },
+    {
+      "id": "opp_food_extra_shift_01",
+      "title": "Weekend Shift Need",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "restaurant"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Cover the shift for extra pay",
+          "effects": {
+            "checking": 16,
+            "career_progress": 1,
+            "health_score": -1
+          },
+          "cost": 18,
+          "paymentRequired": true,
+          "costStatus": "inferred_category",
+          "hooksFinal": [
+            "fatigue_risk_minor"
+          ],
+          "delayedConsequenceId": "fatigue_risk_minor",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Decline and protect your rest time",
+          "effects": {
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A coworker needs coverage this weekend. What do you do?"
+    },
+    {
+      "id": "opp_office_data_01",
+      "title": "Data Entry Catch-Up",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "errands"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Focus and finish the extra work",
+          "effects": {
+            "checking": 14,
+            "career_progress": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Leave it for tomorrow",
+          "effects": {
+            "career_progress": -1
+          },
+          "hooksFinal": [
+            "job_trust_drop"
+          ],
+          "delayedConsequenceId": "job_trust_drop"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "There is a pile of data entry that needs to be finished today. What do you do?"
+    },
+    {
+      "id": "opp_office_supply_01",
+      "title": "Supply Closet Order",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "errands"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Check the list and order carefully",
+          "effects": {
+            "career_progress": 1
+          },
+          "cost": 12,
+          "paymentRequired": true,
+          "costStatus": "inferred_keyword",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Guess and hope it is enough",
+          "effects": {
+            "career_progress": -1
+          },
+          "hooksFinal": [
+            "job_trust_drop"
+          ],
+          "delayedConsequenceId": "job_trust_drop"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "The office needs supplies reordered. What do you do?"
+    },
+    {
+      "id": "opp_office_meeting_01",
+      "title": "Meeting Setup Help",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "errands"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Jump in and help set it up",
+          "effects": {
+            "checking": 6,
+            "career_progress": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Stay only on your assigned task",
+          "effects": {
+            "checking": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A meeting room needs to be set up quickly before guests arrive. What do you do?"
+    },
+    {
+      "id": "opp_office_errand_01",
+      "title": "Bank Errand Opportunity",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "errands"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Handle it carefully and on time",
+          "effects": {
+            "career_progress": 1,
+            "checking": 5
+          },
+          "cost": 18,
+          "paymentRequired": true,
+          "costStatus": "inferred_category",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Say no because you are unsure",
+          "effects": {
+            "career_progress": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your supervisor asks if you can handle a quick banking errand for the office. What do you do?"
+    },
+    {
+      "id": "opp_office_schedule_01",
+      "title": "Calendar Mix-Up",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "errands"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Fix the schedule and communicate quickly",
+          "effects": {
+            "career_progress": 1,
+            "health_score": 1
+          },
+          "cost": 18,
+          "paymentRequired": true,
+          "costStatus": "inferred_category",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Ignore it and hope someone else notices",
+          "effects": {
+            "career_progress": -1
+          },
+          "hooksFinal": [
+            "job_trust_drop"
+          ],
+          "delayedConsequenceId": "job_trust_drop"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A calendar mix-up creates a timing problem. What do you do?"
+    },
+    {
+      "id": "opp_office_project_01",
+      "title": "Project Help Request",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "errands"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Help with the project for experience",
+          "effects": {
+            "career_progress": 1,
+            "checking": 8
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Pass and stick to routine work",
+          "effects": {
+            "checking": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You are asked to help prep materials for a small office project. What do you do?"
+    },
+    {
+      "id": "opp_all_referral_01",
+      "title": "Referral Opportunity",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Try the opportunity",
+          "effects": {
+            "checking": 12,
+            "career_progress": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Skip it and stay focused on your current path",
+          "effects": {
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Someone tells you about a small paid opportunity through a referral. What do you do?"
+    },
+    {
+      "id": "opp_all_sidegig_01",
+      "title": "Quick Side Gig",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Do the side gig",
+          "effects": {
+            "checking": 15,
+            "health_score": -1
+          },
+          "hooksFinal": [
+            "fatigue_risk_minor"
+          ],
+          "delayedConsequenceId": "fatigue_risk_minor"
+        },
+        {
+          "id": "choice_2",
+          "label": "Pass and rest",
+          "effects": {
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A quick side gig could bring in extra money this week. What do you do?"
+    },
+    {
+      "id": "opp_all_skill_01",
+      "title": "Skill Builder Choice",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Spend time building the skill",
+          "effects": {
+            "career_progress": 1,
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Skip it for now",
+          "effects": {
+            "checking": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You can spend time learning a job skill that may help later. What do you do?"
+    },
+    {
+      "id": "opp_all_transport_01",
+      "title": "Transportation Cost Surprise",
+      "type": "opportunity",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Adjust wants to cover the cost",
+          "effects": {
+            "checking": -6,
+            "credit_score": 1
+          },
+          "cost": 6,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Ignore it and hope the budget works out",
+          "effects": {
+            "checking": -6
+          },
+          "cost": 6,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Getting to work costs more than you expected this week. What do you do?"
+    }
+  ]
+}

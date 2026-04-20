@@ -1,0 +1,115 @@
+{
+  "version": "1.0.0",
+  "hooks": [
+    {
+      "hook": "fatigue_chain",
+      "title": "Low Energy Builds Up",
+      "trigger_conditions": [
+        "repeated_needs_neglect",
+        "skip_food_choice"
+      ],
+      "popup_text": "\u26a0\ufe0f This decision is catching up to you...",
+      "outcomes": [
+        "reduced_performance_week",
+        "health_warning_popup"
+      ],
+      "effects": {
+        "health_score": -2
+      },
+      "ledger_note": "Low energy affected weekly performance",
+      "credit_effect": 0,
+      "health_effect": -2
+    },
+    {
+      "hook": "late_fee_chain",
+      "title": "Late Fee Chain",
+      "trigger_conditions": [
+        "delayed_bill_payment"
+      ],
+      "popup_text": "A short-term delay created a longer-term cost.",
+      "outcomes": [
+        "fee_hit",
+        "credit_drop_notice"
+      ],
+      "effects": {
+        "checking": -10
+      },
+      "ledger_note": "Late fee charged",
+      "credit_effect": -5,
+      "health_effect": 0
+    },
+    {
+      "hook": "monthly_contract_charge",
+      "title": "Contract Payment Due",
+      "trigger_conditions": [
+        "contract_active",
+        "new_month_started"
+      ],
+      "popup_text": "Your contract payment is now due.",
+      "outcomes": [
+        "ledger_contract_charge"
+      ],
+      "effects": {
+        "checking": -15
+      },
+      "ledger_note": "Monthly contract charge posted",
+      "credit_effect": 0,
+      "health_effect": 0
+    },
+    {
+      "hook": "loan_payment_cycle",
+      "title": "Loan Payment Cycle",
+      "trigger_conditions": [
+        "loan_active",
+        "new_month_started"
+      ],
+      "popup_text": "Your loan payment is due this month.",
+      "outcomes": [
+        "monthly_loan_payment",
+        "late_payment_penalty_if_missed"
+      ],
+      "effects": {
+        "checking": -20
+      },
+      "ledger_note": "Loan payment due",
+      "credit_effect": -8,
+      "health_effect": 0
+    },
+    {
+      "hook": "steady_growth",
+      "title": "HYSA Growth",
+      "trigger_conditions": [
+        "hysa_deposit_made",
+        "new_month_started"
+      ],
+      "popup_text": "Your savings are growing steadily.",
+      "outcomes": [
+        "interest_bonus"
+      ],
+      "effects": {
+        "savings": 1
+      },
+      "ledger_note": "HYSA growth posted",
+      "credit_effect": 0,
+      "health_effect": 0
+    },
+    {
+      "hook": "locked_growth",
+      "title": "CD Growth Path",
+      "trigger_conditions": [
+        "cd_deposit_made",
+        "maturity_window_hit"
+      ],
+      "popup_text": "Your CD has grown with time.",
+      "outcomes": [
+        "maturity_bonus"
+      ],
+      "effects": {
+        "cd_balance": 3
+      },
+      "ledger_note": "CD growth posted",
+      "credit_effect": 0,
+      "health_effect": 0
+    }
+  ]
+}

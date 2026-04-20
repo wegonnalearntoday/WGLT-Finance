@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WGLT Consequence Map",
+  "type": "object",
+  "required": [
+    "version",
+    "hooks"
+  ],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "hooks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "hook",
+          "title",
+          "trigger_conditions",
+          "outcomes"
+        ],
+        "properties": {
+          "hook": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "trigger_conditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "popup_text": {
+            "type": "string"
+          },
+          "outcomes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "effects": {
+            "type": "object"
+          },
+          "ledger_note": {
+            "type": "string"
+          },
+          "credit_effect": {
+            "type": "integer"
+          },
+          "health_effect": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

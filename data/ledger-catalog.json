@@ -1,0 +1,146 @@
+{
+  "babysitting": [
+    {
+      "id": "snacks",
+      "name": "Snacks Pack",
+      "cost": 8,
+      "type": "inventory"
+    },
+    {
+      "id": "craft",
+      "name": "Craft Kit",
+      "cost": 10,
+      "type": "inventory"
+    }
+  ],
+  "pet": [
+    {
+      "id": "petfood",
+      "name": "Pet Food",
+      "cost": 10,
+      "type": "inventory"
+    },
+    {
+      "id": "treats",
+      "name": "Treats",
+      "cost": 6,
+      "type": "inventory"
+    }
+  ],
+  "dogwalk": [
+    {
+      "id": "poncho",
+      "name": "Rain Poncho",
+      "cost": 6,
+      "type": "inventory"
+    },
+    {
+      "id": "bags",
+      "name": "Waste Bags",
+      "cost": 5,
+      "type": "inventory"
+    }
+  ],
+  "lawn": [
+    {
+      "id": "gas",
+      "name": "Gas Can",
+      "cost": 12,
+      "type": "inventory"
+    },
+    {
+      "id": "gloves",
+      "name": "Gloves",
+      "cost": 6,
+      "type": "inventory"
+    },
+    {
+      "id": "bags",
+      "name": "Yard Bags",
+      "cost": 6,
+      "type": "inventory"
+    }
+  ],
+  "cars": [
+    {
+      "id": "soap",
+      "name": "Car Soap",
+      "cost": 9,
+      "type": "inventory"
+    },
+    {
+      "id": "wax",
+      "name": "Wax",
+      "cost": 11,
+      "type": "inventory"
+    },
+    {
+      "id": "towels",
+      "name": "Microfiber Towels",
+      "cost": 7,
+      "type": "inventory"
+    }
+  ],
+  "tutor": [
+    {
+      "id": "cards",
+      "name": "Flash Cards",
+      "cost": 7,
+      "type": "inventory"
+    },
+    {
+      "id": "markers",
+      "name": "Markers",
+      "cost": 5,
+      "type": "inventory"
+    }
+  ],
+  "chores": [
+    {
+      "id": "spray",
+      "name": "Cleaning Spray",
+      "cost": 5,
+      "type": "inventory"
+    },
+    {
+      "id": "sponges",
+      "name": "Sponges",
+      "cost": 4,
+      "type": "inventory"
+    }
+  ],
+  "errands": [
+    {
+      "id": "fare",
+      "name": "Bus Pass (1 ride)",
+      "cost": 4,
+      "type": "inventory"
+    },
+    {
+      "id": "bag",
+      "name": "Reusable Bag",
+      "cost": 3,
+      "type": "inventory"
+    }
+  ],
+  "crafts": [
+    {
+      "id": "materials",
+      "name": "Craft Materials",
+      "cost": 12,
+      "type": "inventory"
+    },
+    {
+      "id": "stickers",
+      "name": "Stickers Pack",
+      "cost": 6,
+      "type": "inventory"
+    },
+    {
+      "id": "table",
+      "name": "Table Rental (Event)",
+      "cost": 15,
+      "type": "expense"
+    }
+  ]
+}

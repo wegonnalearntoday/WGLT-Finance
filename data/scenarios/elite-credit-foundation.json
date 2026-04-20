@@ -31,12 +31,7 @@
           "loan_payment_cycle"
         ],
         "reflection_tag": "planned_credit_use",
-        "ledger_note": "Accepted starter loan",
-        "paymentRequired": false,
-        "hooksFinal": [
-          "loan_payment_cycle"
-        ],
-        "fundingGapPatched": false
+        "ledger_note": "Accepted starter loan"
       },
       {
         "id": "decline_loan",
@@ -47,10 +42,7 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "cautious_credit",
-        "ledger_note": "Declined starter loan",
-        "paymentRequired": false,
-        "hooksFinal": [],
-        "fundingGapPatched": false
+        "ledger_note": "Declined starter loan"
       }
     ],
     "triggers": {
@@ -117,15 +109,7 @@
           "apartment_approval_path"
         ],
         "reflection_tag": "credit_readiness",
-        "ledger_note": "Paid apartment application fee",
-        "paymentRequired": true,
-        "costFinal": 20,
-        "costStatus": "original",
-        "hooksFinal": [
-          "paymentRequired",
-          "apartment_approval_path"
-        ],
-        "fundingGapPatched": true
+        "ledger_note": "Paid apartment application fee"
       },
       {
         "id": "wait_build_credit",
@@ -136,10 +120,7 @@
         },
         "delayed_hooks": [],
         "reflection_tag": "delay_for_strength",
-        "ledger_note": "Delayed apartment application",
-        "paymentRequired": false,
-        "hooksFinal": [],
-        "fundingGapPatched": false
+        "ledger_note": "Delayed apartment application"
       }
     ],
     "triggers": {

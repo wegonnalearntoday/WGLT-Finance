@@ -758,12 +758,17 @@ function showDecisionBadge(text){
   if(!box || !label || !text) return;
   label.textContent = text;
   box.style.display = 'inline-flex';
+  box.style.bottom = 'auto';
+  box.style.top = 'calc(50% - 220px)';
+  box.style.left = '50%';
+  box.style.transform = 'translateX(-50%)';
+  box.style.zIndex = '1001';
   box.classList.add('show');
   clearTimeout(decisionBadgeTimer);
   decisionBadgeTimer = setTimeout(()=>{
     box.classList.remove('show');
     box.style.display = 'none';
-  }, 2600);
+  }, 1200);
 }
 function formatSourceLabel(src){
   if(src === 'cd') return 'CD';
@@ -3091,6 +3096,33 @@ function inferChoiceRewardAmount(choice){
   const buckets = [choice?.reward || {}, choice?.effects || {}];
   return buckets.reduce((sum, fx)=> sum + Math.max(0, Number(fx.cash || 0)) + Math.max(0, Number(fx.checking || 0)) + Math.max(0, Number(fx.savings || 0)), 0);
 }
+
+function inferFallbackChoiceCost(choice, ev){
+  const blob = `${choice?.label || ''} ${choice?.hint || ''} ${ev?.title || ''} ${ev?.prompt || ''} ${ev?.description || ''}`.toLowerCase();
+  const explicit = blob.match(/\$(\d+)/);
+  if(explicit) return Number(explicit[1]);
+  if(/pay a little|spend a little|upgrade|repair|restock|materials|suppl|tool|promo|flyer|transport|rush|buy ahead|invest|helper|discount|down payment/.test(blob)){
+    if((ev?.typeKey || '') === 'life') return 5;
+    if((ev?.typeKey || '') === 'financial') return 12;
+    return 10;
+  }
+  if(/handle the need|budgeted move|backup plan|solve it|cover it|fix it|protect cash/.test(blob)){
+    return 5;
+  }
+  return 0;
+}
+function getChoicePaymentAmount(choice, ev){
+  const explicitCost = Number(choice?.cost || 0);
+  const inferred = inferChoiceCost(choice);
+  return explicitCost > 0 ? explicitCost : (inferred > 0 ? inferred : inferFallbackChoiceCost(choice, ev));
+}
+function decorateChoiceLabel(choice, ev){
+  const amount = getChoicePaymentAmount(choice, ev);
+  if(amount > 0 && !/\$\d+/.test(String(choice?.label || ''))){
+    return `${choice.label} (${money(amount)})`;
+  }
+  return choice.label;
+}
 function rerouteGenericMoneyEffects(effects, mode, targetKey){
   const fx = Object.assign({}, effects || {});
   const moneyKeys = ['cash','checking','savings'];
@@ -3220,7 +3252,7 @@ function pickUniqueEventFromPool(type, week){
   if(type === 'life'){
     const wants = available.filter(ev => !!ev.__isWantAware);
     const other = available.filter(ev => !ev.__isWantAware);
-    if(wants.length && other.length) return Math.random() < 0.5 ? pickFrom(wants) : pickFrom(other);
+    if(wants.length && other.length) return Math.random() < 0.25 ? pickFrom(wants) : pickFrom(other);
     return pickFrom(available);
   }
 
@@ -3278,7 +3310,7 @@ function queueGenericDelayedConsequence(choice, week, title){
 }
 function applyGenericChoice(choice, ev, week, onDone){
   const payment = choice.paymentRequired || (inferChoiceCost(choice) > 0 && ((choice.effects && (Number(choice.effects.cash || 0) < 0 || Number(choice.effects.checking || 0) < 0 || Number(choice.effects.savings || 0) < 0)) || choice.cost));
-  const amt = inferChoiceCost(choice);
+  const amt = getChoicePaymentAmount(choice, ev);
   const rewardAmt = inferChoiceRewardAmount(choice);
 
   const finish = (paymentSource='', rewardDest='')=>{
@@ -3334,7 +3366,7 @@ function openGeneratedEventModal(ev, week, onDone){
     title:`🎲 Step ${week}: ${ev.title}`,
     meta:`${(ev.typeKey || 'life').toUpperCase()} • ${job.name}`,
     body:buildGenericEventPrompt(ev, job),
-    buttons:choices.map((choice, idx)=>({ id:String(idx), label:choice.label, kind: idx === 0 ? 'primary' : (idx === 1 ? 'secondary' : 'warn') })),
+    buttons:choices.map((choice, idx)=>({ id:String(idx), label:decorateChoiceLabel(choice, ev), kind: idx === 0 ? 'primary' : (idx === 1 ? 'secondary' : 'warn') })),
     onPick:(pickId)=>{
       const choice = choices[Number(pickId)];
       if(!choice) return;
@@ -3347,10 +3379,10 @@ function runEventEngineV1(week, onAllDone){
   const main = pickUniqueEventFromPool(pickedType, week) || pickUniqueEventFromPool('life', week) || pickUniqueEventFromPool('job', week) || pickUniqueEventFromPool('financial', week);
   const queue = [];
   if(main) queue.push(main);
-  if(Math.random() < 0.55){
+  if(Math.random() < 0.22){
     queue.push(createSocialWantEvent(week));
   }
-  if(Math.random() < 0.28){
+  if(Math.random() < 0.35){
     const alt = ['life','job','financial'].filter(x => x !== pickedType);
     const bonusType = alt[Math.floor(Math.random() * alt.length)] || 'life';
     const bonus = pickUniqueEventFromPool(bonusType, week);
@@ -3362,8 +3394,18 @@ function runEventEngineV1(week, onAllDone){
     if(fallback) queue.push(fallback);
   }
   let idx = 0;
+  function focusNextRequired(){
+    const waiting = state && state.mission ? state.mission.waitingAction : null;
+    const req = waiting ? requiredControlForAction(waiting) : null;
+    if(req?.tab) openTab(req.tab, {auto:true});
+    if(req?.el) scrollToBtn(req.el);
+  }
   function runNext(){
-    if(idx >= queue.length){ if(onAllDone) onAllDone(); return; }
+    if(idx >= queue.length){
+      if(onAllDone) onAllDone();
+      setTimeout(focusNextRequired, 260);
+      return;
+    }
     const ev = queue[idx++];
     if(ev && typeof ev.customRunner === 'function'){
       ev.customRunner(runNext);
@@ -3428,7 +3470,9 @@ function beep(type="success"){
 }
 
 /* Modal */
-function openModal({title,meta="",body="",buttons=[{id:"close",label:"Close",kind:"secondary"}],onPick=null}){
+function openModal({title,meta="",body="",buttons=[{id:"close",label:"Close",kind:"secondary"}],onPick=null, allowOverlayClose=false}){
+  if(!state.ui) state.ui = {};
+  state.ui.modalAllowOverlayClose = !!allowOverlayClose;
   $("mTitle").textContent=title;
   $("mMeta").textContent=meta;
   $("mBody").textContent=body;
@@ -3451,10 +3495,16 @@ function openModal({title,meta="",body="",buttons=[{id:"close",label:"Close",kin
   $("overlay").setAttribute("aria-hidden","false");
 }
 function closeModal(){
+  if(state.ui) state.ui.modalAllowOverlayClose = false;
   $("overlay").classList.remove("show");
   $("overlay").setAttribute("aria-hidden","true");
 }
-$("overlay").addEventListener("click",(e)=>{ if(e.target===$("overlay")) { beep("warn"); closeModal(); } });
+$("overlay").addEventListener("click",(e)=>{
+  if(e.target === $("overlay")){
+    beep("warn");
+    if(state.ui && state.ui.modalAllowOverlayClose) closeModal();
+  }
+});
 
 /* Banner */
 let bannerTimer=null;
@@ -6180,15 +6230,20 @@ function startWeeklyStudentFlow(onAllDone){
     }
   };
 
-  // Student flow: always show the weekly job supply/inventory decision first,
-  // then continue into the normal random-event steps.
+  const currentWeek = state.weekEngine ? Number(state.weekEngine.week || 1) : Number(currentWeekIndex ? currentWeekIndex() : 1);
+  const shouldPromptSupplies = currentWeek % 2 === 1;
+
   setTimeout(()=>{
     if(!state.ui) state.ui = {};
-    state.ui.forceWeeklySupplyDecision = true;
-    runJobRealLifeEvent(()=>{
-      state.ui.forceWeeklySupplyDecision = false;
-      setTimeout(launchRandomPhase, 150);
-    });
+    if(shouldPromptSupplies){
+      state.ui.forceWeeklySupplyDecision = true;
+      runJobRealLifeEvent(()=>{
+        state.ui.forceWeeklySupplyDecision = false;
+        setTimeout(launchRandomPhase, 150);
+      });
+      return;
+    }
+    launchRandomPhase();
   }, 180);
 }
 

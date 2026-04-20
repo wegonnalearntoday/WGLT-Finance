@@ -1,0 +1,2563 @@
+{
+  "events": [
+    {
+      "id": "bank_fee",
+      "title": "Unexpected Bank Fee",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Accept the $10 fee",
+          "effects": {
+            "checking": -10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Call and ask for reversal",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Look into changing banks",
+          "effects": {
+            "time": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "credit_card_offer",
+      "title": "Credit Card Offer",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Take the card",
+          "effects": {
+            "credit": 1
+          },
+          "hooksFinal": [
+            "credit_balance_risk"
+          ],
+          "delayedConsequenceId": "credit_balance_risk"
+        },
+        {
+          "id": "choice_2",
+          "label": "Decline for now",
+          "effects": {
+            "credit": 0
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Research before deciding",
+          "effects": {
+            "time": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "student_loan_payment",
+      "title": "Student Loan Payment Due",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "crafts",
+        "lemonade",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay $75 now",
+          "effects": {
+            "cash": -75
+          },
+          "cost": 75,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Pay a smaller amount",
+          "effects": {
+            "cash": -35
+          },
+          "cost": 35,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "loan_balance_grows"
+          ],
+          "delayedConsequenceId": "loan_balance_grows"
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip this cycle",
+          "effects": {
+            "stress": 2
+          },
+          "hooksFinal": [
+            "late_loan_fee"
+          ],
+          "delayedConsequenceId": "late_loan_fee"
+        }
+      ]
+    },
+    {
+      "id": "hysa_choice",
+      "title": "Where Should You Put Your Savings?",
+      "type": "financial",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Keep it in checking",
+          "effects": {}
+        },
+        {
+          "id": "choice_2",
+          "label": "Move $25 into HYSA",
+          "effects": {
+            "checking": -25,
+            "hysa": 25
+          },
+          "cost": 25,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Move $25 into savings",
+          "effects": {
+            "checking": -25,
+            "savings": 25
+          },
+          "cost": 25,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        }
+      ]
+    },
+    {
+      "id": "cd_offer",
+      "title": "CD Offer from Your Bank",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Put $100 into a CD",
+          "effects": {
+            "checking": -100,
+            "cd": 100
+          },
+          "cost": 100,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Stick with HYSA",
+          "effects": {}
+        },
+        {
+          "id": "choice_3",
+          "label": "Keep cash flexible",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "billing_error",
+      "title": "Possible Billing Error",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Call and fix it now",
+          "effects": {
+            "time": -1
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "inferred_keyword",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Pay the extra $18 to avoid delay",
+          "effects": {
+            "cash": -18
+          },
+          "cost": 18,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Ignore it for now",
+          "effects": {
+            "stress": 1
+          },
+          "hooksFinal": [
+            "billing_problem_grows"
+          ],
+          "delayedConsequenceId": "billing_problem_grows"
+        }
+      ]
+    },
+    {
+      "id": "direct_deposit_setup",
+      "title": "Set Up Direct Deposit",
+      "type": "financial",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "manager",
+        "restaurant",
+        "errands",
+        "tutor"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Set it up now",
+          "effects": {
+            "time": -1
+          },
+          "hooksFinal": [
+            "faster_pay_access"
+          ],
+          "delayedConsequenceId": "faster_pay_access"
+        },
+        {
+          "id": "choice_2",
+          "label": "Keep paper checks",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "emergency_fund_choice",
+      "title": "Build an Emergency Fund?",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Put $20 aside",
+          "effects": {
+            "checking": -20,
+            "emergency": 20
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Put $50 aside",
+          "effects": {
+            "checking": -50,
+            "emergency": 50
+          },
+          "cost": 50,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip this week",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "overdraft_risk",
+      "title": "Your Balance Is Getting Low",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Transfer $15 from savings",
+          "effects": {
+            "savings": -15,
+            "checking": 15
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Cut spending this week",
+          "effects": {
+            "discipline": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Ignore it",
+          "effects": {
+            "stress": 1
+          },
+          "hooksFinal": [
+            "overdraft_fee"
+          ],
+          "delayedConsequenceId": "overdraft_fee"
+        }
+      ]
+    },
+    {
+      "id": "small_investment_choice",
+      "title": "You Have $25 Extra",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Put it in HYSA",
+          "effects": {
+            "checking": -25,
+            "hysa": 25
+          },
+          "cost": 25,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Put it in emergency fund",
+          "effects": {
+            "checking": -25,
+            "emergency": 25
+          },
+          "cost": 25,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Keep it available",
+          "effects": {}
+        }
+      ]
+    },
+    {
+      "id": "rent_due",
+      "title": "Rent Is Due Soon",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "crafts",
+        "lemonade",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Set aside the full amount now",
+          "effects": {
+            "planning": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Set aside part of it",
+          "effects": {
+            "planning": 0
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Wait and hope next check covers it",
+          "effects": {
+            "stress": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "subscription_review",
+      "title": "Review Your Subscriptions",
+      "type": "financial",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Cancel one and save $10",
+          "effects": {
+            "cash": 10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Keep everything",
+          "effects": {}
+        },
+        {
+          "id": "choice_3",
+          "label": "Pause one this month",
+          "effects": {
+            "cash": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "late_payment_warning",
+      "title": "Late Payment Warning",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay $25 now",
+          "effects": {
+            "cash": -25
+          },
+          "cost": 25,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Call and ask for more time",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Ignore it",
+          "effects": {
+            "stress": 2
+          },
+          "hooksFinal": [
+            "late_fee"
+          ],
+          "delayedConsequenceId": "late_fee"
+        }
+      ]
+    },
+    {
+      "id": "split_refund",
+      "title": "You Got a Small Refund",
+      "type": "financial",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Spend the $20",
+          "effects": {
+            "cash": 20
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Save half, keep half",
+          "effects": {
+            "cash": 10,
+            "savings": 10
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Save all $20",
+          "effects": {
+            "savings": 20
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        }
+      ]
+    },
+    {
+      "id": "insurance_deductible",
+      "title": "Insurance Deductible Decision",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "adult"
+      ],
+      "jobsAllowed": [
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay the deductible",
+          "effects": {
+            "cash": -120
+          },
+          "cost": 120,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Delay the claim",
+          "effects": {
+            "stress": 2
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Use emergency fund",
+          "effects": {
+            "emergency": -120
+          }
+        }
+      ]
+    },
+    {
+      "id": "fin_overdraft_warning_01",
+      "title": "Overdraft Warning",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Transfer money from savings",
+          "effects": {
+            "checking": 15,
+            "savings": -15,
+            "credit_score": 1
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Wait and hope it works out",
+          "effects": {
+            "checking": 0,
+            "credit_score": -3
+          },
+          "hooksFinal": [
+            "late_fee_chain"
+          ],
+          "delayedConsequenceId": "late_fee_chain"
+        },
+        {
+          "id": "choice_3",
+          "label": "Cancel a planned want and cover the bill",
+          "effects": {
+            "checking": 5,
+            "health_score": 1,
+            "credit_score": 2
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "inferred_keyword",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your checking account is running low, and a planned bill is due tomorrow. What do you do?"
+    },
+    {
+      "id": "fin_birthday_gift_01",
+      "title": "Grandparent Gift",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Put it in HYSA",
+          "effects": {
+            "savings": 25,
+            "health_score": 1
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        },
+        {
+          "id": "choice_2",
+          "label": "Put it in a CD",
+          "effects": {
+            "cd_balance": 25,
+            "health_score": 1
+          },
+          "hooksFinal": [
+            "locked_growth"
+          ],
+          "delayedConsequenceId": "locked_growth"
+        },
+        {
+          "id": "choice_3",
+          "label": "Spend some and save some",
+          "effects": {
+            "checking": 10,
+            "savings": 15,
+            "health_score": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your grandparent gives you birthday money. What do you do with it?"
+    },
+    {
+      "id": "fin_hysa_bonus_01",
+      "title": "HYSA Bonus Offer",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Add $10 to savings",
+          "effects": {
+            "checking": -10,
+            "savings": 10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Wait until next month",
+          "effects": {
+            "checking": 0
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Cut a want and move $10 to savings",
+          "effects": {
+            "savings": 10,
+            "health_score": 1
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your bank offers a small HYSA bonus if you keep saving steadily. What do you do?"
+    },
+    {
+      "id": "fin_streaming_bill_01",
+      "title": "Streaming Bill Hits",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Keep it and cover the bill",
+          "effects": {
+            "checking": -11
+          },
+          "cost": 11,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Cancel and protect your budget",
+          "effects": {
+            "credit_score": 1,
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Pull from savings to cover it",
+          "effects": {
+            "checking": 11,
+            "savings": -11
+          },
+          "cost": 11,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A subscription renewal posts sooner than you expected. What do you do?"
+    },
+    {
+      "id": "fin_textbook_fee_01",
+      "title": "Textbook Fee",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay it now",
+          "effects": {
+            "checking": -14,
+            "credit_score": 1
+          },
+          "cost": 14,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Ask about a simple payment plan",
+          "effects": {
+            "checking": -7
+          },
+          "cost": 7,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "small_bill_pressure"
+          ],
+          "delayedConsequenceId": "small_bill_pressure",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Delay it and hope nothing happens",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "late_fee_chain"
+          ],
+          "delayedConsequenceId": "late_fee_chain"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A class fee or textbook cost comes up. What do you do?"
+    },
+    {
+      "id": "fin_bank_fee_01",
+      "title": "Bank Fee Notice",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Cover it and adjust your budget",
+          "effects": {
+            "checking": -5,
+            "credit_score": 1
+          },
+          "cost": 5,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Ignore it and move on",
+          "effects": {
+            "checking": 0
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "inferred_keyword",
+          "hooksFinal": [
+            "late_fee_chain"
+          ],
+          "delayedConsequenceId": "late_fee_chain",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Call to ask if the fee can be waived",
+          "effects": {
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your bank posts a small service fee. What do you do?"
+    },
+    {
+      "id": "fin_cash_envelope_01",
+      "title": "Cash Envelope Challenge",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Set a small cash limit for wants",
+          "effects": {
+            "health_score": 1,
+            "credit_score": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Keep spending the usual way",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze"
+        },
+        {
+          "id": "choice_3",
+          "label": "Set a smaller partial limit",
+          "effects": {
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You want better control over your wants this month. What do you do?"
+    },
+    {
+      "id": "fin_reinvest_choice_01",
+      "title": "Reinvest Decision",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Take it from checking and invest it",
+          "effects": {
+            "checking": -10,
+            "savings": 0
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Cut wants and invest the difference",
+          "effects": {
+            "checking": 0,
+            "savings": 10,
+            "health_score": 1
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "inferred_category",
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip reinvesting this time",
+          "effects": {
+            "checking": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A small amount is available to reinvest. Where should the money come from?"
+    },
+    {
+      "id": "fin_cd_lock_01",
+      "title": "CD Lock-In",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Open the CD with $20",
+          "effects": {
+            "checking": -20,
+            "cd_balance": 20
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "locked_growth"
+          ],
+          "delayedConsequenceId": "locked_growth",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Keep the money in flexible savings",
+          "effects": {
+            "checking": -20,
+            "savings": 20
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Keep the money in checking for now",
+          "effects": {
+            "checking": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A CD option offers stronger growth if you can leave the money alone. What do you do?"
+    },
+    {
+      "id": "fin_bill_reminder_01",
+      "title": "Bill Reminder Alert",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay it today",
+          "effects": {
+            "checking": -12,
+            "credit_score": 2
+          },
+          "cost": 12,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Move money from savings and pay it",
+          "effects": {
+            "checking": 0,
+            "savings": -12,
+            "credit_score": 1
+          },
+          "cost": 12,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Wait and risk the due date",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "late_fee_chain"
+          ],
+          "delayedConsequenceId": "late_fee_chain"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You get an alert that a payment is due tomorrow. What do you do?"
+    },
+    {
+      "id": "fin_split_gift_01",
+      "title": "Cash Gift Split",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Save all of it",
+          "effects": {
+            "savings": 15
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        },
+        {
+          "id": "choice_2",
+          "label": "Split it between checking, savings, and fun",
+          "effects": {
+            "checking": 5,
+            "savings": 5
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Spend it all now",
+          "effects": {
+            "checking": 15
+          },
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You get a small cash gift. What do you do?"
+    },
+    {
+      "id": "fin_overdraft_buffer_01",
+      "title": "Build an Overdraft Buffer",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Move $15 into checking as a buffer",
+          "effects": {
+            "checking": 15,
+            "savings": -15,
+            "credit_score": 1
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Leave it as is",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "late_fee_chain"
+          ],
+          "delayedConsequenceId": "late_fee_chain"
+        },
+        {
+          "id": "choice_3",
+          "label": "Cut wants and leave the money in checking",
+          "effects": {
+            "health_score": 1,
+            "credit_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your checking is getting thin. What do you do?"
+    },
+    {
+      "id": "fin_card_purchase_01",
+      "title": "Card Purchase Decision",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Use the card only if you can cover it",
+          "effects": {
+            "credit_score": 1
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "inferred_keyword",
+          "hooksFinal": [
+            "small_bill_pressure"
+          ],
+          "delayedConsequenceId": "small_bill_pressure",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Use the card because it is convenient",
+          "effects": {
+            "credit_score": -2
+          },
+          "hooksFinal": [
+            "late_fee_chain"
+          ],
+          "delayedConsequenceId": "late_fee_chain"
+        },
+        {
+          "id": "choice_3",
+          "label": "Wait until you have cash ready",
+          "effects": {
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A purchase would be easier on your card, but your balance matters. What do you do?"
+    },
+    {
+      "id": "fin_auto_save_01",
+      "title": "Auto-Save Toggle",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Turn it on",
+          "effects": {
+            "health_score": 1,
+            "savings": 5
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        },
+        {
+          "id": "choice_2",
+          "label": "Turn on a smaller amount",
+          "effects": {
+            "savings": 2
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        },
+        {
+          "id": "choice_3",
+          "label": "Leave it off for now",
+          "effects": {
+            "checking": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your bank offers automatic saving each month. What do you do?"
+    },
+    {
+      "id": "fin_school_lunch_plan_01",
+      "title": "Lunch Budget Plan",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Make a simple lunch plan",
+          "effects": {
+            "health_score": 1,
+            "savings": 4
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Wing it day by day",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze"
+        },
+        {
+          "id": "choice_3",
+          "label": "Set a tiny snack budget only",
+          "effects": {
+            "health_score": 0,
+            "checking": -2
+          },
+          "cost": 2,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You want to avoid random lunch spending this month. What do you do?"
+    },
+    {
+      "id": "fin_emergency_jar_01",
+      "title": "Emergency Jar",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Start an emergency jar with $10",
+          "effects": {
+            "savings": 10,
+            "checking": -10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Wait until you have more money",
+          "effects": {
+            "checking": 0
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Use gift or bonus money to start it",
+          "effects": {
+            "savings": 10
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "inferred_keyword",
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You want a little backup for surprises. What do you do?"
+    },
+    {
+      "id": "fin_loan_due_01",
+      "title": "Loan Payment Due",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay it on time",
+          "effects": {
+            "checking": -20,
+            "credit_score": 2
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Pay part now and plan the rest",
+          "effects": {
+            "checking": -10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "small_bill_pressure"
+          ],
+          "delayedConsequenceId": "small_bill_pressure",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Miss the payment",
+          "effects": {
+            "checking": 0,
+            "credit_score": -5
+          },
+          "hooksFinal": [
+            "loan_payment_cycle"
+          ],
+          "delayedConsequenceId": "loan_payment_cycle"
+        }
+      ],
+      "weeksAllowed": [
+        8,
+        48
+      ],
+      "prompt": "A payment is due on something you financed. What do you do?"
+    },
+    {
+      "id": "fin_car_cost_01",
+      "title": "Unexpected Car Cost",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Adjust your budget to cover it",
+          "effects": {
+            "checking": -12,
+            "credit_score": 1
+          },
+          "cost": 12,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Use savings to protect the month",
+          "effects": {
+            "savings": -12,
+            "credit_score": 1
+          },
+          "cost": 12,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Delay another bill to cover it",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "late_fee_chain"
+          ],
+          "delayedConsequenceId": "late_fee_chain"
+        }
+      ],
+      "weeksAllowed": [
+        8,
+        48
+      ],
+      "prompt": "Transportation or car-related costs rise this month. What do you do?"
+    },
+    {
+      "id": "fin_apartment_deposit_01",
+      "title": "Apartment Deposit Target",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Save toward the target now",
+          "effects": {
+            "savings": 15,
+            "checking": -15
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Save a smaller amount",
+          "effects": {
+            "savings": 5,
+            "checking": -5
+          },
+          "cost": 5,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip it this month",
+          "effects": {
+            "checking": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        12,
+        48
+      ],
+      "prompt": "You want to be ready for a housing deposit later. What do you do?"
+    },
+    {
+      "id": "fin_investment_mix_01",
+      "title": "Investment Mix Choice",
+      "type": "financial",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Choose a safer mix",
+          "effects": {
+            "savings": -10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Choose a balanced mix",
+          "effects": {
+            "savings": -10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Choose a riskier mix",
+          "effects": {
+            "savings": -10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "market_swing_risk"
+          ],
+          "delayedConsequenceId": "market_swing_risk",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        10,
+        48
+      ],
+      "prompt": "You have a little money set aside. What do you do with it?"
+    },
+    {
+      "id": "fin_fee_reversal_01",
+      "title": "Fee Reversal Chance",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Ask respectfully for a reversal",
+          "effects": {
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Just pay it and move on",
+          "effects": {
+            "checking": -6
+          },
+          "cost": 6,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Ignore the notice for now",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "late_fee_chain"
+          ],
+          "delayedConsequenceId": "late_fee_chain"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You may be able to get a fee reversed if you ask. What do you do?"
+    },
+    {
+      "id": "fin_micro_budget_01",
+      "title": "Micro-Budget Week",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Make a tight spending plan",
+          "effects": {
+            "health_score": 1,
+            "credit_score": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Just guess your way through the week",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze"
+        },
+        {
+          "id": "choice_3",
+          "label": "Pause fun spending until next check",
+          "effects": {
+            "savings": 3
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Money is tight this week. What do you do?"
+    },
+    {
+      "id": "fin_goal_tracker_01",
+      "title": "Savings Goal Tracker",
+      "type": "financial",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Update it and stay focused",
+          "effects": {
+            "health_score": 1,
+            "savings": 2
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        },
+        {
+          "id": "choice_2",
+          "label": "Ignore it this month",
+          "effects": {
+            "checking": 0
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Raise the goal and challenge yourself",
+          "effects": {
+            "health_score": 1
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You can update your savings goal tracker today. What do you do?"
+    }
+  ]
+}

@@ -1,96 +1,410 @@
-# JSON Fix List by Priority
+# Fix List by Priority
 
-Total funding-source patches added: **62**
+## HIGH (0)
 
-## Priority summary
-- High: 12
-- Medium: 0
-- Normal: 50
+## MEDIUM (0)
 
-## Files updated
-- `data/real-life-events.json`
-- `data/financial-events.json`
-- `data/opportunity-events.json`
-- `data/scenarios/real-life-foundation.json`
-- `data/scenarios/financial-foundation.json`
-- `data/scenarios/opportunity-foundation.json`
-- `data/scenarios/real-life-expansion-v1.json`
-- `data/scenarios/financial-expansion-v1.json`
-- `data/scenarios/opportunity-job-expansion-v1.json`
-- `data/scenarios/elite-credit-foundation.json`
-
-## Highest-priority items
-- [HIGH] `data/scenarios/financial-expansion-v1.json` :: **Bank Fee Notice** -> Cover it and adjust your budget ($5)
-- [HIGH] `data/scenarios/financial-expansion-v1.json` :: **Bill Reminder Alert** -> Move money from savings and pay it ($12)
-- [HIGH] `data/scenarios/financial-expansion-v1.json` :: **Bill Reminder Alert** -> Pay it today ($12)
-- [HIGH] `data/scenarios/financial-expansion-v1.json` :: **Fee Reversal Chance** -> Just pay it and move on ($6)
-- [HIGH] `data/scenarios/financial-expansion-v1.json` :: **Streaming Bill Hits** -> Keep it and cover the bill ($11)
-- [HIGH] `data/scenarios/financial-expansion-v1.json` :: **Streaming Bill Hits** -> Pull from savings to cover it ($11)
-- [HIGH] `data/scenarios/financial-expansion-v1.json` :: **Textbook Fee** -> Pay it now ($14)
-- [HIGH] `data/scenarios/financial-expansion-v1.json` :: **Textbook Fee** -> Ask about a simple payment plan ($7)
-- [HIGH] `data/scenarios/real-life-expansion-v1.json` :: **Library Fee Notice** -> Cut a small want and pay the fee ($4)
-- [HIGH] `data/scenarios/real-life-expansion-v1.json` :: **Library Fee Notice** -> Pay it now ($4)
-- [HIGH] `data/scenarios/real-life-expansion-v1.json` :: **School Trip Fee** -> Ask family if they can help cover part of it ($8)
-- [HIGH] `data/scenarios/real-life-expansion-v1.json` :: **School Trip Fee** -> Pay the fee and go ($18)
-- [NORMAL] `data/scenarios/elite-credit-foundation.json` :: **Apartment Application** -> Apply now ($20)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Apartment Deposit Target** -> Save toward the target now ($15)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Apartment Deposit Target** -> Save a smaller amount ($5)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Build an Overdraft Buffer** -> Move $15 into checking as a buffer ($15)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **CD Lock-In** -> Keep the money in flexible savings ($20)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **CD Lock-In** -> Open the CD with $20 ($20)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Emergency Jar** -> Start an emergency jar with $10 ($10)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **HYSA Bonus Offer** -> Add $10 to savings ($10)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **HYSA Bonus Offer** -> Cut a want and move $10 to savings ($10)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Investment Mix Choice** -> Choose a balanced mix ($10)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Investment Mix Choice** -> Choose a riskier mix ($10)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Investment Mix Choice** -> Choose a safer mix ($10)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Loan Payment Due** -> Pay part now and plan the rest ($10)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Loan Payment Due** -> Pay it on time ($20)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Lunch Budget Plan** -> Set a tiny snack budget only ($2)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Reinvest Decision** -> Take it from checking and invest it ($10)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Unexpected Car Cost** -> Adjust your budget to cover it ($12)
-- [NORMAL] `data/scenarios/financial-expansion-v1.json` :: **Unexpected Car Cost** -> Use savings to protect the month ($12)
-- [NORMAL] `data/scenarios/financial-foundation.json` :: **Overdraft Warning** -> Transfer money from savings ($15)
-- [NORMAL] `data/scenarios/opportunity-job-expansion-v1.json` :: **Employee Discount Temptation** -> Buy it because it is on discount ($15)
-- [NORMAL] `data/scenarios/opportunity-job-expansion-v1.json` :: **Rainy Week Slowdown** -> Keep spending like normal ($8)
-- [NORMAL] `data/scenarios/opportunity-job-expansion-v1.json` :: **Tip Pool Question** -> Spend like your tips were normal ($10)
-- [NORMAL] `data/scenarios/opportunity-job-expansion-v1.json` :: **Transportation Cost Surprise** -> Adjust wants to cover the cost ($6)
-- [NORMAL] `data/scenarios/opportunity-job-expansion-v1.json` :: **Transportation Cost Surprise** -> Ignore it and hope the budget works out ($6)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Birthday Invite** -> Go and spend the full amount ($16)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Birthday Invite** -> Go with a smaller budget ($7)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Bus Fare Surprise** -> Pay the fare and get where you need to go ($3)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Community Event Booth** -> Partner with someone and split the fee ($5)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Community Event Booth** -> Pay the booth fee and try it ($10)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Family Cookout Plate** -> Bring something small and useful ($6)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Family Cookout Plate** -> Buy a larger item to bring ($14)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Forgot Charger** -> Buy a cheap charger now ($8)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Forgot Water Bottle** -> Buy a drink ($3)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Group Project Supplies** -> Buy the supplies yourself ($9)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Group Project Supplies** -> Ask everyone to split the cost ($3)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Locker Fine** -> Cut a want and pay it today ($6)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Locker Fine** -> Pay the fine now ($6)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Lost Headphones** -> Replace them now ($15)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Missed Alarm** -> Rush out and buy breakfast later ($5)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Missing Uniform Piece** -> Buy the item now ($10)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Movie Night Vote** -> Join but limit what you spend ($4)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Movie Night Vote** -> Split the cost and join ($9)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **New Game Release** -> Buy it now ($20)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Phone Screen Crack** -> Repair it right away ($25)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **School Spirit Day** -> Buy the shirt ($12)
-- [NORMAL] `data/scenarios/real-life-expansion-v1.json` :: **Team Snack Request** -> Join the snack order ($7)
-- [NORMAL] `data/scenarios/real-life-foundation.json` :: **Forgot Your Lunch** -> Buy school lunch for $4 ($4)
-- [NORMAL] `data/scenarios/real-life-foundation.json` :: **Forgot Your Lunch** -> Buy a snack for $2 ($2)
-- [NORMAL] `data/scenarios/real-life-foundation.json` :: **Friends Want Pizza** -> Join in and spend $12 ($12)
-- [NORMAL] `data/scenarios/real-life-foundation.json` :: **Friends Want Pizza** -> Go, but spend only $5 ($5)
-
-## Overused hooks
-- `paymentRequired` -> 62
-- `steady_growth` -> 23
-- `budget_squeeze` -> 20
-- `social_tension_minor` -> 10
-- `late_fee_chain` -> 10
-- `job_trust_drop` -> 7
-- `fatigue_risk_minor` -> 6
-- `small_bill_pressure` -> 6
-
-## Thin jobs
+## LOW (403)
+- unknown :: Unexpected Medical Copay :: 3
+- unknown :: Unexpected Bank Fee :: 1
+- unknown :: Where Should You Put Your Savings? :: 2
+- unknown :: Where Should You Put Your Savings? :: 3
+- unknown :: CD Offer from Your Bank :: 1
+- unknown :: Possible Billing Error :: 1
+- unknown :: Build an Emergency Fund? :: 1
+- unknown :: Build an Emergency Fund? :: 2
+- unknown :: Your Balance Is Getting Low :: 1
+- unknown :: You Have $25 Extra :: 1
+- unknown :: You Have $25 Extra :: 2
+- unknown :: Review Your Subscriptions :: 1
+- unknown :: You Got a Small Refund :: 1
+- unknown :: You Got a Small Refund :: 3
+- unknown :: Extra Shift Available :: 1
+- unknown :: Campus Gig Opportunity :: 1
+- unknown :: Sell Something You No Longer Need :: 1
+- unknown :: Tutoring Opportunity :: 1
+- unknown :: Forgot Your Lunch :: 1
+- unknown :: Forgot Your Lunch :: 2
+- unknown :: Friends Want Pizza :: 1
+- unknown :: Friends Want Pizza :: 2
+- unknown :: Bus Fare Surprise :: 1
+- unknown :: School Trip Fee :: 1
+- unknown :: School Trip Fee :: 3
+- unknown :: Phone Screen Crack :: 1
+- unknown :: Locker Fine :: 1
+- unknown :: Locker Fine :: 3
+- unknown :: New Game Release :: 1
+- unknown :: School Spirit Day :: 1
+- unknown :: Missed Alarm :: 1
+- unknown :: Group Project Supplies :: 1
+- unknown :: Group Project Supplies :: 2
+- unknown :: Family Cookout Plate :: 1
+- unknown :: Family Cookout Plate :: 2
+- unknown :: Lost Headphones :: 1
+- unknown :: Team Snack Request :: 1
+- unknown :: Library Fee Notice :: 1
+- unknown :: Library Fee Notice :: 3
+- unknown :: Birthday Invite :: 1
+- unknown :: Birthday Invite :: 2
+- unknown :: Missing Uniform Piece :: 1
+- unknown :: Forgot Water Bottle :: 1
+- unknown :: Community Event Booth :: 1
+- unknown :: Community Event Booth :: 2
+- unknown :: Forgot Charger :: 1
+- unknown :: Movie Night Vote :: 1
+- unknown :: Movie Night Vote :: 2
+- unknown :: Overdraft Warning :: 1
+- unknown :: Overdraft Warning :: 3
+- unknown :: HYSA Bonus Offer :: 1
+- unknown :: HYSA Bonus Offer :: 3
+- unknown :: Streaming Bill Hits :: 1
+- unknown :: Streaming Bill Hits :: 3
+- unknown :: Textbook Fee :: 1
+- unknown :: Textbook Fee :: 2
+- unknown :: Bank Fee Notice :: 1
+- unknown :: Bank Fee Notice :: 2
+- unknown :: Reinvest Decision :: 1
+- unknown :: Reinvest Decision :: 2
+- unknown :: CD Lock-In :: 1
+- unknown :: CD Lock-In :: 2
+- unknown :: Bill Reminder Alert :: 1
+- unknown :: Bill Reminder Alert :: 2
+- unknown :: Build an Overdraft Buffer :: 1
+- unknown :: Card Purchase Decision :: 1
+- unknown :: Lunch Budget Plan :: 3
+- unknown :: Emergency Jar :: 1
+- unknown :: Emergency Jar :: 3
+- unknown :: Loan Payment Due :: 1
+- unknown :: Loan Payment Due :: 2
+- unknown :: Unexpected Car Cost :: 1
+- unknown :: Unexpected Car Cost :: 2
+- unknown :: Apartment Deposit Target :: 1
+- unknown :: Apartment Deposit Target :: 2
+- unknown :: Investment Mix Choice :: 1
+- unknown :: Investment Mix Choice :: 2
+- unknown :: Investment Mix Choice :: 3
+- unknown :: Fee Reversal Chance :: 2
+- unknown :: Busy Saturday Rush :: 1
+- unknown :: Rainy Week Slowdown :: 2
+- unknown :: Holiday Rush :: 1
+- unknown :: Employee Discount Temptation :: 1
+- unknown :: Upsell Contest :: 1
+- unknown :: Tip Pool Question :: 2
+- unknown :: Weekend Shift Need :: 1
+- unknown :: Supply Closet Order :: 1
+- unknown :: Bank Errand Opportunity :: 1
+- unknown :: Calendar Mix-Up :: 1
+- unknown :: Transportation Cost Surprise :: 1
+- unknown :: Transportation Cost Surprise :: 2
+- unknown :: Apartment Application :: 1
+- unknown :: 🍬 Candy Stop :: 2
+- unknown :: 🥨 Snack Run :: 2
+- unknown :: 🎬 Movie Night :: 2
+- unknown :: 🎵 Music Subscription :: 2
+- unknown :: 🕹️ New Game Skin :: 2
+- unknown :: 🍕 Pizza Night :: 2
+- unknown :: 🎮 Video Game Rental :: 2
+- unknown :: 🕹️ Arcade Day :: 2
+- unknown :: 👟 Style Drop :: 2
+- unknown :: 🎯 Full Game Purchase :: 2
+- unknown :: 🎉 Weekend Fun Pack :: 2
+- unknown :: 🎤 Concert / Big Trip :: 2
+- unknown :: 💅 Nail Appointment :: 2
+- unknown :: 🛍️ Mall Shopping Trip :: 2
+- unknown :: ✨ Beauty Supply Stop :: 2
+- unknown :: 🧖 Self-Care Day :: 2
+- unknown :: Payday Temptation :: 2
+- unknown :: Payday Temptation :: 3
+- unknown :: Mall Invite :: 2
+- unknown :: Mall Invite :: 3
+- unknown :: Online Deal :: 2
+- unknown :: Online Deal :: 3
+- unknown :: Toiletries vs Treat :: 1
+- unknown :: Toiletries vs Treat :: 2
+- unknown :: Toiletries vs Treat :: 3
+- unknown :: Supplies vs Gift Card :: 2
+- unknown :: Supplies vs Gift Card :: 3
+- unknown :: Lunch Money Choice :: 2
+- unknown :: Lunch Money Choice :: 3
+- unknown :: First Savings Transfer :: 1
+- unknown :: First Savings Transfer :: 3
+- unknown :: Advice at Home :: 2
+- unknown :: Advice at Home :: 3
+- unknown :: Sale Day Conflict :: 2
+- unknown :: Sale Day Conflict :: 3
+- unknown :: After-School Snacks :: 2
+- unknown :: After-School Snacks :: 3
+- unknown :: Cheap Fun Trap :: 2
+- unknown :: Cheap Fun Trap :: 3
+- unknown :: Convenience Habit :: 2
+- unknown :: Convenience Habit :: 3
+- unknown :: Forgot Lunch :: 1
+- unknown :: Forgot Lunch :: 2
+- unknown :: Forgot Lunch :: 3
+- unknown :: Convenience Store Stop :: 2
+- unknown :: Convenience Store Stop :: 3
+- unknown :: Post-Practice Hunger :: 2
+- unknown :: Post-Practice Hunger :: 3
+- unknown :: Pizza Night :: 3
+- unknown :: Team Snack Fund :: 1
+- unknown :: Team Snack Fund :: 2
+- unknown :: Team Snack Fund :: 3
+- unknown :: Movie Invite :: 2
+- unknown :: Movie Invite :: 3
+- unknown :: Receipt Check :: 2
+- unknown :: Receipt Check :: 3
+- unknown :: Budget App Entry :: 2
+- unknown :: Budget App Entry :: 3
+- unknown :: Cash Left Question :: 2
+- unknown :: Cash Left Question :: 3
+- unknown :: Lost Charger :: 1
+- unknown :: Lost Charger :: 2
+- unknown :: Lost Charger :: 3
+- unknown :: Club Fee Reminder :: 2
+- unknown :: Club Fee Reminder :: 3
+- unknown :: Broken Headphones :: 1
+- unknown :: Broken Headphones :: 2
+- unknown :: Broken Headphones :: 3
+- unknown :: Cash or Deposit :: 1
+- unknown :: Cash or Deposit :: 2
+- unknown :: Cash or Deposit :: 3
+- unknown :: Checking vs Savings :: 1
+- unknown :: Checking vs Savings :: 2
+- unknown :: Checking vs Savings :: 3
+- unknown :: Birthday Money Choice :: 2
+- unknown :: Birthday Money Choice :: 3
+- unknown :: Shoes Now or Later :: 2
+- unknown :: Shoes Now or Later :: 3
+- unknown :: Accessories vs Goal :: 2
+- unknown :: Accessories vs Goal :: 3
+- unknown :: Concert Ticket Temptation :: 2
+- unknown :: Concert Ticket Temptation :: 3
+- unknown :: Extra Shift Offer :: 2
+- unknown :: Extra Shift Offer :: 3
+- unknown :: Smaller Paycheck :: 2
+- unknown :: Smaller Paycheck :: 3
+- unknown :: Side Hustle Idea :: 2
+- unknown :: Side Hustle Idea :: 3
+- unknown :: Strong Week :: 2
+- unknown :: Strong Week :: 3
+- unknown :: Reset Moment :: 2
+- unknown :: Reset Moment :: 3
+- unknown :: Routine Check :: 2
+- unknown :: Routine Check :: 3
+- unknown :: Phone Bill :: 1
+- unknown :: Phone Bill :: 2
+- unknown :: Phone Bill :: 3
+- unknown :: Transportation Cost :: 2
+- unknown :: Transportation Cost :: 3
+- unknown :: Monthly Service :: 2
+- unknown :: Monthly Service :: 3
+- unknown :: Due Date Today :: 1
+- unknown :: Due Date Today :: 2
+- unknown :: Due Date Today :: 3
+- unknown :: Reminder Notice :: 1
+- unknown :: Reminder Notice :: 2
+- unknown :: Reminder Notice :: 3
+- unknown :: Bill Money Temptation :: 2
+- unknown :: Bill Money Temptation :: 3
+- unknown :: Streaming Stack :: 2
+- unknown :: Streaming Stack :: 3
+- unknown :: Trial Period Ending :: 2
+- unknown :: Trial Period Ending :: 3
+- unknown :: Music Plan Upgrade :: 2
+- unknown :: Music Plan Upgrade :: 3
+- unknown :: Shared Item Care :: 1
+- unknown :: Shared Item Care :: 2
+- unknown :: Shared Item Care :: 3
+- unknown :: Missed Preparation :: 1
+- unknown :: Missed Preparation :: 2
+- unknown :: Missed Preparation :: 3
+- unknown :: Future Option :: 2
+- unknown :: Future Option :: 3
+- unknown :: Split the Ride :: 1
+- unknown :: Split the Ride :: 2
+- unknown :: Split the Ride :: 3
+- unknown :: Group Gift :: 1
+- unknown :: Group Gift :: 2
+- unknown :: Group Gift :: 3
+- unknown :: Shared Food Cost :: 2
+- unknown :: Shared Food Cost :: 3
+- unknown :: Store Display :: 3
+- unknown :: Online Cart :: 3
+- unknown :: Limited Time Sign :: 2
+- unknown :: Limited Time Sign :: 3
+- unknown :: Schedule Change :: 1
+- unknown :: Schedule Change :: 2
+- unknown :: Schedule Change :: 3
+- unknown :: School Cost Surprise :: 2
+- unknown :: School Cost Surprise :: 3
+- unknown :: Family Schedule Shift :: 2
+- unknown :: Family Schedule Shift :: 3
+- unknown :: Small Emergency :: 2
+- unknown :: Small Emergency :: 3
+- unknown :: Need It Fast :: 2
+- unknown :: Need It Fast :: 3
+- unknown :: After the Emergency :: 2
+- unknown :: After the Emergency :: 3
+- unknown :: Family Request :: 3
+- unknown :: Shared Responsibility :: 1
+- unknown :: Shared Responsibility :: 2
+- unknown :: Shared Responsibility :: 3
+- unknown :: Loan Request :: 2
+- unknown :: Loan Request :: 3
+- unknown :: Same Item Different Prices :: 1
+- unknown :: Same Item Different Prices :: 2
+- unknown :: Same Item Different Prices :: 3
+- unknown :: Brand vs Basic :: 3
+- unknown :: Quick Purchase Pressure :: 2
+- unknown :: Quick Purchase Pressure :: 3
+- unknown :: Big Goal Reminder :: 2
+- unknown :: Big Goal Reminder :: 3
+- unknown :: Weekend Temptation :: 2
+- unknown :: Weekend Temptation :: 3
+- unknown :: Goal Progress Check :: 2
+- unknown :: Goal Progress Check :: 3
+- unknown :: Savings Cushion :: 2
+- unknown :: Savings Cushion :: 3
+- unknown :: Review Week Win :: 2
+- unknown :: Review Week Win :: 3
+- unknown :: Peace of Mind Choice :: 2
+- unknown :: Peace of Mind Choice :: 3
+- unknown :: Savings Growth Notice :: 3
+- unknown :: Interest Lesson :: 2
+- unknown :: Interest Lesson :: 3
+- unknown :: Small Gain Question :: 2
+- unknown :: Small Gain Question :: 3
+- unknown :: HYSA Option :: 3
+- unknown :: Birthday Money Deposit :: 2
+- unknown :: Birthday Money Deposit :: 3
+- unknown :: Growth Comparison :: 1
+- unknown :: Growth Comparison :: 2
+- unknown :: Growth Comparison :: 3
+- unknown :: Six-Month CD :: 3
+- unknown :: Locked Money Concern :: 2
+- unknown :: Locked Money Concern :: 3
+- unknown :: Friend’s Opinion :: 3
+- unknown :: Waiting Pays :: 2
+- unknown :: Waiting Pays :: 3
+- unknown :: Goal Almost There :: 2
+- unknown :: Goal Almost There :: 3
+- unknown :: Sale Countdown :: 2
+- unknown :: Sale Countdown :: 3
+- unknown :: Spend Next Week’s Money :: 2
+- unknown :: Spend Next Week’s Money :: 3
+- unknown :: Advance Offer :: 2
+- unknown :: Advance Offer :: 3
+- unknown :: Borrow From a Goal :: 2
+- unknown :: Borrow From a Goal :: 3
+- unknown :: Account Check :: 2
+- unknown :: Account Check :: 3
+- unknown :: Debit Card Habit :: 2
+- unknown :: Debit Card Habit :: 3
+- unknown :: Bank Alert Setup :: 2
+- unknown :: Bank Alert Setup :: 3
+- unknown :: Loan to a Friend :: 2
+- unknown :: Loan to a Friend :: 3
+- unknown :: Service Agreement :: 2
+- unknown :: Service Agreement :: 3
+- unknown :: Shared Purchase Plan :: 2
+- unknown :: Shared Purchase Plan :: 3
+- unknown :: Tiny Print :: 3
+- unknown :: Auto-Renew Clause :: 2
+- unknown :: Auto-Renew Clause :: 3
+- unknown :: Return Policy :: 2
+- unknown :: Return Policy :: 3
+- unknown :: Three Easy Payments :: 2
+- unknown :: Three Easy Payments :: 3
+- unknown :: Split-Pay App :: 2
+- unknown :: Split-Pay App :: 3
+- unknown :: Monthly vs Total :: 3
+- unknown :: Flash Sale Message :: 2
+- unknown :: Flash Sale Message :: 3
+- unknown :: Luxury for Cheap :: 3
+- unknown :: Urgent Offer :: 3
+- unknown :: Fake Prize :: 3
+- unknown :: Suspicious Seller :: 2
+- unknown :: Suspicious Seller :: 3
+- unknown :: Link Pressure :: 3
+- unknown :: Laptop Choice :: 3
+- unknown :: Transportation Upgrade :: 2
+- unknown :: Transportation Upgrade :: 3
+- unknown :: Special Event Cost :: 2
+- unknown :: Special Event Cost :: 3
+- unknown :: Goal Jar :: 2
+- unknown :: Goal Jar :: 3
+- unknown :: Used vs New :: 3
+- unknown :: Almost There :: 3
+- unknown :: Category Budgeting :: 2
+- unknown :: Category Budgeting :: 3
+- unknown :: Wants Compete With Goal :: 2
+- unknown :: Wants Compete With Goal :: 3
+- unknown :: Visible Progress :: 3
+- unknown :: Class Trip Chance :: 2
+- unknown :: Class Trip Chance :: 3
+- unknown :: Discounted Tool or Course :: 3
+- unknown :: Community Event Entry :: 2
+- unknown :: Community Event Entry :: 3
+- unknown :: Routine Over Mood :: 2
+- unknown :: Routine Over Mood :: 3
+- unknown :: Quiet Win :: 2
+- unknown :: Quiet Win :: 3
+- unknown :: Independent Choice :: 2
+- unknown :: Independent Choice :: 3
+- unknown :: Help With Boundaries :: 3
+- unknown :: Birthday or Celebration :: 2
+- unknown :: Birthday or Celebration :: 3
+- unknown :: Saying No Kindly :: 2
+- unknown :: Saying No Kindly :: 3
+- unknown :: Strong Pattern :: 3
+- unknown :: System Check :: 2
+- unknown :: System Check :: 3
+- unknown :: Habit Pressure Test :: 2
+- unknown :: Habit Pressure Test :: 3
+- unknown :: Earlier Choice Echo :: 2
+- unknown :: Earlier Choice Echo :: 3
+- unknown :: Consequence Review :: 2
+- unknown :: Consequence Review :: 3
+- unknown :: Window of Opportunity :: 2
+- unknown :: Window of Opportunity :: 3
+- unknown :: Money Voice :: 2
+- unknown :: Money Voice :: 3
+- unknown :: Smart Choice Without Approval :: 2
+- unknown :: Smart Choice Without Approval :: 3
+- unknown :: Banking Question :: 3
+- unknown :: Plan vs Panic :: 2
+- unknown :: Plan vs Panic :: 3
+- unknown :: End-of-Week Feeling :: 2
+- unknown :: End-of-Week Feeling :: 3
+- unknown :: Deadline Pressure :: 2
+- unknown :: Deadline Pressure :: 3
+- unknown :: Budget for Something Bigger :: 3
+- unknown :: Purposeful Spending :: 2
+- unknown :: Purposeful Spending :: 3
+- unknown :: Goal Priority Check :: 3
+- unknown :: Small Wins Add Up :: 2
+- unknown :: Small Wins Add Up :: 3
+- unknown :: Growth Reflection :: 2
+- unknown :: Growth Reflection :: 3
+- unknown :: Compound Trouble :: 2
+- unknown :: Compound Trouble :: 3
+- unknown :: Year Review :: 3
+- unknown :: Next Year Plan :: 2
+- unknown :: Next Year Plan :: 3
+- unknown :: Identity Statement :: 3
+- unknown :: Babysitting: Supply Decision :: 1
+- unknown :: Pet Sitting: Supply Decision :: 1
+- unknown :: Dog Walking: Supply Decision :: 1
+- unknown :: Lawn Care: Supply Decision :: 1
+- unknown :: Washing Cars: Supply Decision :: 1
+- unknown :: Tutoring: Supply Decision :: 1
+- unknown :: House Cleaning: Supply Decision :: 1
+- unknown :: Running Errands: Supply Decision :: 1
+- unknown :: Selling Crafts: Supply Decision :: 1
+- unknown :: Lemonade Stand: Supply Decision :: 1
+- unknown :: Grocery Bagger: Supply Decision :: 1
+- unknown :: Cashier: Supply Decision :: 1
+- unknown :: Restaurant Worker: Supply Decision :: 1
+- unknown :: Manager: Supply Decision :: 1
+- unknown :: Entrepreneur: Supply Decision :: 1
+- unknown :: CEO: Supply Decision :: 1

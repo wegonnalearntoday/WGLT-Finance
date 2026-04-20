@@ -1,0 +1,26 @@
+{
+  "presentationRoles": [
+    {
+      "id": "student",
+      "name": "Student",
+      "description": "Gameplay-first view with a cleaner dashboard and minimal teaching scaffolds.",
+      "showTeacherTools": false,
+      "showBenchmarksInMeta": false,
+      "showScenarioReason": false,
+      "showDelayedTracker": false,
+      "showRubric": false,
+      "showHiddenNotes": false
+    },
+    {
+      "id": "teacher",
+      "name": "Teacher",
+      "description": "Facilitator view with prompts, notes, vocabulary, reflection checkpoints, and visible tracking tools.",
+      "showTeacherTools": true,
+      "showBenchmarksInMeta": true,
+      "showScenarioReason": true,
+      "showDelayedTracker": true,
+      "showRubric": true,
+      "showHiddenNotes": true
+    }
+  ]
+}

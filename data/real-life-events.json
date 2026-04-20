@@ -1,0 +1,3325 @@
+{
+  "events": [
+    {
+      "id": "forgot_lunch",
+      "title": "Forgot Lunch",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy lunch for $4",
+          "effects": {
+            "cash": -4
+          },
+          "cost": 4,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Buy a snack for $2",
+          "effects": {
+            "cash": -2
+          },
+          "cost": 2,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip lunch",
+          "effects": {
+            "stress": 1
+          },
+          "hooksFinal": [
+            "low_energy_next_week"
+          ],
+          "delayedConsequenceId": "low_energy_next_week"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "teacherPromptId": "prompt_forgot_lunch"
+    },
+    {
+      "id": "friend_pizza_night",
+      "title": "Friends Want Pizza Tonight",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Go and spend $8",
+          "effects": {
+            "cash": -8,
+            "social": 1
+          },
+          "cost": 8,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Go but keep it to $4",
+          "effects": {
+            "cash": -4
+          },
+          "cost": 4,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip and save money",
+          "effects": {
+            "cash": 0,
+            "social": -1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "teacherPromptId": "prompt_social_spending"
+    },
+    {
+      "id": "broken_headphones",
+      "title": "Headphones Broke",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Replace now for $20",
+          "effects": {
+            "cash": -20
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Borrow a pair for now",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Wait until next paycheck",
+          "effects": {
+            "cash": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "birthday_gift",
+      "title": "Friend Birthday Gift",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy a $15 gift",
+          "effects": {
+            "cash": -15,
+            "social": 1
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Buy a simple $5 gift",
+          "effects": {
+            "cash": -5
+          },
+          "cost": 5,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Make a card and spend $0",
+          "effects": {
+            "cash": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "school_trip_fee",
+      "title": "Unexpected School Activity Fee",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay the $12 fee",
+          "effects": {
+            "cash": -12
+          },
+          "cost": 12,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Ask for help covering the fee",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip the activity",
+          "effects": {
+            "social": -1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        2,
+        40
+      ]
+    },
+    {
+      "id": "bus_pass_issue",
+      "title": "Bus Pass Expired",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "crafts",
+        "lemonade",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Renew it for $25",
+          "effects": {
+            "cash": -25
+          },
+          "cost": 25,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Use rideshare for $12",
+          "effects": {
+            "cash": -12
+          },
+          "cost": 12,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Ask a friend for a ride",
+          "effects": {
+            "stress": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "phone_screen_crack",
+      "title": "Phone Screen Cracked",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Repair now for $85",
+          "effects": {
+            "cash": -85
+          },
+          "cost": 85,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Use a $15 protective case for now",
+          "effects": {
+            "cash": -15
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Wait and risk it getting worse",
+          "effects": {
+            "stress": 1
+          },
+          "hooksFinal": [
+            "bigger_phone_repair"
+          ],
+          "delayedConsequenceId": "bigger_phone_repair"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "car_trouble",
+      "title": "Car Trouble Before Work",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "tutor",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Fix it now for $250",
+          "effects": {
+            "cash": -250
+          },
+          "cost": 250,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Borrow a car this week",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Delay repair",
+          "effects": {
+            "cash": 0,
+            "stress": 2
+          },
+          "hooksFinal": [
+            "missed_shift"
+          ],
+          "delayedConsequenceId": "missed_shift"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "teacherPromptId": "prompt_transportation"
+    },
+    {
+      "id": "roommate_split_bill",
+      "title": "Roommate Missed Their Part",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "tutor"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Cover their $40 for now",
+          "effects": {
+            "cash": -40
+          },
+          "cost": 40,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "roommate_pays_back"
+          ],
+          "delayedConsequenceId": "roommate_pays_back"
+        },
+        {
+          "id": "choice_2",
+          "label": "Cover only $20",
+          "effects": {
+            "cash": -20,
+            "stress": 1
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Refuse to cover it",
+          "effects": {
+            "social": -1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        4,
+        48
+      ]
+    },
+    {
+      "id": "laundry_day",
+      "title": "Laundry Day",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Spend $8 on laundry",
+          "effects": {
+            "cash": -8
+          },
+          "cost": 8,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Wait until next week",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Do a smaller load for $4",
+          "effects": {
+            "cash": -4
+          },
+          "cost": 4,
+          "paymentRequired": true,
+          "costStatus": "original"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "textbook_required",
+      "title": "You Need a Textbook",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "crafts",
+        "lemonade",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy new for $90",
+          "effects": {
+            "cash": -90
+          },
+          "cost": 90,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Rent for $35",
+          "effects": {
+            "cash": -35
+          },
+          "cost": 35,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Use library reserve copy",
+          "effects": {
+            "stress": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        20
+      ]
+    },
+    {
+      "id": "work_uniform",
+      "title": "Work Uniform Needed",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "manager",
+        "restaurant",
+        "errands",
+        "tutor"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy uniform pieces for $30",
+          "effects": {
+            "cash": -30
+          },
+          "cost": 30,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Borrow one piece temporarily",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Find a used option for $12",
+          "effects": {
+            "cash": -12
+          },
+          "cost": 12,
+          "paymentRequired": true,
+          "costStatus": "original"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        12
+      ]
+    },
+    {
+      "id": "medical_copay",
+      "title": "Unexpected Medical Copay",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay the $35 copay",
+          "effects": {
+            "cash": -35
+          },
+          "cost": 35,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Reschedule and hope it can wait",
+          "effects": {
+            "stress": 2
+          },
+          "hooksFinal": [
+            "bigger_health_issue"
+          ],
+          "delayedConsequenceId": "bigger_health_issue"
+        },
+        {
+          "id": "choice_3",
+          "label": "Use saved medical money",
+          "effects": {
+            "savings": -35
+          },
+          "cost": 35,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "childcare_need",
+      "title": "Need Emergency Childcare",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "adult"
+      ],
+      "jobsAllowed": [
+        "tutor"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay $60 for childcare",
+          "effects": {
+            "cash": -60
+          },
+          "cost": 60,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Ask family for help",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Miss work to stay home",
+          "effects": {
+            "income": -40
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "professional_clothes",
+      "title": "Need Professional Clothes",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy an outfit for $55",
+          "effects": {
+            "cash": -55
+          },
+          "cost": 55,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Thrift an outfit for $18",
+          "effects": {
+            "cash": -18
+          },
+          "cost": 18,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Borrow something for now",
+          "effects": {
+            "stress": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        24
+      ]
+    },
+    {
+      "id": "pet_expense",
+      "title": "Pet Needs Food or Care",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "adult",
+        "college"
+      ],
+      "jobsAllowed": [
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Spend $30 on pet needs",
+          "effects": {
+            "cash": -30
+          },
+          "cost": 30,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Buy a smaller supply for $15",
+          "effects": {
+            "cash": -15
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Delay and risk a bigger issue",
+          "effects": {
+            "stress": 2
+          },
+          "hooksFinal": [
+            "pet_emergency"
+          ],
+          "delayedConsequenceId": "pet_emergency"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "campus_parking_ticket",
+      "title": "Parking Ticket",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "crafts",
+        "lemonade",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay the $25 ticket",
+          "effects": {
+            "cash": -25
+          },
+          "cost": 25,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Try to appeal it",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Wait until later",
+          "effects": {
+            "cash": 0
+          },
+          "hooksFinal": [
+            "late_ticket_fee"
+          ],
+          "delayedConsequenceId": "late_ticket_fee"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "holiday_travel",
+      "title": "Holiday Travel Decision",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Spend $100 to travel home",
+          "effects": {
+            "cash": -100,
+            "social": 1
+          },
+          "cost": 100,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Find a budget option for $45",
+          "effects": {
+            "cash": -45
+          },
+          "cost": 45,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Stay local and save",
+          "effects": {
+            "cash": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        36,
+        48
+      ]
+    },
+    {
+      "id": "graduation_fee",
+      "title": "Graduation or Certification Fee",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "crafts",
+        "lemonade",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay the $75 fee",
+          "effects": {
+            "cash": -75
+          },
+          "cost": 75,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Delay and save for it",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Ask for support or reimbursement",
+          "effects": {
+            "stress": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        20,
+        48
+      ]
+    },
+    {
+      "id": "moving_supplies",
+      "title": "You Need Moving Supplies",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "crafts",
+        "lemonade",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Spend $40 on supplies",
+          "effects": {
+            "cash": -40
+          },
+          "cost": 40,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Borrow boxes and spend $10",
+          "effects": {
+            "cash": -10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Delay the move",
+          "effects": {
+            "stress": 2
+          }
+        }
+      ],
+      "weeksAllowed": [
+        10,
+        48
+      ]
+    },
+    {
+      "id": "wifi_outage",
+      "title": "Home Wi-Fi Problem",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "grocery",
+        "cashier",
+        "restaurant",
+        "errands",
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "crafts",
+        "lemonade",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay $20 for a faster fix",
+          "effects": {
+            "cash": -20
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Use your hotspot and wait",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Work at the library for now",
+          "effects": {
+            "time": -1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "interview_transportation",
+      "title": "Interview Transportation",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Take a rideshare for $18",
+          "effects": {
+            "cash": -18
+          },
+          "cost": 18,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Use transit for $4",
+          "effects": {
+            "cash": -4
+          },
+          "cost": 4,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Ask someone for a ride",
+          "effects": {
+            "stress": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "lost_id",
+      "title": "Lost ID or Campus Card",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Replace it for $15",
+          "effects": {
+            "cash": -15
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Use a temporary pass",
+          "effects": {
+            "stress": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Wait until payday",
+          "effects": {
+            "cash": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "small_home_repair",
+      "title": "Small Home Repair",
+      "type": "realLife",
+      "difficulty": [
+        "elite"
+      ],
+      "gradeBands": [
+        "adult"
+      ],
+      "jobsAllowed": [
+        "tutor",
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Repair it for $65",
+          "effects": {
+            "cash": -65
+          },
+          "cost": 65,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Patch it for $15",
+          "effects": {
+            "cash": -15
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Wait and risk a bigger cost",
+          "effects": {
+            "stress": 2
+          },
+          "hooksFinal": [
+            "bigger_home_repair"
+          ],
+          "delayedConsequenceId": "bigger_home_repair"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "family_obligation",
+      "title": "Family Obligation Comes Up",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Contribute $20",
+          "effects": {
+            "cash": -20,
+            "social": 1
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Help with time instead of money",
+          "effects": {
+            "time": -1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Decline to help financially",
+          "effects": {
+            "social": -1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "food_budget_stretch",
+      "title": "Food Budget Running Low",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Meal plan carefully and spend $12",
+          "effects": {
+            "cash": -12
+          },
+          "cost": 12,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Keep eating out for $25",
+          "effects": {
+            "cash": -25
+          },
+          "cost": 25,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_pressure"
+          ],
+          "delayedConsequenceId": "budget_pressure"
+        },
+        {
+          "id": "choice_3",
+          "label": "Use what you have at home",
+          "effects": {
+            "cash": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "group_project_supply",
+      "title": "Need Supplies for a Group Project",
+      "type": "realLife",
+      "difficulty": [
+        "beginner",
+        "standard"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12",
+        "college"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy supplies for $10",
+          "effects": {
+            "cash": -10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Split cost and pay $5",
+          "effects": {
+            "cash": -5
+          },
+          "cost": 5,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Use free materials",
+          "effects": {
+            "time": -1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        32
+      ]
+    },
+    {
+      "id": "graduation_party",
+      "title": "Graduation Celebration Cost",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "9-12",
+        "college",
+        "adult"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Spend $50 celebrating",
+          "effects": {
+            "cash": -50,
+            "social": 1
+          },
+          "cost": 50,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_2",
+          "label": "Keep celebration to $15",
+          "effects": {
+            "cash": -15
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original"
+        },
+        {
+          "id": "choice_3",
+          "label": "Celebrate for free",
+          "effects": {
+            "cash": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        20,
+        48
+      ]
+    },
+    {
+      "id": "rl_forgot_lunch_01",
+      "title": "Forgot Your Lunch",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy school lunch for $4",
+          "effects": {
+            "checking": -4,
+            "health_score": 1
+          },
+          "cost": 4,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Buy a snack for $2",
+          "effects": {
+            "checking": -2,
+            "health_score": -1
+          },
+          "cost": 2,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "low_energy_risk"
+          ],
+          "delayedConsequenceId": "low_energy_risk",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip eating today",
+          "effects": {
+            "checking": 0,
+            "health_score": -3
+          },
+          "hooksFinal": [
+            "fatigue_chain"
+          ],
+          "delayedConsequenceId": "fatigue_chain"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You forgot your lunch today. What do you do?"
+    },
+    {
+      "id": "rl_friend_pizza_01",
+      "title": "Friends Want Pizza",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Join in and spend $12",
+          "effects": {
+            "checking": -12,
+            "health_score": 0
+          },
+          "cost": 12,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Go, but spend only $5",
+          "effects": {
+            "checking": -5,
+            "health_score": 1
+          },
+          "cost": 5,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip and save the money",
+          "effects": {
+            "checking": 0,
+            "health_score": 0
+          },
+          "hooksFinal": [
+            "social_tension_minor"
+          ],
+          "delayedConsequenceId": "social_tension_minor"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your friends want pizza tonight. What do you do?"
+    },
+    {
+      "id": "rl_bus_fare_01",
+      "title": "Bus Fare Surprise",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay the fare and get where you need to go",
+          "effects": {
+            "checking": -3,
+            "health_score": 1
+          },
+          "cost": 3,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Ask a friend for help and pay them back later",
+          "effects": {
+            "health_score": 0
+          },
+          "hooksFinal": [
+            "social_tension_minor"
+          ],
+          "delayedConsequenceId": "social_tension_minor"
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip the trip to save the money",
+          "effects": {
+            "health_score": -1
+          },
+          "hooksFinal": [
+            "missed_opportunity_minor"
+          ],
+          "delayedConsequenceId": "missed_opportunity_minor"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your ride falls through and you need bus fare today. What do you do?"
+    },
+    {
+      "id": "rl_school_trip_01",
+      "title": "School Trip Fee",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay the fee and go",
+          "effects": {
+            "checking": -18
+          },
+          "cost": 18,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Skip this one and save for next time",
+          "effects": {
+            "savings": 5,
+            "health_score": 1
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        },
+        {
+          "id": "choice_3",
+          "label": "Ask family if they can help cover part of it",
+          "effects": {
+            "checking": -8
+          },
+          "cost": 8,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "social_tension_minor"
+          ],
+          "delayedConsequenceId": "social_tension_minor",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A school trip sounds fun, but the fee was not in your plan. What do you do?"
+    },
+    {
+      "id": "rl_phone_damage_01",
+      "title": "Phone Screen Crack",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Repair it right away",
+          "effects": {
+            "checking": -25
+          },
+          "cost": 25,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Keep using it for now",
+          "effects": {
+            "health_score": 0
+          },
+          "hooksFinal": [
+            "small_bill_pressure"
+          ],
+          "delayedConsequenceId": "small_bill_pressure"
+        },
+        {
+          "id": "choice_3",
+          "label": "Borrow a device when needed",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "social_tension_minor"
+          ],
+          "delayedConsequenceId": "social_tension_minor"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your phone screen cracks. What do you do?"
+    },
+    {
+      "id": "rl_locker_fine_01",
+      "title": "Locker Fine",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay the fine now",
+          "effects": {
+            "checking": -6,
+            "credit_score": 1
+          },
+          "cost": 6,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Delay and hope it goes away",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "late_fee_chain"
+          ],
+          "delayedConsequenceId": "late_fee_chain"
+        },
+        {
+          "id": "choice_3",
+          "label": "Cut a want and pay it today",
+          "effects": {
+            "checking": -6,
+            "health_score": 1
+          },
+          "cost": 6,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You get a small school fine for a late return. What do you do?"
+    },
+    {
+      "id": "rl_game_release_01",
+      "title": "New Game Release",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy it now",
+          "effects": {
+            "checking": -20
+          },
+          "cost": 20,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Wait for a sale",
+          "effects": {
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Borrow or share with a friend",
+          "effects": {
+            "checking": 0,
+            "health_score": 1
+          },
+          "hooksFinal": [
+            "social_tension_minor"
+          ],
+          "delayedConsequenceId": "social_tension_minor"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A new game drops and everyone is talking about it. What do you do?"
+    },
+    {
+      "id": "rl_spirit_day_01",
+      "title": "School Spirit Day",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy the shirt",
+          "effects": {
+            "checking": -12
+          },
+          "cost": 12,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Skip it and keep your plan",
+          "effects": {
+            "savings": 4
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        },
+        {
+          "id": "choice_3",
+          "label": "Use what you already own",
+          "effects": {
+            "checking": 0,
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "There is a special shirt sale for school spirit day. What do you do?"
+    },
+    {
+      "id": "rl_missed_alarm_01",
+      "title": "Missed Alarm",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Rush out and buy breakfast later",
+          "effects": {
+            "checking": -5,
+            "health_score": -1
+          },
+          "cost": 5,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "low_energy_risk"
+          ],
+          "delayedConsequenceId": "low_energy_risk",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Grab a quick snack from home",
+          "effects": {
+            "checking": 0,
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip breakfast to save time",
+          "effects": {
+            "checking": 0,
+            "health_score": -2
+          },
+          "hooksFinal": [
+            "fatigue_chain"
+          ],
+          "delayedConsequenceId": "fatigue_chain"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You overslept and are behind for the day. What do you do?"
+    },
+    {
+      "id": "rl_group_project_01",
+      "title": "Group Project Supplies",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy the supplies yourself",
+          "effects": {
+            "checking": -9
+          },
+          "cost": 9,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "small_bill_pressure"
+          ],
+          "delayedConsequenceId": "small_bill_pressure",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Ask everyone to split the cost",
+          "effects": {
+            "checking": -3,
+            "health_score": 1
+          },
+          "cost": 3,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Use what is already available",
+          "effects": {
+            "checking": 0
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your group needs supplies and nobody planned ahead. What do you do?"
+    },
+    {
+      "id": "rl_family_cookout_01",
+      "title": "Family Cookout Plate",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy a larger item to bring",
+          "effects": {
+            "checking": -14
+          },
+          "cost": 14,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Bring something small and useful",
+          "effects": {
+            "checking": -6,
+            "health_score": 1
+          },
+          "cost": 6,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Offer setup help instead of buying food",
+          "effects": {
+            "checking": 0,
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A family event asks everyone to bring something. What do you do?"
+    },
+    {
+      "id": "rl_lost_headphones_01",
+      "title": "Lost Headphones",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Replace them now",
+          "effects": {
+            "checking": -15
+          },
+          "cost": 15,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Use an older backup pair",
+          "effects": {
+            "checking": 0,
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Go without for now",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "small_bill_pressure"
+          ],
+          "delayedConsequenceId": "small_bill_pressure"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You lost your headphones and replacing them would hit your budget. What do you do?"
+    },
+    {
+      "id": "rl_team_snack_01",
+      "title": "Team Snack Request",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Join the snack order",
+          "effects": {
+            "checking": -7
+          },
+          "cost": 7,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Bring something from home",
+          "effects": {
+            "checking": 0,
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip the snack order",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "social_tension_minor"
+          ],
+          "delayedConsequenceId": "social_tension_minor"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your team wants to order snacks after practice. What do you do?"
+    },
+    {
+      "id": "rl_library_fee_01",
+      "title": "Library Fee Notice",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay it now",
+          "effects": {
+            "checking": -4,
+            "credit_score": 1
+          },
+          "cost": 4,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Delay it to next month",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "late_fee_chain"
+          ],
+          "delayedConsequenceId": "late_fee_chain"
+        },
+        {
+          "id": "choice_3",
+          "label": "Cut a small want and pay the fee",
+          "effects": {
+            "checking": -4,
+            "health_score": 1
+          },
+          "cost": 4,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A late library fee pops up unexpectedly. What do you do?"
+    },
+    {
+      "id": "rl_birthday_invite_01",
+      "title": "Birthday Invite",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Go and spend the full amount",
+          "effects": {
+            "checking": -16
+          },
+          "cost": 16,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Go with a smaller budget",
+          "effects": {
+            "checking": -7,
+            "health_score": 1
+          },
+          "cost": 7,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip the outing and send a kind message",
+          "effects": {
+            "checking": 0,
+            "health_score": 1
+          },
+          "hooksFinal": [
+            "social_tension_minor"
+          ],
+          "delayedConsequenceId": "social_tension_minor"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You are invited to a birthday outing that costs money. What do you do?"
+    },
+    {
+      "id": "rl_missing_uniform_01",
+      "title": "Missing Uniform Piece",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy the item now",
+          "effects": {
+            "checking": -10
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Borrow one for the day",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "social_tension_minor"
+          ],
+          "delayedConsequenceId": "social_tension_minor"
+        },
+        {
+          "id": "choice_3",
+          "label": "Wait and risk being unprepared",
+          "effects": {
+            "checking": 0,
+            "health_score": -1
+          },
+          "hooksFinal": [
+            "missed_opportunity_minor"
+          ],
+          "delayedConsequenceId": "missed_opportunity_minor"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You need a small uniform item before tomorrow. What do you do?"
+    },
+    {
+      "id": "rl_water_bottle_01",
+      "title": "Forgot Water Bottle",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy a drink",
+          "effects": {
+            "checking": -3,
+            "health_score": 1
+          },
+          "cost": 3,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Use free water options",
+          "effects": {
+            "checking": 0,
+            "health_score": 1
+          }
+        },
+        {
+          "id": "choice_3",
+          "label": "Wait it out without drinking",
+          "effects": {
+            "checking": 0,
+            "health_score": -2
+          },
+          "hooksFinal": [
+            "fatigue_chain"
+          ],
+          "delayedConsequenceId": "fatigue_chain"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You forgot your water bottle and the day is long. What do you do?"
+    },
+    {
+      "id": "rl_community_event_01",
+      "title": "Community Event Booth",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Pay the booth fee and try it",
+          "effects": {
+            "checking": -10,
+            "career_progress": 1
+          },
+          "cost": 10,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "profit_if_used_well"
+          ],
+          "delayedConsequenceId": "profit_if_used_well",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Partner with someone and split the fee",
+          "effects": {
+            "checking": -5,
+            "career_progress": 1
+          },
+          "cost": 5,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip this one and watch how others do it",
+          "effects": {
+            "checking": 0,
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "A community event has a booth fee if you want to sell something small. What do you do?"
+    },
+    {
+      "id": "rl_forgot_charger_01",
+      "title": "Forgot Charger",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Buy a cheap charger now",
+          "effects": {
+            "checking": -8
+          },
+          "cost": 8,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Borrow a charger for the day",
+          "effects": {
+            "checking": 0
+          },
+          "hooksFinal": [
+            "social_tension_minor"
+          ],
+          "delayedConsequenceId": "social_tension_minor"
+        },
+        {
+          "id": "choice_3",
+          "label": "Use power-save mode and wait",
+          "effects": {
+            "checking": 0,
+            "health_score": 1
+          }
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Your battery is low and you forgot your charger. What do you do?"
+    },
+    {
+      "id": "rl_late_return_01",
+      "title": "Late Return Promise",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Return it now even if it costs you time",
+          "effects": {
+            "health_score": 1,
+            "career_progress": 1
+          }
+        },
+        {
+          "id": "choice_2",
+          "label": "Send a message and return it tomorrow",
+          "effects": {
+            "health_score": 0
+          },
+          "hooksFinal": [
+            "social_tension_minor"
+          ],
+          "delayedConsequenceId": "social_tension_minor"
+        },
+        {
+          "id": "choice_3",
+          "label": "Ignore it for now",
+          "effects": {
+            "health_score": -1
+          },
+          "hooksFinal": [
+            "job_trust_drop"
+          ],
+          "delayedConsequenceId": "job_trust_drop"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "You promised to return something today and forgot. What do you do?"
+    },
+    {
+      "id": "rl_movie_night_01",
+      "title": "Movie Night Vote",
+      "type": "realLife",
+      "difficulty": [
+        "standard",
+        "elite"
+      ],
+      "gradeBands": [
+        "6-8",
+        "9-12"
+      ],
+      "jobsAllowed": [
+        "babysitting",
+        "pet",
+        "dogwalk",
+        "lawn",
+        "cars",
+        "tutor",
+        "chores",
+        "errands",
+        "crafts",
+        "lemonade",
+        "grocery",
+        "cashier",
+        "restaurant",
+        "manager",
+        "entrepreneur",
+        "ceo"
+      ],
+      "choices": [
+        {
+          "id": "choice_1",
+          "label": "Split the cost and join",
+          "effects": {
+            "checking": -9
+          },
+          "cost": 9,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "hooksFinal": [
+            "budget_squeeze"
+          ],
+          "delayedConsequenceId": "budget_squeeze",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_2",
+          "label": "Join but limit what you spend",
+          "effects": {
+            "checking": -4,
+            "health_score": 1
+          },
+          "cost": 4,
+          "paymentRequired": true,
+          "costStatus": "original",
+          "fundingGapPatched": true
+        },
+        {
+          "id": "choice_3",
+          "label": "Skip and save the money",
+          "effects": {
+            "savings": 4
+          },
+          "hooksFinal": [
+            "steady_growth"
+          ],
+          "delayedConsequenceId": "steady_growth"
+        }
+      ],
+      "weeksAllowed": [
+        1,
+        48
+      ],
+      "prompt": "Friends want to rent a movie and order snacks. What do you do?"
+    }
+  ]
+}
